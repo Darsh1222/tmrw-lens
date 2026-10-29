@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Design tokens. Components use these, never raw colours. */
+:root {
+  --lens-bg: #ffffff;
+  --lens-text: #14171c;
+  --lens-text-secondary: #4a5260;
+  --lens-border: #e3e6eb;
+  --lens-accent: #1f6fd1;
+  --lens-unverified: #b45309;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lens-bg: #0d1117;
+    --lens-text: #eef1f5;
+    --lens-text-secondary: #a3acb9;
+    --lens-border: #262d38;
+    --lens-accent: #5b9cf0;
+    --lens-unverified: #f2a64a;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--lens-bg);
+  --color-text: var(--lens-text);
+  --color-text-secondary: var(--lens-text-secondary);
+  --color-border: var(--lens-border);
+  --color-accent: var(--lens-accent);
+  --color-unverified: var(--lens-unverified);
+}
+
+body {
+  background: var(--lens-bg);
+  color: var(--lens-text);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}

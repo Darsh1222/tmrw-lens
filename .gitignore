@@ -147,3 +147,9 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Lens
+# Real inputs (your own schedules, syllabi, photos) stay here, never in git.
+local-inputs/
+.vercel
+next-env.d.ts

@@ -1,0 +1,12 @@
+Fall 2026 Schedule
+
+MATH141 (0121) Calculus II  4 credits
+  Lec  MWF  10:00am - 10:50am  ESJ 0224
+  Dis  TuTh  9:00am - 9:50am  MTH 0101
+CMSC131 (0302) Object-Oriented Programming I  4 credits
+  Lec  TuTh  11:00am - 12:15pm  IRB 0324
+  Lab  MW  2:00pm - 2:50pm  CSI 2107
+PHYS161 (0101) General Physics: Mechanics  3 credits
+  Lec  MWF  1:00pm - 1:50pm  PHY 1412
+ENGL101 (0405) Academic Writing  3 credits
+  Lec  MW  3:30pm - 4:45pm  TWS 0236
