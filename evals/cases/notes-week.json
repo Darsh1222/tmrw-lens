@@ -1,0 +1,48 @@
+{
+  "name": "notes-week",
+  "description": "Handwritten to-do list with a crossed-out line",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["notes-week.jpg"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": "PHYS161",
+        "title": "PHYS161 lab report",
+        "date": "2026-10-27",
+        "time": "23:59",
+        "end": null,
+        "match": "lab report"
+      },
+      {
+        "course": "ENGL101",
+        "title": "ENGL101 draft",
+        "date": "2026-10-30",
+        "time": "17:00",
+        "end": null,
+        "match": "draft"
+      },
+      {
+        "course": null,
+        "title": "call advisor",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "advisor"
+      },
+      {
+        "course": null,
+        "title": "calc PS6",
+        "date": "2026-11-05",
+        "time": null,
+        "end": null,
+        "match": "ps6|ps 6"
+      }
+    ],
+    "crossed_out": ["draft due wed|draft"],
+    "classes": [],
+    "conflicts": [],
+    "overlaps": []
+  }
+}

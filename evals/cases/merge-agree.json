@@ -1,0 +1,97 @@
+{
+  "name": "merge-agree",
+  "description": "Whiteboard agrees with the syllabus: 'Quiz Fri' is Quiz 3, merged, no conflict",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-math141.pdf", "whiteboard-math141.jpg"],
+  "expect": {
+    "term_start": "2026-08-31",
+    "items": [
+      {
+        "course": "MATH141",
+        "title": "Problem Set 4",
+        "date": "2026-10-08",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 5",
+        "date": "2026-10-15",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 1",
+        "date": "2026-10-21",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3",
+        "date": "2026-10-30",
+        "time": null,
+        "end": null,
+        "sources": 2
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 6",
+        "date": "2026-11-05",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 2",
+        "date": "2026-11-11",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 4",
+        "date": "2026-11-20",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Final exam",
+        "date": "2026-12-14",
+        "time": "08:00",
+        "end": "10:00"
+      },
+      {
+        "course": "MATH141",
+        "title": "Reading",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "stewart|chapter 7|7\\.1"
+      },
+      {
+        "course": null,
+        "title": "PS5 (graded, pick up)",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "^ps ?5\\b|graded"
+      },
+      {
+        "course": null,
+        "title": "Read 7.8",
+        "date": "2026-10-28",
+        "time": null,
+        "end": null,
+        "match": "7\\.8"
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

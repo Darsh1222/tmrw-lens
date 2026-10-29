@@ -1,0 +1,58 @@
+{
+  "name": "schedule-text",
+  "description": "Pasted Testudo schedule text",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["testudo-schedule.txt"],
+  "expect": {
+    "term_start": null,
+    "classes": [
+      {
+        "course": "MATH141",
+        "type": "lecture",
+        "days": "MWF",
+        "start": "10:00",
+        "end": "10:50"
+      },
+      {
+        "course": "MATH141",
+        "type": "discussion",
+        "days": "TuTh",
+        "start": "09:00",
+        "end": "09:50"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lecture",
+        "days": "TuTh",
+        "start": "11:00",
+        "end": "12:15"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lab",
+        "days": "MW",
+        "start": "14:00",
+        "end": "14:50"
+      },
+      {
+        "course": "PHYS161",
+        "type": "lecture",
+        "days": "MWF",
+        "start": "13:00",
+        "end": "13:50"
+      },
+      {
+        "course": "ENGL101",
+        "type": "lecture",
+        "days": "MW",
+        "start": "15:30",
+        "end": "16:45"
+      }
+    ],
+    "items": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

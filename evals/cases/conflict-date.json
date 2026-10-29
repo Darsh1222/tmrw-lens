@@ -1,0 +1,98 @@
+{
+  "name": "conflict-date",
+  "description": "Deliberate conflict: syllabus 'Quiz 3, Fri Oct 30' vs whiteboard 'Quiz moved to Mon!' (photo Wed Oct 28)",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-math141.pdf", "whiteboard-quiz-moved.jpg"],
+  "expect": {
+    "term_start": "2026-08-31",
+    "items": [
+      {
+        "course": "MATH141",
+        "title": "Problem Set 4",
+        "date": "2026-10-08",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 5",
+        "date": "2026-10-15",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 1",
+        "date": "2026-10-21",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3",
+        "date": "2026-10-30",
+        "time": null,
+        "end": null,
+        "conflict": true
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 6",
+        "date": "2026-11-05",
+        "time": null,
+        "end": null,
+        "sources": 2
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 2",
+        "date": "2026-11-11",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 4",
+        "date": "2026-11-20",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Final exam",
+        "date": "2026-12-14",
+        "time": "08:00",
+        "end": "10:00"
+      },
+      {
+        "course": "MATH141",
+        "title": "Reading",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "stewart|chapter 7|7\\.1"
+      },
+      {
+        "course": null,
+        "title": "Office hours",
+        "date": "2026-10-28",
+        "time": "14:00",
+        "end": "15:00",
+        "match": "office"
+      }
+    ],
+    "conflicts": [
+      {
+        "title": "Quiz 3",
+        "course": "MATH141",
+        "fields": ["date"],
+        "options": ["2026-10-30", "2026-11-02"],
+        "suggested": "2026-11-02"
+      }
+    ],
+    "classes": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

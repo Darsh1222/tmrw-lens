@@ -1,0 +1,206 @@
+{
+  "name": "full-week",
+  "description": "Everything together: schedule, two syllabi, whiteboard, notes. Both conflicts, 'in class' times from the schedule, and an exam that overlaps a class",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": [
+    "testudo-schedule.png",
+    "syllabus-math141.pdf",
+    "syllabus-cmsc131.pdf",
+    "whiteboard-quiz-moved.jpg",
+    "notes-cmsc131.jpg"
+  ],
+  "expect": {
+    "term_start": "2026-08-31",
+    "classes": [
+      {
+        "course": "MATH141",
+        "type": "lecture",
+        "days": "MWF",
+        "start": "10:00",
+        "end": "10:50"
+      },
+      {
+        "course": "MATH141",
+        "type": "discussion",
+        "days": "TuTh",
+        "start": "09:00",
+        "end": "09:50"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lecture",
+        "days": "TuTh",
+        "start": "11:00",
+        "end": "12:15"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lab",
+        "days": "MW",
+        "start": "14:00",
+        "end": "14:50"
+      },
+      {
+        "course": "PHYS161",
+        "type": "lecture",
+        "days": "MWF",
+        "start": "13:00",
+        "end": "13:50"
+      },
+      {
+        "course": "ENGL101",
+        "type": "lecture",
+        "days": "MW",
+        "start": "15:30",
+        "end": "16:45"
+      }
+    ],
+    "items": [
+      {
+        "course": "MATH141",
+        "title": "Problem Set 4",
+        "date": "2026-10-08",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 5",
+        "date": "2026-10-15",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 1",
+        "date": "2026-10-21",
+        "time": "10:00",
+        "end": "10:50"
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3",
+        "date": "2026-10-30",
+        "time": null,
+        "end": null,
+        "conflict": true
+      },
+      {
+        "course": "MATH141",
+        "title": "Problem Set 6",
+        "date": "2026-11-05",
+        "time": null,
+        "end": null,
+        "sources": 2
+      },
+      {
+        "course": "MATH141",
+        "title": "Midterm 2",
+        "date": "2026-11-11",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 4",
+        "date": "2026-11-20",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Final exam",
+        "date": "2026-12-14",
+        "time": "08:00",
+        "end": "10:00"
+      },
+      {
+        "course": "MATH141",
+        "title": "Reading",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "stewart|chapter 7|7\\.1"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Project 3",
+        "date": "2026-11-01",
+        "time": "23:59",
+        "end": null,
+        "sources": 2
+      },
+      {
+        "course": "CMSC131",
+        "title": "Exam 2",
+        "date": "2026-11-11",
+        "time": "13:00",
+        "end": "14:15"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Project 4",
+        "date": "2026-11-13",
+        "time": "23:59",
+        "end": null,
+        "conflict": true
+      },
+      {
+        "course": "CMSC131",
+        "title": "Quiz 5",
+        "date": "2026-11-17",
+        "time": "11:00",
+        "end": "12:15"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Project 5",
+        "date": "2026-12-04",
+        "time": "23:59",
+        "end": null
+      },
+      {
+        "course": "CMSC131",
+        "title": "Final exam",
+        "date": "2026-12-12",
+        "time": "16:00",
+        "end": "18:00"
+      },
+      {
+        "course": null,
+        "title": "Office hours",
+        "date": "2026-10-28",
+        "time": "14:00",
+        "end": "15:00",
+        "match": "office"
+      },
+      {
+        "course": null,
+        "title": "review recursion slides",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "recursion"
+      }
+    ],
+    "conflicts": [
+      {
+        "title": "Quiz 3",
+        "course": "MATH141",
+        "fields": ["date"],
+        "options": ["2026-10-30", "2026-11-02"],
+        "suggested": "2026-11-02"
+      },
+      {
+        "title": "Project 4",
+        "course": "CMSC131",
+        "fields": ["time"],
+        "options": ["2026-11-13T23:59", "2026-11-13T17:00"],
+        "suggested": "2026-11-13T17:00"
+      }
+    ],
+    "overlaps": ["Exam 2"],
+    "crossed_out": []
+  }
+}

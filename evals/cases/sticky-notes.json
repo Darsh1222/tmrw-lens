@@ -1,0 +1,48 @@
+{
+  "name": "sticky-notes",
+  "description": "Four sticky notes on a desk, photographed Thu Oct 29",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["sticky-notes.jpg"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": null,
+        "title": "PHYS HW 8",
+        "date": "2026-11-06",
+        "time": null,
+        "end": null,
+        "match": "hw ?8"
+      },
+      {
+        "course": null,
+        "title": "ENGL peer review",
+        "date": "2026-11-02",
+        "time": null,
+        "end": null,
+        "match": "peer review"
+      },
+      {
+        "course": "CMSC131",
+        "title": "office hrs",
+        "date": null,
+        "time": "15:00",
+        "end": "16:00",
+        "match": "office"
+      },
+      {
+        "course": null,
+        "title": "buy bluebook",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "bluebook"
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

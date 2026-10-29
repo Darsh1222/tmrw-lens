@@ -106,7 +106,11 @@ await step("PDF native (input_file → SyllabusPageExtraction)", async () => {
     [{ type: "input_file", filename: "syllabus.pdf", file_data: dataUrl(pdf, "application/pdf") }],
     { log: quiet },
   );
-  report("pdf native", c.at(-1)!, `${data.items.length} items, term start ${JSON.stringify(data.term_start_text)}`);
+  report(
+    "pdf native",
+    c.at(-1)!,
+    `${data.items.length} items, term start ${JSON.stringify(data.term_start?.date_text ?? null)}`,
+  );
 });
 
 for (const phrase of ["table", "text block"]) {

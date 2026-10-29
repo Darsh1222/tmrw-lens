@@ -43,3 +43,43 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   Apache-2.0 repo shouldn't pull in.
 - 2026-10-28: The pre-commit hook refuses to commit when gitleaks is missing, rather than skipping the scan. CI also
   runs gitleaks over the full history on every push and pull request.
+- 2026-10-29: Contradiction detection (PLAN updated). Two readings are the same item when course, kind, and family
+  ("quiz", "pset", "project") match and either their numbers match ("Quiz 3" = "Quiz 3") or one has no number and
+  the dates match. An unnumbered reading that says it changed ("Quiz moved to Mon!") joins the next numbered item of
+  its kind on or after the day the photo was taken; that join is uncertain, so its question adds "They're two
+  different items". Any disagreement on date or start time makes the item `conflict`: no date or time is picked, every
+  version keeps its own evidence, and one question lists the versions. Pre-selection: a source that says it changed
+  scores 2, a dated photo of a whiteboard or notes scores 1, the highest wins, and with no score the syllabus wins as
+  the official schedule. The reason is always shown ("The whiteboard photo was taken Wed Oct 28 and says 'moved to'").
+  Only conflicts are pre-selected; a plain date choice ("Thu" written on a Thursday) has no favourite, so none is.
+- 2026-10-29: "Invented dates" is an audit, not a model judgement. Every date in a plan (term start, item dates,
+  class first meetings, every version in a conflict) carries a trace: the words, the quote they're in, the rule, and
+  the inputs. The audit checks the words are in the quote, the inputs are the plan's own term start or the source's
+  photo or added date, and that recomputing gives the same date; times likewise. Send will run it and refuse on any
+  failure. "Fully verified" counts classes and items whose every field is `verified`.
+- 2026-10-29: Date resolution rules. Week N is counted from the Monday-to-Sunday week the term starts in. A month and
+  day without a year take the year that puts them from 60 days before to 305 days after the anchor (term start, else
+  photo date, else the day the source was added). "Mon", "today", and "tomorrow" need a photo date, and "Mon" written
+  on a Monday or "next Mon" is a question. A weekday that disagrees with its date ("Fri Oct 31") is a question.
+  "midnight" is 11:59pm on that day. A time without am/pm ("5") is a question. "in class" takes the course's meeting
+  that day from the schedule, preferring the lecture.
+- 2026-10-29: Verification by source type. Pasted text and PDF pages with a text layer: each line of the quote must be
+  found in the text (quotes may join non-adjacent lines, like a course heading and its meeting). Photos: a second Spark
+  call re-reads crops of every box, with no hint of the first reading; the quote must match (each line, or 85%
+  similar) and every field must appear in the re-read exactly, so a changed digit fails. On a grid-only Testudo
+  screenshot, class days come from column positions, which no quote can prove, so the days are one question per
+  screenshot rather than verified or unverified. Rejected re-reading text-layer PDF pages: search is stricter and free.
+- 2026-10-29: Crops for the re-read are padded by 5% of the image width: Spark's boxes were sometimes a character
+  short, and the first eval run lost the "5" of "11/5".
+- 2026-10-29: Evals replay recorded model readings (`evals/recorded/`, keyed by fixture hash and task version), so
+  `pnpm eval` is free and runs in CI; `pnpm eval:live` re-reads the fixtures (about 17 cents for all 10). Fixtures are
+  byte-identical across regenerations (PDF dates pinned, seeded noise) so recordings don't go stale.
+- 2026-10-29: Synthetic whiteboard, notes, and sticky-note photos are drawn in code with two SIL Open Font License
+  handwriting fonts (Caveat, Patrick Hand), vendored in `fixtures/fonts/` with their licences, plus rotation, uneven
+  light, and noise. Real photos are still needed before the demo; they stay in `local-inputs/`.
+- 2026-10-29: SAM spike (about 20 minutes, under 2 cents). On the synthetic photos SAM 3.1 finds each sticky note
+  ("sticky note", 0.97), the whole whiteboard, and the sheet of notebook paper, but nothing for "handwriting". It also
+  boxed a laptop corner as a sticky note at 0.91. Spark already read all four sticky notes from the whole photo, so
+  SAM isn't in the pipeline. Revisit with real cluttered photos: split by "sticky note" or "paper" at confidence 0.95
+  or more, and read each region on its own.
+- 2026-10-29: `@napi-rs/canvas` moved to runtime dependencies: the server crops boxes for the re-read.

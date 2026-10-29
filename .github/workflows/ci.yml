@@ -29,4 +29,6 @@ jobs:
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm test
+      # Replays recorded model readings: no API key, no cost. Fails on any invented date or missed conflict.
+      - run: pnpm eval
       - run: pnpm build

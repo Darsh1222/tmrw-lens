@@ -1,0 +1,52 @@
+{
+  "testudo-schedule.png": {
+    "kind": "testudo_screenshot",
+    "label": "Testudo screenshot",
+    "captured_at": null
+  },
+  "testudo-schedule.txt": {
+    "kind": "testudo_text",
+    "label": "pasted Testudo schedule",
+    "captured_at": null
+  },
+  "testudo-grid.png": {
+    "kind": "testudo_screenshot",
+    "label": "Testudo screenshot",
+    "captured_at": null
+  },
+  "syllabus-math141.pdf": {
+    "kind": "syllabus_pdf",
+    "label": "MATH141 syllabus",
+    "captured_at": null
+  },
+  "syllabus-cmsc131.pdf": {
+    "kind": "syllabus_pdf",
+    "label": "CMSC131 syllabus",
+    "captured_at": null
+  },
+  "whiteboard-math141.jpg": {
+    "kind": "whiteboard_photo",
+    "label": "whiteboard photo",
+    "captured_at": "2026-10-26T10:52:00-04:00"
+  },
+  "whiteboard-quiz-moved.jpg": {
+    "kind": "whiteboard_photo",
+    "label": "whiteboard photo",
+    "captured_at": "2026-10-28T10:51:00-04:00"
+  },
+  "notes-week.jpg": {
+    "kind": "notes_photo",
+    "label": "notes photo",
+    "captured_at": "2026-10-25T20:15:00-04:00"
+  },
+  "notes-cmsc131.jpg": {
+    "kind": "notes_photo",
+    "label": "notes photo",
+    "captured_at": "2026-10-28T16:40:00-04:00"
+  },
+  "sticky-notes.jpg": {
+    "kind": "notes_photo",
+    "label": "sticky notes photo",
+    "captured_at": "2026-10-29T08:30:00-04:00"
+  }
+}

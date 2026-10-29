@@ -1,3 +1,5 @@
 pnpm-lock.yaml
 fixtures/
 .next/
+evals/recorded/
+evals/results.json

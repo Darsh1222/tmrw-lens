@@ -3,8 +3,8 @@ import { createRequire } from "node:module";
 import { createCanvas } from "@napi-rs/canvas";
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 
-// Renders PDF pages to PNG in Node, for fixtures, smoke tests, and evals.
-// The app renders pages in the browser instead, so this stays a dev dependency.
+// Renders PDF pages to PNG in Node, with each page's text layer, for fixtures,
+// smoke tests, and evals. The app does the same in the browser.
 
 const pdfjsRoot = dirname(createRequire(import.meta.url).resolve("pdfjs-dist/package.json"));
 
@@ -16,7 +16,7 @@ export async function renderPdfPages(pdf: Uint8Array, opts: { scale?: number; pa
   });
   const doc = await task.promise;
   const wanted = opts.pages ?? Array.from({ length: doc.numPages }, (_, i) => i + 1);
-  const out: { page: number; png: Buffer; width: number; height: number }[] = [];
+  const out: { page: number; png: Buffer; width: number; height: number; text: string | null }[] = [];
   try {
     for (const n of wanted) {
       const page = await doc.getPage(n);
@@ -31,7 +31,19 @@ export async function renderPdfPages(pdf: Uint8Array, opts: { scale?: number; pa
         canvasContext: ctx as unknown as CanvasRenderingContext2D,
         viewport,
       }).promise;
-      out.push({ page: n, png: canvas.toBuffer("image/png"), width: canvas.width, height: canvas.height });
+      // Lines of the text layer, joined in reading order; null for a scanned page with no text.
+      const content = await page.getTextContent();
+      const text = content.items
+        .map((it) => ("str" in it ? it.str + (it.hasEOL ? "\n" : " ") : ""))
+        .join("")
+        .trim();
+      out.push({
+        page: n,
+        png: canvas.toBuffer("image/png"),
+        width: canvas.width,
+        height: canvas.height,
+        text: text || null,
+      });
     }
   } finally {
     await task.destroy();

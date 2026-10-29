@@ -22,7 +22,9 @@
     "check:env": "node scripts/check-env-files.mjs",
     "check:secrets": "gitleaks git --redact --no-banner .",
     "fixtures": "tsx scripts/make-fixtures.ts",
-    "smoke": "tsx --env-file=.env.local scripts/smoke.ts"
+    "smoke": "tsx --env-file=.env.local scripts/smoke.ts",
+    "eval": "tsx scripts/eval.ts",
+    "eval:live": "tsx --env-file=.env.local scripts/eval.ts --live"
   },
   "dependencies": {
     "luxon": "^3.7.2",

@@ -1,0 +1,76 @@
+{
+  "name": "conflict-time",
+  "description": "Deliberate conflict: syllabus 'Project 4 due Fri Nov 13, 11:59pm' vs notes 'Proj 4 due Fri 11/13 @ 5pm (per TA)' (photo Wed Oct 28)",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-cmsc131.pdf", "notes-cmsc131.jpg"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": "CMSC131",
+        "title": "Project 3",
+        "date": "2026-11-01",
+        "time": "23:59",
+        "end": null,
+        "sources": 2
+      },
+      {
+        "course": "CMSC131",
+        "title": "Exam 2",
+        "date": "2026-11-11",
+        "time": "13:00",
+        "end": "14:15"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Project 4",
+        "date": "2026-11-13",
+        "time": "23:59",
+        "end": null,
+        "conflict": true
+      },
+      {
+        "course": "CMSC131",
+        "title": "Quiz 5",
+        "date": "2026-11-17",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "CMSC131",
+        "title": "Project 5",
+        "date": "2026-12-04",
+        "time": "23:59",
+        "end": null
+      },
+      {
+        "course": "CMSC131",
+        "title": "Final exam",
+        "date": "2026-12-12",
+        "time": "16:00",
+        "end": "18:00"
+      },
+      {
+        "course": null,
+        "title": "review recursion slides",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "recursion"
+      }
+    ],
+    "conflicts": [
+      {
+        "title": "Project 4",
+        "course": "CMSC131",
+        "fields": ["time"],
+        "options": ["2026-11-13T23:59", "2026-11-13T17:00"],
+        "suggested": "2026-11-13T17:00"
+      }
+    ],
+    "classes": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

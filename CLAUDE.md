@@ -22,7 +22,10 @@ Upstash Redis (REST) for the spend cap and rate limits. No database: Tomorrow ow
 - `pnpm typecheck`, `pnpm lint`, `pnpm format:check` (`pnpm format` to fix), `pnpm test` (unit, `tests/unit/`)
 - `pnpm smoke`: live calls to Meta Model API on the synthetic fixtures (text, image, PDF page rendered and native,
   SAM). Reads `.env.local`. About 5 cents.
-- `pnpm fixtures`: regenerate `fixtures/synthetic/` (made-up schedule screenshot, pasted text, two-page syllabus).
+- `pnpm fixtures`: regenerate `fixtures/synthetic/` (all made up; byte-identical across runs) and its `manifest.json`.
+- `pnpm eval`: score `evals/cases/` against recorded model readings (offline, free, in CI). Headline numbers: "% fully
+  verified" and "invented dates". `pnpm eval:live` re-reads the fixtures with Meta Model API and re-records (about
+  20 cents); run it after changing a task's instructions or schema (and bump its `version`), or a fixture.
 - `pnpm check:env`: fails if any `.env*` file other than `.env.example` is tracked. Runs in the pre-commit hook and CI.
 - `pnpm check:secrets`: gitleaks over the full git history.
 - The pre-commit hook (`.githooks/pre-commit`, enabled by `pnpm install`) runs `check:env` and gitleaks on staged
@@ -39,8 +42,10 @@ Upstash Redis (REST) for the spend cap and rate limits. No database: Tomorrow ow
 - The model reads; code computes. Extraction returns dates, days, and times as written ("Week 7 Thu", "TuTh") plus an
   exact quote and a 0-1000 box. Code resolves dates (Luxon, with the term start), converts boxes to 0-1, checks every
   field appears in its quote, and flags conflicts with class blocks.
-- Every extracted field has a status: verified, needs_question, or unverified. Unverified fields are amber and never
-  sent to Tomorrow until the person edits or confirms them. One question per ambiguity.
+- Every extracted field has a status: verified, needs_question, unverified, or conflict. Unverified fields are amber
+  and never sent to Tomorrow until the person edits or confirms them. Conflicting sources are never merged silently:
+  one question, likely answer pre-selected with its reason, applied only when the person answers. One question per
+  ambiguity. Every date traces to a quote plus a code computation (`src/lib/plan/audit.ts`).
 - Store times in UTC with an IANA zone; render in the person's zone. Test DST.
 - Never log content: no file bytes, quotes, prompts, or replies. The cost log records task, model, tokens, cost, and
   latency only.

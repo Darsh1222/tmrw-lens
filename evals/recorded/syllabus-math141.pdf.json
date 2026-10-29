@@ -1,0 +1,192 @@
+{
+  "file": "syllabus-math141.pdf",
+  "sha256": "bdd0fb6b67213d66f7bbcf7e52c73774895d39555a27f795a12053e7d5240404",
+  "model": "muse-spark-1.3",
+  "tasks": {
+    "extract_schedule": 1,
+    "extract_syllabus_page": 2,
+    "extract_whiteboard": 2,
+    "extract_notes": 2,
+    "reread_crops": 1
+  },
+  "pages": [
+    {
+      "page": 1,
+      "text": "MATH141 Calculus II, Fall 2026 \nSection 0121 · Synthetic syllabus for testing (not a real course page)\nInstructor: Dr. A. Example · Office hours: Tue 2:00-3:30pm, MTH 3104\nClasses begin Monday, August 31, 2026. Week 1 is the week of August 31. \nGrading \nWeekly problem sets 20%\nQuizzes (best 5 of 6) 15%\nMidterm 1 20%\nMidterm 2 20%\nFinal exam 25% \nLate policy \nProblem sets are due at 11:59pm on the day listed. One late set (up to 48 hours) is accepted without penalty.",
+      "extraction": {
+        "course_code": "MATH141",
+        "course_title": "Calculus II",
+        "term_start": {
+          "date_text": "Monday, August 31, 2026",
+          "evidence": {
+            "quote": "Classes begin Monday, August 31, 2026. Week 1 is the week of August 31.",
+            "box": {
+              "x_min": 91,
+              "y_min": 148,
+              "x_max": 847,
+              "y_max": 165
+            }
+          }
+        },
+        "items": []
+      },
+      "rereads": {}
+    },
+    {
+      "page": 2,
+      "text": "Course schedule \nWeek   Dates   Topic   Due\n6   Oct 5 - Oct 9   Integration by parts   Problem Set 4 due Thu Oct 8\n7   Oct 12 - Oct 16   Trig substitution   Problem Set 5 due Week 7 Thu\n8   Oct 19 - Oct 23   Partial fractions   Midterm 1, Wed Oct 21, in class\n9   Oct 26 - Oct 30   Improper integrals   Quiz 3, Fri Oct 30\n10   Nov 2 - Nov 6   Sequences   Problem Set 6 due Thu Nov 5\n11   Nov 9 - Nov 13   Series and convergence tests   Midterm 2, Week 11 Wed\n12   Nov 16 - Nov 20   Power series   Quiz 4, Fri Nov 20\nFinal exam: Monday, December 14, 8:00am - 10:00am, location TBA.\nReading: Stewart, Chapter 7 sections 7.1-7.5 before Midterm 1.",
+      "extraction": {
+        "course_code": null,
+        "course_title": null,
+        "term_start": null,
+        "items": [
+          {
+            "kind": "assignment",
+            "title": "Problem Set 4",
+            "date_text": "Thu Oct 8",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "6 Oct 5 - Oct 9 Integration by parts Problem Set 4 due Thu Oct 8",
+              "box": {
+                "x_min": 88,
+                "y_min": 106,
+                "x_max": 663,
+                "y_max": 122
+              }
+            }
+          },
+          {
+            "kind": "assignment",
+            "title": "Problem Set 5",
+            "date_text": "Week 7 Thu",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "7 Oct 12 - Oct 16 Trig substitution Problem Set 5 due Week 7 Thu",
+              "box": {
+                "x_min": 88,
+                "y_min": 133,
+                "x_max": 733,
+                "y_max": 149
+              }
+            }
+          },
+          {
+            "kind": "exam",
+            "title": "Midterm 1",
+            "date_text": "Wed Oct 21",
+            "time_text": "in class",
+            "weight_text": null,
+            "evidence": {
+              "quote": "8 Oct 19 - Oct 23 Partial fractions Midterm 1, Wed Oct 21, in class",
+              "box": {
+                "x_min": 88,
+                "y_min": 158,
+                "x_max": 724,
+                "y_max": 174
+              }
+            }
+          },
+          {
+            "kind": "quiz",
+            "title": "Quiz 3",
+            "date_text": "Fri Oct 30",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "9 Oct 26 - Oct 30 Improper integrals Quiz 3, Fri Oct 30",
+              "box": {
+                "x_min": 88,
+                "y_min": 184,
+                "x_max": 630,
+                "y_max": 199
+              }
+            }
+          },
+          {
+            "kind": "assignment",
+            "title": "Problem Set 6",
+            "date_text": "Thu Nov 5",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "10 Nov 2 - Nov 6 Sequences Problem Set 6 due Thu Nov 5",
+              "box": {
+                "x_min": 88,
+                "y_min": 209,
+                "x_max": 658,
+                "y_max": 225
+              }
+            }
+          },
+          {
+            "kind": "exam",
+            "title": "Midterm 2",
+            "date_text": "Week 11 Wed",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "11 Nov 9 - Nov 13 Series and convergence tests Midterm 2, Week 11 Wed",
+              "box": {
+                "x_min": 88,
+                "y_min": 234,
+                "x_max": 764,
+                "y_max": 250
+              }
+            }
+          },
+          {
+            "kind": "quiz",
+            "title": "Quiz 4",
+            "date_text": "Fri Nov 20",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "12 Nov 16 - Nov 20 Power series Quiz 4, Fri Nov 20",
+              "box": {
+                "x_min": 88,
+                "y_min": 259,
+                "x_max": 635,
+                "y_max": 275
+              }
+            }
+          },
+          {
+            "kind": "exam",
+            "title": "Final exam",
+            "date_text": "Monday, December 14",
+            "time_text": "8:00am - 10:00am",
+            "weight_text": null,
+            "evidence": {
+              "quote": "Final exam: Monday, December 14, 8:00am - 10:00am, location TBA.",
+              "box": {
+                "x_min": 88,
+                "y_min": 312,
+                "x_max": 676,
+                "y_max": 330
+              }
+            }
+          },
+          {
+            "kind": "reading",
+            "title": "Stewart, Chapter 7 sections 7.1-7.5",
+            "date_text": "before Midterm 1",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "Reading: Stewart, Chapter 7 sections 7.1-7.5 before Midterm 1.",
+              "box": {
+                "x_min": 89,
+                "y_min": 335,
+                "x_max": 633,
+                "y_max": 352
+              }
+            }
+          }
+        ]
+      },
+      "rereads": {}
+    }
+  ]
+}

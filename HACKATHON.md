@@ -33,3 +33,22 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
 - First live calls: text, Testudo screenshot (6 of 6 class meetings read from the list view, with boxes), syllabus page
   as a rendered image and as a native PDF (9 of 9 items each), and SAM. Six calls, about 5 cents.
 - Guardrails: gitleaks pre-commit hook, a check that fails if any `.env` file other than `.env.example` is tracked.
+
+### Oct 29
+
+- Date and time resolver in code: "Week 7 Thu", "Fri Oct 30", "11/3", "Mon", "today", "in class", "1:00-2:15pm",
+  with US daylight-saving tests. Ambiguous words become one question; nothing is guessed.
+- Extraction tasks for all four input types, each checked so every date and time the model returns is inside its
+  quote, plus an independent second read of every photo crop.
+- Verifier: per-field status (verified, needs question, unverified, conflict), "in class" times filled in from the
+  schedule, exams that overlap another course's class flagged.
+- Cross-source merge with contradiction detection: when sources disagree ("Quiz 3, Fri Oct 30" in the syllabus,
+  "Quiz moved to Mon!" on the whiteboard), the item is marked conflict, both pieces of evidence are kept, and one
+  question asks which is right, with the likely answer pre-selected and the reason shown.
+- Date audit behind "invented dates: 0": every date must trace to words in its quote and recompute to the same value.
+- Ten synthetic fixtures (schedule screenshot, grid-only screenshot, pasted schedule, two syllabi, two whiteboards, two
+  pages of notes, sticky notes), two with deliberate conflicts, and eleven eval cases.
+- First eval run on Muse Spark: 0 invented dates of 74, 73% of everything found fully verified (the rest are real
+  questions), 68 of 68 items found, 54 of 54 dates right, 4 of 4 conflicts caught with the right answer
+  pre-selected, 0 false conflicts. About 17 cents.
+- SAM 3.1 spike: it finds sticky notes, whiteboards, and sheets of paper in a photo, not handwriting.
