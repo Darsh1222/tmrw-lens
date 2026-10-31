@@ -2,13 +2,16 @@
   "file": "whiteboard-math141.jpg",
   "sha256": "3a2b98a1bbbe8dcc022f7ae37a5135e1a7e6070b250744fde2941c6c76b31fdc",
   "model": "muse-spark-1.3",
+  "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 1,
-    "extract_syllabus_page": 2,
-    "extract_whiteboard": 2,
-    "extract_notes": 2,
+    "extract_schedule": 2,
+    "extract_syllabus_page": 3,
+    "extract_whiteboard": 3,
+    "extract_notes": 3,
     "reread_crops": 1
   },
+  "crops": 3,
+  "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
       "page": null,
@@ -26,15 +29,15 @@
             "evidence": {
               "quote": "Quiz Fri: improper integrals",
               "box": {
-                "x_min": 95,
-                "y_min": 275,
-                "x_max": 535,
+                "x_min": 80,
+                "y_min": 270,
+                "x_max": 595,
                 "y_max": 350
               }
             }
           },
           {
-            "kind": "task",
+            "kind": "assignment",
             "title": "PS5",
             "course_hint": "MATH 141",
             "date_text": null,
@@ -44,10 +47,10 @@
             "evidence": {
               "quote": "PS5 graded - pick up in discussion",
               "box": {
-                "x_min": 107,
-                "y_min": 410,
-                "x_max": 677,
-                "y_max": 512
+                "x_min": 82,
+                "y_min": 408,
+                "x_max": 682,
+                "y_max": 513
               }
             }
           },
@@ -55,17 +58,17 @@
             "kind": "task",
             "title": "Read 7.8",
             "course_hint": "MATH 141",
-            "date_text": "Wed",
+            "date_text": "before Wed",
             "time_text": null,
             "change_text": null,
             "legible": "clear",
             "evidence": {
               "quote": "Read 7.8 before Wed",
               "box": {
-                "x_min": 88,
-                "y_min": 547,
-                "x_max": 372,
-                "y_max": 634
+                "x_min": 80,
+                "y_min": 548,
+                "x_max": 410,
+                "y_max": 635
               }
             }
           }
@@ -84,7 +87,309 @@
           "text": "Read 7.8 before Wed",
           "legible": "clear"
         }
+      },
+      "sam": {
+        "objects": [
+          {
+            "id": "paper_0",
+            "label": "paper",
+            "bbox": {
+              "x0": 0.035,
+              "y0": 0.047,
+              "x1": 0.96625,
+              "y1": 0.953
+            },
+            "outline": [
+              [
+                0.035,
+                0.3731
+              ],
+              [
+                0.0396,
+                0.0543
+              ],
+              [
+                0.0405,
+                0.0528
+              ],
+              [
+                0.0841,
+                0.047
+              ],
+              [
+                0.0851,
+                0.047
+              ],
+              [
+                0.4573,
+                0.0557
+              ],
+              [
+                0.8877,
+                0.0688
+              ],
+              [
+                0.9277,
+                0.0717
+              ],
+              [
+                0.9469,
+                0.0732
+              ],
+              [
+                0.9605,
+                0.0747
+              ],
+              [
+                0.9632,
+                0.0761
+              ],
+              [
+                0.966,
+                0.079
+              ],
+              [
+                0.966,
+                0.0819
+              ],
+              [
+                0.9641,
+                0.6439
+              ],
+              [
+                0.9632,
+                0.6963
+              ],
+              [
+                0.9596,
+                0.8972
+              ],
+              [
+                0.9587,
+                0.9453
+              ],
+              [
+                0.9578,
+                0.9467
+              ],
+              [
+                0.9469,
+                0.954
+              ],
+              [
+                0.885,
+                0.954
+              ],
+              [
+                0.5373,
+                0.9467
+              ],
+              [
+                0.3435,
+                0.9424
+              ],
+              [
+                0.1105,
+                0.9351
+              ],
+              [
+                0.0386,
+                0.9322
+              ],
+              [
+                0.0359,
+                0.9307
+              ],
+              [
+                0.035,
+                0.6133
+              ]
+            ],
+            "confidence": 0.507692277431488
+          },
+          {
+            "id": "whiteboard_0",
+            "label": "whiteboard",
+            "bbox": {
+              "x0": 0.03125,
+              "y0": 0.044,
+              "x1": 0.969375,
+              "y1": 0.955
+            },
+            "outline": [
+              [
+                0.0313,
+                0.9149
+              ],
+              [
+                0.0331,
+                0.5806
+              ],
+              [
+                0.0358,
+                0.2683
+              ],
+              [
+                0.0368,
+                0.1657
+              ],
+              [
+                0.0386,
+                0.0513
+              ],
+              [
+                0.0395,
+                0.0469
+              ],
+              [
+                0.0413,
+                0.0455
+              ],
+              [
+                0.0459,
+                0.044
+              ],
+              [
+                0.0551,
+                0.044
+              ],
+              [
+                0.937,
+                0.0631
+              ],
+              [
+                0.9645,
+                0.0645
+              ],
+              [
+                0.9672,
+                0.066
+              ],
+              [
+                0.9682,
+                0.0675
+              ],
+              [
+                0.9691,
+                0.0704
+              ],
+              [
+                0.97,
+                0.0748
+              ],
+              [
+                0.97,
+                0.0792
+              ],
+              [
+                0.9672,
+                0.4545
+              ],
+              [
+                0.9645,
+                0.7243
+              ],
+              [
+                0.9627,
+                0.8988
+              ],
+              [
+                0.9608,
+                0.9501
+              ],
+              [
+                0.9599,
+                0.9531
+              ],
+              [
+                0.9526,
+                0.956
+              ],
+              [
+                0.9324,
+                0.956
+              ],
+              [
+                0.7793,
+                0.9531
+              ],
+              [
+                0.3393,
+                0.9428
+              ],
+              [
+                0.1119,
+                0.9369
+              ],
+              [
+                0.0606,
+                0.9355
+              ],
+              [
+                0.0377,
+                0.934
+              ],
+              [
+                0.034,
+                0.9325
+              ],
+              [
+                0.0322,
+                0.9296
+              ],
+              [
+                0.0313,
+                0.9281
+              ]
+            ],
+            "confidence": 0.8241757750511169
+          }
+        ],
+        "rereads": {
+          "items.0": {
+            "text": "Quiz Fri: improper integrals",
+            "legible": "clear"
+          },
+          "items.1": {
+            "text": "PS5 graded - pick up in discussion",
+            "legible": "clear"
+          },
+          "items.2": {
+            "text": "Read 7.8 before Wed",
+            "legible": "clear"
+          }
+        }
       }
     }
-  ]
+  ],
+  "stages": {
+    "extract": {
+      "calls": 1,
+      "input_tokens": 2973,
+      "cached_tokens": 2929,
+      "output_tokens": 1288,
+      "cost_usd": 0.005968350000000001
+    },
+    "reread_box": {
+      "calls": 1,
+      "input_tokens": 779,
+      "cached_tokens": 113,
+      "output_tokens": 150,
+      "cost_usd": 0.0014869500000000001
+    },
+    "sam_segment": {
+      "calls": 3,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0.0075
+    },
+    "reread_sam": {
+      "calls": 1,
+      "input_tokens": 779,
+      "cached_tokens": 113,
+      "output_tokens": 150,
+      "cost_usd": 0.0014869500000000001
+    }
+  }
 }

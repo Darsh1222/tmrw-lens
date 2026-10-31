@@ -1,4 +1,4 @@
-import { contains, similarity } from "@/lib/plan/text";
+import { contains, windowSimilarity } from "@/lib/plan/text";
 import { ok, type Check, type PageReading } from "@/lib/plan/types";
 
 // Is the quote really in the source, and is each field really in the quote?
@@ -25,6 +25,11 @@ function linesIn(haystack: string, quote: string): boolean {
 
 const unverified = (reason: string): Check => ({ status: "unverified", reason });
 
+/** Whether a second read agrees with the quote: every line in it, or close to a stretch of it. */
+export function rereadAgrees(reread: string, quote: string): boolean {
+  return linesIn(reread, quote) || windowSimilarity(reread, quote) >= SIMILAR;
+}
+
 export function verifyReading(
   page: PageReading,
   key: string,
@@ -38,7 +43,7 @@ export function verifyReading(
     quoteCheck = linesIn(page.text, quote) ? ok : unverified("That line isn't in the source text.");
   } else if (!reread) {
     quoteCheck = unverified("There was no box to check this against.");
-  } else if (linesIn(reread.text, quote) || similarity(reread.text, quote) >= SIMILAR) {
+  } else if (rereadAgrees(reread.text, quote)) {
     // Two reads agree. If either reader found it hard to read, the person still gets the final say.
     const shaky = (unsure || reread.legible === "unsure") && !linesIn(reread.text, quote);
     quoteCheck = shaky ? { status: "needs_question", reason: "It's hard to read." } : ok;

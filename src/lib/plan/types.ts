@@ -1,5 +1,6 @@
 import type { DateInputs, DateRule, Weekday } from "@/lib/resolve/dates";
-import type { Evidence, SourceKind } from "@/lib/schemas/evidence";
+import type { Point } from "@/lib/images/geometry";
+import type { BBox, Evidence, ObjectLabel, SourceKind } from "@/lib/schemas/evidence";
 import type {
   NotesExtraction,
   ScheduleExtraction,
@@ -33,6 +34,15 @@ export type SourceMeta = {
 
 export type Reread = { text: string; legible: "clear" | "unsure" };
 
+/** One thing SAM found in a photo: a sticky note, a sheet of paper, or the whiteboard. */
+export type SceneObject = {
+  id: string;
+  label: ObjectLabel;
+  bbox: BBox;
+  outline: Point[];
+  confidence: number | null;
+};
+
 export type PageReading = {
   page: number | null;
   /** The page's own text when there is one (pasted text, a PDF's text layer); quotes are checked against it. */
@@ -43,6 +53,8 @@ export type PageReading = {
    * "classes.0", "term_start"). Missing where there was no box to crop, or the page has its own text.
    */
   rereads: Record<string, Reread>;
+  /** What SAM found on the photo. Absent when SAM wasn't run (documents, or segmentation off). */
+  objects?: SceneObject[];
 };
 
 export type SourceReading = { source: SourceMeta; pages: PageReading[] };
@@ -51,7 +63,7 @@ export type DateTrace = {
   /** The words as written, e.g. "Week 7 Thu". Always inside `evidence.quote`. */
   text: string;
   evidence: Evidence;
-  rule: DateRule | "first_meeting";
+  rule: DateRule | "first_meeting" | "last_meeting";
   inputs: DateInputs;
 };
 export type TracedDate = { value: string; trace: DateTrace };
@@ -59,9 +71,11 @@ export type TracedDate = { value: string; trace: DateTrace };
 export type TimeTrace = {
   text: string;
   evidence: Evidence;
-  rule: "clock" | "in_class";
+  rule: "clock" | "in_class" | "before_item";
   /** For "in class": the class block whose meeting time was used. */
   class_id: string | null;
+  /** For "before Midterm 1": the item whose start time was used. */
+  item_id?: string;
 };
 export type TracedTime = { start: string; end: string | null; trace: TimeTrace };
 
@@ -82,12 +96,14 @@ export type Candidate = {
   crossed_out: boolean;
   date: TracedDate | null;
   time: TracedTime | null;
+  /** The date words as written, kept for dates that depend on another item ("before Midterm 1"). */
+  date_text: string | null;
   /** Unresolved time words, e.g. "in class" with no schedule, kept for the question. */
   time_text: string | null;
   evidence: Evidence;
   checks: { quote: Check; title: Check; course: Check; date: Check; time: Check };
   /** Why the date couldn't be resolved, and candidate dates when it's a choice. */
-  date_needs: { needs: "term_start" | "photo_date" | "choice" | "rewrite"; options: string[] } | null;
+  date_needs: { needs: "term_start" | "photo_date" | "choice" | "rewrite" | "reference"; options: string[] } | null;
   legibility: { reread: string | null; unsure: boolean };
 };
 
@@ -102,8 +118,11 @@ export type ClassBlock = {
   start: string;
   end: string;
   location: string | null;
+  /** Weekly, with UNTIL at the end of the last day of classes when that's known. */
   rrule: string;
   first_date: TracedDate | null;
+  /** The last meeting on or before the last day of classes. */
+  last_date: TracedDate | null;
   evidence: Evidence;
   checks: { quote: Check; days: Check; time: Check };
   status: Status;
@@ -112,7 +131,7 @@ export type ClassBlock = {
 export type QuestionOption = {
   id: string;
   label: string;
-  /** A date, time, or "different"/"keep"; null means "let me type it". */
+  /** A date, time, "different"/"keep", or "item:<id>" for which item a relative date means; null means "let me type it". */
   value: string | null;
   evidence: Evidence | null;
 };
@@ -121,7 +140,8 @@ export type Question = {
   id: string;
   /** The item (or "term") it's about. */
   about: string;
-  type: "conflict" | "choose_date" | "missing_fact" | "unreadable" | "class_overlap" | "course" | "check";
+  type:
+    "conflict" | "choose_date" | "missing_fact" | "unreadable" | "class_overlap" | "course" | "check" | "which_item";
   prompt: string;
   options: QuestionOption[];
   /** Pre-selected option id, never applied until the person answers. */
@@ -135,6 +155,8 @@ export type Conflict = {
   versions: { candidate_id: string; date: TracedDate | null; time: TracedTime | null; evidence: Evidence }[];
   /** True when it's not certain the sources mean the same item (e.g. "quiz moved to Mon" vs "Quiz 3"). */
   maybe_different: boolean;
+  /** The candidate whose version the person picked; null until they answer. */
+  chosen: string | null;
 };
 
 export type PlanItem = {
@@ -150,14 +172,22 @@ export type PlanItem = {
   candidates: string[];
   checks: Candidate["checks"];
   conflict: Conflict | null;
+  /**
+   * A date written relative to another item ("before Midterm 1", "the week after Project 4"). The date is recomputed
+   * from that item's whenever it changes, so answering that item's question moves this one too. `item_id` is null
+   * while it's unclear which item it means (its question asks).
+   */
+  depends_on: { item_id: string | null; text: string; offset_days: number } | null;
   status: Status;
 };
 
-export type TermStart = { date: TracedDate | null; check: Check };
+/** The first or last day of classes. */
+export type TermDate = { date: TracedDate | null; check: Check };
 
 export type Plan = {
   zone: string;
-  term_start: TermStart;
+  term_start: TermDate;
+  term_end: TermDate;
   classes: ClassBlock[];
   items: PlanItem[];
   questions: Question[];

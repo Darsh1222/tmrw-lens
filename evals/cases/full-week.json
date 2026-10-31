@@ -118,8 +118,8 @@
       {
         "course": "MATH141",
         "title": "Reading",
-        "date": null,
-        "time": null,
+        "date": "2026-10-21",
+        "time": "10:00",
         "end": null,
         "match": "stewart|chapter 7|7\\.1"
       },
@@ -178,10 +178,26 @@
       {
         "course": null,
         "title": "review recursion slides",
-        "date": null,
-        "time": null,
+        "date": "2026-11-11",
+        "time": "13:00",
         "end": null,
         "match": "recursion"
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3 corrections",
+        "match": "corrections",
+        "date": null,
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "CMSC131",
+        "title": "Exam 2 corrections",
+        "match": "corrections",
+        "date": "2026-11-18",
+        "time": null,
+        "end": null
       }
     ],
     "conflicts": [
@@ -201,6 +217,32 @@
       }
     ],
     "overlaps": ["Exam 2"],
-    "crossed_out": []
+    "crossed_out": [],
+    "term_end": "2026-12-08"
+  },
+  "then": {
+    "answer": [
+      {
+        "conflict": "Quiz 3",
+        "pick": "2026-11-02"
+      }
+    ],
+    "items": [
+      {
+        "course": "MATH141",
+        "title": "Quiz 3",
+        "date": "2026-11-02",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3 corrections",
+        "match": "corrections",
+        "date": "2026-11-03",
+        "time": null,
+        "end": null
+      }
+    ]
   }
 }

@@ -10,7 +10,7 @@ import { DateTime } from "luxon";
 /** ISO weekday, Monday = 1 ... Sunday = 7, as Luxon numbers them. */
 export type Weekday = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-export type DateRule = "month_day" | "numeric" | "week_of_term" | "weekday_after" | "relative_day";
+export type DateRule = "month_day" | "numeric" | "week_of_term" | "weekday_after" | "relative_day" | "offset";
 
 /** The facts a date can depend on, as ISO dates. Recorded with every resolved date so it can be recomputed. */
 export type DateInputs = {
@@ -20,6 +20,10 @@ export type DateInputs = {
   photo_date: string | null;
   /** The day the source was added to Lens. Only ever used to pick the year of "Oct 30". */
   added_date: string | null;
+  /** Last day of classes. Only for a class's last meeting. */
+  term_end?: string | null;
+  /** The item a date like "before Midterm 1" depends on, and that item's date when this one was computed. */
+  ref?: { item_id: string; date: string } | null;
 };
 
 export type DateResult =
@@ -29,7 +33,7 @@ export type DateResult =
       /** Plain words for the person, e.g. "Oct 31, 2026 is a Saturday, not a Friday". */
       reason: string;
       /** What would settle it: a fact to ask for, or a choice between dates. */
-      needs: "term_start" | "photo_date" | "choice" | "rewrite";
+      needs: "term_start" | "photo_date" | "choice" | "rewrite" | "reference";
       /** Candidate ISO dates when it's a choice, most likely first. */
       options: string[];
     };
@@ -94,8 +98,45 @@ function nearestWithWeekday(d: DateTime, wd: Weekday): DateTime {
   return fwd <= 3 ? d.plus({ days: fwd }) : d.minus({ days: 7 - fwd });
 }
 
+const COUNT: Record<string, number> = { a: 1, an: 1, one: 1, the: 1, two: 2, three: 3, four: 4 };
+
+export type Relative = {
+  /** What it's relative to, as written: "Midterm 1", "the project", "Wed". */
+  ref: string;
+  /** Days from that date: "before X" is 0 (due by X), "the day after X" is 1, "the week before X" is -7. */
+  offset_days: number;
+};
+
+/**
+ * Splits "before Midterm 1", "the week after the project", "2 days before Exam 2" into what it's relative to and how
+ * far from it. null when the words aren't relative, or don't say how far ("after the midterm" alone).
+ */
+export function parseRelative(text: string): Relative | null {
+  const t = normalize(text).replace(/^due\s+/, "");
+  const m = /^(?:(a|an|one|the|two|three|four|\d+)\s+(days?|weeks?)\s+)?(before|after|prior to|by)\s+(.+)$/.exec(t);
+  if (!m) return null;
+  const [, count, unit, dir, ref] = m;
+  if (!unit && dir === "after") return null;
+  const n = unit ? (COUNT[count] ?? Number(count)) * (unit.startsWith("week") ? 7 : 1) : 0;
+  return { ref: ref.trim(), offset_days: dir === "after" || n === 0 ? n : -n };
+}
+
 /** Resolves a date as written. Pure: the same text and inputs always give the same answer. */
 export function resolveDate(text: string, inputs: DateInputs): DateResult {
+  // "the day before Oct 30" is Oct 29; "before Midterm 1" depends on another item, which the caller looks up.
+  const rel = parseRelative(text);
+  if (rel) {
+    const inner = resolveDate(rel.ref, inputs);
+    if (inner.ok)
+      return rel.offset_days === 0
+        ? inner
+        : { ok: true, date: iso(day(inner.date).plus({ days: rel.offset_days })), rule: "offset" };
+    if (inner.needs === "rewrite")
+      return inputs.ref
+        ? { ok: true, date: iso(day(inputs.ref.date).plus({ days: rel.offset_days })), rule: "offset" }
+        : fail(`"${text}" depends on when ${rel.ref} is`, "reference");
+    return inner;
+  }
   const t = normalize(text);
   const weekdayWords = [...t.matchAll(new RegExp(`\\b(${WEEKDAY_RE})\\b`, "g"))].map((m) => WEEKDAYS[m[1]]);
   const weekday = weekdayWords[0] ?? null;
@@ -272,8 +313,13 @@ export function parseDays(text: string): Weekday[] | null {
 }
 
 const BYDAY = ["", "MO", "TU", "WE", "TH", "FR", "SA", "SU"];
-export function weeklyRrule(days: Weekday[]): string {
-  return `FREQ=WEEKLY;BYDAY=${days.map((d) => BYDAY[d]).join(",")}`;
+/** Weekly on `days`; with `until` (a date, in `zone`), the last occurrence is on or before the end of that day. */
+export function weeklyRrule(days: Weekday[], until?: { date: string; zone: string }): string {
+  const rule = `FREQ=WEEKLY;BYDAY=${days.map((d) => BYDAY[d]).join(",")}`;
+  if (!until) return rule;
+  // RFC 5545: with a zoned DTSTART, UNTIL is in UTC.
+  const end = DateTime.fromISO(until.date, { zone: until.zone }).endOf("day").toUTC().toFormat("yyyyMMdd'T'HHmmss'Z'");
+  return `${rule};UNTIL=${end}`;
 }
 
 /** The first date on or after `from` that falls on one of `days`. */
@@ -281,6 +327,13 @@ export function firstMeeting(days: Weekday[], from: string): string {
   const d = day(from);
   const ahead = Math.min(...days.map((wd) => (wd - d.weekday + 7) % 7));
   return iso(d.plus({ days: ahead }));
+}
+
+/** The last date on or before `until` that falls on one of `days`. */
+export function lastMeeting(days: Weekday[], until: string): string {
+  const d = day(until);
+  const back = Math.min(...days.map((wd) => (d.weekday - wd + 7) % 7));
+  return iso(d.minus({ days: back }));
 }
 
 export function weekdayOf(isoDate: string): Weekday {

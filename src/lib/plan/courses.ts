@@ -54,8 +54,12 @@ const FAMILIES: { re: RegExp; family: string; num?: RegExp }[] = [
   { re: /\b(read|reading)\b/, family: "reading" },
 ];
 
+/** Words that make "Quiz 3 corrections" or "Midterm 1 review" a thing of its own, not Quiz 3 or Midterm 1. */
+const ABOUT = /\b(corrections?|reflections?|solutions?|review|regrades?|retakes?|make-?ups?|prep|practice|feedback)\b/;
+
 export function familyOf(title: string): { family: string | null; number: number | null } {
   const t = title.toLowerCase();
+  if (ABOUT.test(t)) return { family: null, number: null };
   for (const f of FAMILIES) {
     if (!f.re.test(t)) continue;
     const n = f.num?.exec(t);

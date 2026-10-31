@@ -83,3 +83,74 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   SAM isn't in the pipeline. Revisit with real cluttered photos: split by "sticky note" or "paper" at confidence 0.95
   or more, and read each region on its own.
 - 2026-10-29: `@napi-rs/canvas` moved to runtime dependencies: the server crops boxes for the re-read.
+- 2026-10-30: The cost–quality policy lives in CLAUDE.md and in PLAN.md's new "Quality bar" section. Lens has no
+  SPEC; PLAN is its spec. Tomorrow's `docs/SPEC.md` (its section 11 is the "Quality bar") is read-only from here, so
+  the owner adds it there. Points that only exist in Tomorrow (SMS, admin, judge score, MODEL_FAST/MODEL_SMART) are
+  kept as written, with a note on how each applies to Lens.
+- 2026-10-30: Policy point 3 in Lens: there is one text model, so tasks route by reasoning effort (`minimal` for
+  re-reads, `low` for extraction), and `runTask`'s one retry after a failed check runs one effort step higher. The
+  cost log tags it `:retry`, which is what the escalation rate is counted from. Point 4: Meta Model API caches
+  prefixes automatically; instructions go first and `prompt_cache_key` is the task name (never content). Point 8:
+  Meta documents no Batch API, so nothing is batched yet.
+- 2026-10-30: SAM masks are decoded with Meta's `@meta-sam/parser` 0.1.0 (SAM License: free use and redistribution,
+  with the licence included if it's ever distributed). It runs on the server only, and only outlines, never the
+  library, reach the browser. A regex can't parse masks: the base85 payload can contain `|>`.
+- 2026-10-30: SAM in the pipeline. Each whiteboard and notes photo gets three SAM calls ("sticky note", "paper",
+  "whiteboard", since SAM takes one concept per request): $0.0075 per photo. Matches under 0.5 confidence are dropped.
+  The raw detections are recorded; which ones are the same thing is decided in code. Detections whose boxes overlap
+  by IoU over 0.8 count as one object, and the likelier label wins, then the more specific one on a near-tie, so a
+  notebook page found as "sticky note" at 0.73 and "paper" at 0.93 is paper. A quote belongs to the smallest object
+  whose outline holds the centre of its box. The outline is the convex hull of the mask, in 0-1 image coordinates,
+  stored on the evidence as `region` and used as the highlight.
+- 2026-10-30: Which crop the second read gets. A quote alone on its object (one item per sticky note) is re-read from
+  the whole object, with everything outside its outline painted white. A quote that shares its object (a line on a
+  board or a notebook page) is re-read from its own box, clipped to the object's outline. Tried and rejected:
+  re-reading a shared object whole. It scored higher (77% fully verified against 72%), but on a board or a page the
+  object is nearly the whole photo, so that "second read" is the same pixels as the first. The gain came from
+  papering over badly placed boxes, which is a weaker check, not a better one.
+- 2026-10-30: One targeted retry for a line crop that doesn't read back as its quote (the model's box was a line off,
+  or cut a digit): a band 1.5 box heights above and below, as wide as the object (or the photo, without SAM),
+  clipped to the object. This follows policy point 9, a cheap check before anything bigger. On the synthetic photos
+  it recovered every such line: 0 unverified items, up from 5. A re-read still never sees the first read's text.
+- 2026-10-30: The second read's quote match also accepts 85% similarity to any stretch of the re-read about the
+  quote's length, not only to the whole re-read, because an object or band read holds more than one line. Fields
+  still have to appear in the re-read exactly, so a changed digit still fails.
+- 2026-10-30: SAM stays on for photos. On the synthetic photos it changes no verification result (77% with and
+  without; the second reads came back identical) and costs $0.0069 more per photo ($0.0185 against $0.0116). It is
+  kept for the outline highlight (every photo quote lands in an object) and for keeping neighbouring notes out of a
+  crop, which the clean synthetic photos don't test. `readSource(..., { sam: false })` turns it off. Real photos
+  decide whether its second-read crops are worth keeping.
+- 2026-10-30: Relative dates. "before X" and "by X" mean X's date, and X's start time when X has one (due before it
+  starts). "the day/week before/after X" and "N days/weeks before/after X" add or subtract days. A bare "after X"
+  isn't a date. "the day before Oct 30" is computed directly. The item X is looked up among items of the same course:
+  by kind and number ("Midterm 1"), by kind alone when only one exists ("the project" with one project), or by exact
+  title. If none matches, or more than one does, there's one "which item" question, listing the candidates. A
+  dependent of an item with no date yet (a conflict, say) waits on that item, with no question of its own. Dates are
+  recomputed after every answer, in dependency order, and a cycle is a question. The audit checks each dependent
+  against its item's current date.
+- 2026-10-30: "Quiz 3 corrections", "Midterm 1 review", "Exam 2 corrections" and the like are things of their own,
+  not Quiz 3 or Midterm 1, so they don't merge into them. A quote's date words no longer name its item ("review
+  slides before Exam 2" isn't Exam 2).
+- 2026-10-30: The last day of classes comes from a syllabus or schedule (`term_end` in both extraction schemas). Each
+  class's RRULE ends with UNTIL at the end of that day in the person's zone, written in UTC as RFC 5545 asks
+  (20261209T045959Z for Tue Dec 8 in New York). Each class also keeps its last meeting on or before that day. With
+  classes but no end date there is one question, never one per class, and two sources that disagree make it a
+  conflict. Breaks (Thanksgiving) aren't handled yet (they'd be EXDATEs).
+- 2026-10-30: Answers apply in code (`answerQuestion`): picking a conflict version settles that item, and choosing
+  which item a relative date means links it; then dependents are recomputed. Splitting a "maybe the same" conflict
+  into two items ("They're two different items") isn't built yet and throws, for the UI slice to add.
+- 2026-10-30: Real photos (`pnpm eval:real`, files in `local-inputs/`). They're prepared the way the app will prepare
+  uploads: at most 2048px on the long edge, re-encoded as JPEG (which drops every EXIF field, location included),
+  keeping the capture time read from EXIF. `@napi-rs/canvas` already applies EXIF orientation when it decodes. HEIC
+  is converted with macOS `sips` (local only). Each file's kind comes from `local-inputs/inputs.json` or its name.
+  Recordings stay in `local-inputs/.recorded/`, and only numbers are printed unless `--verbose`. With no gold
+  answers, only the two headline numbers are scored, which need none.
+- 2026-10-30: Never pay twice in evals. `pnpm eval:live` re-reads only inputs whose recording is missing or stale
+  (file hash, task version, or for photos the crop version), and `--force` re-reads everything. Recordings now hold
+  both second reads (with and without SAM) from one first read, so the comparison differs only in SAM, plus calls,
+  tokens, cached tokens, and cost per stage.
+- 2026-10-30: Fixture additions: the MATH141 syllabus gains "Last day of classes: Tuesday, December 8, 2026." and
+  "Quiz 3 corrections are due the day after Quiz 3." The CMSC131 syllabus gains "Exam 2 corrections due one week
+  after Exam 2". The eval cases with the moved quiz answer the conflict and check that the corrections move from
+  Oct 31 to Nov 3. All tasks were bumped (schedule v2, syllabus v3, whiteboard v3, notes v3) for the new fields and
+  the relative-date rule.

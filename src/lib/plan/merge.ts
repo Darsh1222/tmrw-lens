@@ -154,6 +154,7 @@ export function merge(cands: Candidate[]): { items: PlanItem[]; questions: Quest
           evidence: c.evidence,
         })),
         maybe_different: maybe,
+        chosen: null,
       };
       const pick = suggest(versions);
       const said = versions.map(
@@ -209,6 +210,7 @@ export function merge(cands: Candidate[]): { items: PlanItem[]; questions: Quest
       candidates: ordered.map((c) => c.id),
       checks,
       conflict,
+      depends_on: null,
       status: worst(...Object.values(checks)).status,
     });
   }

@@ -27,6 +27,8 @@ export type ResponsesRequest = {
   tools?: unknown[];
   /** SAM options travel here as strings, e.g. { include_confidence: "true" }. */
   metadata?: Record<string, string>;
+  /** Groups requests that share a prefix, for Meta's automatic prompt caching. A task name, never content. */
+  prompt_cache_key?: string;
   // Lens keeps no conversation state on Meta's side.
   store?: false;
 };

@@ -44,6 +44,23 @@ export function similarity(a: string, b: string): number {
   return 1 - levenshtein(x, y) / Math.max(x.length, y.length);
 }
 
+/**
+ * The best `similarity` between `needle` and any stretch of `haystack` about its length: how close a quote comes to
+ * appearing in a re-read of a whole sticky note or board, where the read holds more than that one line.
+ */
+export function windowSimilarity(haystack: string, needle: string): number {
+  const h = squash(haystack);
+  const n = squash(needle);
+  if (h.length <= n.length) return similarity(haystack, needle);
+  let best = 0;
+  for (const len of [n.length - 1, n.length, n.length + 1])
+    for (let i = 0; i + len <= h.length; i++) {
+      const s = 1 - levenshtein(h.slice(i, i + len), n) / Math.max(len, n.length);
+      if (s > best) best = s;
+    }
+  return best;
+}
+
 /** The digits in a string, in order: a re-read that changes any of them is a different reading. */
 export function digits(text: string): string {
   return text.replace(/\D/g, "");

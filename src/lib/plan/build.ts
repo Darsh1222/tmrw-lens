@@ -1,4 +1,5 @@
-import { candidates, classBlocks, GRID_DAYS, termStart } from "@/lib/plan/candidates";
+import { candidates, classBlocks, GRID_DAYS, termDate } from "@/lib/plan/candidates";
+import { linkDependents, propagate } from "@/lib/plan/depends";
 import { formatTime, merge } from "@/lib/plan/merge";
 import type { Candidate, ClassBlock, Plan, PlanItem, Question, SourceReading } from "@/lib/plan/types";
 import { worst } from "@/lib/plan/verify";
@@ -63,13 +64,15 @@ function overlap(item: PlanItem, classes: ClassBlock[]): ClassBlock | null {
 const MEETING = { lecture: "lecture", discussion: "discussion", lab: "lab", other: "class" };
 
 export function buildPlan(readings: SourceReading[], { zone }: { zone: string }): Plan {
-  const term = termStart(readings, zone);
-  const classes = classBlocks(readings, term);
+  const term = termDate(readings, zone, "term_start");
+  const termEnd = termDate(readings, zone, "term_end");
+  const classes = classBlocks(readings, term, { termEnd, zone });
   const all = candidates(readings, term, zone).map((c) => fillInClass(c, classes));
   const live = all.filter((c) => !c.crossed_out);
   const { items, questions } = merge(live);
   const byId = new Map(all.map((c) => [c.id, c]));
-  const asked: Question[] = [];
+  const asked: Question[] = linkDependents(items, byId);
+  propagate(items);
 
   // The first day of classes is one question for the whole plan, not one per item.
   const needsTerm =
@@ -80,6 +83,18 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
       about: "term",
       type: "missing_fact",
       prompt: "When is the first day of classes?",
+      options: [{ id: "edit", label: "Pick the date", value: null, evidence: null }],
+      suggested: null,
+      why_suggested: null,
+    });
+
+  // Weekly classes repeat until the last day of classes: one question if no syllabus or schedule says when that is.
+  if (classes.length > 0 && !termEnd.date)
+    asked.push({
+      id: "q_term_end",
+      about: "term",
+      type: "missing_fact",
+      prompt: `When is the last day of classes? Your weekly classes repeat until then.${termEnd.check.status === "conflict" ? ` ${termEnd.check.reason}` : ""}`,
       options: [{ id: "edit", label: "Pick the date", value: null, evidence: null }],
       suggested: null,
       why_suggested: null,
@@ -136,6 +151,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
 
   for (const item of items) {
     if (item.conflict) continue; // its one question is the conflict question
+    if (asked.some((q) => q.about === item.id && q.type === "which_item")) continue;
     const members = item.candidates.map((id) => byId.get(id)!);
     const first = members[0];
     const q = (type: Question["type"], prompt: string, options: Question["options"], suggested: string | null = null) =>
@@ -170,7 +186,9 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
         { id: "edit", label: "Pick the course", value: null, evidence: first.evidence },
       ]);
     const dn = members.find((c) => c.date_needs)?.date_needs;
-    if (item.checks.date.status === "needs_question" && dn?.needs !== "term_start" && dn?.needs !== "photo_date")
+    // A date that depends on another item waits on that item's question, if it has one; it has none of its own.
+    const waits = item.depends_on !== null || dn?.needs === "term_start" || dn?.needs === "photo_date";
+    if (item.checks.date.status === "needs_question" && !waits)
       q(
         dn?.needs === "choice" ? "choose_date" : "missing_fact",
         `When is "${item.title}"? ${item.checks.date.reason}`,
@@ -185,7 +203,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
           { id: "edit", label: "Pick the date", value: null, evidence: null },
         ],
       );
-    if (item.checks.time.status === "needs_question")
+    if (item.checks.time.status === "needs_question" && item.time?.trace.rule !== "before_item")
       q("missing_fact", `What time is "${item.title}"? ${item.checks.time.reason}`, [
         { id: "edit", label: "Pick the time", value: null, evidence: null },
       ]);
@@ -211,6 +229,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
   return {
     zone,
     term_start: term,
+    term_end: termEnd,
     classes,
     items,
     questions: [...asked.filter((q) => q.about === "term"), ...questions, ...asked.filter((q) => q.about !== "term")],

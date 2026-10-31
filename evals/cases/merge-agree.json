@@ -67,7 +67,7 @@
       {
         "course": "MATH141",
         "title": "Reading",
-        "date": null,
+        "date": "2026-10-21",
         "time": null,
         "end": null,
         "match": "stewart|chapter 7|7\\.1"
@@ -87,11 +87,20 @@
         "time": null,
         "end": null,
         "match": "7\\.8"
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3 corrections",
+        "match": "corrections",
+        "date": "2026-10-31",
+        "time": null,
+        "end": null
       }
     ],
     "classes": [],
     "conflicts": [],
     "crossed_out": [],
-    "overlaps": []
+    "overlaps": [],
+    "term_end": "2026-12-08"
   }
 }

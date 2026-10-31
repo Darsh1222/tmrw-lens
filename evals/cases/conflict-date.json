@@ -68,7 +68,7 @@
       {
         "course": "MATH141",
         "title": "Reading",
-        "date": null,
+        "date": "2026-10-21",
         "time": null,
         "end": null,
         "match": "stewart|chapter 7|7\\.1"
@@ -80,6 +80,14 @@
         "time": "14:00",
         "end": "15:00",
         "match": "office"
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3 corrections",
+        "match": "corrections",
+        "date": null,
+        "time": null,
+        "end": null
       }
     ],
     "conflicts": [
@@ -93,6 +101,32 @@
     ],
     "classes": [],
     "crossed_out": [],
-    "overlaps": []
+    "overlaps": [],
+    "term_end": "2026-12-08"
+  },
+  "then": {
+    "answer": [
+      {
+        "conflict": "Quiz 3",
+        "pick": "2026-11-02"
+      }
+    ],
+    "items": [
+      {
+        "course": "MATH141",
+        "title": "Quiz 3",
+        "date": "2026-11-02",
+        "time": null,
+        "end": null
+      },
+      {
+        "course": "MATH141",
+        "title": "Quiz 3 corrections",
+        "match": "corrections",
+        "date": "2026-11-03",
+        "time": null,
+        "end": null
+      }
+    ]
   }
 }

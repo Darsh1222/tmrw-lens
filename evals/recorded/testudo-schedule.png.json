@@ -2,19 +2,22 @@
   "file": "testudo-schedule.png",
   "sha256": "bbe94c204d15b51b8ef2f2fd401a62603bdcb2d0a104a195123b8a9e763e566f",
   "model": "muse-spark-1.3",
+  "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 1,
-    "extract_syllabus_page": 2,
-    "extract_whiteboard": 2,
-    "extract_notes": 2,
+    "extract_schedule": 2,
+    "extract_syllabus_page": 3,
+    "extract_whiteboard": 3,
+    "extract_notes": 3,
     "reread_crops": 1
   },
+  "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
       "page": null,
       "text": null,
       "extraction": {
         "term_text": "Fall 2026",
+        "term_end": null,
         "view": "list",
         "classes": [
           {
@@ -27,12 +30,12 @@
             "end_text": "10:50am",
             "location": "ESJ 0224",
             "evidence": {
-              "quote": "MATH141 (0121)  Calculus II\nLec MWF  10:00am - 10:50am  ESJ 0224",
+              "quote": "MATH141 (0121) Calculus II\nLec MWF 10:00am - 10:50am ESJ 0224",
               "box": {
-                "x_min": 667,
+                "x_min": 605,
                 "y_min": 112,
-                "x_max": 980,
-                "y_max": 198
+                "x_max": 981,
+                "y_max": 196
               }
             }
           },
@@ -46,12 +49,12 @@
             "end_text": "9:50am",
             "location": "MTH 0101",
             "evidence": {
-              "quote": "MATH141 (0121)  Calculus II\nDis TuTh  9:00am - 9:50am  MTH 0101",
+              "quote": "MATH141 (0121) Calculus II\nDis TuTh 9:00am - 9:50am MTH 0101",
               "box": {
-                "x_min": 667,
+                "x_min": 605,
                 "y_min": 112,
-                "x_max": 980,
-                "y_max": 198
+                "x_max": 981,
+                "y_max": 196
               }
             }
           },
@@ -65,12 +68,12 @@
             "end_text": "12:15pm",
             "location": "IRB 0324",
             "evidence": {
-              "quote": "CMSC131 (0302)  Object-Oriented Programming I\nLec TuTh  11:00am - 12:15pm  IRB 0324",
+              "quote": "CMSC131 (0302) Object-Oriented Programming I\nLec TuTh 11:00am - 12:15pm IRB 0324",
               "box": {
-                "x_min": 667,
+                "x_min": 605,
                 "y_min": 212,
-                "x_max": 980,
-                "y_max": 300
+                "x_max": 981,
+                "y_max": 298
               }
             }
           },
@@ -84,12 +87,12 @@
             "end_text": "2:50pm",
             "location": "CSI 2107",
             "evidence": {
-              "quote": "CMSC131 (0302)  Object-Oriented Programming I\nLab MW  2:00pm - 2:50pm  CSI 2107",
+              "quote": "CMSC131 (0302) Object-Oriented Programming I\nLab MW 2:00pm - 2:50pm CSI 2107",
               "box": {
-                "x_min": 667,
+                "x_min": 605,
                 "y_min": 212,
-                "x_max": 980,
-                "y_max": 300
+                "x_max": 981,
+                "y_max": 298
               }
             }
           },
@@ -103,12 +106,12 @@
             "end_text": "1:50pm",
             "location": "PHY 1412",
             "evidence": {
-              "quote": "PHYS161 (0101)  General Physics: Mechanics\nLec MWF  1:00pm - 1:50pm  PHY 1412",
+              "quote": "PHYS161 (0101) General Physics: Mechanics\nLec MWF 1:00pm - 1:50pm PHY 1412",
               "box": {
-                "x_min": 667,
-                "y_min": 314,
-                "x_max": 980,
-                "y_max": 376
+                "x_min": 605,
+                "y_min": 313,
+                "x_max": 981,
+                "y_max": 377
               }
             }
           },
@@ -122,11 +125,11 @@
             "end_text": "4:45pm",
             "location": "TWS 0236",
             "evidence": {
-              "quote": "ENGL101 (0405)  Academic Writing\nLec MW  3:30pm - 4:45pm  TWS 0236",
+              "quote": "ENGL101 (0405) Academic Writing\nLec MW 3:30pm - 4:45pm TWS 0236",
               "box": {
-                "x_min": 667,
+                "x_min": 605,
                 "y_min": 392,
-                "x_max": 980,
+                "x_max": 981,
                 "y_max": 455
               }
             }
@@ -158,7 +161,38 @@
           "text": "ENGL101 (0405) Academic Writing Lec MW 3:30pm - 4:45pm TWS 0236",
           "legible": "clear"
         }
-      }
+      },
+      "sam": null
     }
-  ]
+  ],
+  "stages": {
+    "extract": {
+      "calls": 1,
+      "input_tokens": 3209,
+      "cached_tokens": 0,
+      "output_tokens": 2528,
+      "cost_usd": 0.01475525
+    },
+    "reread_box": {
+      "calls": 1,
+      "input_tokens": 965,
+      "cached_tokens": 113,
+      "output_tokens": 889,
+      "cost_usd": 0.004860199999999999
+    },
+    "sam_segment": {
+      "calls": 0,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0
+    },
+    "reread_sam": {
+      "calls": 0,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0
+    }
+  }
 }

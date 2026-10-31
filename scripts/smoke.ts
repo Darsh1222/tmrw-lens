@@ -115,7 +115,7 @@ await step("PDF native (input_file → SyllabusPageExtraction)", async () => {
 
 for (const phrase of ["table", "text block"]) {
   await step(`SAM "${phrase}"`, async () => {
-    const { boxes, call } = await segmentImage(dataUrl(schedulePng, "image/png"), phrase, { log: quiet });
+    const { objects: boxes, call } = await segmentImage(dataUrl(schedulePng, "image/png"), phrase, { log: quiet });
     const top = boxes
       .slice(0, 3)
       .map(

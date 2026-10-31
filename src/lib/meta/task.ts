@@ -70,6 +70,10 @@ function parseJson(text: string): unknown {
   }
 }
 
+/** On a retry the effort goes up one step (never down): a failed check is a sign the task was harder than planned. */
+const EFFORTS: ReasoningEffort[] = ["minimal", "low", "medium", "high", "xhigh", "max"];
+const escalate = (e: ReasoningEffort) => EFFORTS[Math.min(EFFORTS.indexOf(e) + 1, EFFORTS.length - 1)];
+
 export async function runTask<T>(
   task: Task<T>,
   content: ContentPart[],
@@ -91,13 +95,16 @@ export async function runTask<T>(
     const result = await createResponse(
       {
         model,
+        // Instructions go first and never change between calls of a task: that's the prefix the cache reuses.
         instructions: task.instructions,
+        prompt_cache_key: task.name,
         input,
         text: { format },
-        reasoning: { effort: task.effort ?? "low" },
+        reasoning: { effort: attempt ? escalate(task.effort ?? "low") : (task.effort ?? "low") },
         max_output_tokens: task.maxOutputTokens ?? 8_000,
       },
-      { ...opts, env, task: `${task.name}@v${task.version}` },
+      // ":retry" in the cost log is what the escalation rate is counted from.
+      { ...opts, env, task: `${task.name}@v${task.version}${attempt ? ":retry" : ""}` },
     );
     calls.push(result);
     const parsed = task.schema.safeParse(parseJson(result.outputText));

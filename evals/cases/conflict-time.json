@@ -54,10 +54,18 @@
       {
         "course": null,
         "title": "review recursion slides",
-        "date": null,
-        "time": null,
+        "date": "2026-11-11",
+        "time": "13:00",
         "end": null,
         "match": "recursion"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Exam 2 corrections",
+        "match": "corrections",
+        "date": "2026-11-18",
+        "time": null,
+        "end": null
       }
     ],
     "conflicts": [

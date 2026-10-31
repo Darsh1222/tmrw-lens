@@ -196,6 +196,7 @@ async function syllabusPdf() {
     ["Instructor: Dr. A. Example  ·  Office hours: Tue 2:00-3:30pm, MTH 3104"],
     [""],
     ["Classes begin Monday, August 31, 2026. Week 1 is the week of August 31."],
+    ["Last day of classes: Tuesday, December 8, 2026."],
     [""],
     ["Grading", true, 13],
     ["Weekly problem sets  20%"],
@@ -221,6 +222,7 @@ async function syllabusPdf() {
     [""],
     ["Final exam: Monday, December 14, 8:00am - 10:00am, location TBA."],
     ["Reading: Stewart, Chapter 7 sections 7.1-7.5 before Midterm 1."],
+    ["Quiz 3 corrections are due the day after Quiz 3."],
   ]);
   return doc.save();
 }
@@ -239,6 +241,7 @@ async function cmscSyllabusPdf() {
     ["Schedule of projects and exams", true, 13],
     ["Project 3 due Sun Nov 1, 11:59pm"],
     ["Exam 2: Wed Nov 11, 1:00pm - 2:15pm, IRB 0324"],
+    ["Exam 2 corrections due one week after Exam 2"],
     ["Project 4 due Fri Nov 13, 11:59pm"],
     ["Quiz 5: Tue Nov 17, in class"],
     ["Project 5 due Fri Dec 4, 11:59pm"],

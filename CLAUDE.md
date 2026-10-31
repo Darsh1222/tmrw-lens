@@ -24,8 +24,11 @@ Upstash Redis (REST) for the spend cap and rate limits. No database: Tomorrow ow
   SAM). Reads `.env.local`. About 5 cents.
 - `pnpm fixtures`: regenerate `fixtures/synthetic/` (all made up; byte-identical across runs) and its `manifest.json`.
 - `pnpm eval`: score `evals/cases/` against recorded model readings (offline, free, in CI). Headline numbers: "% fully
-  verified" and "invented dates". `pnpm eval:live` re-reads the fixtures with Meta Model API and re-records (about
-  20 cents); run it after changing a task's instructions or schema (and bump its `version`), or a fixture.
+  verified" and "invented dates", each with and without SAM, plus model cost per photo, tokens per call, and cache
+  hit rate. `pnpm eval:live` re-reads only fixtures whose recording is stale and re-records (`--force` for all, about
+  22 cents); run it after changing a task's instructions or schema (and bump its `version`), how photos are cropped
+  (bump `CROP_VERSION` in `src/lib/extract/read.ts`), or a fixture.
+- `pnpm eval:real`: the same on your own photos in `local-inputs/` (git-ignored, recordings too). Prints numbers only.
 - `pnpm check:env`: fails if any `.env*` file other than `.env.example` is tracked. Runs in the pre-commit hook and CI.
 - `pnpm check:secrets`: gitleaks over the full git history.
 - The pre-commit hook (`.githooks/pre-commit`, enabled by `pnpm install`) runs `check:env` and gitleaks on staged
@@ -51,6 +54,34 @@ Upstash Redis (REST) for the spend cap and rate limits. No database: Tomorrow ow
   latency only.
 - Copy is plain, calm, and specific. No guilt, streaks, cheerleading, or fake urgency, least of all in rebuild
   messages ("Moved X to Thu 4pm because... Nothing else changed.").
+
+## Cost–quality policy
+
+Every feature, and every prompt or model change, follows this. (Written for Lens and Tomorrow alike; where Lens has
+no such thing yet, the Lens note says so.)
+
+1. Quality floor first. Eval targets (judge score, verification %, 0 invented dates, correction rate) never go down
+   to save money. Cost cuts ship only if evals show equal or better quality.
+2. Code before models. Dates, times, availability, conflicts, math, totals, and formatting are computed in code
+   (free, exact). Models only read, decide, and write.
+3. Route by difficulty. The cheapest model that passes evals for each task: MODEL_FAST for classification, safety,
+   simple replies and single adds; MODEL_SMART for multi-item dumps, conflicts, planning trade-offs, rebuilds.
+   Escalate to the bigger model automatically when confidence is low or a check fails, never the other way around.
+   Lens has one text model (Muse Spark), so it routes by reasoning effort: `minimal` for re-reads, `low` for
+   extraction; `runTask` retries a failed check one effort step up.
+4. Prompt caching on every stable prefix (system prompt, tool definitions, static rules). Report cache hit rate.
+   Meta Model API caches prefixes automatically; task instructions go first and `prompt_cache_key` is the task name.
+5. Small context. Send only what the turn needs (recent messages, today/tomorrow, relevant items), not the whole
+   history. Measure tokens per turn. (Lens sends one page or photo per call; `pnpm eval` reports tokens per call.)
+6. Cap output length per task (`maxOutputTokens` on every task); SMS replies stay short by design.
+7. Never pay twice. Cache file and image extraction by content hash; don't re-run a model on unchanged input.
+8. Batch what can wait (weekly recaps, pattern detection, eval runs) via the Batch API. (Meta Model API documents no
+   Batch API yet; use it when it exists.)
+9. Checks over bigger models. Prefer a cheap verification step (schema + code checks + one targeted re-read) to
+   upgrading the whole task to a larger model.
+10. Measure. Admin shows cost per turn, cost per active user per week, tokens per turn, cache hit rate,
+    fallback/escalation rate, alongside judge score and correction rate. Every PR that touches prompts or models
+    reports before/after on both quality and cost. (Lens: `pnpm eval` before and after, from `evals/results.json`.)
 
 ## Public repo rules
 

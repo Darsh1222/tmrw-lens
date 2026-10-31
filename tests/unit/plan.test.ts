@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { answerQuestion } from "@/lib/plan/answer";
 import { auditPlan } from "@/lib/plan/audit";
 import { buildPlan } from "@/lib/plan/build";
 import { matchCourse, familyOf } from "@/lib/plan/courses";
+import { dedupeObjects, objectFor } from "@/lib/plan/objects";
 import { verifyReading } from "@/lib/plan/verify";
-import type { PageReading, SourceMeta, SourceReading } from "@/lib/plan/types";
+import type { PageReading, SceneObject, SourceMeta, SourceReading } from "@/lib/plan/types";
 import type { ModelBox } from "@/lib/schemas/evidence";
 
 const ZONE = "America/New_York";
@@ -58,6 +60,7 @@ function mathSyllabus(): SourceReading {
           course_code: "MATH141",
           course_title: "Calculus II",
           term_start: { date_text: "August 31, 2026", evidence: ev("Classes begin Monday, August 31, 2026.") },
+          term_end: null,
           items: [
             syllabusItem("Problem Set 5", "assignment", "Week 7 Thu", null, "Problem Set 5 due Week 7 Thu"),
             syllabusItem("Quiz 3", "quiz", "Fri Oct 30", null, "Quiz 3, Fri Oct 30"),
@@ -116,6 +119,7 @@ const schedule: SourceReading = {
       rereads: {},
       extraction: {
         term_text: "Fall 2026",
+        term_end: null,
         view: "text",
         classes: [
           { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", evidence: ev("Lec  MWF  10:00am - 10:50am  ESJ 0224") },
@@ -143,6 +147,9 @@ describe("matching", () => {
     expect(familyOf("Problem Set 5")).toEqual({ family: "pset", number: 5 });
     expect(familyOf("Proj 4")).toEqual({ family: "project", number: 4 });
     expect(familyOf("quiz moved to Mon")).toEqual({ family: "quiz", number: null });
+    // Something about Quiz 3 isn't Quiz 3.
+    expect(familyOf("Quiz 3 corrections")).toEqual({ family: null, number: null });
+    expect(familyOf("Midterm 1 review session")).toEqual({ family: null, number: null });
   });
 });
 
@@ -227,7 +234,7 @@ describe("buildPlan", () => {
     const cmsc: SourceReading = {
       source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
       pages: [{ page: 1, text: "Project 4 due Fri Nov 13, 11:59pm", rereads: {}, extraction: {
-        course_code: "CMSC131", course_title: "Object-Oriented Programming I", term_start: null,
+        course_code: "CMSC131", course_title: "Object-Oriented Programming I", term_start: null, term_end: null,
         items: [syllabusItem("Project 4", "project", "Fri Nov 13", "11:59pm", "Project 4 due Fri Nov 13, 11:59pm")],
       } }],
     }; // prettier-ignore
@@ -250,7 +257,7 @@ describe("buildPlan", () => {
     const exam: SourceReading = {
       source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
       pages: [{ page: 1, text: "Exam 2 Wed Nov 11, 1:00pm - 2:15pm", rereads: {}, extraction: {
-        course_code: "CMSC131", course_title: null, term_start: null,
+        course_code: "CMSC131", course_title: null, term_start: null, term_end: null,
         items: [syllabusItem("Exam 2", "exam", "Wed Nov 11", "1:00pm - 2:15pm", "Exam 2 Wed Nov 11, 1:00pm - 2:15pm")],
       } }],
     }; // prettier-ignore
@@ -332,5 +339,169 @@ describe("auditPlan", () => {
     find(plan, "Quiz 4").date!.trace.text = "Fri Nov 27";
     const why = auditPlan(plan, sources(readings)).invented.map((f) => f.why);
     expect(why).toEqual(['"Fri Oct 30" recomputes to 2026-10-30, not 2026-10-31', '"Fri Nov 27" isn\'t in its quote']);
+  });
+});
+
+/** The MATH141 syllabus plus extra lines, each "title|kind|date_text|time_text|quote". */
+function withLines(lines: string[], termEnd = false): SourceReading {
+  const s = mathSyllabus();
+  const page = s.pages[0];
+  const ex = page.extraction as { items: unknown[]; term_end: unknown };
+  for (const l of lines) {
+    const [title, kind, dateText, timeText, quote] = l.split("|");
+    ex.items.push(syllabusItem(title, kind, dateText || null, timeText || null, quote));
+    page.text += `\n${quote}`;
+  }
+  if (termEnd) {
+    ex.term_end = { date_text: "December 8, 2026", evidence: ev("Last day of classes: Tuesday, December 8, 2026.") };
+    page.text += "\nLast day of classes: Tuesday, December 8, 2026.";
+  }
+  return s;
+}
+
+describe("dates relative to another item", () => {
+  const movedBoard = () =>
+    photo("board", "whiteboard_photo", "whiteboard photo", "2026-10-28T09:12:00-04:00", [
+      { title: "Quiz", kind: "quiz", course_hint: "MATH141", date_text: "Mon", time_text: null, change_text: "moved to", quote: "Quiz moved to Mon!" },
+    ]); // prettier-ignore
+
+  it("resolves 'before Midterm 1' from Midterm 1, and takes its start time when the schedule gives one", () => {
+    const readings = [
+      withLines(["Reading|reading|before Midterm 1||Reading: Stewart 7.1-7.5 before Midterm 1."]),
+      schedule,
+    ];
+    const plan = buildPlan(readings, { zone: ZONE });
+    const reading = find(plan, "Reading");
+    expect(reading.depends_on).toEqual({
+      item_id: find(plan, "Midterm 1").id,
+      text: "before Midterm 1",
+      offset_days: 0,
+    });
+    expect(reading.date).toMatchObject({ value: "2026-10-21", trace: { rule: "offset" } });
+    expect(reading.time).toMatchObject({ start: "10:00", end: null, trace: { rule: "before_item" } });
+    expect(reading.status).toBe("verified");
+    expect(plan.questions.filter((q) => q.about === reading.id)).toEqual([]);
+    expect(auditPlan(plan, sources(readings)).invented).toEqual([]);
+  });
+
+  it("waits on a conflict without a question of its own, then moves when it's answered", () => {
+    const readings = [
+      withLines(["Quiz 3 corrections|assignment|the day after Quiz 3||Quiz 3 corrections due the day after Quiz 3."]),
+      movedBoard(),
+    ];
+    const plan = buildPlan(readings, { zone: ZONE });
+    const fix = find(plan, "Quiz 3 corrections");
+    expect(fix.date).toBeNull();
+    expect(fix.checks.date.reason).toBe("Waits on the Quiz 3 question.");
+    expect(plan.questions.filter((q) => q.about === fix.id)).toEqual([]);
+
+    const q = plan.questions.find((x) => x.type === "conflict")!;
+    const moved = answerQuestion(plan, q.id, "v1"); // the whiteboard: Mon Nov 2
+    expect(find(moved, "Quiz 3").date?.value).toBe("2026-11-02");
+    expect(find(moved, "Quiz 3").status).toBe("verified");
+    expect(find(moved, "Quiz 3 corrections").date?.value).toBe("2026-11-03");
+    expect(find(moved, "Quiz 3 corrections").status).toBe("verified");
+    expect(moved.questions.find((x) => x.id === q.id)).toBeUndefined();
+    expect(auditPlan(moved, sources(readings)).invented).toEqual([]);
+
+    const kept = answerQuestion(plan, q.id, "v0"); // the syllabus: Fri Oct 30
+    expect(find(kept, "Quiz 3 corrections").date?.value).toBe("2026-10-31");
+    expect(plan.items.find((i) => i.id === fix.id)?.date).toBeNull(); // answering doesn't change the original plan
+  });
+
+  it("asks which item when it could be more than one, and links the answer", () => {
+    const cmsc: SourceReading = {
+      source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
+      pages: [{ page: 1, text: "Project 3 due Sun Nov 1\nProject 4 due Fri Nov 13\nReflection due the week after the project", rereads: {}, extraction: {
+        course_code: "CMSC131", course_title: null, term_start: null, term_end: null,
+        items: [
+          syllabusItem("Project 3", "project", "Sun Nov 1", null, "Project 3 due Sun Nov 1"),
+          syllabusItem("Project 4", "project", "Fri Nov 13", null, "Project 4 due Fri Nov 13"),
+          syllabusItem("Reflection", "assignment", "the week after the project", null, "Reflection due the week after the project"),
+        ],
+      } }],
+    }; // prettier-ignore
+    const plan = buildPlan([cmsc], { zone: ZONE });
+    const r = find(plan, "Reflection");
+    const qs = plan.questions.filter((q) => q.about === r.id);
+    expect(qs.map((q) => q.type)).toEqual(["which_item"]);
+    expect(qs[0].options.map((o) => o.label)).toEqual([
+      "Project 3 (Sun Nov 1)",
+      "Project 4 (Fri Nov 13)",
+      "Pick the date",
+    ]);
+    const after = answerQuestion(plan, qs[0].id, find(plan, "Project 4").id);
+    expect(find(after, "Reflection").date?.value).toBe("2026-11-20");
+    expect(auditPlan(after, sources([cmsc])).invented).toEqual([]);
+  });
+
+  it("asks when the item it points at isn't there", () => {
+    const plan = buildPlan(
+      [withLines(["Lab writeup|assignment|before the lab practical||Lab writeup before the lab practical"])],
+      {
+        zone: ZONE,
+      },
+    );
+    const q = plan.questions.find((x) => x.about === find(plan, "Lab writeup").id)!;
+    expect(q.type).toBe("which_item");
+    expect(q.prompt).toBe(
+      'When is "Lab writeup"? It says before the lab practical, and I can\'t find the lab practical in what you added.',
+    );
+  });
+});
+
+describe("class recurrences", () => {
+  it("end on the last day of classes when the syllabus gives it", () => {
+    const readings = [withLines([], true), schedule];
+    const plan = buildPlan(readings, { zone: ZONE });
+    expect(plan.term_end.date?.value).toBe("2026-12-08");
+    const math = plan.classes.find((c) => c.course === "MATH141")!;
+    expect(math.rrule).toBe("FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20261209T045959Z");
+    expect(math.last_date?.value).toBe("2026-12-07");
+    expect(plan.questions.find((q) => q.id === "q_term_end")).toBeUndefined();
+    expect(auditPlan(plan, sources(readings)).invented).toEqual([]);
+  });
+  it("ask once for the last day when nothing says it", () => {
+    const plan = buildPlan([mathSyllabus(), schedule], { zone: ZONE });
+    expect(plan.classes.every((c) => !c.rrule.includes("UNTIL") && c.last_date === null)).toBe(true);
+    expect(plan.questions.filter((q) => q.id === "q_term_end")).toHaveLength(1);
+  });
+  it("catch an end date that isn't the term's", () => {
+    const readings = [withLines([], true), schedule];
+    const plan = buildPlan(readings, { zone: ZONE });
+    plan.classes[0].rrule = plan.classes[0].rrule.replace("20261209", "20261215");
+    expect(auditPlan(plan, sources(readings)).invented.map((f) => f.field)).toEqual(["rrule"]);
+  });
+});
+
+describe("SAM objects", () => {
+  const square = (id: string, label: SceneObject["label"], x0: number, y0: number, x1: number, y1: number, confidence = 0.9): SceneObject => ({
+    id, label, confidence, bbox: { x0, y0, x1, y1 }, outline: [[x0, y0], [x1, y0], [x1, y1], [x0, y1]],
+  }); // prettier-ignore
+  const board = square("whiteboard_0", "whiteboard", 0, 0, 1, 1);
+  const note = square("sticky_note_0", "sticky_note", 0.1, 0.1, 0.4, 0.4);
+  it("puts a quote in the smallest object around it", () => {
+    expect(objectFor({ x0: 0.15, y0: 0.2, x1: 0.35, y1: 0.25 }, [board, note])?.id).toBe("sticky_note_0");
+    expect(objectFor({ x0: 0.6, y0: 0.6, x1: 0.8, y1: 0.7 }, [board, note])?.id).toBe("whiteboard_0");
+    expect(objectFor({ x0: 0.6, y0: 0.6, x1: 0.8, y1: 0.7 }, [note])).toBeNull();
+  });
+  it("keeps one object when 'paper' and 'sticky note' find the same note", () => {
+    const paper = square("paper_0", "paper", 0.11, 0.1, 0.4, 0.41);
+    expect(dedupeObjects([paper, note, board]).map((o) => o.id)).toEqual(["sticky_note_0", "whiteboard_0"]);
+  });
+  it("uses the object's outline as the highlight", () => {
+    const notes = photo("notes", "notes_photo", "sticky notes photo", "2026-10-29T08:30:00-04:00", [
+      { title: "PHYS HW 8", kind: "assignment", course_hint: "PHYS", date_text: "Fri 11/6", time_text: null, change_text: null, quote: "PHYS HW 8 due Fri 11/6" },
+    ]); // prettier-ignore
+    const page = notes.pages[0];
+    const ex = page.extraction as { items: { evidence: { box: ModelBox } }[] };
+    ex.items[0].evidence.box = { x_min: 150, y_min: 200, x_max: 350, y_max: 260 };
+    page.objects = [board, note];
+    const plan = buildPlan([notes], { zone: ZONE });
+    expect(plan.items[0].evidence[0].region).toEqual({
+      object_id: "sticky_note_0",
+      label: "sticky_note",
+      outline: note.outline,
+    });
   });
 });

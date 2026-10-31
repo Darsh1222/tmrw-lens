@@ -24,9 +24,11 @@
     "fixtures": "tsx scripts/make-fixtures.ts",
     "smoke": "tsx --env-file=.env.local scripts/smoke.ts",
     "eval": "tsx scripts/eval.ts",
-    "eval:live": "tsx --env-file=.env.local scripts/eval.ts --live"
+    "eval:live": "tsx --env-file=.env.local scripts/eval.ts --live",
+    "eval:real": "tsx --env-file=.env.local scripts/eval.ts --real"
   },
   "dependencies": {
+    "@meta-sam/parser": "0.1.0",
     "luxon": "^3.7.2",
     "next": "16.4.3",
     "react": "19.3.0",

@@ -52,3 +52,24 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
   questions), 68 of 68 items found, 54 of 54 dates right, 4 of 4 conflicts caught with the right answer
   pre-selected, 0 false conflicts. About 17 cents.
 - SAM 3.1 spike: it finds sticky notes, whiteboards, and sheets of paper in a photo, not handwriting.
+
+### Oct 30
+
+- SAM 3.1 in the pipeline: each whiteboard and notes photo is segmented into sticky notes, sheets, and the board.
+  Every item is attached to the object its quote sits in, and the object's outline is its evidence highlight. The
+  second read uses the object's crop when the quote is alone on it, or the quote's line clipped to the object when
+  it isn't. Masks are decoded with Meta's `@meta-sam/parser`.
+- Evals now report everything with and without SAM, from the same first read, plus model cost per photo, tokens per
+  call, and cache hit rate. On the synthetic photos SAM changes no verification result (77% fully verified both
+  ways, 0 invented dates of 159), puts 23 of 23 photo quotes in an object, and costs $0.0069 more per photo.
+- One targeted retry when a line's crop doesn't read back as its quote: a taller band around it. On the synthetic
+  photos that took unverified items from 5 to 0.
+- Dates relative to another item: "before Midterm 1", "the day after Quiz 3", "one week after Exam 2". They're
+  computed from that item's date and stay linked to it, so answering the Quiz 3 conflict moves Quiz 3 corrections
+  from Oct 31 to Nov 3. There's one question only when the item can't be found, or could be more than one.
+- Class recurrences end on the last day of classes (RRULE UNTIL, in UTC) when a syllabus or schedule gives it, with
+  one question when nothing does.
+- Answering questions works in code for conflicts and "which item", and dependents are recomputed after each answer.
+- `pnpm eval:real` runs the same evals on my own photos, kept out of the repo in `local-inputs/`.
+- Cost–quality policy written into CLAUDE.md and the plan's new Quality bar. As part of it: a failed check retries
+  at one step higher reasoning effort, requests carry a prompt-cache key, and evals never re-read an unchanged input.

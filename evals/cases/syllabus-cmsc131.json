@@ -48,6 +48,14 @@
         "date": "2026-12-12",
         "time": "16:00",
         "end": "18:00"
+      },
+      {
+        "course": "CMSC131",
+        "title": "Exam 2 corrections",
+        "match": "corrections",
+        "date": "2026-11-18",
+        "time": null,
+        "end": null
       }
     ],
     "classes": [],

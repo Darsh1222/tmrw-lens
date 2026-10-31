@@ -53,6 +53,7 @@
     "items": [],
     "conflicts": [],
     "crossed_out": [],
-    "overlaps": []
+    "overlaps": [],
+    "term_end": null
   }
 }

@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   firstMeeting,
+  lastMeeting,
   localDate,
+  parseRelative,
   parseDays,
   parseTime,
   resolveDate,
@@ -53,7 +55,7 @@ describe("resolveDate", () => {
   });
   it("rejects what isn't one date", () => {
     expect(date("Oct 26 - Oct 30", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
-    expect(date("before Midterm 1", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
+    expect(date("before Midterm 1", syllabus)).toMatchObject({ ok: false, needs: "reference" });
     expect(date("2/30", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
   });
 });
@@ -79,6 +81,34 @@ describe("parseTime", () => {
   });
 });
 
+describe("relative dates", () => {
+  it("splits the words into what it's relative to and how far", () => {
+    expect(parseRelative("before Midterm 1")).toEqual({ ref: "midterm 1", offset_days: 0 });
+    expect(parseRelative("the week after the project")).toEqual({ ref: "the project", offset_days: 7 });
+    expect(parseRelative("due one week after Exam 2")).toEqual({ ref: "exam 2", offset_days: 7 });
+    expect(parseRelative("2 days before Quiz 3")).toEqual({ ref: "quiz 3", offset_days: -2 });
+    expect(parseRelative("the day after Quiz 3")).toEqual({ ref: "quiz 3", offset_days: 1 });
+    expect(parseRelative("by Midterm 2")).toEqual({ ref: "midterm 2", offset_days: 0 });
+    expect(parseRelative("after the midterm")).toBeNull(); // how long after?
+    expect(parseRelative("Fri after class")).toBeNull();
+    expect(parseRelative("Week 7 Thu")).toBeNull();
+  });
+  it("offsets a written date in code, and leaves 'before Fri' as Fri", () => {
+    expect(resolveDate("the day before Oct 30", syllabus)).toEqual({ ok: true, date: "2026-10-29", rule: "offset" });
+    expect(date("before Fri", photo)).toBe("2026-10-30");
+    expect(date("Fri after class", photo)).toBe("2026-10-30");
+  });
+  it("needs the referenced item's date, and uses it when given", () => {
+    expect(date("the week after Project 4", syllabus)).toMatchObject({ ok: false, needs: "reference" });
+    const ref = { item_id: "item_p4", date: "2026-11-13" };
+    expect(resolveDate("the week after Project 4", { ...syllabus, ref })).toEqual({
+      ok: true,
+      date: "2026-11-20",
+      rule: "offset",
+    });
+  });
+});
+
 describe("classes", () => {
   it("parses Testudo days", () => {
     expect(parseDays("MWF")).toEqual([1, 3, 5]);
@@ -91,6 +121,19 @@ describe("classes", () => {
   it("finds the first meeting on or after the term start", () => {
     expect(firstMeeting([2, 4], "2026-08-31")).toBe("2026-09-01");
     expect(firstMeeting([1, 3, 5], "2026-08-31")).toBe("2026-08-31");
+  });
+  it("finds the last meeting on or before the last day of classes", () => {
+    expect(lastMeeting([1, 3, 5], "2026-12-08")).toBe("2026-12-07"); // Tue Dec 8: the last MWF class is Mon
+    expect(lastMeeting([2, 4], "2026-12-08")).toBe("2026-12-08");
+  });
+  it("ends the weekly rule at the end of the last day, in UTC, across DST", () => {
+    const ny = "America/New_York";
+    expect(weeklyRrule([2, 4], { date: "2026-12-08", zone: ny })).toBe(
+      "FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20261209T045959Z", // EST
+    );
+    expect(weeklyRrule([2, 4], { date: "2026-08-13", zone: ny })).toBe(
+      "FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20260814T035959Z", // EDT
+    );
   });
 });
 

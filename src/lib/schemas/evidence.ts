@@ -40,12 +40,26 @@ export const BBox = z
   .refine((b) => b.x1 > b.x0 && b.y1 > b.y0, "box must have positive area");
 export type BBox = z.infer<typeof BBox>;
 
+export const ObjectLabel = z.enum(["sticky_note", "paper", "whiteboard"]);
+export type ObjectLabel = z.infer<typeof ObjectLabel>;
+
+/** The SAM object a quote sits in (a sticky note, a sheet, the board). Its outline is the evidence highlight. */
+export const Region = z.object({
+  object_id: z.string().min(1),
+  label: ObjectLabel,
+  /** Convex outline in 0-1 coordinates of the image. */
+  outline: z.array(z.tuple([z.number().min(0).max(1), z.number().min(0).max(1)])).min(3),
+});
+export type Region = z.infer<typeof Region>;
+
 export const Evidence = z.object({
   source_id: z.string().min(1),
   /** 1-based page for PDFs; null for images and pasted text. */
   page: z.int().positive().nullable(),
   bbox: BBox.nullable(),
   quote: z.string().min(1),
+  /** Photos segmented with SAM only; null when the quote is in no object, or SAM wasn't run. */
+  region: Region.nullable().optional(),
 });
 export type Evidence = z.infer<typeof Evidence>;
 

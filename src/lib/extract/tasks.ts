@@ -15,6 +15,7 @@ import {
 const RULES = `Rules:
 - The quote is the whole line or table row the item comes from, copied exactly as written: same words, abbreviations, numbers, and punctuation. Don't fix typos.
 - Every *_text field and the title are copied from inside that item's quote, exactly. Don't convert, complete, or reformat them: "Week 7 Thu" stays "Week 7 Thu", "Fri" stays "Fri", "11/3" stays "11/3". Never add a year, a date, or a time that isn't written.
+- A date written relative to another item ("before Midterm 1", "the week after Project 4") is copied as written, words and all. Don't look up the other item's date.
 - If something isn't written, use null. Don't infer it.
 - box is where the quote is: [x_min, y_min, x_max, y_max] on a 0-1000 grid of the image, origin top-left. For pasted text, box is null.`;
 
@@ -27,28 +28,36 @@ function fieldsInQuotes(rows: { label: string; quote: string; fields: (string | 
   return problems.length ? `${problems.join("; ")}. Copy fields from the quote, or widen the quote.` : null;
 }
 
+const termRows = (o: { term_start?: TermDate; term_end?: TermDate }) =>
+  (["term_start", "term_end"] as const).flatMap((k) => {
+    const t = o[k];
+    return t ? [{ label: k, quote: t.evidence.quote, fields: [t.date_text] }] : [];
+  });
+type TermDate = { date_text: string; evidence: { quote: string } } | null;
+
 export const scheduleTask: Task<ScheduleExtraction> = {
   name: "extract_schedule",
-  version: 1,
+  version: 2,
   instructions: `You read a student's weekly class schedule from the University of Maryland's Testudo: a screenshot (grid view, list view, or both) or pasted text. Extract every class meeting: one entry per meeting pattern (a lecture on MWF and a discussion on TuTh are two entries).
-If a text list of courses is visible, read from it rather than from positions on the grid. Ignore names, IDs, and anything that isn't a class meeting.
+If a text list of courses is visible, read from it rather than from positions on the grid. Ignore names, IDs, and anything that isn't a class meeting. If it shows the last day of classes, fill term_end with those words and their quote.
 ${RULES}`,
   schema: ScheduleExtraction,
   maxOutputTokens: 12_000,
   check: (o) =>
-    fieldsInQuotes(
-      o.classes.map((c, i) => ({
+    fieldsInQuotes([
+      ...o.classes.map((c, i) => ({
         label: `classes[${i}]`,
         quote: c.evidence.quote,
         fields: [c.days_text, c.start_text, c.end_text],
       })),
-    ),
+      ...termRows(o),
+    ]),
 };
 
 export const syllabusPageTask: Task<SyllabusPageExtraction> = {
   name: "extract_syllabus_page",
-  version: 2,
-  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. Skip grading tables and policies unless they give a date. If the page says when classes begin, fill term_start with those words and their quote.
+  version: 3,
+  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. Skip grading tables and policies unless they give a date. If the page says when classes begin, fill term_start with those words and their quote; if it says the last day of classes, fill term_end the same way.
 ${RULES}`,
   schema: SyllabusPageExtraction,
   maxOutputTokens: 12_000,
@@ -59,9 +68,7 @@ ${RULES}`,
         quote: it.evidence.quote,
         fields: [it.title, it.date_text, it.time_text],
       })),
-      ...(o.term_start
-        ? [{ label: "term_start", quote: o.term_start.evidence.quote, fields: [o.term_start.date_text] }]
-        : []),
+      ...termRows(o),
     ]),
 };
 
@@ -82,7 +89,7 @@ const freeformCheck = (o: { items: WhiteboardExtraction["items"] }) =>
 
 export const whiteboardTask: Task<WhiteboardExtraction> = {
   name: "extract_whiteboard",
-  version: 2,
+  version: 3,
   instructions: `You read a photo of a classroom whiteboard or a board of notes. Extract every item a student would need to act on or remember: exams, quizzes, assignments, tasks, reminders.
 ${FREEFORM}`,
   schema: WhiteboardExtraction,
@@ -92,7 +99,7 @@ ${FREEFORM}`,
 
 export const notesTask: Task<NotesExtraction> = {
   name: "extract_notes",
-  version: 2,
+  version: 3,
   instructions: `You read a photo of a student's handwritten notes or to-do list. Extract every item on it: exams, quizzes, assignments, tasks, reminders.
 ${FREEFORM}
 - crossed_out is true if the line is struck through or checked off. Still extract it.`,

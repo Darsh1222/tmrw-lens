@@ -9,11 +9,12 @@ import {
   type PageReading,
   type SourceMeta,
   type SourceReading,
-  type TermStart,
+  type TermDate,
 } from "@/lib/plan/types";
 import { verifyReading, worst } from "@/lib/plan/verify";
 import {
   firstMeeting,
+  lastMeeting,
   localDate,
   parseDays,
   parseTime,
@@ -21,7 +22,8 @@ import {
   weeklyRrule,
   type DateInputs,
 } from "@/lib/resolve/dates";
-import { toEvidence } from "@/lib/schemas/evidence";
+import { objectFor, regionOf } from "@/lib/plan/objects";
+import { toEvidence, type Evidence, type ModelEvidence } from "@/lib/schemas/evidence";
 import type {
   NotesExtraction,
   ScheduleExtraction,
@@ -36,6 +38,13 @@ import type {
 export const GRID_DAYS = "Read from which columns the class sits in on the grid.";
 
 type Page<T> = { source: SourceMeta; page: PageReading; data: T };
+
+/** Where a quote was read, plus the SAM object (sticky note, sheet, board) it sits in, when there is one. */
+function evidenceOf(model: ModelEvidence, source: SourceMeta, page: PageReading): Evidence {
+  const e = toEvidence(model, source.id, page.page);
+  const object = objectFor(e.bbox, page.objects);
+  return object ? { ...e, region: regionOf(object) } : e;
+}
 
 function pagesOf<T>(readings: SourceReading[], kinds: SourceMeta["kind"][]): Page<T>[] {
   return readings
@@ -63,13 +72,16 @@ export function knownCourses(readings: SourceReading[]): KnownCourse[] {
   return [...out.values()];
 }
 
-export function termStart(readings: SourceReading[], zone: string): TermStart {
-  const found: TermStart[] = [];
-  for (const { source, page, data } of syllabusPages(readings)) {
-    const t = data.term_start;
+/** The first or last day of classes, from whichever syllabus or schedule says it. Two that disagree are a conflict. */
+export function termDate(readings: SourceReading[], zone: string, key: "term_start" | "term_end"): TermDate {
+  const which = key === "term_start" ? "first" : "last";
+  const found: TermDate[] = [];
+  const pages = [...syllabusPages(readings), ...schedulePages(readings)];
+  for (const { source, page, data } of pages) {
+    const t = key in data ? (data as Record<typeof key, SyllabusPageExtraction["term_start"]>)[key] : null;
     if (!t) continue;
-    const evidence = toEvidence(t.evidence, source.id, page.page);
-    const read = verifyReading(page, "term_start", t.evidence.quote, [t.date_text]);
+    const evidence = evidenceOf(t.evidence, source, page);
+    const read = verifyReading(page, key, t.evidence.quote, [t.date_text]);
     const inputs: DateInputs = { term_start: null, photo_date: null, added_date: localDate(source.added_at, zone) };
     const r = resolveDate(t.date_text, inputs);
     if (!r.ok) {
@@ -84,15 +96,27 @@ export function termStart(readings: SourceReading[], zone: string): TermStart {
   const dated = found.filter((f) => f.date);
   const values = new Set(dated.map((f) => f.date!.value));
   if (values.size > 1)
-    return { date: null, check: { status: "conflict", reason: "Two syllabi give different first days of classes." } };
+    return {
+      date: null,
+      check: { status: "conflict", reason: `Two sources give different ${which} days of classes.` },
+    };
   return (
     dated.find((f) => f.check.status === "verified") ??
     dated[0] ??
-    found[0] ?? { date: null, check: { status: "needs_question", reason: "No source says when classes start." } }
+    found[0] ?? {
+      date: null,
+      check: { status: "needs_question", reason: `No source says the ${which} day of classes.` },
+    }
   );
 }
 
-export function classBlocks(readings: SourceReading[], term: TermStart): ClassBlock[] {
+export const termStart = (readings: SourceReading[], zone: string) => termDate(readings, zone, "term_start");
+
+export function classBlocks(
+  readings: SourceReading[],
+  term: TermDate,
+  { termEnd, zone }: { termEnd: TermDate; zone: string },
+): ClassBlock[] {
   const out: ClassBlock[] = [];
   const seen = new Set<string>();
   for (const { source, page, data } of schedulePages(readings))
@@ -129,7 +153,7 @@ export function classBlocks(readings: SourceReading[], term: TermStart): ClassBl
       const key = [course, c.meeting_type, days?.join(""), startT, endT].join("|");
       if (seen.has(key)) return; // the same meeting from a second schedule source
       seen.add(key);
-      const evidence = toEvidence(c.evidence, source.id, page.page);
+      const evidence = evidenceOf(c.evidence, source, page);
       const ds = days ?? [];
       const firstTrace = (from: string): DateTrace => ({
         text: c.days_text,
@@ -137,6 +161,7 @@ export function classBlocks(readings: SourceReading[], term: TermStart): ClassBl
         rule: "first_meeting",
         inputs: { term_start: from, photo_date: null, added_date: null },
       });
+      const until = termEnd.date?.value ?? null;
       const checks = { quote: read.quote, days: daysCheck, time: timeCheck };
       out.push({
         id: `class_${shortHash(key)}`,
@@ -149,10 +174,22 @@ export function classBlocks(readings: SourceReading[], term: TermStart): ClassBl
         start: startT ?? "00:00",
         end: endT ?? "00:00",
         location: c.location,
-        rrule: weeklyRrule(ds),
+        rrule: weeklyRrule(ds, until ? { date: until, zone } : undefined),
         first_date:
           term.date && ds.length
             ? { value: firstMeeting(ds, term.date.value), trace: firstTrace(term.date.value) }
+            : null,
+        last_date:
+          until && ds.length
+            ? {
+                value: lastMeeting(ds, until),
+                trace: {
+                  text: c.days_text,
+                  evidence,
+                  rule: "last_meeting",
+                  inputs: { term_start: null, photo_date: null, added_date: null, term_end: until },
+                },
+              }
             : null,
         evidence,
         checks,
@@ -201,7 +238,7 @@ function rawItems(readings: SourceReading[], known: KnownCourse[]) {
           crossed_out: false,
           unsure: false,
           quote: it.evidence.quote,
-          evidence: toEvidence(it.evidence, source.id, page.page),
+          evidence: evidenceOf(it.evidence, source, page),
         },
       });
     });
@@ -232,7 +269,7 @@ function rawItems(readings: SourceReading[], known: KnownCourse[]) {
           crossed_out: "crossed_out" in it && it.crossed_out === true,
           unsure: it.legible === "unsure",
           quote: it.evidence.quote,
-          evidence: toEvidence(it.evidence, source.id, page.page),
+          evidence: evidenceOf(it.evidence, source, page),
         },
       });
     });
@@ -241,7 +278,7 @@ function rawItems(readings: SourceReading[], known: KnownCourse[]) {
 
 const needs = (reason: string): Check => ({ status: "needs_question", reason });
 
-export function candidates(readings: SourceReading[], term: TermStart, zone: string): Candidate[] {
+export function candidates(readings: SourceReading[], term: TermDate, zone: string): Candidate[] {
   const known = knownCourses(readings);
   return rawItems(readings, known).map(({ source, page, key, raw }) => {
     const read = verifyReading(
@@ -255,7 +292,10 @@ export function candidates(readings: SourceReading[], term: TermStart, zone: str
     const kind = itemKind(raw.kind);
     // "improper integrals" says nothing, but its quote "Quiz Fri: improper integrals" does.
     const titled = familyOf(raw.title);
-    const { family, number } = titled.family ? titled : familyOf(raw.quote);
+    // The quote's date words aren't the item: "review slides before Exam 2" isn't Exam 2.
+    const { family, number } = titled.family
+      ? titled
+      : familyOf(raw.date_text ? raw.quote.replace(raw.date_text, " ") : raw.quote);
 
     const inputs: DateInputs = {
       term_start: term.date?.value ?? null,
@@ -309,6 +349,7 @@ export function candidates(readings: SourceReading[], term: TermStart, zone: str
       crossed_out: raw.crossed_out,
       date,
       time,
+      date_text: raw.date_text,
       time_text: raw.time_text,
       evidence: raw.evidence,
       checks: { quote: read.quote, title: titleCheck, course: raw.course.check, date: dateCheck, time: timeCheck },
