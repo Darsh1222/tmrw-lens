@@ -46,7 +46,8 @@ function bestTarget(loose: Candidate, options: Candidate[]): Candidate | null {
   return null;
 }
 
-function clusters(cands: Candidate[]): { members: Candidate[]; maybe: boolean }[] {
+function clusters(cands: Candidate[], separate: [string, string][] = []): { members: Candidate[]; maybe: boolean }[] {
+  const apart = new Set(separate.flatMap(([a, b]) => [`${a}|${b}`, `${b}|${a}`]));
   const parent = cands.map((_, i) => i);
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   const maybeRoots = new Set<number>();
@@ -63,7 +64,10 @@ function clusters(cands: Candidate[]): { members: Candidate[]; maybe: boolean }[
     if (loose.number !== null) return;
     const rootHasNumber = cands.some((c, k) => find(k) === find(i) && c.number !== null);
     if (rootHasNumber) return;
-    const options = cands.filter((c) => c.source.id !== loose.source.id && relation(loose, c) === "maybe");
+    // The person said they're two different items: never offered as a match again.
+    const options = cands.filter(
+      (c) => c.source.id !== loose.source.id && relation(loose, c) === "maybe" && !apart.has(`${loose.id}|${c.id}`),
+    );
     const target = bestTarget(loose, options);
     if (!target) return;
     parent[find(i)] = find(cands.indexOf(target));
@@ -111,11 +115,14 @@ function suggest(versions: { c: Candidate; i: number }[]): { index: number; why:
   return { index: best.i, why };
 }
 
-export function merge(cands: Candidate[]): { items: PlanItem[]; questions: Question[] } {
+export function merge(
+  cands: Candidate[],
+  { separate }: { separate?: [string, string][] } = {},
+): { items: PlanItem[]; questions: Question[] } {
   const items: PlanItem[] = [];
   const questions: Question[] = [];
 
-  for (const { members, maybe } of clusters(cands)) {
+  for (const { members, maybe } of clusters(cands, separate)) {
     // Documents first, then photos oldest to newest, so the official wording names the item.
     const ordered = [...members].sort(
       (a, b) =>
@@ -177,6 +184,7 @@ export function merge(cands: Candidate[]): { items: PlanItem[]; questions: Quest
             ? [{ id: "different", label: "They're two different items", value: "different", evidence: null }]
             : []),
         ],
+        input: null,
         suggested: `v${pick.index}`,
         why_suggested: pick.why,
       });

@@ -28,9 +28,21 @@ const TermDate = (what: string) =>
     .nullable()
     .describe(`Only if this page says it: ${what.toLowerCase()}`);
 
+/** "Thanksgiving break: no classes Nov 25-29". Single days with no classes count too. */
+const Breaks = z
+  .array(
+    z.object({
+      name: text('What it\'s called as written, e.g. "Thanksgiving break", "No class"'),
+      dates_text: text('The dates as written, e.g. "Nov 25-29", "November 25 - November 29", "Wed 11/11"'),
+      evidence: ModelEvidence,
+    }),
+  )
+  .describe("Breaks or days with no classes, only if written");
+
 export const ScheduleExtraction = z.object({
   term_text: maybe('Term as written, e.g. "Fall 2026"'),
   term_end: TermDate("Last day of classes"),
+  breaks: Breaks,
   view: z
     .enum(["list", "grid", "text"])
     .describe("list if a text list of classes is visible (preferred over reading grid positions)"),
@@ -54,6 +66,7 @@ export const SyllabusPageExtraction = z.object({
   course_title: maybe("Course title if this page names it"),
   term_start: TermDate("First day of classes"),
   term_end: TermDate("Last day of classes"),
+  breaks: Breaks,
   items: z.array(SyllabusItem),
 });
 export type SyllabusPageExtraction = z.infer<typeof SyllabusPageExtraction>;

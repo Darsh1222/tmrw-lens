@@ -4,8 +4,8 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 2,
-    "extract_syllabus_page": 3,
+    "extract_schedule": 3,
+    "extract_syllabus_page": 4,
     "extract_whiteboard": 3,
     "extract_notes": 3,
     "reread_crops": 1
@@ -22,17 +22,17 @@
             "kind": "quiz",
             "title": "Quiz",
             "course_hint": "MATH141",
-            "date_text": "Mon!",
+            "date_text": "Mon",
             "time_text": null,
             "change_text": "moved to",
             "legible": "clear",
             "evidence": {
               "quote": "Quiz moved to Mon!",
               "box": {
-                "x_min": 93,
-                "y_min": 273,
-                "x_max": 396,
-                "y_max": 363
+                "x_min": 95,
+                "y_min": 282,
+                "x_max": 375,
+                "y_max": 375
               }
             }
           },
@@ -47,10 +47,10 @@
             "evidence": {
               "quote": "PS6 due Thu 11/5",
               "box": {
-                "x_min": 88,
+                "x_min": 85,
                 "y_min": 445,
-                "x_max": 351,
-                "y_max": 523
+                "x_max": 365,
+                "y_max": 538
               }
             }
           },
@@ -65,10 +65,10 @@
             "evidence": {
               "quote": "Office hours today 2-3pm",
               "box": {
-                "x_min": 93,
-                "y_min": 578,
-                "x_max": 454,
-                "y_max": 661
+                "x_min": 95,
+                "y_min": 595,
+                "x_max": 432,
+                "y_max": 685
               }
             }
           }
@@ -121,7 +121,7 @@
                 0.0685
               ],
               [
-                0.0481,
+                0.049,
                 0.067
               ],
               [
@@ -185,7 +185,7 @@
                 0.9305
               ],
               [
-                0.9446,
+                0.9427,
                 0.932
               ],
               [
@@ -250,15 +250,15 @@
       "calls": 1,
       "input_tokens": 2973,
       "cached_tokens": 0,
-      "output_tokens": 1373,
-      "cost_usd": 0.0095515
+      "output_tokens": 1132,
+      "cost_usd": 0.00852725
     },
     "reread_box": {
       "calls": 1,
-      "input_tokens": 618,
-      "cached_tokens": 113,
-      "output_tokens": 151,
-      "cost_usd": 0.00128995
+      "input_tokens": 623,
+      "cached_tokens": 0,
+      "output_tokens": 156,
+      "cost_usd": 0.00144175
     },
     "sam_segment": {
       "calls": 3,
@@ -269,10 +269,10 @@
     },
     "reread_sam": {
       "calls": 1,
-      "input_tokens": 618,
+      "input_tokens": 623,
       "cached_tokens": 497,
-      "output_tokens": 174,
-      "cost_usd": 0.0009653
+      "output_tokens": 144,
+      "cost_usd": 0.0008440499999999999
     }
   }
 }

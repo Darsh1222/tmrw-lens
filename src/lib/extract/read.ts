@@ -59,6 +59,8 @@ export function quotesOf(extraction: PageReading["extraction"]): { key: string; 
     out.push({ key: "term_start", evidence: extraction.term_start.evidence });
   if ("term_end" in extraction && extraction.term_end)
     out.push({ key: "term_end", evidence: extraction.term_end.evidence });
+  if ("breaks" in extraction)
+    (extraction.breaks ?? []).forEach((b, i) => out.push({ key: `breaks.${i}`, evidence: b.evidence }));
   return out;
 }
 
@@ -82,8 +84,12 @@ export async function segmentPage(
   const url = dataUrl(image, mime);
   const found: SceneObject[] = [];
   const calls: CallResult[] = [];
-  for (const { phrase, label } of CONCEPTS) {
-    const { objects, call } = await segmentImage(url, phrase, { ...opts, task: `sam_${label}` });
+  // One request per concept, all at once; results are kept in CONCEPTS order, so the outcome doesn't depend on timing.
+  const results = await Promise.all(
+    CONCEPTS.map(({ phrase, label }) => segmentImage(url, phrase, { ...opts, task: `sam_${label}` })),
+  );
+  for (const [k, { objects, call }] of results.entries()) {
+    const { label } = CONCEPTS[k];
     calls.push(call);
     for (const o of objects)
       if ((o.confidence ?? 1) >= MIN_CONFIDENCE)
@@ -161,29 +167,39 @@ async function readCrops(
   return { rereads, calls };
 }
 
+/** One page or photo: read, then on photos segmented (when `sam`) and re-read. */
+export async function readPage(
+  kind: SourceKind,
+  p: PageInput,
+  opts: Opts & { sam?: boolean } = {},
+): Promise<{ page: PageReading; calls: CallResult[] }> {
+  const { sam = true, ...callOpts } = opts;
+  const { extraction, calls } = await extractPage(kind, p, callOpts);
+  const page: PageReading = { page: p.page, text: p.text, extraction, rereads: {} };
+  if (p.text === null && p.image) {
+    if (sam && SEGMENTED_KINDS.includes(kind)) {
+      const s = await segmentPage(p.image, p.mime ?? "image/png", callOpts);
+      calls.push(...s.calls);
+      page.objects = s.objects;
+    }
+    const r = await rereadPage(p.image, extraction, callOpts, page.objects);
+    page.rereads = r.rereads;
+    calls.push(...r.calls);
+  }
+  return { page, calls };
+}
+
 export async function readSource(
   source: SourceMeta,
   pages: PageInput[],
   opts: Opts & { sam?: boolean } = {},
 ): Promise<{ reading: SourceReading; calls: CallResult[] }> {
-  const { sam = true, ...callOpts } = opts;
   const calls: CallResult[] = [];
   const out: PageReading[] = [];
   for (const p of pages) {
-    const { extraction, calls: c } = await extractPage(source.kind, p, callOpts);
-    calls.push(...c);
-    const page: PageReading = { page: p.page, text: p.text, extraction, rereads: {} };
-    if (p.text === null && p.image) {
-      if (sam && SEGMENTED_KINDS.includes(source.kind)) {
-        const s = await segmentPage(p.image, p.mime ?? "image/png", callOpts);
-        calls.push(...s.calls);
-        page.objects = s.objects;
-      }
-      const r = await rereadPage(p.image, extraction, callOpts, page.objects);
-      page.rereads = r.rereads;
-      calls.push(...r.calls);
-    }
-    out.push(page);
+    const r = await readPage(source.kind, p, opts);
+    calls.push(...r.calls);
+    out.push(r.page);
   }
   return { reading: { source, pages: out }, calls };
 }

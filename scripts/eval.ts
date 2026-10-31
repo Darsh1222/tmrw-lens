@@ -23,7 +23,7 @@ import {
   segmentPage,
   type PageInput,
 } from "@/lib/extract/read";
-import { notesTask, rereadTask, scheduleTask, syllabusPageTask, whiteboardTask } from "@/lib/extract/tasks";
+import { notesTask, rereadTask, scheduleTask, syllabusPageTask, taskFor, whiteboardTask } from "@/lib/extract/tasks";
 import { preparePhoto, readExif } from "@/lib/images/prepare";
 import type { CallResult } from "@/lib/meta/client";
 import { answerQuestion } from "@/lib/plan/answer";
@@ -64,6 +64,8 @@ type GoldConflict = { title: string; course: string; fields: string[]; options: 
 type Expect = {
   term_start: string | null;
   term_end?: string | null;
+  /** First and last day of each break the sources list; [] when none do (then Lens should ask, if there are classes). */
+  breaks?: [string, string][];
   classes: { course: string; type: string; days: string; start: string; end: string }[];
   items: GoldItem[];
   conflicts: GoldConflict[];
@@ -132,7 +134,7 @@ function metaOf(file: string): Meta {
       ? "syllabus_pdf"
       : n.endsWith(".txt")
         ? "testudo_text"
-        : /testudo|schedule/.test(n)
+        : /testudo|schedule|screen ?shot/.test(n)
           ? "testudo_screenshot"
           : /board/.test(n)
             ? "whiteboard_photo"
@@ -240,8 +242,10 @@ function loadRec(file: string): Recording {
   }
   if (rec.sha256 !== sha(readFileSync(join(FIX, file))))
     throw new Error(`${file} changed since it was recorded; run pnpm eval:${real ? "real" : "live"}`);
+  // Only the tasks this input is read with: bumping the syllabus task doesn't re-read whiteboards.
+  const used = [taskFor(metaOf(file).kind).name, rereadTask(1).name];
   for (const [name, v] of Object.entries(TASK_VERSIONS))
-    if (rec.tasks[name] !== undefined && rec.tasks[name] !== v)
+    if (used.includes(name) && rec.tasks[name] !== undefined && rec.tasks[name] !== v)
       throw new Error(`${file} was recorded with ${name}@v${rec.tasks[name]}; run pnpm eval:${real ? "real" : "live"}`);
   if (SEGMENTED_KINDS.includes(metaOf(file).kind) && rec.crops !== CROP_VERSION)
     throw new Error(`${file} was recorded with crops v${rec.crops}; run pnpm eval:${real ? "real" : "live"}`);
@@ -411,6 +415,16 @@ function score(c: Case, plan: Plan, sources: SourceMeta[]): Score {
         s.notes.push(`${k.course} ${k.meeting_type}: recurrence end ${k.last_date?.value ?? "none"}`);
     if (!x.term_end && plan.classes.length && !plan.questions.some((q) => q.id === "q_term_end"))
       s.notes.push("didn't ask for the last day of classes");
+  }
+  if (x.breaks !== undefined) {
+    const got = plan.term_breaks.breaks.map((b) => `${b.start}/${b.end}`).join(" ");
+    const want = x.breaks.map(([a, b]) => `${a}/${b}`).join(" ");
+    if (got !== want) s.notes.push(`breaks ${got || "none"}, expected ${want || "none"}`);
+    const asked = plan.questions.some((q) => q.id === "q_breaks");
+    if (!x.breaks.length && plan.classes.length && !asked) s.notes.push("didn't ask about breaks");
+    if (x.breaks.length && asked) s.notes.push("asked about breaks a source lists");
+    for (const k of plan.classes)
+      if (x.breaks.length && !k.skip_dates.length) s.notes.push(`${k.course} ${k.meeting_type}: no meetings skipped`);
   }
 
   // Answer the conflicts as the person would, then check that dependents moved.

@@ -3,3 +3,7 @@ fixtures/
 .next/
 evals/recorded/
 evals/results.json
+public/pdfjs/
+public/samples/
+src/lib/demo/sample-week.json
+local-inputs/

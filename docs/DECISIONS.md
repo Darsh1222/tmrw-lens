@@ -154,3 +154,47 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   after Exam 2". The eval cases with the moved quiz answer the conflict and check that the corrections move from
   Oct 31 to Nov 3. All tasks were bumped (schedule v2, syllabus v3, whiteboard v3, notes v3) for the new fields and
   the relative-date rule.
+- 2026-10-31: SAM License (checked in `node_modules/@meta-sam/parser/LICENSE`, "SAM License, Last Updated November
+  19, 2025"). It grants a non-exclusive, worldwide, royalty-free license to use, reproduce, distribute, and modify the
+  SAM Materials, with no field-of-use or user-count limit, so a public repo, the hosted demo, and later commercial use
+  are all allowed. Obligations that apply to Lens: anyone who redistributes the SAM Materials must include a copy of
+  the license (Lens doesn't vendor the parser; it's an npm dependency, and the deployed server bundle isn't handed to
+  anyone); a published write-up of research done with SAM must acknowledge SAM (the README and HACKATHON.md do);
+  comply with trade controls and privacy law; don't reverse engineer the models; suing Meta over SAM IP ends the
+  license. Calls to `sam-3.1` itself are under the Meta Model API terms, not this license. Not legal advice; revisit if
+  Meta changes the license (it says changes take effect on continued use).
+- 2026-10-31: Breaks. Syllabus and schedule tasks read `breaks` (name, dates as written, quote); code resolves them
+  with `parseDateRange` ("Nov 25-29", "11/25-11/29", "November 25 - 29, 2026"; at most five weeks) and each class
+  gets `skip_dates`: its meetings inside a break, within the term. Sent to Tomorrow as `exdates` at the class's own
+  start time. If no source lists breaks and there are classes, one question (`q_breaks`: "No breaks" or type the
+  dates). The audit recomputes breaks from their words and every class's skipped meetings from the breaks. Tasks
+  bumped: schedule v3, syllabus v4. The MATH141 fixture gains a Thanksgiving break line.
+- 2026-10-31: A plan is the readings plus the person's answers, replayed in order (`planFrom`, session.ts). Answers that
+  change how readings resolve are facts that rebuild the plan: first and last day of classes, when a photo was taken,
+  breaks, and "two different items" (those candidates are never merged again). Everything else (picking a version or
+  a date, a course, a time, confirming, editing, leaving out) is applied on top after every rebuild; an answer whose
+  question a rebuild settled another way is dropped. Item edits and "Leave out" from the list are answers too
+  (`edit:<id>`, `skip:<id>`). A date or time the person gives has trace rule `answer`, naming the question; the audit
+  accepts it as traced to them rather than to a quote. Rejected: patching the plan in place per answer (fact answers
+  change every date downstream; replaying is simpler and can't drift).
+- 2026-10-31: Uploads aren't stored, and Vercel Blob isn't used (PLAN said Blob with 24h delete). The browser does what
+  Blob was for: photos are turned upright, shrunk to 2048px, and re-encoded as JPEG there (EXIF dropped after the
+  capture time is read), and PDF pages are rendered there with pdf.js (at most 12 pages), so every request to
+  `/api/read` is one page under 4 MB, inside Vercel's body limit. One page per request also keeps each call well
+  inside the function time limit. Less to configure, and nothing of a visitor's to delete. Readings are cached 24h in
+  Upstash by content hash (never pay twice), encrypted with AES-256-GCM under a key derived from the image bytes and
+  stored under a hash of that key, so only the same image can find or read it.
+- 2026-10-31: Rate limit: per visitor (a hash of their IP, never the IP), 40 page reads an hour and 120 a day, counted
+  only on cache misses; plus the existing daily spend cap. The sample week replays recorded readings (`pnpm sample`
+  writes them from the full-week eval case) and costs nothing.
+- 2026-10-31: A Testudo grid can be read one block per column ("Monday" MATH141 10:00, "Wednesday" MATH141 10:00): the
+  Oct 31 re-record did exactly that and lost all 6 grid classes. Code now merges grid blocks with the same course,
+  type, times, and room into one meeting pattern (every block's quote as evidence, the union of boxes as highlight),
+  and the audit checks each day word is in the quote. Back to 24 of 24. Fixed in code rather than the prompt, since
+  both readings of a grid are fair.
+- 2026-10-31: `eval:live` staleness now checks only the tasks an input is read with. Bumping the syllabus and
+  schedule tasks had re-read every fixture (about 13 cents wasted).
+- 2026-10-31: SAM's three concept calls per photo run in parallel (results kept in a fixed order, so the outcome
+  doesn't depend on timing): about 2.5 s faster per photo.
+- 2026-10-31: Send relays through Lens's server rather than the browser calling Tomorrow, so Tomorrow needs no CORS.
+  The person's Lens token passes through and isn't stored or logged. The Idempotency-Key is a hash of the body.

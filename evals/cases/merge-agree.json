@@ -101,6 +101,7 @@
     "conflicts": [],
     "crossed_out": [],
     "overlaps": [],
-    "term_end": "2026-12-08"
+    "term_end": "2026-12-08",
+    "breaks": [["2026-11-25", "2026-11-29"]]
   }
 }

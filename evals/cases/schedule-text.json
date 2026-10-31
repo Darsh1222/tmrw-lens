@@ -54,6 +54,7 @@
     "conflicts": [],
     "crossed_out": [],
     "overlaps": [],
-    "term_end": null
+    "term_end": null,
+    "breaks": []
   }
 }

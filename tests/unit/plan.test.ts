@@ -61,6 +61,7 @@ function mathSyllabus(): SourceReading {
           course_title: "Calculus II",
           term_start: { date_text: "August 31, 2026", evidence: ev("Classes begin Monday, August 31, 2026.") },
           term_end: null,
+          breaks: [],
           items: [
             syllabusItem("Problem Set 5", "assignment", "Week 7 Thu", null, "Problem Set 5 due Week 7 Thu"),
             syllabusItem("Quiz 3", "quiz", "Fri Oct 30", null, "Quiz 3, Fri Oct 30"),
@@ -119,7 +120,7 @@ const schedule: SourceReading = {
       rereads: {},
       extraction: {
         term_text: "Fall 2026",
-        term_end: null,
+        term_end: null, breaks: [],
         view: "text",
         classes: [
           { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", evidence: ev("Lec  MWF  10:00am - 10:50am  ESJ 0224") },
@@ -234,7 +235,7 @@ describe("buildPlan", () => {
     const cmsc: SourceReading = {
       source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
       pages: [{ page: 1, text: "Project 4 due Fri Nov 13, 11:59pm", rereads: {}, extraction: {
-        course_code: "CMSC131", course_title: "Object-Oriented Programming I", term_start: null, term_end: null,
+        course_code: "CMSC131", course_title: "Object-Oriented Programming I", term_start: null, term_end: null, breaks: [],
         items: [syllabusItem("Project 4", "project", "Fri Nov 13", "11:59pm", "Project 4 due Fri Nov 13, 11:59pm")],
       } }],
     }; // prettier-ignore
@@ -257,7 +258,7 @@ describe("buildPlan", () => {
     const exam: SourceReading = {
       source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
       pages: [{ page: 1, text: "Exam 2 Wed Nov 11, 1:00pm - 2:15pm", rereads: {}, extraction: {
-        course_code: "CMSC131", course_title: null, term_start: null, term_end: null,
+        course_code: "CMSC131", course_title: null, term_start: null, term_end: null, breaks: [],
         items: [syllabusItem("Exam 2", "exam", "Wed Nov 11", "1:00pm - 2:15pm", "Exam 2 Wed Nov 11, 1:00pm - 2:15pm")],
       } }],
     }; // prettier-ignore
@@ -413,7 +414,7 @@ describe("dates relative to another item", () => {
     const cmsc: SourceReading = {
       source: source("cmsc", "syllabus_pdf", "CMSC131 syllabus"),
       pages: [{ page: 1, text: "Project 3 due Sun Nov 1\nProject 4 due Fri Nov 13\nReflection due the week after the project", rereads: {}, extraction: {
-        course_code: "CMSC131", course_title: null, term_start: null, term_end: null,
+        course_code: "CMSC131", course_title: null, term_start: null, term_end: null, breaks: [],
         items: [
           syllabusItem("Project 3", "project", "Sun Nov 1", null, "Project 3 due Sun Nov 1"),
           syllabusItem("Project 4", "project", "Fri Nov 13", null, "Project 4 due Fri Nov 13"),

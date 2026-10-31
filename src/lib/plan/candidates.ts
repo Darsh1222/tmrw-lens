@@ -6,16 +6,22 @@ import {
   type Check,
   type ClassBlock,
   type DateTrace,
+  type Facts,
   type PageReading,
   type SourceMeta,
   type SourceReading,
+  type TermBreak,
+  type TermBreaks,
   type TermDate,
+  type TracedDate,
 } from "@/lib/plan/types";
 import { verifyReading, worst } from "@/lib/plan/verify";
 import {
   firstMeeting,
   lastMeeting,
   localDate,
+  meetingsBetween,
+  parseDateRange,
   parseDays,
   parseTime,
   resolveDate,
@@ -112,29 +118,137 @@ export function termDate(readings: SourceReading[], zone: string, key: "term_sta
 
 export const termStart = (readings: SourceReading[], zone: string) => termDate(readings, zone, "term_start");
 
+/** What the person said, as evidence: there's no page to point at, only their answer. */
+export function answerEvidence(question: string, words: string): Evidence {
+  return { source_id: "answer", page: null, bbox: null, quote: words || question };
+}
+
+/** A date the person gave, traced to the question they answered. */
+export function answeredDate(date: string, question: string, words = date): TracedDate {
+  return {
+    value: date,
+    trace: {
+      text: words,
+      evidence: answerEvidence(question, words),
+      rule: "answer",
+      inputs: { term_start: null, photo_date: null, added_date: null, answer: question },
+    },
+  };
+}
+
+/** Breaks with no classes, from every syllabus and schedule that lists them, or from the person's answer. */
+export function termBreaks(readings: SourceReading[], term: TermDate, zone: string, facts: Facts = {}): TermBreaks {
+  if (facts.breaks) {
+    const breaks = facts.breaks.map((b, i) => ({
+      id: `break_${shortHash(`${b.start}|${b.end}|${i}`)}`,
+      name: b.name,
+      start: b.start,
+      end: b.end,
+      trace: { ...answeredDate(b.start, b.question, b.text).trace },
+    }));
+    return { breaks, check: { status: "verified", reason: breaks.length ? null : "You said there are no breaks." } };
+  }
+  const out = new Map<string, TermBreak>();
+  let unread: Check | null = null;
+  for (const { source, page, data } of [...syllabusPages(readings), ...schedulePages(readings)])
+    for (const [i, b] of (data.breaks ?? []).entries()) {
+      const inputs: DateInputs = {
+        term_start: term.date?.value ?? null,
+        photo_date: null,
+        added_date: localDate(source.added_at, zone),
+      };
+      const read = verifyReading(page, `breaks.${i}`, b.evidence.quote, [b.dates_text]);
+      const r = parseDateRange(b.dates_text, inputs);
+      const check = worst(read.quote, ...read.fields);
+      if (!r.ok || check.status !== "verified") {
+        unread = r.ok ? check : { status: "needs_question", reason: r.reason };
+        continue;
+      }
+      const key = `${r.start}|${r.end}`;
+      if (out.has(key)) continue; // the same break in two syllabi
+      out.set(key, {
+        id: `break_${shortHash(key)}`,
+        name: b.name,
+        start: r.start,
+        end: r.end,
+        trace: { text: b.dates_text, evidence: evidenceOf(b.evidence, source, page), rule: r.rule, inputs },
+      });
+    }
+  const breaks = [...out.values()].sort((a, b) => a.start.localeCompare(b.start));
+  if (breaks.length) return { breaks, check: ok };
+  return { breaks, check: unread ?? { status: "needs_question", reason: "No source lists the breaks." } };
+}
+
+type Meeting = ScheduleExtraction["classes"][number];
+
+/**
+ * One entry per meeting pattern. A grid can be read one block per column ("Monday" MATH141 10:00, "Wednesday" MATH141
+ * 10:00, ...): those become one class meeting on every day it appears, with every block's quote as its evidence and
+ * the union of their boxes as its highlight. List and text views are already one entry per pattern.
+ */
+function gridMeetings(data: ScheduleExtraction): { c: Meeting; members: { i: number; quote: string }[] }[] {
+  const all = data.classes.map((c, i) => ({ c, members: [{ i, quote: c.evidence.quote }] }));
+  if (data.view !== "grid") return all;
+  const groups = new Map<string, typeof all>();
+  for (const e of all) {
+    const k = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.start_text, e.c.end_text, e.c.location].join("|");
+    groups.set(k, [...(groups.get(k) ?? []), e]);
+  }
+  return [...groups.values()].map((g) => {
+    if (g.length === 1) return g[0];
+    const boxes = g.flatMap((e) => (e.c.evidence.box ? [e.c.evidence.box] : []));
+    const box = boxes.length
+      ? {
+          x_min: Math.min(...boxes.map((b) => b.x_min)),
+          y_min: Math.min(...boxes.map((b) => b.y_min)),
+          x_max: Math.max(...boxes.map((b) => b.x_max)),
+          y_max: Math.max(...boxes.map((b) => b.y_max)),
+        }
+      : null;
+    const c: Meeting = {
+      ...g[0].c,
+      days_text: [...new Set(g.map((e) => e.c.days_text))].join(" "),
+      evidence: { quote: g.map((e) => e.c.evidence.quote).join("\n"), box },
+    };
+    return { c, members: g.flatMap((e) => e.members) };
+  });
+}
+
+/** Meetings that fall in a break, within the term when its first and last days are known. */
+export function skipDates(days: ClassBlock["days"], breaks: TermBreak[], from: string | null, until: string | null) {
+  return breaks.flatMap((b) =>
+    meetingsBetween(days, b.start, b.end)
+      .filter((d) => (!from || d >= from) && (!until || d <= until))
+      .map((date) => ({ date, break_id: b.id })),
+  );
+}
+
 export function classBlocks(
   readings: SourceReading[],
   term: TermDate,
-  { termEnd, zone }: { termEnd: TermDate; zone: string },
+  { termEnd, zone, breaks = [] }: { termEnd: TermDate; zone: string; breaks?: TermBreak[] },
 ): ClassBlock[] {
   const out: ClassBlock[] = [];
   const seen = new Set<string>();
   for (const { source, page, data } of schedulePages(readings))
-    data.classes.forEach((c, i) => {
+    for (const { c, members } of gridMeetings(data)) {
       const course = normalizeCode(c.course_code) ?? c.course_code.toUpperCase();
       const grid = data.view === "grid";
       // On a grid, the quote's day names are column headers, not part of the block; the block's own lines are checked.
-      const checked = grid
-        ? c.evidence.quote
-            .split("\n")
-            .filter((l) => !parseDays(l))
-            .join("\n")
-        : c.evidence.quote;
-      const read = verifyReading(page, `classes.${i}`, checked || c.evidence.quote, [
-        grid ? null : c.days_text,
-        c.start_text,
-        c.end_text,
-      ]);
+      const checkedOf = (quote: string) =>
+        grid
+          ? quote
+              .split("\n")
+              .filter((l) => !parseDays(l))
+              .join("\n") || quote
+          : quote;
+      const reads = members.map(({ i, quote }) =>
+        verifyReading(page, `classes.${i}`, checkedOf(quote), [grid ? null : c.days_text, c.start_text, c.end_text]),
+      );
+      const read = {
+        quote: worst(...reads.map((r) => r.quote)),
+        fields: [0, 1, 2].map((k) => worst(...reads.map((r) => r.fields[k]))),
+      };
       const days = parseDays(c.days_text);
       const start = parseTime(c.start_text);
       const end = parseTime(c.end_text);
@@ -151,7 +265,7 @@ export function classBlocks(
           ? worst(read.fields[1], read.fields[2])
           : { status: "unverified", reason: `Can't read "${c.start_text} - ${c.end_text}".` };
       const key = [course, c.meeting_type, days?.join(""), startT, endT].join("|");
-      if (seen.has(key)) return; // the same meeting from a second schedule source
+      if (seen.has(key)) continue; // the same meeting from a second schedule source
       seen.add(key);
       const evidence = evidenceOf(c.evidence, source, page);
       const ds = days ?? [];
@@ -191,11 +305,12 @@ export function classBlocks(
                 },
               }
             : null,
+        skip_dates: skipDates(ds, breaks, term.date?.value ?? null, until),
         evidence,
         checks,
         status: worst(checks.quote, checks.days, checks.time).status,
       });
-    });
+    }
   return out;
 }
 

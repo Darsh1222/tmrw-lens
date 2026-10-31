@@ -28,18 +28,21 @@ function fieldsInQuotes(rows: { label: string; quote: string; fields: (string | 
   return problems.length ? `${problems.join("; ")}. Copy fields from the quote, or widen the quote.` : null;
 }
 
-const termRows = (o: { term_start?: TermDate; term_end?: TermDate }) =>
-  (["term_start", "term_end"] as const).flatMap((k) => {
+const termRows = (o: { term_start?: TermDate; term_end?: TermDate; breaks: Break[] }) => [
+  ...(["term_start", "term_end"] as const).flatMap((k) => {
     const t = o[k];
     return t ? [{ label: k, quote: t.evidence.quote, fields: [t.date_text] }] : [];
-  });
+  }),
+  ...o.breaks.map((b, i) => ({ label: `breaks[${i}]`, quote: b.evidence.quote, fields: [b.dates_text] })),
+];
+type Break = { dates_text: string; evidence: { quote: string } };
 type TermDate = { date_text: string; evidence: { quote: string } } | null;
 
 export const scheduleTask: Task<ScheduleExtraction> = {
   name: "extract_schedule",
-  version: 2,
+  version: 3,
   instructions: `You read a student's weekly class schedule from the University of Maryland's Testudo: a screenshot (grid view, list view, or both) or pasted text. Extract every class meeting: one entry per meeting pattern (a lecture on MWF and a discussion on TuTh are two entries).
-If a text list of courses is visible, read from it rather than from positions on the grid. Ignore names, IDs, and anything that isn't a class meeting. If it shows the last day of classes, fill term_end with those words and their quote.
+If a text list of courses is visible, read from it rather than from positions on the grid. Ignore names, IDs, and anything that isn't a class meeting. If it shows the last day of classes, fill term_end with those words and their quote. If it lists breaks or days with no classes, add each to breaks.
 ${RULES}`,
   schema: ScheduleExtraction,
   maxOutputTokens: 12_000,
@@ -56,8 +59,8 @@ ${RULES}`,
 
 export const syllabusPageTask: Task<SyllabusPageExtraction> = {
   name: "extract_syllabus_page",
-  version: 3,
-  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. Skip grading tables and policies unless they give a date. If the page says when classes begin, fill term_start with those words and their quote; if it says the last day of classes, fill term_end the same way.
+  version: 4,
+  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. Skip grading tables and policies unless they give a date. If the page says when classes begin, fill term_start with those words and their quote; if it says the last day of classes, fill term_end the same way. Add each break or day with no classes it lists (Thanksgiving break, spring break, "no class") to breaks, with its dates as written; these are not items.
 ${RULES}`,
   schema: SyllabusPageExtraction,
   maxOutputTokens: 12_000,

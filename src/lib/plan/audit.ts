@@ -1,9 +1,11 @@
 import { contains } from "@/lib/plan/text";
 import type { DateTrace, Plan, SourceMeta, TracedDate, TracedTime } from "@/lib/plan/types";
+import { skipDates } from "@/lib/plan/candidates";
 import {
   firstMeeting,
   lastMeeting,
   localDate,
+  parseDateRange,
   parseDays,
   parseTime,
   resolveDate,
@@ -15,7 +17,9 @@ import {
 // are inside its quote, and recomputing it from those words and the recorded
 // inputs must give the same date. The inputs themselves must be real: the
 // plan's own term start or end, the day a source was photographed or added,
-// or the current date of the item a relative date depends on.
+// or the current date of the item a relative date depends on. A date the
+// person typed or picked traces to their answer instead. Breaks recompute from
+// their words, and each class's skipped meetings from the breaks.
 // Times get the same treatment. Send runs this too, and refuses on any failure.
 
 export type Finding = { about: string; field: string; value: string; why: string };
@@ -34,7 +38,13 @@ export function auditPlan(plan: Plan, sources: SourceMeta[]): DateAudit {
   };
 
   function dateProblem(t: DateTrace, value: string, isTerm: boolean): string | null {
-    if (!contains(t.evidence.quote, t.text)) return `"${t.text}" isn't in its quote`;
+    if (t.rule === "answer") return t.inputs.answer ? null : "a date the person gave, with no question";
+    // Class days can be column headers spread over a grid ("Monday", "Wednesday"): each day word must be in the quote.
+    const meeting = t.rule === "first_meeting" || t.rule === "last_meeting";
+    if (
+      meeting ? !t.text.split(/\s+/).every((w) => contains(t.evidence.quote, w)) : !contains(t.evidence.quote, t.text)
+    )
+      return `"${t.text}" isn't in its quote`;
     const src = byId.get(t.evidence.source_id);
     if (!src) return `unknown source ${t.evidence.source_id}`;
     const term = plan.term_start.date?.value ?? null;
@@ -72,6 +82,7 @@ export function auditPlan(plan: Plan, sources: SourceMeta[]): DateAudit {
     times++;
     const t = tt.trace;
     const fail = (why: string) => invented.push({ about, field: "time", value: tt.start, why });
+    if (t.rule === "answer") return;
     if (!contains(t.evidence.quote, t.text)) return fail(`"${t.text}" isn't in its quote`);
     if (t.rule === "in_class") {
       const b = plan.classes.find((c) => c.id === t.class_id);
@@ -89,7 +100,37 @@ export function auditPlan(plan: Plan, sources: SourceMeta[]): DateAudit {
 
   if (plan.term_start.date) checkDate("term", "term_start", plan.term_start.date, true);
   if (plan.term_end.date) checkDate("term", "term_end", plan.term_end.date, true);
+  for (const b of plan.term_breaks.breaks) {
+    dates++;
+    const t = b.trace;
+    let why: string | null = null;
+    if (t.rule === "answer") why = t.inputs.answer ? null : "a break the person gave, with no question";
+    else if (!contains(t.evidence.quote, t.text)) why = `"${t.text}" isn't in its quote`;
+    else if (t.inputs.term_start !== null && t.inputs.term_start !== (plan.term_start.date?.value ?? null))
+      why = "term start isn't the plan's";
+    else {
+      const r = parseDateRange(t.text, t.inputs);
+      if (!r.ok || r.start !== b.start || r.end !== b.end) why = `"${t.text}" doesn't recompute to ${b.start}-${b.end}`;
+    }
+    if (why) invented.push({ about: b.id, field: "break", value: `${b.start}/${b.end}`, why });
+  }
   for (const c of plan.classes) {
+    if (c.skip_dates.length) {
+      dates += c.skip_dates.length;
+      const want = skipDates(
+        c.days,
+        plan.term_breaks.breaks,
+        plan.term_start.date?.value ?? null,
+        plan.term_end.date?.value ?? null,
+      );
+      if (JSON.stringify(want) !== JSON.stringify(c.skip_dates))
+        invented.push({
+          about: c.id,
+          field: "skip_dates",
+          value: c.skip_dates.map((s) => s.date).join(","),
+          why: "skipped meetings aren't the meetings in the breaks",
+        });
+    }
     if (c.first_date) checkDate(c.id, "first_date", c.first_date);
     if (c.last_date) checkDate(c.id, "last_date", c.last_date);
     if (c.rrule.includes("UNTIL")) {

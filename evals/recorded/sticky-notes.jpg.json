@@ -4,8 +4,8 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 2,
-    "extract_syllabus_page": 3,
+    "extract_schedule": 3,
+    "extract_syllabus_page": 4,
     "extract_whiteboard": 3,
     "extract_notes": 3,
     "reread_crops": 1
@@ -20,7 +20,7 @@
         "items": [
           {
             "kind": "assignment",
-            "title": "PHYS HW 8",
+            "title": "HW 8",
             "course_hint": "PHYS",
             "date_text": "Fri 11/6",
             "time_text": null,
@@ -32,14 +32,14 @@
                 "x_min": 69,
                 "y_min": 95,
                 "x_max": 324,
-                "y_max": 488
+                "y_max": 465
               }
             },
             "crossed_out": false
           },
           {
             "kind": "assignment",
-            "title": "ENGL peer review",
+            "title": "peer review",
             "course_hint": "ENGL",
             "date_text": "Mon 11/2",
             "time_text": "in class",
@@ -48,17 +48,17 @@
             "evidence": {
               "quote": "ENGL peer review\nMon 11/2 in class",
               "box": {
-                "x_min": 330,
+                "x_min": 327,
                 "y_min": 124,
-                "x_max": 635,
-                "y_max": 514
+                "x_max": 626,
+                "y_max": 490
               }
             },
             "crossed_out": false
           },
           {
-            "kind": "other",
-            "title": "CMSC131 office hrs",
+            "kind": "reminder",
+            "title": "office hrs",
             "course_hint": "CMSC131",
             "date_text": "Thu",
             "time_text": "3-4pm",
@@ -69,8 +69,8 @@
               "box": {
                 "x_min": 677,
                 "y_min": 92,
-                "x_max": 972,
-                "y_max": 474
+                "x_max": 955,
+                "y_max": 450
               }
             },
             "crossed_out": false
@@ -86,10 +86,10 @@
             "evidence": {
               "quote": "buy bluebook\nfor calc midterm",
               "box": {
-                "x_min": 300,
+                "x_min": 299,
                 "y_min": 519,
-                "x_max": 630,
-                "y_max": 944
+                "x_max": 587,
+                "y_max": 894
               }
             },
             "crossed_out": false
@@ -171,7 +171,7 @@
                 1
               ]
             ],
-            "confidence": 0.9064327478408813
+            "confidence": 0.9024390578269958
           },
           {
             "id": "sticky_note_1",
@@ -256,11 +256,7 @@
                 0.4173
               ],
               [
-                0.245,
-                0.4245
-              ],
-              [
-                0.1288,
+                0.1294,
                 0.4345
               ],
               [
@@ -272,16 +268,12 @@
                 0.4373
               ],
               [
-                0.0831,
-                0.4364
-              ],
-              [
                 0.0825,
-                0.4345
+                0.4355
               ],
               [
                 0.0819,
-                0.4282
+                0.4291
               ],
               [
                 0.0756,
@@ -341,7 +333,7 @@
                 0.0682
               ],
               [
-                0.9631,
+                0.9638,
                 0.0691
               ],
               [
@@ -377,11 +369,11 @@
                 0.4109
               ],
               [
-                0.9663,
+                0.9669,
                 0.4118
               ],
               [
-                0.91,
+                0.9106,
                 0.4145
               ],
               [
@@ -538,7 +530,7 @@
                 0.8682
               ],
               [
-                0.6012,
+                0.6006,
                 0.8682
               ],
               [
@@ -608,7 +600,7 @@
               ],
               [
                 0.3869,
-                0.1173
+                0.1164
               ],
               [
                 0.3875,
@@ -625,6 +617,10 @@
               [
                 0.4,
                 0.1009
+              ],
+              [
+                0.4294,
+                0.1027
               ],
               [
                 0.4438,
@@ -668,7 +664,7 @@
               ],
               [
                 0.6506,
-                0.4445
+                0.4436
               ],
               [
                 0.65,
@@ -736,7 +732,7 @@
                 0.7827
               ],
               [
-                0.0219,
+                0.0213,
                 0.7818
               ],
               [
@@ -834,7 +830,7 @@
               ],
               [
                 0.3431,
-                0.0936
+                0.0945
               ],
               [
                 0.3475,
@@ -905,7 +901,7 @@
             "bbox": {
               "x0": 0.690625,
               "y0": 0.06818181818181818,
-              "x1": 0.97125,
+              "x1": 0.970625,
               "y1": 0.4218181818181818
             },
             "outline": [
@@ -970,7 +966,11 @@
                 0.4091
               ],
               [
-                0.97,
+                0.9706,
+                0.41
+              ],
+              [
+                0.9694,
                 0.4109
               ],
               [
@@ -978,11 +978,15 @@
                 0.4118
               ],
               [
+                0.9088,
+                0.4145
+              ],
+              [
                 0.85,
                 0.4173
               ],
               [
-                0.765,
+                0.7656,
                 0.4209
               ],
               [
@@ -1099,10 +1103,6 @@
                 0.5364
               ],
               [
-                0.6325,
-                0.55
-              ],
-              [
                 0.6319,
                 0.5618
               ],
@@ -1111,8 +1111,12 @@
                 0.7473
               ],
               [
+                0.6181,
+                0.8145
+              ],
+              [
                 0.6156,
-                0.86
+                0.8591
               ],
               [
                 0.615,
@@ -1320,16 +1324,16 @@
     "extract": {
       "calls": 1,
       "input_tokens": 3241,
-      "cached_tokens": 3185,
-      "output_tokens": 1895,
-      "cost_usd": 0.0086015
+      "cached_tokens": 881,
+      "output_tokens": 1377,
+      "cost_usd": 0.0089344
     },
     "reread_box": {
       "calls": 1,
-      "input_tokens": 2408,
+      "input_tokens": 2317,
       "cached_tokens": 113,
-      "output_tokens": 389,
-      "cost_usd": 0.00453895
+      "output_tokens": 297,
+      "cost_usd": 0.0040342
     },
     "sam_segment": {
       "calls": 3,
@@ -1342,8 +1346,8 @@
       "calls": 1,
       "input_tokens": 1172,
       "cached_tokens": 113,
-      "output_tokens": 209,
-      "cost_usd": 0.00222895
+      "output_tokens": 199,
+      "cost_usd": 0.00218645
     }
   }
 }

@@ -1,7 +1,8 @@
-import { candidates, classBlocks, GRID_DAYS, termDate } from "@/lib/plan/candidates";
+import { DateTime } from "luxon";
+import { answeredDate, candidates, classBlocks, GRID_DAYS, termBreaks, termDate } from "@/lib/plan/candidates";
 import { linkDependents, propagate } from "@/lib/plan/depends";
 import { formatTime, merge } from "@/lib/plan/merge";
-import type { Candidate, ClassBlock, Plan, PlanItem, Question, SourceReading } from "@/lib/plan/types";
+import type { Candidate, ClassBlock, Facts, Plan, PlanItem, Question, SourceReading, TermDate } from "@/lib/plan/types";
 import { worst } from "@/lib/plan/verify";
 import { formatDate, minutesOf, parseTime, WEEKDAY_NAMES, weekdayOf } from "@/lib/resolve/dates";
 
@@ -63,13 +64,35 @@ function overlap(item: PlanItem, classes: ClassBlock[]): ClassBlock | null {
 
 const MEETING = { lecture: "lecture", discussion: "discussion", lab: "lab", other: "class" };
 
-export function buildPlan(readings: SourceReading[], { zone }: { zone: string }): Plan {
-  const term = termDate(readings, zone, "term_start");
-  const termEnd = termDate(readings, zone, "term_end");
-  const classes = classBlocks(readings, term, { termEnd, zone });
+/** The readings with the photo dates the person gave: "Mon" on that photo then resolves like any dated photo's. */
+export function withFacts(readings: SourceReading[], facts: Facts, zone: string): SourceReading[] {
+  const dates = facts.photo_dates ?? {};
+  return readings.map((r) =>
+    dates[r.source.id]
+      ? {
+          ...r,
+          source: {
+            ...r.source,
+            captured_at: DateTime.fromISO(dates[r.source.id].date, { zone }).set({ hour: 12 }).toISO()!,
+          },
+        }
+      : r,
+  );
+}
+
+const told = (f: { date: string; question: string } | undefined): TermDate | null =>
+  f ? { date: answeredDate(f.date, f.question), check: { status: "verified", reason: "You said so." } } : null;
+
+/** `facts` are what the person has answered that changes how things resolve; see `planFrom` in session.ts. */
+export function buildPlan(input: SourceReading[], { zone, facts = {} }: { zone: string; facts?: Facts }): Plan {
+  const readings = withFacts(input, facts, zone);
+  const term = told(facts.term_start) ?? termDate(readings, zone, "term_start");
+  const termEnd = told(facts.term_end) ?? termDate(readings, zone, "term_end");
+  const breaks = termBreaks(readings, term, zone, facts);
+  const classes = classBlocks(readings, term, { termEnd, zone, breaks: breaks.breaks });
   const all = candidates(readings, term, zone).map((c) => fillInClass(c, classes));
   const live = all.filter((c) => !c.crossed_out);
-  const { items, questions } = merge(live);
+  const { items, questions } = merge(live, { separate: facts.separate });
   const byId = new Map(all.map((c) => [c.id, c]));
   const asked: Question[] = linkDependents(items, byId);
   propagate(items);
@@ -84,6 +107,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
       type: "missing_fact",
       prompt: "When is the first day of classes?",
       options: [{ id: "edit", label: "Pick the date", value: null, evidence: null }],
+      input: "date",
       suggested: null,
       why_suggested: null,
     });
@@ -96,6 +120,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
       type: "missing_fact",
       prompt: `When is the last day of classes? Your weekly classes repeat until then.${termEnd.check.status === "conflict" ? ` ${termEnd.check.reason}` : ""}`,
       options: [{ id: "edit", label: "Pick the date", value: null, evidence: null }],
+      input: "date",
       suggested: null,
       why_suggested: null,
     });
@@ -110,6 +135,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
       type: "missing_fact",
       prompt: `When was the ${src.label} taken? It says things like "Mon", which depend on that.`,
       options: [{ id: "edit", label: "Pick the date", value: null, evidence: null }],
+      input: "date",
       suggested: null,
       why_suggested: null,
     });
@@ -128,6 +154,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
         { id: "confirm", label: "Yes, they're right", value: "confirm", evidence: null },
         { id: "edit", label: "Let me fix them", value: null, evidence: null },
       ],
+      input: "fields",
       suggested: null,
       why_suggested: null,
     });
@@ -144,18 +171,53 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
           { id: "confirm", label: "Yes, it's right", value: "confirm", evidence: c.evidence },
           { id: "edit", label: "Let me fix it", value: null, evidence: null },
         ],
+        input: "fields",
         suggested: null,
         why_suggested: null,
       });
     }
 
+  // Weekly classes skip breaks: one question if no syllabus or schedule lists them.
+  if (classes.length > 0 && breaks.check.status !== "verified")
+    asked.push({
+      id: "q_breaks",
+      about: "term",
+      type: "missing_fact",
+      prompt: `Are there breaks with no classes this term, like Thanksgiving? Your weekly classes skip them.${breaks.check.reason && !breaks.check.reason.startsWith("No source") ? ` ${breaks.check.reason}` : ""}`,
+      options: [
+        { id: "none", label: "No breaks", value: "none", evidence: null },
+        { id: "edit", label: "Add the dates", value: null, evidence: null },
+      ],
+      input: "dates",
+      suggested: null,
+      why_suggested: null,
+    });
+
+  const courses = [
+    ...new Set([...classes.map((c) => c.course), ...items.flatMap((i) => (i.course ? [i.course] : []))]),
+  ].sort();
   for (const item of items) {
     if (item.conflict) continue; // its one question is the conflict question
     if (asked.some((q) => q.about === item.id && q.type === "which_item")) continue;
     const members = item.candidates.map((id) => byId.get(id)!);
     const first = members[0];
-    const q = (type: Question["type"], prompt: string, options: Question["options"], suggested: string | null = null) =>
-      asked.push({ id: `q_${item.id}_${type}`, about: item.id, type, prompt, options, suggested, why_suggested: null });
+    const q = (
+      type: Question["type"],
+      prompt: string,
+      options: Question["options"],
+      input: Question["input"],
+      suggested: string | null = null,
+    ) =>
+      asked.push({
+        id: `q_${item.id}_${type}`,
+        about: item.id,
+        type,
+        prompt,
+        options,
+        input,
+        suggested,
+        why_suggested: null,
+      });
 
     if (
       item.checks.quote.status === "unverified" ||
@@ -166,25 +228,48 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
       const reason = [item.checks.quote, item.checks.title, item.checks.date, item.checks.time].find(
         (c) => c.status === "unverified",
       )!.reason;
-      q("check", `I couldn't confirm "${first.evidence.quote}". ${reason} Is it right as read?`, [
-        { id: "confirm", label: "Yes, it's right", value: "confirm", evidence: first.evidence },
-        { id: "edit", label: "Let me fix it", value: null, evidence: null },
-      ]);
+      q(
+        "check",
+        `I couldn't confirm "${first.evidence.quote}". ${reason} Is it right as read?`,
+        [
+          { id: "confirm", label: "Yes, it's right", value: "confirm", evidence: first.evidence },
+          { id: "edit", label: "Let me fix it", value: null, evidence: null },
+        ],
+        "fields",
+      );
       continue;
     }
     if (item.checks.quote.status === "needs_question") {
-      q("unreadable", `Is this "${first.evidence.quote}"?`, [
-        { id: "as_read", label: first.evidence.quote, value: first.evidence.quote, evidence: first.evidence },
-        ...(first.legibility.reread && first.legibility.reread !== first.evidence.quote
-          ? [{ id: "reread", label: first.legibility.reread, value: first.legibility.reread, evidence: first.evidence }]
-          : []),
-        { id: "edit", label: "Neither, let me type it", value: null, evidence: null },
-      ]);
+      q(
+        "unreadable",
+        `Is this "${first.evidence.quote}"?`,
+        [
+          { id: "as_read", label: first.evidence.quote, value: first.evidence.quote, evidence: first.evidence },
+          ...(first.legibility.reread && first.legibility.reread !== first.evidence.quote
+            ? [
+                {
+                  id: "reread",
+                  label: first.legibility.reread,
+                  value: first.legibility.reread,
+                  evidence: first.evidence,
+                },
+              ]
+            : []),
+          { id: "edit", label: "Neither, let me type it", value: null, evidence: null },
+        ],
+        "text",
+      );
     }
     if (item.checks.course.status === "needs_question")
-      q("course", `Which course is "${item.title}" for? ${item.checks.course.reason}`, [
-        { id: "edit", label: "Pick the course", value: null, evidence: first.evidence },
-      ]);
+      q(
+        "course",
+        `Which course is "${item.title}" for? ${item.checks.course.reason}`,
+        [
+          ...courses.map((code) => ({ id: `c_${code}`, label: code, value: code, evidence: first.evidence })),
+          { id: "edit", label: "Another course", value: null, evidence: null },
+        ],
+        "course",
+      );
     const dn = members.find((c) => c.date_needs)?.date_needs;
     // A date that depends on another item waits on that item's question, if it has one; it has none of its own.
     const waits = item.depends_on !== null || dn?.needs === "term_start" || dn?.needs === "photo_date";
@@ -202,11 +287,15 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
           })),
           { id: "edit", label: "Pick the date", value: null, evidence: null },
         ],
+        "date",
       );
     if (item.checks.time.status === "needs_question" && item.time?.trace.rule !== "before_item")
-      q("missing_fact", `What time is "${item.title}"? ${item.checks.time.reason}`, [
-        { id: "edit", label: "Pick the time", value: null, evidence: null },
-      ]);
+      q(
+        `missing_fact`,
+        `What time is "${item.title}"? ${item.checks.time.reason}`,
+        [{ id: "edit", label: "Pick the time", value: null, evidence: null }],
+        "time",
+      );
 
     const hit = overlap(item, classes);
     if (hit) {
@@ -218,6 +307,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
           { id: "keep", label: "Keep both as they are", value: "keep", evidence: item.evidence[0] },
           { id: "edit", label: "Let me fix the time", value: null, evidence: hit.evidence },
         ],
+        "time",
       );
       if (item.checks.time.status === "verified") {
         item.checks.time = { status: "needs_question", reason: `Overlaps ${hit.course} ${MEETING[hit.meeting_type]}.` };
@@ -230,6 +320,7 @@ export function buildPlan(readings: SourceReading[], { zone }: { zone: string })
     zone,
     term_start: term,
     term_end: termEnd,
+    term_breaks: breaks,
     classes,
     items,
     questions: [...asked.filter((q) => q.about === "term"), ...questions, ...asked.filter((q) => q.about !== "term")],

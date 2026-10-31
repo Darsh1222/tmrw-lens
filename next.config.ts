@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  // Native image library for crops on the server; loaded with Node's require, not bundled.
+  serverExternalPackages: ["@napi-rs/canvas"],
   turbopack: {
     rules: {
       "*.css": {

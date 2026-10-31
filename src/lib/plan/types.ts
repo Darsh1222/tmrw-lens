@@ -63,7 +63,8 @@ export type DateTrace = {
   /** The words as written, e.g. "Week 7 Thu". Always inside `evidence.quote`. */
   text: string;
   evidence: Evidence;
-  rule: DateRule | "first_meeting" | "last_meeting";
+  /** "answer": the person typed or picked it (`inputs.answer` names the question); its evidence is their words. */
+  rule: DateRule | "first_meeting" | "last_meeting" | "answer";
   inputs: DateInputs;
 };
 export type TracedDate = { value: string; trace: DateTrace };
@@ -71,7 +72,7 @@ export type TracedDate = { value: string; trace: DateTrace };
 export type TimeTrace = {
   text: string;
   evidence: Evidence;
-  rule: "clock" | "in_class" | "before_item";
+  rule: "clock" | "in_class" | "before_item" | "answer";
   /** For "in class": the class block whose meeting time was used. */
   class_id: string | null;
   /** For "before Midterm 1": the item whose start time was used. */
@@ -123,6 +124,8 @@ export type ClassBlock = {
   first_date: TracedDate | null;
   /** The last meeting on or before the last day of classes. */
   last_date: TracedDate | null;
+  /** Meetings that fall in a break (ISO dates, in the person's zone): EXDATEs on the recurrence. */
+  skip_dates: { date: string; break_id: string }[];
   evidence: Evidence;
   checks: { quote: Check; days: Check; time: Check };
   status: Status;
@@ -144,6 +147,8 @@ export type Question = {
     "conflict" | "choose_date" | "missing_fact" | "unreadable" | "class_overlap" | "course" | "check" | "which_item";
   prompt: string;
   options: QuestionOption[];
+  /** What the "let me type it" option (value null) asks for, so the card shows the right input. */
+  input: "date" | "time" | "course" | "text" | "dates" | "fields" | null;
   /** Pre-selected option id, never applied until the person answers. */
   suggested: string | null;
   why_suggested: string | null;
@@ -184,13 +189,43 @@ export type PlanItem = {
 /** The first or last day of classes. */
 export type TermDate = { date: TracedDate | null; check: Check };
 
+/** A break with no classes ("Thanksgiving break: Nov 25-29"), first to last day inclusive. */
+export type TermBreak = {
+  id: string;
+  name: string;
+  start: string;
+  end: string;
+  /** `text` is the dates as written; recomputing them with `parseDateRange` gives start and end. */
+  trace: DateTrace;
+};
+/** `check` is verified when a source lists the breaks, or the person said there are none. */
+export type TermBreaks = { breaks: TermBreak[]; check: Check };
+
+/**
+ * What the person told Lens that changes how the readings resolve. Plans are rebuilt from the readings plus these,
+ * so an answer never has to patch a plan by hand. Dates are ISO; each records the question it answered.
+ */
+export type Facts = {
+  term_start?: { date: string; question: string };
+  term_end?: { date: string; question: string };
+  /** Per photo source id: the day it was taken. */
+  photo_dates?: Record<string, { date: string; question: string }>;
+  /** [] means the person said there are no breaks. */
+  breaks?: { name: string; text: string; start: string; end: string; question: string }[];
+  /** Candidate ids that are two different items, from answering "They're two different items". */
+  separate?: [string, string][];
+};
+
 export type Plan = {
   zone: string;
   term_start: TermDate;
   term_end: TermDate;
+  term_breaks: TermBreaks;
   classes: ClassBlock[];
   items: PlanItem[];
   questions: Question[];
+  /** Items and classes the person chose to leave out of Send. */
+  skipped?: string[];
   /** Crossed-out lines, kept so the card can say they were left out on purpose. */
   crossed_out: Candidate[];
 };

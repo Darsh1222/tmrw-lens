@@ -218,7 +218,8 @@
     ],
     "overlaps": ["Exam 2"],
     "crossed_out": [],
-    "term_end": "2026-12-08"
+    "term_end": "2026-12-08",
+    "breaks": [["2026-11-25", "2026-11-29"]]
   },
   "then": {
     "answer": [

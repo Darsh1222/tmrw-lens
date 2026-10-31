@@ -2,9 +2,9 @@
   "headline": {
     "cases": 11,
     "with_sam": {
-      "fully_verified": "75/98 (77%)",
-      "invented_dates": "0 of 159",
-      "items_found": "74/75",
+      "fully_verified": "81/99 (82%)",
+      "invented_dates": "0 of 181",
+      "items_found": "75/75",
       "classes_right": "24/24",
       "dates_right": "65/65",
       "dates_right_after_answers": "4/4",
@@ -13,12 +13,12 @@
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "23/23",
-      "status": "verified 75, needs_question 19, conflict 4"
+      "status": "verified 81, needs_question 14, conflict 4"
     },
     "without_sam": {
-      "fully_verified": "75/98 (77%)",
-      "invented_dates": "0 of 159",
-      "items_found": "74/75",
+      "fully_verified": "81/99 (82%)",
+      "invented_dates": "0 of 181",
+      "items_found": "75/75",
       "classes_right": "24/24",
       "dates_right": "65/65",
       "dates_right_after_answers": "4/4",
@@ -27,14 +27,14 @@
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "0/23",
-      "status": "verified 75, needs_question 19, conflict 4"
+      "status": "verified 81, needs_question 14, conflict 4"
     },
     "cost": {
       "photos": 5,
-      "box_per_photo": 0.01157915,
-      "sam_per_photo": 0.018504720000000002,
-      "tokens_per_call": "1318 in, 700 out",
-      "cache_hit_rate": "22%"
+      "box_per_photo": 0.01450123,
+      "sam_per_photo": 0.02101443,
+      "tokens_per_call": "1439 in, 898 out",
+      "cache_hit_rate": "12%"
     }
   },
   "cases": [
@@ -55,7 +55,7 @@
       "datesRight": 9,
       "wrong": [],
       "invented": [],
-      "datesAudited": 28,
+      "datesAudited": 30,
       "conflictsExpected": 1,
       "conflictsCaught": 1,
       "suggestedRight": 1,
@@ -115,7 +115,7 @@
       "datesRight": 16,
       "wrong": [],
       "invented": [],
-      "datesAudited": 84,
+      "datesAudited": 102,
       "conflictsExpected": 2,
       "conflictsCaught": 2,
       "suggestedRight": 2,
@@ -130,23 +130,21 @@
     },
     {
       "name": "merge-agree",
-      "things": 11,
+      "things": 12,
       "verified": 10,
       "status": {
         "verified": 10,
-        "needs_question": 1
+        "needs_question": 2
       },
       "goldItems": 12,
-      "found": 11,
+      "found": 12,
       "extra": [],
-      "missed": [
-        "PS5 (graded, pick up)"
-      ],
+      "missed": [],
       "dates": 11,
       "datesRight": 11,
       "wrong": [],
       "invented": [],
-      "datesAudited": 13,
+      "datesAudited": 14,
       "conflictsExpected": 0,
       "conflictsCaught": 0,
       "suggestedRight": 0,
@@ -191,9 +189,9 @@
     {
       "name": "schedule-grid",
       "things": 6,
-      "verified": 0,
+      "verified": 6,
       "status": {
-        "needs_question": 6
+        "verified": 6
       },
       "goldItems": 0,
       "found": 0,
@@ -345,7 +343,7 @@
       "datesRight": 10,
       "wrong": [],
       "invented": [],
-      "datesAudited": 12,
+      "datesAudited": 13,
       "conflictsExpected": 0,
       "conflictsCaught": 0,
       "suggestedRight": 0,

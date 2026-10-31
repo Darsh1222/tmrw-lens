@@ -12,6 +12,11 @@ const schema = z.object({
   DAILY_SPEND_CAP_USD: z.coerce.number().positive().default(5),
   UPSTASH_REDIS_REST_URL: z.url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+  // Per visitor, pages or photos read with the model (the sample week is free and not counted).
+  READS_PER_HOUR: z.coerce.number().int().positive().default(40),
+  READS_PER_DAY: z.coerce.number().int().positive().default(120),
+  // Where Send delivers confirmed items (Tomorrow's side of docs/IMPORT_CONTRACT.md).
+  TOMORROW_IMPORT_URL: z.url().default("https://bettertmrw.app/api/lens/import"),
   VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
 });
 

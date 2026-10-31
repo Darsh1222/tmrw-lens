@@ -53,6 +53,22 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
   pre-selected, 0 false conflicts. About 17 cents.
 - SAM 3.1 spike: it finds sticky notes, whiteboards, and sheets of paper in a photo, not handwriting.
 
+### Oct 31
+
+- The Lens app at [lens.bettertmrw.app](https://lens.bettertmrw.app): add photos, PDFs, or pasted Testudo text (several
+  at once), or try the built-in sample week. Each input is read with Muse Spark (and SAM 3.1 on photos), one page per
+  request. The source viewer switches between inputs and PDF pages and highlights every quote on the image; the
+  selected item is drawn strongest, with its SAM outline. Every item and class has a status badge, a "computed from"
+  line ("\"Week 7 Thu\": week 1 is the week classes start (Mon Aug 31)"), and how its reading was checked.
+- One question at a time, with the likely answer pre-selected and its reason shown; a conflict shows both sources'
+  words side by side. "They're two different items" keeps both. Edit, leave out, and undo from the list.
+- Breaks: class meetings inside a break the syllabus lists are skipped; if none does, Lens asks once.
+- Send to Tomorrow (verified items only, after the date audit), and the contract for Tomorrow's side:
+  [docs/IMPORT_CONTRACT.md](docs/IMPORT_CONTRACT.md).
+- Photos and PDF pages are prepared in the browser and never stored; readings are cached for a day, encrypted with a
+  key only the same image can produce. Per-visitor rate limits on top of the daily spend cap.
+- Evals: 82% fully verified (was 77%), 0 invented dates of 181, classes 24 of 24, items 75 of 75.
+
 ### Oct 30
 
 - SAM 3.1 in the pipeline: each whiteboard and notes photo is segmented into sticky notes, sheets, and the board.

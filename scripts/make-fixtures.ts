@@ -197,6 +197,7 @@ async function syllabusPdf() {
     [""],
     ["Classes begin Monday, August 31, 2026. Week 1 is the week of August 31."],
     ["Last day of classes: Tuesday, December 8, 2026."],
+    ["Thanksgiving break: no classes Wednesday, November 25 - Sunday, November 29."],
     [""],
     ["Grading", true, 13],
     ["Weekly problem sets  20%"],

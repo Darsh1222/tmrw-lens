@@ -169,12 +169,18 @@ importers:
       '@meta-sam/parser':
         specifier: 0.1.0
         version: 0.1.0
+      '@napi-rs/canvas':
+        specifier: ^1.0.13
+        version: 1.0.13
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
       next:
         specifier: 16.4.3
         version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      pdfjs-dist:
+        specifier: ^6.4.299
+        version: 6.4.299
       react:
         specifier: 19.3.0
         version: 19.3.0
@@ -185,9 +191,6 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@napi-rs/canvas':
-        specifier: ^1.0.13
-        version: 1.0.13
       '@tailwindcss/turbopack':
         specifier: ^4.3.3
         version: 4.3.3
@@ -212,9 +215,6 @@ importers:
       pdf-lib:
         specifier: ^1.17.1
         version: 1.17.1
-      pdfjs-dist:
-        specifier: ^6.4.299
-        version: 6.4.299
       prettier:
         specifier: ^3.9.10
         version: 3.9.10

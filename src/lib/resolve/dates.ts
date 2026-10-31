@@ -24,6 +24,8 @@ export type DateInputs = {
   term_end?: string | null;
   /** The item a date like "before Midterm 1" depends on, and that item's date when this one was computed. */
   ref?: { item_id: string; date: string } | null;
+  /** For a date the person gave: the question they answered. */
+  answer?: string;
 };
 
 export type DateResult =
@@ -211,6 +213,44 @@ export function resolveDate(text: string, inputs: DateInputs): DateResult {
   }
 
   return fail(`"${text}" isn't a date I can read`, "rewrite");
+}
+
+export type RangeResult =
+  | { ok: true; start: string; end: string; rule: DateRule }
+  | { ok: false; reason: string; needs: Extract<DateResult, { ok: false }>["needs"] };
+
+const RANGE_SEP = /\s*(?:\s[-–—]\s|[–—]|(?<=\d)-(?=\s*[a-z\d])|\bto\b|\bthrough\b|\bthru\b|\buntil\b)\s*/i;
+
+/**
+ * A break as written: "Nov 25-29", "November 25 - November 29, 2026", "11/25-11/29", "Wed Nov 25", resolved to its
+ * first and last day. The end takes the start's month when it's only a day ("25-29"). At most five weeks long.
+ */
+export function parseDateRange(text: string, inputs: DateInputs): RangeResult {
+  const parts = text.trim().split(RANGE_SEP);
+  const [a, b] = parts.length === 2 ? parts : [text, null];
+  if (parts.length > 2) return { ok: false, reason: `"${text}" has more than one range in it`, needs: "rewrite" };
+  // "November 25 - 29, 2026": the year written at the end belongs to both.
+  const year = b ? /\b(\d{4})\s*$/.exec(b)?.[1] : undefined;
+  const start = resolveDate(year && !/\b\d{4}\b/.test(a) ? `${a} ${year}` : a, inputs);
+  if (!start.ok) return { ok: false, reason: start.reason, needs: start.needs };
+  if (!b) return { ok: true, start: start.date, end: start.date, rule: start.rule };
+  const bare = /^(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*\d{4})?$/.exec(b.trim());
+  const end = bare
+    ? resolveDate(`${day(start.date).toFormat("LLL")} ${bare[1]}${year ? ` ${year}` : ""}`, { ...inputs, term_start: start.date }) // prettier-ignore
+    : resolveDate(b, { ...inputs, term_start: inputs.term_start ?? start.date });
+  if (!end.ok) return { ok: false, reason: end.reason, needs: end.needs };
+  const span = day(end.date).diff(day(start.date), "days").days;
+  if (span < 0) return { ok: false, reason: `"${text}" ends before it starts`, needs: "rewrite" };
+  if (span > 35) return { ok: false, reason: `"${text}" is longer than a break`, needs: "rewrite" };
+  return { ok: true, start: start.date, end: end.date, rule: start.rule };
+}
+
+/** Every date from `start` to `end` (inclusive) that falls on one of `days`. */
+export function meetingsBetween(days: Weekday[], start: string, end: string): string[] {
+  const out: string[] = [];
+  for (let d = day(start); d <= day(end); d = d.plus({ days: 1 }))
+    if (days.includes(d.weekday as Weekday)) out.push(iso(d));
+  return out;
 }
 
 export type TimeResult =

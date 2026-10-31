@@ -62,6 +62,7 @@ export function linkDependents(items: PlanItem[], byId: Map<string, Candidate>):
         })),
         { id: "edit", label: "Pick the date", value: null, evidence: null },
       ],
+      input: "date",
       suggested: null,
       why_suggested: null,
     });
