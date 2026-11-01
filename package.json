@@ -26,6 +26,8 @@
     "eval": "tsx scripts/eval.ts",
     "eval:live": "tsx --env-file=.env.local scripts/eval.ts --live",
     "eval:real": "tsx --env-file=.env.local scripts/eval.ts --real",
+    "eval:rebuild": "tsx scripts/eval-rebuild.ts",
+    "eval:rebuild:live": "tsx --env-file=.env.local scripts/eval-rebuild.ts --live",
     "sample": "tsx scripts/make-sample.ts"
   },
   "dependencies": {

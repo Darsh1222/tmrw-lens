@@ -198,3 +198,27 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   doesn't depend on timing): about 2.5 s faster per photo.
 - 2026-10-31: Send relays through Lens's server rather than the browser calling Tomorrow, so Tomorrow needs no CORS.
   The person's Lens token passes through and isn't stored or logged. The Idempotency-Key is a hash of the body.
+- 2026-10-31: Rebuild split: the model chooses (what moves or drops, and the reason, a clause after "because"); code
+  owns every fact (free time from Tomorrow's windows plus slots freed by other changes, whether a move fits before its
+  deadline, the times in the message) and writes the message itself ("Moved X to Thu 4pm because …. Nothing else
+  changed."), so the message always says exactly what the diff does. Reasons with clock times, guilt, praise, urgency,
+  or "!" are refused back to the model.
+- 2026-10-31: Rebuild tool loop is stateless (`store: false`, reasoning replayed with `reasoning.encrypted_content`), so
+  Meta keeps no copy of anyone's plan. Prefix caching still works: 86% of input tokens cached.
+- 2026-10-31: Meta's `strict` flag validates tool schemas but not the model's arguments: Spark sometimes leaves out a
+  null field, sends `"null"`, a number as a string, or seconds on a time. Code accepts those unambiguous forms; anything
+  else goes back to the model as a refusal with the reason. Refusals went from 14 to 0 per 10 cases.
+- 2026-10-31: One cheap check before a drop stands: if the agent drops the missed item while time that fits is still
+  free before its deadline, propose_diff pushes back once, listing that time. A second propose_diff is accepted (the
+  reply may rule the time out). This fixed the one wrong rebuild (dst-weekend dropped despite Sunday being free) without
+  raising reasoning effort.
+- 2026-10-31: Reasoning effort `low` for the rebuild: 10 of 10 right, judge 5.0, in two full runs; per the cost–quality
+  policy, `medium` isn't needed. At most 8 turns and 45 seconds, then code's fallback (first free time before the
+  deadline, else drop), so Tomorrow always gets a valid answer; fallback answers aren't cached, so a retry gets the model.
+- 2026-10-31: Judge for rebuild messages is Muse Spark itself (one call per case, live evals only, recorded), given the
+  facts, all free time, the changes, and the message. Same-model judging may be lenient; the code checks (validity,
+  expectations per case, unkind words) are the hard gate, the judge is the soft one.
+- 2026-10-31: At most 3 changes per rebuild, the missed item included: past that it's a new plan, not a recovery, and
+  "Nothing else changed" stops being the point.
+- 2026-10-31: `/api/rebuild` auth is one shared secret (`LENS_REBUILD_SECRET`, at least 32 characters) compared in
+  constant time; Tomorrow calls server to server. Same request within 24 hours is answered from the encrypted cache.

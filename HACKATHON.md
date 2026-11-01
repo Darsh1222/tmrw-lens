@@ -68,6 +68,15 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
 - Photos and PDF pages are prepared in the browser and never stored; readings are cached for a day, encrypted with a
   key only the same image can produce. Per-visitor rate limits on top of the daily spend cap.
 - Evals: 82% fully verified (was 77%), 0 invented dates of 181, classes 24 of 24, items 75 of 75.
+- The flagship, miss and rebuild: `POST /api/rebuild`. When a planned session passes undone, Tomorrow sends the plan
+  and the person's reply; Muse Spark, with tools (get_day, find_open_time, move_item, drop_item, propose_diff),
+  decides what moves or drops and why, and Lens sends back the diff and one message: "Moved Calc practice to 7:30am
+  tomorrow because you said tonight is out and it's the last free time before the quiz. Nothing else changed." Code
+  computes all free time, refuses any move that doesn't fit, and writes the times. If the model can't answer, code
+  places the session in the first free time, so Tomorrow always gets an answer. Contract for Tomorrow's side, with
+  miss detection and the check-in: [docs/REBUILD_CONTRACT.md](docs/REBUILD_CONTRACT.md).
+- Rebuild evals (in CI): 10 of 10 cases right (code alone gets 5), 0 invalid moves, 0 unkind messages, judge score 5.0
+  of 5, $0.0069 and about 5 seconds per rebuild.
 
 ### Oct 30
 

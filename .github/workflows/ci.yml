@@ -31,4 +31,6 @@ jobs:
       - run: pnpm test
       # Replays recorded model readings: no API key, no cost. Fails on any invented date or missed conflict.
       - run: pnpm eval
+      # Replays recorded rebuilds. Fails on any move Tomorrow would have to refuse, or an unkind message.
+      - run: pnpm eval:rebuild
       - run: pnpm build

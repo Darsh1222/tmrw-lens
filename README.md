@@ -36,6 +36,8 @@ pnpm eval             # score the eval cases on recorded model readings (free, o
 pnpm eval:live        # re-read fixtures whose recording is stale, then score (--force: all, about 22 cents)
 pnpm eval:real        # the same on your own photos in local-inputs/ (git-ignored); prints numbers only
 pnpm sample           # rebuild the app's sample week from the eval recordings (after eval:live)
+pnpm eval:rebuild     # score the rebuild agent on recorded runs (free, offline)
+pnpm eval:rebuild:live  # re-run stale rebuild cases with the model and the judge (--force: all, about 11 cents)
 ```
 
 How the app handles what people add: photos are shrunk and re-encoded in the browser (dropping EXIF, after reading the
@@ -64,6 +66,25 @@ Every date traces to a quote and a code computation, including dates relative to
 3" moves when the Quiz 3 conflict is answered), the end of every class recurrence, and every class meeting skipped for a
 break. The rest of "fully verified"
 are real questions (conflicts, "in class" with no schedule, a course a note doesn't name).
+
+### Rebuild
+
+When a planned session passes undone, Tomorrow calls `POST /api/rebuild`
+([docs/REBUILD_CONTRACT.md](docs/REBUILD_CONTRACT.md)). Muse Spark, with five tools (`get_day`, `find_open_time`,
+`move_item`, `drop_item`, `propose_diff`), decides what moves or drops and why; code computes the free time, refuses
+any move that doesn't fit, and writes the one message from the reasons ("Moved Calc practice to 7:30am tomorrow
+because you said tonight is out and it's the last free time before the quiz. Nothing else changed."). Ten synthetic
+cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", sick today, shortening to fit, no time left, a
+reply that tries to give orders, the clock change, partial. Latest run (`evals/rebuild/results.json`):
+
+|                                  | agent (reasoning effort low) | code alone (fallback) |
+| -------------------------------- | ---------------------------- | --------------------- |
+| Rebuilds right                   | **10 of 10**                 | 5 of 10               |
+| Invalid moves                    | **0**                        | 0                     |
+| Unkind messages                  | **0**                        | 0                     |
+| Judge score (Muse Spark, 1 to 5) | 5.0                          |                       |
+| Model cost per rebuild           | $0.0069 (4 turns, about 5 s) | free                  |
+| Tokens per call, cache hit rate  | 2530 in, 227 out; 86% cached |                       |
 
 ## License
 

@@ -1,0 +1,79 @@
+{
+  "agent_version": 5,
+  "judge_version": 2,
+  "request_sha": "7eeca536ea3703a2c7ddf2ffc687ed50a92f12d6899dbeaa9f14fd4a87ceb37c",
+  "effort": "low",
+  "response": {
+    "version": 1,
+    "diff": [
+      {
+        "item_id": "s_hist",
+        "action": "move",
+        "start": "2026-11-04T19:00:00-05:00",
+        "end": "2026-11-04T20:00:00-05:00",
+        "reason": "there is still free time tonight"
+      },
+      {
+        "item_id": "s_outline",
+        "action": "keep",
+        "start": null,
+        "end": null,
+        "reason": null
+      }
+    ],
+    "message": "Moved Read HIST ch. 4 to 7pm today because there is still free time tonight. Nothing else changed.",
+    "decided_by": "agent"
+  },
+  "turns": 3,
+  "refused": 0,
+  "refusals": [],
+  "fell_back": null,
+  "calls": [
+    {
+      "usage": {
+        "input_tokens": 1803,
+        "output_tokens": 440,
+        "cached_tokens": 1777,
+        "reasoning_tokens": 337
+      },
+      "costUsd": 0.00216905,
+      "latencyMs": 1835
+    },
+    {
+      "usage": {
+        "input_tokens": 2461,
+        "output_tokens": 225,
+        "cached_tokens": 1777,
+        "reasoning_tokens": 100
+      },
+      "costUsd": 0.0020778000000000003,
+      "latencyMs": 1234
+    },
+    {
+      "usage": {
+        "input_tokens": 2742,
+        "output_tokens": 47,
+        "cached_tokens": 2417,
+        "reasoning_tokens": 9
+      },
+      "costUsd": 0.00096855,
+      "latencyMs": 687
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "problems": []
+  },
+  "judge_calls": [
+    {
+      "usage": {
+        "input_tokens": 641,
+        "output_tokens": 1100,
+        "cached_tokens": 625,
+        "reasoning_tokens": 1084
+      },
+      "costUsd": 0.00478875,
+      "latencyMs": 4823
+    }
+  ]
+}

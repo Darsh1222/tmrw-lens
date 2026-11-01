@@ -1,0 +1,134 @@
+{
+  "headline": {
+    "cases": 10,
+    "effort": "low",
+    "rebuilds_right": "10/10",
+    "invalid_moves": 0,
+    "unkind_messages": 0,
+    "judge_score": 5,
+    "judged": "10/10",
+    "fell_back": "0/10",
+    "turns_per_rebuild": 4,
+    "refused_tool_calls": 0,
+    "cost_per_rebuild": 0.00694,
+    "tokens_per_call": "2530 in, 227 out",
+    "cache_hit_rate": "86%",
+    "latency_per_rebuild_s": 5.4,
+    "fallback_rebuilds_right": "5/10"
+  },
+  "cases": [
+    {
+      "name": "simple-move",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": []
+    },
+    {
+      "name": "make-room",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": [
+        "missed item: drop, expected move",
+        "s_laundry should move or drop"
+      ]
+    },
+    {
+      "name": "tired-tonight",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": [
+        "s_calc before 2026-11-05 05:00"
+      ]
+    },
+    {
+      "name": "no-deadline",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": []
+    },
+    {
+      "name": "no-time",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": []
+    },
+    {
+      "name": "shorten",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": []
+    },
+    {
+      "name": "sick-today",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": [
+        "s_calc before 2026-11-05 00:00",
+        "s_outline should move or drop",
+        "s_hist should move or drop"
+      ]
+    },
+    {
+      "name": "injection",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": []
+    },
+    {
+      "name": "dst-weekend",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": [
+        "s_calc before 2026-11-01 00:00"
+      ]
+    },
+    {
+      "name": "partial",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": [
+        "longer than 45 min"
+      ]
+    }
+  ]
+}

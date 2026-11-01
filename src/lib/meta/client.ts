@@ -13,18 +13,42 @@ export type ContentPart =
 
 export type InputMessage = { role: "user" | "developer"; content: ContentPart[] };
 
+/** A function the model may call. `parameters` is a strict JSON Schema (toStrictJsonSchema). */
+export type FunctionTool = {
+  type: "function";
+  name: string;
+  description: string;
+  parameters: Record<string, unknown>;
+  strict: boolean;
+};
+
+export type FunctionCall = { type: "function_call"; call_id: string; name: string; arguments: string };
+
+/**
+ * With store: false Meta keeps no conversation, so a tool loop resends what came
+ * back (reasoning items with their encrypted content, function calls) followed by
+ * each call's result.
+ */
+export type InputItem =
+  | InputMessage
+  | { type: "function_call_output"; call_id: string; output: string }
+  | ({ type: string } & Record<string, unknown>);
+
 export type ReasoningEffort = "minimal" | "low" | "medium" | "high" | "xhigh" | "max";
 
 export type JsonSchemaFormat = { type: "json_schema"; name: string; schema: Record<string, unknown>; strict: boolean };
 
 export type ResponsesRequest = {
   model: string;
-  input: string | InputMessage[];
+  input: string | InputItem[];
   instructions?: string;
   text?: { format: JsonSchemaFormat };
   reasoning?: { effort: ReasoningEffort };
   max_output_tokens?: number;
   tools?: unknown[];
+  parallel_tool_calls?: boolean;
+  /** "reasoning.encrypted_content" lets a stateless tool loop hand reasoning back. */
+  include?: string[];
   /** SAM options travel here as strings, e.g. { include_confidence: "true" }. */
   metadata?: Record<string, string>;
   /** Groups requests that share a prefix, for Meta's automatic prompt caching. A task name, never content. */
@@ -111,6 +135,20 @@ const outputMessageSchema = z.object({
   content: z.array(z.object({ type: z.string(), text: z.string().optional() })),
 });
 
+const functionCallSchema = z.object({
+  type: z.literal("function_call"),
+  call_id: z.string(),
+  name: z.string(),
+  arguments: z.string(),
+});
+
+export function functionCalls(output: unknown[]): FunctionCall[] {
+  return output.flatMap((item) => {
+    const parsed = functionCallSchema.safeParse(item);
+    return parsed.success ? [parsed.data] : [];
+  });
+}
+
 export function outputText(output: unknown[]): string {
   let text = "";
   for (const item of output) {
@@ -133,12 +171,17 @@ function shapeOf(req: ResponsesRequest): CallShape {
   };
   if (typeof req.input === "string") shape.textChars += req.input.length;
   else
-    for (const m of req.input)
-      for (const part of m.content) {
+    for (const m of req.input) {
+      if (!("content" in m) || !Array.isArray(m.content)) {
+        shape.textChars += JSON.stringify(m).length;
+        continue;
+      }
+      for (const part of m.content as ContentPart[]) {
         if (part.type === "input_text") shape.textChars += part.text.length;
         else if (part.type === "input_image") shape.images += 1;
         else shape.files += 1;
       }
+    }
   return shape;
 }
 

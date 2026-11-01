@@ -1,0 +1,72 @@
+{
+  "agent_version": 5,
+  "judge_version": 2,
+  "request_sha": "5f771543daa25a56754a0cd5a589ba6fd12974a3ed0b188277c5be56bb7e4ae8",
+  "effort": "low",
+  "response": {
+    "version": 1,
+    "diff": [
+      {
+        "item_id": "s_calc",
+        "action": "move",
+        "start": "2026-11-01T10:00:00-05:00",
+        "end": "2026-11-01T11:00:00-05:00",
+        "reason": "you said tonight is out and it's still before the quiz"
+      }
+    ],
+    "message": "Moved Calc practice to 10am tomorrow because you said tonight is out and it's still before the quiz. Nothing else changed.",
+    "decided_by": "agent"
+  },
+  "turns": 3,
+  "refused": 0,
+  "refusals": [],
+  "fell_back": null,
+  "calls": [
+    {
+      "usage": {
+        "input_tokens": 1739,
+        "output_tokens": 315,
+        "cached_tokens": 1649,
+        "reasoning_tokens": 145
+      },
+      "costUsd": 0.0016986,
+      "latencyMs": 1115
+    },
+    {
+      "usage": {
+        "input_tokens": 2217,
+        "output_tokens": 202,
+        "cached_tokens": 1649,
+        "reasoning_tokens": 81
+      },
+      "costUsd": 0.00181585,
+      "latencyMs": 1439
+    },
+    {
+      "usage": {
+        "input_tokens": 2471,
+        "output_tokens": 43,
+        "cached_tokens": 2161,
+        "reasoning_tokens": 5
+      },
+      "costUsd": 0.0008944,
+      "latencyMs": 509
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "problems": []
+  },
+  "judge_calls": [
+    {
+      "usage": {
+        "input_tokens": 548,
+        "output_tokens": 702,
+        "cached_tokens": 497,
+        "reasoning_tokens": 686
+      },
+      "costUsd": 0.0031218,
+      "latencyMs": 2911
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "agent_version": 5,
+  "judge_version": 2,
+  "request_sha": "783216c97d23380ae68cb7dfbeb2e929e63433aa15e78ec75fcf8797eeed52a8",
+  "effort": "low",
+  "response": {
+    "version": 1,
+    "diff": [
+      {
+        "item_id": "s_calc",
+        "action": "move",
+        "start": "2026-11-04T19:00:00-05:00",
+        "end": "2026-11-04T20:00:00-05:00",
+        "reason": "the quiz is tomorrow morning"
+      },
+      {
+        "item_id": "s_outline",
+        "action": "keep",
+        "start": null,
+        "end": null,
+        "reason": null
+      },
+      {
+        "item_id": "s_hist",
+        "action": "keep",
+        "start": null,
+        "end": null,
+        "reason": null
+      }
+    ],
+    "message": "Moved Calc practice to 7pm today because the quiz is tomorrow morning. Nothing else changed.",
+    "decided_by": "agent"
+  },
+  "turns": 3,
+  "refused": 0,
+  "refusals": [],
+  "fell_back": null,
+  "calls": [
+    {
+      "usage": {
+        "input_tokens": 1873,
+        "output_tokens": 494,
+        "cached_tokens": 1777,
+        "reasoning_tokens": 378
+      },
+      "costUsd": 0.00248605,
+      "latencyMs": 6731
+    },
+    {
+      "usage": {
+        "input_tokens": 2474,
+        "output_tokens": 322,
+        "cached_tokens": 1777,
+        "reasoning_tokens": 195
+      },
+      "costUsd": 0.0025063000000000004,
+      "latencyMs": 1776
+    },
+    {
+      "usage": {
+        "input_tokens": 2848,
+        "output_tokens": 42,
+        "cached_tokens": 2417,
+        "reasoning_tokens": 4
+      },
+      "costUsd": 0.0010798,
+      "latencyMs": 489
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "problems": []
+  },
+  "judge_calls": [
+    {
+      "usage": {
+        "input_tokens": 702,
+        "output_tokens": 779,
+        "cached_tokens": 625,
+        "reasoning_tokens": 763
+      },
+      "costUsd": 0.00350075,
+      "latencyMs": 3227
+    }
+  ]
+}
