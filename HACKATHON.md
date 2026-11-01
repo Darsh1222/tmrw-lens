@@ -53,6 +53,17 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
   pre-selected, 0 false conflicts. About 17 cents.
 - SAM 3.1 spike: it finds sticky notes, whiteboards, and sheets of paper in a photo, not handwriting.
 
+### Nov 1
+
+- **Try a missed session** on the homepage, right after the sample week: the flagship without needing Tomorrow. Pick a
+  case ("too tired tonight", "practice until 9", sick today, no room, a reply that gives orders…) and see the
+  check-in, the reply, the one recovery message, what changed and why, code's check, and every tool call Muse Spark
+  made. Recorded runs replay for free; "Rebuild it live" runs Muse Spark on whatever reply you type (a few runs per
+  visitor, within the daily spend cap).
+- A new case from trying the live demo: "I have practice until 9 tonight" was read as "tonight is out". Busy-until
+  replies now rule out only the time before; that case moves the session to 9pm, and reasons must say what the person
+  actually said. Rebuild evals: 11 of 11 right, 0 invalid moves, 0 unkind messages, judge 4.73.
+
 ### Oct 31
 
 - The Lens app at [lens.bettertmrw.app](https://lens.bettertmrw.app): add photos, PDFs, or pasted Testudo text (several

@@ -222,3 +222,17 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   "Nothing else changed" stops being the point.
 - 2026-10-31: `/api/rebuild` auth is one shared secret (`LENS_REBUILD_SECRET`, at least 32 characters) compared in
   constant time; Tomorrow calls server to server. Same request within 24 hours is answered from the encrypted cache.
+- 2026-11-01: "Try a missed session" is the default way to see the flagship, on the homepage right after the sample
+  week, not a fallback for Tomorrow: recorded runs (the same ones `pnpm eval:rebuild` scores, written by `pnpm sample`
+  to `src/lib/demo/rebuilds.json`) replay free; a live run uses the case's made-up week with only the visitor's reply
+  (at most 280 characters), limited to 6 an hour and 20 a day per visitor (separate counters from page reads), within
+  the daily spend cap. Past the cap, code's fallback answers and the panel says so. Same case and reply again comes from
+  the encrypted cache.
+- 2026-11-01: The panel's body renders on the client only (`useSyncExternalStore`): Luxon reads the clock while parsing,
+  which Cache Components refuses during prerender. The header is in the static page.
+- 2026-11-01: New rebuild case `busy-until` ("I have practice until 9 tonight"), from trying the live demo: the agent
+  had treated it as "tonight is out" and said so. Instructions now say busy-until rules out only the time before, and
+  reasons must say what the person said. Rebuild version 6.
+- 2026-11-01: The judge is the same model as the agent, so the owner spot-checks every recorded rebuild message before
+  the README calls them human-reviewed. Run of Nov 1: the judge gave `shorten` a 2 ("only an hour still fits" when 45
+  more minutes are free Thursday morning; the hour is the longest stretch), left as recorded for that review.

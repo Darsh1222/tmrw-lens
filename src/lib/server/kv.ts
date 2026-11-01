@@ -121,8 +121,10 @@ export async function rateLimit(
   visitor: string,
   limits: { perHour: number; perDay: number },
   now = new Date(),
+  /** Separate counters per kind of request: page reads, live rebuilds. */
+  scope = "read",
 ): Promise<void> {
-  const who = sha256("lens-visitor", visitor).toString("hex").slice(0, 24);
+  const who = `${scope === "read" ? "" : `${scope}:`}${sha256("lens-visitor", visitor).toString("hex").slice(0, 24)}`;
   const hour = now.toISOString().slice(0, 13);
   const day = hour.slice(0, 10);
   const [h, d] = await Promise.all([

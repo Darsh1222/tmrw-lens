@@ -16,7 +16,7 @@ import { DateTime } from "luxon";
 import { readEnv } from "@/lib/env";
 import type { CallResult, ReasoningEffort } from "@/lib/meta/client";
 import { runTask } from "@/lib/meta/task";
-import { brief, REBUILD_VERSION, rebuild } from "@/lib/rebuild/agent";
+import { brief, REBUILD_VERSION, rebuild, type Step } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkResponse, Draft, fallback, unkind } from "@/lib/rebuild/draft";
 import { judgeTask, type Judgement } from "@/lib/rebuild/judge";
@@ -42,6 +42,7 @@ type Recording = {
   turns: number;
   refused: number;
   refusals: string[];
+  steps: Step[];
   fell_back: string | null;
   calls: CallLine[];
   judge: Judgement | null;
@@ -126,6 +127,7 @@ for (const c of cases) {
       turns: run.turns,
       refused: run.refused,
       refusals: run.refusals,
+      steps: run.steps,
       fell_back: run.fellBack,
       calls: lines(run.calls),
       judge: null,

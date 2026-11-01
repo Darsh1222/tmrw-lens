@@ -2,10 +2,15 @@
 // the full-week case (copied to public/samples/) and Muse Spark + SAM's recorded
 // readings of them (src/lib/demo/sample-week.json). The sample costs nothing
 // to try and reads the same as `pnpm eval` scores. Run after `pnpm eval:live`.
+// Also the "Try a missed session" panel's recorded rebuilds, from
+// evals/rebuild/recorded/ (src/lib/demo/rebuilds.json). Run after `pnpm eval:rebuild:live`.
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { PageReading, SourceReading } from "@/lib/plan/types";
+import type { Step } from "@/lib/rebuild/agent";
+import type { RebuildResponse } from "@/lib/rebuild/contract";
 import type { SourceKind } from "@/lib/schemas/evidence";
+import { REBUILD_CASES } from "../evals/rebuild/cases";
 
 const ROOT = join(import.meta.dirname, "..");
 const CASE = "full-week";
@@ -37,3 +42,31 @@ writeFileSync(
   JSON.stringify({ zone: c.zone, files: c.sources.map((f) => `/samples/${f}`), readings }) + "\n",
 );
 console.log(`Sample week: ${c.sources.length} inputs from ${CASE}`);
+
+// The panel's order: the everyday cases first, then the ones that show judgment.
+const ORDER = ["tired-tonight", "busy-until", "make-room", "sick-today", "partial", "shorten", "no-time", "injection", "dst-weekend", "simple-move", "no-deadline"]; // prettier-ignore
+type RebuildRec = {
+  response: RebuildResponse;
+  steps: Step[];
+  turns: number;
+  calls: { costUsd: number; latencyMs: number }[];
+  judge: { score: number } | null;
+};
+const rebuilds = ORDER.map((name) => {
+  const c = REBUILD_CASES.find((x) => x.name === name)!;
+  const rec = JSON.parse(readFileSync(join(ROOT, "evals", "rebuild", "recorded", `${name}.json`), "utf8")) as RebuildRec; // prettier-ignore
+  return {
+    name,
+    label: c.label,
+    about: c.about,
+    request: c.request,
+    response: rec.response,
+    steps: rec.steps,
+    turns: rec.turns,
+    cost_usd: rec.calls.reduce((a, x) => a + x.costUsd, 0),
+    latency_s: rec.calls.reduce((a, x) => a + x.latencyMs, 0) / 1000,
+    judge: rec.judge?.score ?? null,
+  };
+});
+writeFileSync(join(ROOT, "src", "lib", "demo", "rebuilds.json"), JSON.stringify(rebuilds) + "\n");
+console.log(`Rebuilds: ${rebuilds.length} recorded cases`);

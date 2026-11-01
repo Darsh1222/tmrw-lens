@@ -302,3 +302,52 @@ describe("POST /api/rebuild", () => {
     expect(await (await post(body)).json()).toEqual(json);
   });
 });
+
+describe("POST /api/rebuild/demo", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+  const post = async (body: unknown, ip = "203.0.113.7") => {
+    const { POST } = await import("@/app/api/rebuild/demo/route");
+    return POST(
+      new Request("http://lens.test/api/rebuild/demo", {
+        method: "POST",
+        headers: { "x-real-ip": ip },
+        body: JSON.stringify(body),
+      }),
+    );
+  };
+
+  it("refuses an unknown case", async () => {
+    expect((await post({ case: "nope", reply: null })).status).toBe(404);
+  });
+
+  it("runs the recorded case's week with the visitor's reply, and caches it", async () => {
+    vi.stubEnv("META_API_KEY", "test-key");
+    const { sent, opts } = scripted(
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, reason: "you said tonight is out" })), // prettier-ignore
+      reply(call("propose_diff", {})),
+    );
+    vi.stubGlobal("fetch", opts.fetchImpl);
+    const body = { case: "tired-tonight", reply: "  band practice until 10 tonight " };
+    const first = await post(body, "203.0.113.8");
+    expect(first.status).toBe(200);
+    const json = await first.json();
+    expect(json).toMatchObject({ cached: false, fell_back: null, turns: 2 });
+    expect(json.response.message).toMatch(/^Moved Calc practice to 7:30am tomorrow because you said tonight is out/);
+    expect(JSON.stringify(sent[0].input)).toContain("band practice until 10 tonight");
+    expect(await (await post(body, "203.0.113.8")).json()).toMatchObject({ cached: true });
+  });
+
+  it("limits live runs per visitor", async () => {
+    vi.stubEnv("META_API_KEY", "test-key");
+    vi.stubGlobal("fetch", async () => {
+      throw new TypeError("fetch failed");
+    });
+    const statuses = [];
+    for (let n = 0; n < 7; n++) statuses.push((await post({ case: "partial", reply: `try ${n}` }, "203.0.113.9")).status); // prettier-ignore
+    expect(statuses.slice(0, 6).every((s) => s === 200)).toBe(true);
+    expect(statuses[6]).toBe(429);
+  });
+});

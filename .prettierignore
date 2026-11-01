@@ -6,4 +6,5 @@ evals/results.json
 public/pdfjs/
 public/samples/
 src/lib/demo/sample-week.json
+src/lib/demo/rebuilds.json
 local-inputs/

@@ -72,19 +72,23 @@ are real questions (conflicts, "in class" with no schedule, a course a note does
 When a planned session passes undone, Tomorrow calls `POST /api/rebuild`
 ([docs/REBUILD_CONTRACT.md](docs/REBUILD_CONTRACT.md)). Muse Spark, with five tools (`get_day`, `find_open_time`,
 `move_item`, `drop_item`, `propose_diff`), decides what moves or drops and why; code computes the free time, refuses
-any move that doesn't fit, and writes the one message from the reasons ("Moved Calc practice to 7:30am tomorrow
-because you said tonight is out and it's the last free time before the quiz. Nothing else changed."). Ten synthetic
-cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", sick today, shortening to fit, no time left, a
-reply that tries to give orders, the clock change, partial. Latest run (`evals/rebuild/results.json`):
+any move that doesn't fit, and writes the one message from the reasons ("Moved Calc practice to 9pm today because it's
+still free after practice and before the quiz tomorrow morning. Nothing else changed."). Try it on the homepage under
+**Try a missed session**: eleven recorded cases replay for free, and "Rebuild it live" runs Muse Spark on your own
+reply.
 
-|                                  | agent (reasoning effort low) | code alone (fallback) |
-| -------------------------------- | ---------------------------- | --------------------- |
-| Rebuilds right                   | **10 of 10**                 | 5 of 10               |
-| Invalid moves                    | **0**                        | 0                     |
-| Unkind messages                  | **0**                        | 0                     |
-| Judge score (Muse Spark, 1 to 5) | 5.0                          |                       |
-| Model cost per rebuild           | $0.0069 (4 turns, about 5 s) | free                  |
-| Tokens per call, cache hit rate  | 2530 in, 227 out; 86% cached |                       |
+Eleven synthetic cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", "practice until 9", sick today,
+shortening to fit, no time left, a reply that tries to give orders, the clock change, partial. Latest run
+(`evals/rebuild/results.json`):
+
+|                                  | agent (reasoning effort low)   | code alone (fallback) |
+| -------------------------------- | ------------------------------ | --------------------- |
+| Rebuilds right                   | **11 of 11**                   | 5 of 11               |
+| Invalid moves                    | **0**                          | 0                     |
+| Unkind messages                  | **0**                          | 0                     |
+| Judge score (Muse Spark, 1 to 5) | 4.73                           |                       |
+| Model cost per rebuild           | $0.0073 (3.7 turns, about 5 s) | free                  |
+| Tokens per call, cache hit rate  | 2613 in, 249 out; 82% cached   |                       |
 
 ## License
 

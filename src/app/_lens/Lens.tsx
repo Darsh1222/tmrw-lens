@@ -221,6 +221,9 @@ export function Lens() {
           Add your week: a Testudo schedule, a syllabus, a whiteboard, your notes. Lens reads them with Muse Spark and
           SAM 3.1, checks every date against the words it came from, and asks only what it can&apos;t settle.
         </p>
+        <a href="#missed-session" className="self-start text-sm text-accent underline-offset-2 hover:underline">
+          And when a session gets missed, it rebuilds the plan: try it ↓
+        </a>
       </header>
 
       <section aria-label="Add inputs" className="flex flex-col gap-3 rounded-xl border border-border p-4">

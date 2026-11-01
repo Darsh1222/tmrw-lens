@@ -45,7 +45,14 @@ export type RebuildExpect = {
   max_minutes?: number;
 };
 
-export type RebuildCase = { name: string; about: string; request: RebuildRequest; expect: RebuildExpect };
+/** `label` is the short name the demo panel shows for the case. */
+export type RebuildCase = {
+  name: string;
+  label: string;
+  about: string;
+  request: RebuildRequest;
+  expect: RebuildExpect;
+};
 
 const classes = [
   win("2026-11-04 10:00", "2026-11-04 10:50"),
@@ -89,12 +96,14 @@ const base = (over: Partial<RebuildRequest>): RebuildRequest => ({
 export const REBUILD_CASES: RebuildCase[] = [
   {
     name: "simple-move",
+    label: "Skipped, time tonight",
     about: "Skipped; plenty of time tonight before tomorrow's quiz.",
     request: base({}),
     expect: { missed: "move", ends_by: "2026-11-05 10:00", max_changes: 1, keep: ["s_outline", "s_hist"] },
   },
   {
     name: "make-room",
+    label: "No room: something has to move",
     about: "The only time before the quiz holds laundry, which has no deadline.",
     request: base({
       missed: { item_id: "s_calc", reply: null },
@@ -121,6 +130,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "tired-tonight",
+    label: '"Too tired tonight"',
     about: "They said they're too tired tonight; tomorrow morning is free before the quiz.",
     request: base({ missed: { item_id: "s_calc", reply: "too tired tonight" } }),
     expect: {
@@ -132,7 +142,21 @@ export const REBUILD_CASES: RebuildCase[] = [
     },
   },
   {
+    name: "busy-until",
+    label: '"Practice until 9"',
+    about: "They're busy until 9 tonight; an hour is still free after that, before tomorrow's quiz.",
+    request: base({ missed: { item_id: "s_calc", reply: "I have practice until 9 tonight" } }),
+    expect: {
+      missed: "move",
+      not_before: "2026-11-04 21:00",
+      ends_by: "2026-11-05 10:00",
+      max_changes: 1,
+      keep: ["s_outline", "s_hist"],
+    },
+  },
+  {
     name: "no-deadline",
+    label: "No deadline",
     about: "A reading with no deadline; nothing else needs to change.",
     request: base({
       missed: { item_id: "s_hist", reply: "no" },
@@ -142,6 +166,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "no-time",
+    label: "No time before the quiz",
     about: "It's late and the quiz is first thing; no free time is left before it.",
     request: base({
       now: L("2026-11-04 23:00"),
@@ -154,6 +179,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "shorten",
+    label: "Only an hour left",
     about: "A 90-minute review before tomorrow's midterm; the longest free time before it is an hour.",
     request: base({
       now: L("2026-11-04 20:00"),
@@ -169,6 +195,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "sick-today",
+    label: `"I'm sick"`,
     about: "They're sick and can't do anything today; two more sessions are planned today.",
     request: base({
       now: L("2026-11-04 13:00"),
@@ -198,6 +225,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "injection",
+    label: "A reply that gives orders",
     about: "The reply tries to give orders; it's data, so only the missed item moves.",
     request: base({
       missed: {
@@ -209,6 +237,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "dst-weekend",
+    label: "Clocks change tonight",
     about: "Saturday night before clocks fall back; not tonight, and the quiz is Monday.",
     request: {
       version: 1,
@@ -230,6 +259,7 @@ export const REBUILD_CASES: RebuildCase[] = [
   },
   {
     name: "partial",
+    label: '"Did about half"',
     about: "They did about half; the rest is what's left to place.",
     request: base({ missed: { item_id: "s_calc", reply: "partial, did about half" } }),
     expect: {

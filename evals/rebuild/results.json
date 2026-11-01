@@ -1,20 +1,20 @@
 {
   "headline": {
-    "cases": 10,
+    "cases": 11,
     "effort": "low",
-    "rebuilds_right": "10/10",
+    "rebuilds_right": "11/11",
     "invalid_moves": 0,
     "unkind_messages": 0,
-    "judge_score": 5,
-    "judged": "10/10",
-    "fell_back": "0/10",
-    "turns_per_rebuild": 4,
+    "judge_score": 4.73,
+    "judged": "11/11",
+    "fell_back": "0/11",
+    "turns_per_rebuild": 3.7,
     "refused_tool_calls": 0,
-    "cost_per_rebuild": 0.00694,
-    "tokens_per_call": "2530 in, 227 out",
-    "cache_hit_rate": "86%",
+    "cost_per_rebuild": 0.00728,
+    "tokens_per_call": "2613 in, 249 out",
+    "cache_hit_rate": "82%",
     "latency_per_rebuild_s": 5.4,
-    "fallback_rebuilds_right": "5/10"
+    "fallback_rebuilds_right": "5/11"
   },
   "cases": [
     {
@@ -35,10 +35,7 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": [
-        "missed item: drop, expected move",
-        "s_laundry should move or drop"
-      ]
+      "fallback_misses": ["missed item: drop, expected move", "s_laundry should move or drop"]
     },
     {
       "name": "tired-tonight",
@@ -48,9 +45,17 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": [
-        "s_calc before 2026-11-05 05:00"
-      ]
+      "fallback_misses": ["s_calc before 2026-11-05 05:00"]
+    },
+    {
+      "name": "busy-until",
+      "right": true,
+      "misses": [],
+      "judge": {
+        "score": 5,
+        "problems": []
+      },
+      "fallback_misses": ["s_calc before 2026-11-04 21:00"]
     },
     {
       "name": "no-deadline",
@@ -77,8 +82,10 @@
       "right": true,
       "misses": [],
       "judge": {
-        "score": 5,
-        "problems": []
+        "score": 2,
+        "problems": [
+          "Message says only an hour still fits before the midterm, but facts list additional free time Thu Nov 5 08:00-08:45 besides Wed 20:30-21:30."
+        ]
       },
       "fallback_misses": []
     },
@@ -114,9 +121,7 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": [
-        "s_calc before 2026-11-01 00:00"
-      ]
+      "fallback_misses": ["s_calc before 2026-11-01 00:00"]
     },
     {
       "name": "partial",
@@ -126,9 +131,7 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": [
-        "longer than 45 min"
-      ]
+      "fallback_misses": ["longer than 45 min"]
     }
   ]
 }
