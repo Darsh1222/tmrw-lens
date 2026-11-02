@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { readEnv, type Env } from "@/lib/env";
 import { SAM_PRICE_PER_IMAGE, tokenCostUsd, worstCaseCostUsd, type CallShape, type Usage } from "@/lib/meta/pricing";
-import { spendGuardFor, type SpendGuard } from "@/lib/meta/spend";
+import { currentPayer, spendGuardFor, type SpendGuard } from "@/lib/meta/spend";
 
 // The one place Lens talks to Meta Model API (Responses protocol,
 // https://dev.meta.ai/docs/protocols/responses). Plain fetch, no SDK.
@@ -262,7 +262,8 @@ export async function createResponse(req: ResponsesRequest, opts: CallOptions): 
           latencyMs: Date.now() - started,
           attempts,
         };
-        await reservation.settle(result.costUsd);
+        const totals = await reservation.settle(result.costUsd);
+        const payer = currentPayer();
         log({
           event: "meta_call",
           task: opts.task,
@@ -272,6 +273,8 @@ export async function createResponse(req: ResponsesRequest, opts: CallOptions): 
           latency_ms: result.latencyMs,
           ...usage,
           cost_usd: Number(result.costUsd.toFixed(6)),
+          // Who paid (a hashed id, never who they are) and their total so far today: the cost per identity per day.
+          ...(payer && { pool: payer.pool, who: payer.accounts[0]?.key, who_day_usd: Number(totals[0].toFixed(6)) }),
         });
         if (data.status === "incomplete") throw new MetaIncomplete(data.incomplete_details?.reason ?? null, result);
         if (data.status !== "completed")

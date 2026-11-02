@@ -293,3 +293,46 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   before the deadline (time to get there), not before 7 AM, overlapping nothing. It's outside Tomorrow's free time, so
   the response carries it as `offer` and Tomorrow applies it only on a yes. The judge's rubric (v3) now says an offer
   is a question, and "Feel better." is care; it had scored the offer 2 for being outside free time. 11/11 at 5.
+- 2026-11-02: Every Lens screen now uses Tomorrow's Forum design (owner's request): one theme file
+  (`src/app/theme.css`) holds every colour as a token, Day and Night by the system setting; components use Tailwind
+  names mapped to those tokens and no raw values. Fonts load once in the root layout. Exceptions, listed for the
+  owner: the browser `theme-color` meta needs literal values (the two page backgrounds); canvas fills for rendering
+  PDF pages are white; the primary button is crimson (Forum's rule) besides deadlines and flags; "verified" chips use
+  the sage pastel and "needs a look" butter (Forum has no green or amber); icons are Phosphor light, the one family
+  Forum allows.
+- 2026-11-02: Results layout: source and question side by side, the plan full width below (a 7-day grid needs the
+  width). The viewer opens on a photo with SAM objects. When results arrive the outlines draw on one by one (80 ms
+  apart), then the line boxes, then the plan's cards arrive; only once on screen, never under reduced motion.
+- 2026-11-02: Upload progress is real: pages read over pages to read (the bar only grows), and the seconds the current
+  read has taken. Inputs appear as "Opening…" cards at their final size the moment they're chosen, and the results
+  area holds a screen's height from the click that starts a read, so nothing on screen moves as work completes:
+  layout shift 0 in Lighthouse and under 0.05 in every visual test.
+- 2026-11-02: Visual smoke tests (`pnpm test:visual`, Playwright): 12 screens in light and dark, desktop and phone,
+  against the production build, with model calls mocked or replayed (free). They check console errors, sideways
+  scroll, and layout shift, and save screenshots to test-results/. Not in CI yet (browsers); run before a release.
+- 2026-11-02: Spend limits per identity (owner's spec), replacing the per-hour and per-day read limits and the one
+  shared cap. A "call" is one metered request (a page or photo read, one live rebuild), not one model API call: a
+  photo read takes 2 to 3 model calls and a rebuild 2 to 6, and the owner's numbers ($0.50 over 30 calls) only make
+  sense per request. One texted photo is one call however many model calls it takes. Dollars are reserved at each
+  model call's worst case on the identity and the pool, then settled, as the old cap did. The payer travels with the
+  request (AsyncLocalStorage) so the deepest model call is charged without threading it through every task.
+- 2026-11-02: A visitor is a signed random cookie plus their address. A request without a valid cookie is charged as
+  that address's visitor (25 a day), so a script that drops cookies gets no more than one visitor; the address also has
+  its own 75-a-day, $1.50 allowance across all its cookies. Signing stops someone choosing another visitor's id; the
+  address limit stops fresh cookies from adding up. Hashes are HMACs keyed with LENS_REBUILD_SECRET so a logged hash
+  can't be reversed by trying every IPv4 address. Hackathon judges are remote, so one shared network is unlikely; if
+  it happens, the address allowance covers about five people.
+- 2026-11-02: `user_ref` is optional on /api/rebuild and /api/extract (owner): Tomorrow's production doesn't send it
+  yet (its PR #29 adds it), and a missing id must never be a 422. Without one, the call is charged to one shared
+  identity, `tomorrow-unknown`, counted and logged, limited only by Tomorrow's $20 brake: a one-person limit (30 a
+  day) on everyone together would stop all of Tomorrow early. A limit hit mid-run is an error with a code, not Lens's own
+  fallback: Tomorrow has its own code-only rebuild and decides.
+- 2026-11-02: Visitor limits raised for judges (owner): 25 calls and $0.40 a visitor, 75 calls and $1.50 an address.
+  A 12-page syllabus plus a schedule and a few photos fits in one visitor's day. Global brakes unchanged ($5 / $20).
+- 2026-11-02: The plan appears once per batch of reads, not as each page lands: inputs being read join the plan
+  together when the last page is in, and the viewer opens on the photo SAM outlined. Reading pages one by one had the
+  plan open on whichever input finished first (usually a PDF, with no outlines) and reshuffle as the rest arrived.
+- 2026-11-02: The proof drawer locks page scroll while open (a modal), with `scrollbar-gutter: stable` so hiding the
+  scrollbar shifts nothing. The results week ends at midnight: an 11:59 PM deadline no longer opens a 12 AM row.
+- 2026-11-02: Machine-written eval outputs (rebuild and extract results and recordings) are Prettier-ignored like
+  evals/results.json: CI failed on 035a4ad because the rebuild results were written by JSON.stringify.

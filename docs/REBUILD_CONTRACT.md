@@ -37,6 +37,7 @@ deployments' environment variables. Send it from your server only.
 ```jsonc
 {
   "version": 1,
+  "user_ref": "u_7f3a1c9e", // optional, please send it: Tomorrow's opaque id for the person (8-64 chars; not a phone or email). Limits are per person; without it, every request shares one Tomorrow identity
   "zone": "America/New_York", // the person's IANA zone
   "now": "2026-11-04T18:10:00-05:00",
   "missed": {
@@ -132,16 +133,22 @@ safe and free.
 
 Errors:
 
-| Status | When                                                    |
-| ------ | ------------------------------------------------------- |
-| 400    | The body isn't JSON                                     |
-| 401    | Missing or wrong secret                                 |
-| 413    | Body over 200 KB                                        |
-| 422    | Doesn't match the contract; `issues` says what's wrong  |
-| 503    | `LENS_REBUILD_SECRET` isn't set on this Lens deployment |
+| Status | When                                                                                  |
+| ------ | ------------------------------------------------------------------------------------- |
+| 400    | The body isn't JSON                                                                   |
+| 401    | Missing or wrong secret                                                               |
+| 413    | Body over 200 KB                                                                      |
+| 422    | Doesn't match the contract; `issues` says what's wrong (a missing `user_ref` is fine) |
+| 429    | `code: "user_limit"`: this `user_ref` is past 30 runs or $0.50 today; has Retry-After |
+| 503    | `code: "global_limit"`: Lens's daily budget for Tomorrow is spent; has Retry-After    |
+| 503    | No `code`: `LENS_REBUILD_SECRET` isn't set on this Lens deployment                    |
+
+On `user_limit` or `global_limit`, use Tomorrow's own code-only rebuild; don't retry until Retry-After (the next UTC
+day). Limits are per UTC day and shared with `/api/extract` (one photo read counts as one call). A repeat of a cached
+request is answered free and never counts.
 
 The route answers within about 50 seconds (the agent gives up at 45 and falls back). Use a 60-second timeout. On a
-network error or 5xx, retry once, then send nothing and log it. A silent miss is better than a wrong message.
+network error or a 5xx without a `code`, retry once, then send nothing and log it. A silent miss is better than a wrong message.
 
 ## Test it
 

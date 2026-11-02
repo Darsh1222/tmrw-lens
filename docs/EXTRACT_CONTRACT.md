@@ -35,7 +35,7 @@ The same shared secret as `/api/rebuild` (docs/REBUILD_CONTRACT.md); server to s
 ```jsonc
 {
   "version": 1,
-  "user_ref": "u_7f3a1c9e", // Tomorrow's opaque id for the person (8-64 chars; not a phone or email): rate limits are per person
+  "user_ref": "u_7f3a1c9e", // optional, please send it: Tomorrow's opaque id for the person (8-64 chars; not a phone or email). Limits are per person; without it, every request shares one Tomorrow identity
   "zone": "America/New_York",
   "now": "2026-10-28T11:05:00-04:00", // when the text arrived
   "images": [{ "data": "<base64 JPEG or PNG, at most 3 MB>" }], // 1 to 4
@@ -155,15 +155,15 @@ What Lens guarantees:
 
 ## Errors
 
-| Status | When                                                                    |
-| ------ | ----------------------------------------------------------------------- |
-| 401    | Missing or wrong secret                                                 |
-| 413    | An image over 3 MB                                                      |
-| 415    | An image that isn't JPEG or PNG (HEIC is named, so you can convert it)  |
-| 422    | Doesn't match the contract; `issues` says what's wrong                  |
-| 429    | Over 20 photos an hour or 60 a day for this `user_ref`; has Retry-After |
-| 502    | The model didn't answer properly; retry once                            |
-| 503    | Lens's daily spend cap is reached, or the secret isn't set on this Lens |
+| Status | When                                                                                                                                                                                |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 401    | Missing or wrong secret                                                                                                                                                             |
+| 413    | An image over 3 MB                                                                                                                                                                  |
+| 415    | An image that isn't JPEG or PNG (HEIC is named, so you can convert it)                                                                                                              |
+| 422    | Doesn't match the contract; `issues` says what's wrong                                                                                                                              |
+| 429    | `code: "user_limit"`: this `user_ref` is past 30 calls or $0.50 today (shared with `/api/rebuild`; each photo the model reads is one call, a cached photo is free); has Retry-After |
+| 502    | The model didn't answer properly; retry once                                                                                                                                        |
+| 503    | `code: "global_limit"`: Lens's daily budget for Tomorrow is spent; has Retry-After. Without a `code`, the secret isn't set on this Lens                                             |
 
 ## Privacy
 

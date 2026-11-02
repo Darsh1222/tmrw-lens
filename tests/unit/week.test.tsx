@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { rowsFor } from "@/app/_lens/plan/model";
 import { DayTimeline } from "@/app/_lens/rebuild/DayTimeline";
 import { buildWeek, hoursInto, placeOf, span, twelveHour, yOf } from "@/app/_lens/rebuild/week";
 import { WeekGrid } from "@/app/_lens/rebuild/WeekGrid";
@@ -90,5 +91,13 @@ describe("times", () => {
     expect(model.rows.at(-1)!.to).toBe(24);
     expect(model.rows.some((r) => r.label === null)).toBe(true);
     expect(model.rows.every((r) => r.label === null || /^\d{1,2} (AM|PM)$/.test(r.label))).toBe(true);
+  });
+});
+
+describe("the results week's hour axis", () => {
+  it("ends at midnight: an 11:59 PM deadline opens no 12 AM row", () => {
+    const e = { start: 23 + 59 / 60, end: null } as Parameters<typeof rowsFor>[0][number];
+    const rows = rowsFor([e]);
+    expect(rows.at(-1)).toMatchObject({ from: 23, to: 24, label: "11 PM" });
   });
 });

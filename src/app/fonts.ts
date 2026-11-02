@@ -1,6 +1,6 @@
 import { Cinzel, Instrument_Sans, Noto_Serif_Display } from "next/font/google";
 
-// Tomorrow's "Forum" faces, for the missed-session panel: Instrument Sans for
+// Tomorrow's "Forum" faces, for every Lens screen: Instrument Sans for
 // the interface, Noto Serif Display narrowed on its width axis for the title,
 // Cinzel for the one small-caps label. Self-hosted by next/font, latin only.
 

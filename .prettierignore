@@ -3,6 +3,10 @@ fixtures/
 .next/
 evals/recorded/
 evals/results.json
+evals/rebuild/results.json
+evals/rebuild/recorded/
+evals/extract/results.json
+evals/extract/recorded/
 public/pdfjs/
 public/samples/
 src/lib/demo/sample-week.json

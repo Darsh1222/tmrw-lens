@@ -33,7 +33,6 @@ type Run = {
 type Status = "idle" | "running" | "done";
 
 const WHY: Record<string, string> = {
-  SpendCapReached: "Lens has reached today's spending limit for model calls",
   OutOfTime: "the model took too long",
   TooManyTurns: "the model didn't finish in 8 turns",
   CheckFailed: "the model's plan didn't pass code's check",
@@ -414,14 +413,14 @@ export function MissDemo() {
 
 function Frame({ children, placeholder = false }: { children: React.ReactNode; placeholder?: boolean }) {
   return (
-    <section id="missed-session" aria-label="Try a missed session" className="mx-auto w-full max-w-6xl px-4 pb-12">
+    <section id="missed-session" aria-label="Try a missed session" className="scroll-mt-6">
       <div
         // Before the week renders (client only), hold its height so the page below doesn't jump when it appears.
         className={`forum flex flex-col gap-6 rounded-2xl p-4 sm:p-8 ${placeholder ? "min-h-[2160px] md:min-h-[1648px] lg:min-h-[1524px]" : ""}`}
         style={{ border: "1px solid var(--tm-border)" }}
       >
         <header className="flex flex-col gap-2">
-          <span className="forum-caps">The rebuild</span>
+          <span className="forum-caps">III · Rebuild</span>
           <h2 className="forum-display text-3xl sm:text-4xl">Miss a session. Lens rebuilds the week.</h2>
           <p className="max-w-2xl text-base" style={{ color: "var(--tm-text-2)" }}>
             When a planned session passes undone, Tomorrow asks once. Lens decides what moves and why, code checks every

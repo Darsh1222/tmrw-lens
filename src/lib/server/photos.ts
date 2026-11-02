@@ -41,10 +41,13 @@ export async function readPhotos(
   const done = await Promise.all(
     images.map(async (bytes, index) => {
       const calls: CallResult[] = [];
+      // One photo is one metered call, however many model calls it takes (classify, read, re-read).
+      let counted: Promise<void> | undefined;
+      const miss = () => (counted ??= onMiss?.() ?? Promise.resolve());
       const photo = await preparePhoto(bytes);
       let cls = await classified.get<PhotoClass>(photo.bytes).catch(() => null);
       if (!cls) {
-        await onMiss?.();
+        await miss();
         const r = await runTask(classifyTask, [{ type: "input_image", image_url: dataUrl(photo.bytes, photo.mime) }], { env }); // prettier-ignore
         calls.push(...r.calls);
         cls = r.data;
@@ -55,7 +58,7 @@ export async function readPhotos(
       if (!kind) return { info, reading: null, calls };
       const read = await readCached(
         { kind, page: kind === "syllabus_pdf" ? 1 : null, image: photo.bytes, mime: photo.mime, text: null },
-        { env, kv, onMiss },
+        { env, kv, onMiss: miss },
       );
       calls.push(...read.calls);
       const reading: SourceReading = {

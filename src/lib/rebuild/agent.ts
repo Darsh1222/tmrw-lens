@@ -9,6 +9,7 @@ import {
   type InputItem,
   type ReasoningEffort,
 } from "@/lib/meta/client";
+import { LimitReached } from "@/lib/meta/spend";
 import { toStrictJsonSchema } from "@/lib/meta/task";
 import type { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkResponse, Draft, fallback, MAX_CHANGES, type Outcome } from "@/lib/rebuild/draft";
@@ -345,6 +346,8 @@ export async function rebuild(req: RebuildRequest, opts: RebuildOptions = {}): P
     }
     return fellBack("TooManyTurns");
   } catch (e) {
+    // Out of budget isn't the model failing: the caller says so (Tomorrow then uses its own code-only rebuild).
+    if (e instanceof LimitReached) throw e;
     return fellBack(e instanceof Error ? e.name : "Error");
   }
 }

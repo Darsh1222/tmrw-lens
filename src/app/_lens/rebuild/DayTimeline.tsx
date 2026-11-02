@@ -79,10 +79,10 @@ export function DayTimeline({ model, phase, missedId }: { model: WeekModel; phas
         ].sort((a, b) => a.at - b.at);
         return (
           <section key={d.iso} aria-label={`${d.weekday} ${d.date}`}>
-            <h4 className="mb-2 text-sm">
+            <h3 className="mb-2 text-sm">
               <span className="font-medium">{d.weekday}</span>{" "}
               <span style={{ color: "var(--tm-muted)" }}>{d.date}</span>
-            </h4>
+            </h3>
             <ol className="flex flex-col gap-2">
               {entries.map((e) => (
                 <Fragment key={e.key}>{e.node}</Fragment>

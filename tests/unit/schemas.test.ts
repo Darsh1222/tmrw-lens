@@ -6,7 +6,7 @@ import { cropObjects } from "@/lib/images/crop";
 import { maskOutline, pointInPolygon } from "@/lib/images/geometry";
 import { preparePhoto, readExif } from "@/lib/images/prepare";
 import { parseSamBoxes, parseSamObjects } from "@/lib/meta/sam";
-import { MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
+import { bucketsFor, MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
 import { runTask, TaskFailed, toStrictJsonSchema } from "@/lib/meta/task";
 import { normalizeBox, toEvidence } from "@/lib/schemas/evidence";
 import {
@@ -166,7 +166,7 @@ describe("runTask", () => {
     const r = await runTask(task, [{ type: "input_text", text: "hi" }], {
       env,
       fetchImpl,
-      guard: new SpendGuard(new MemoryCounterStore(), 1),
+      guard: new SpendGuard(new MemoryCounterStore(), bucketsFor(undefined, 1)),
       log: () => {},
     });
     expect(r.data.n).toBe(3);
@@ -182,7 +182,7 @@ describe("runTask", () => {
       runTask(task, [{ type: "input_text", text: "hi" }], {
         env,
         fetchImpl,
-        guard: new SpendGuard(new MemoryCounterStore(), 1),
+        guard: new SpendGuard(new MemoryCounterStore(), bucketsFor(undefined, 1)),
         log: () => {},
       }),
     ).rejects.toBeInstanceOf(TaskFailed);

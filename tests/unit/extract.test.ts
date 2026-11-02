@@ -119,6 +119,14 @@ describe("POST /api/extract", () => {
     const big = Buffer.concat([Buffer.from([0xff, 0xd8]), Buffer.alloc(3_000_001)]);
     expect((await post(body(big.toString("base64")))).status).toBe(413);
   });
+
+  it("accepts a request without user_ref (Tomorrow before it sends one): never a 422 for that", async () => {
+    vi.stubEnv("LENS_REBUILD_SECRET", SECRET);
+    const anonymous: Record<string, unknown> = body(Buffer.from("not an image at all").toString("base64"));
+    delete anonymous.user_ref;
+    // Past the contract check, to the image check: the missing user_ref isn't what's wrong.
+    expect((await post(anonymous)).status).toBe(415);
+  });
 });
 
 describe("POST /api/extract/answer", () => {

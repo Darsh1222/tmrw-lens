@@ -1,7 +1,8 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { readEnv } from "@/lib/env";
-import { MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
+import { bucketsFor, callsKey, counterStoreFor, MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
+import { tomorrowPayer } from "@/lib/server/identity";
 import { rebuild, TOOLS } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkReason, checkResponse, Draft, fallback, plain } from "@/lib/rebuild/draft";
@@ -218,7 +219,7 @@ function scripted(...replies: (Response | Error)[]) {
     if (next instanceof Error) throw next;
     return next;
   }) as unknown as typeof fetch;
-  return { sent, opts: { env, fetchImpl, guard: new SpendGuard(new MemoryCounterStore(), 1), log: () => {}, sleep: async () => {} } }; // prettier-ignore
+  return { sent, opts: { env, fetchImpl, guard: new SpendGuard(new MemoryCounterStore(), bucketsFor(undefined, 1)), log: () => {}, sleep: async () => {} } }; // prettier-ignore
 }
 
 describe("rebuild agent", () => {
@@ -283,6 +284,7 @@ describe("rebuild agent", () => {
 
 describe("POST /api/rebuild", () => {
   const SECRET = "s".repeat(40);
+  const asTomorrow = (name: string) => ({ ...req(name), user_ref: "user_0001" });
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.unstubAllGlobals();
@@ -300,16 +302,16 @@ describe("POST /api/rebuild", () => {
 
   it("is closed without the secret configured, or with the wrong one", async () => {
     vi.stubEnv("LENS_REBUILD_SECRET", "");
-    expect((await post(req("simple-move"))).status).toBe(503);
+    expect((await post(asTomorrow("simple-move"))).status).toBe(503);
     vi.stubEnv("LENS_REBUILD_SECRET", SECRET);
-    expect((await post(req("simple-move"), "Bearer wrong")).status).toBe(401);
-    expect((await post(req("simple-move"), null)).status).toBe(401);
+    expect((await post(asTomorrow("simple-move"), "Bearer wrong")).status).toBe(401);
+    expect((await post(asTomorrow("simple-move"), null)).status).toBe(401);
   });
 
   it("says what's wrong with a request that doesn't match the contract", async () => {
     vi.stubEnv("LENS_REBUILD_SECRET", SECRET);
     expect((await post("{not json")).status).toBe(400);
-    const res = await post({ ...req("simple-move"), version: 2 });
+    const res = await post({ ...asTomorrow("simple-move"), version: 2 });
     expect(res.status).toBe(422);
     expect((await res.json()).issues).toMatch(/version/);
   });
@@ -322,13 +324,16 @@ describe("POST /api/rebuild", () => {
       reply(call("propose_diff", {})),
     );
     vi.stubGlobal("fetch", opts.fetchImpl);
-    const body = { ...req("simple-move"), now: "2026-11-04T18:11:00-05:00" };
+    const body = { ...asTomorrow("simple-move"), now: "2026-11-04T18:11:00-05:00" };
     const first = await post(body);
     expect(first.status).toBe(200);
     const json = RebuildResponse.parse(await first.json());
     expect(json.decided_by).toBe("agent");
     // No replies are left in the script: a second model call would fail and fall back.
     expect(await (await post(body)).json()).toEqual(json);
+    // The cached answer was free: one call counted against the person today, not two.
+    const who = tomorrowPayer(readEnv(), "user_0001").accounts[0];
+    expect(await counterStoreFor(readEnv()).add(callsKey("tomorrow", who, new Date()), 0, 60)).toBe(1);
   });
 });
 
@@ -369,15 +374,19 @@ describe("POST /api/rebuild/demo", () => {
     expect(await (await post(body, "203.0.113.8")).json()).toMatchObject({ cached: true });
   });
 
-  it("limits live runs per visitor", async () => {
+  it("limits live runs per visitor: 25 a day, then come back tomorrow", async () => {
     vi.stubEnv("META_API_KEY", "test-key");
-    vi.stubGlobal("fetch", async () => {
-      throw new TypeError("fetch failed");
-    });
+    vi.stubGlobal(
+      "fetch",
+      async () =>
+        new Response(JSON.stringify({ error: { message: "no", type: "invalid_request_error" } }), { status: 400 }),
+    );
     const statuses = [];
-    for (let n = 0; n < 7; n++) statuses.push((await post({ case: "partial", reply: `try ${n}` }, "203.0.113.9")).status); // prettier-ignore
-    expect(statuses.slice(0, 6).every((s) => s === 200)).toBe(true);
-    expect(statuses[6]).toBe(429);
+    for (let n = 0; n < 26; n++) statuses.push((await post({ case: "partial", reply: `try ${n}` }, "203.0.113.9")).status); // prettier-ignore
+    expect(statuses.slice(0, 25).every((s) => s === 200)).toBe(true);
+    expect(statuses[25]).toBe(429);
+    const last = await post({ case: "partial", reply: "one more" }, "203.0.113.9");
+    expect((await last.json()).error).toMatch(/Come back tomorrow/);
   });
 });
 

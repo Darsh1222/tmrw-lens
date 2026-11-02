@@ -31,6 +31,7 @@ pnpm install          # also enables the pre-commit hook (needs gitleaks: brew i
 cp .env.example .env.local   # then set META_API_KEY
 pnpm dev              # http://localhost:3000 (the sample week works without an API key)
 pnpm test             # unit tests
+pnpm test:visual      # every screen, light and dark, desktop and phone (after pnpm build; free)
 pnpm smoke            # live calls to Meta Model API on synthetic fixtures (about 5 cents)
 pnpm eval             # score the eval cases on recorded model readings (free, offline)
 pnpm eval:live        # re-read fixtures whose recording is stale, then score (--force: all, about 22 cents)
@@ -46,6 +47,41 @@ How the app handles what people add: photos are shrunk and re-encoded in the bro
 capture time) and PDF pages are rendered there, so the server gets one small page per request and stores none of it.
 Readings are cached for 24 hours by content hash, encrypted with a key derived from the image itself. Send relays
 verified items to Tomorrow ([docs/IMPORT_CONTRACT.md](docs/IMPORT_CONTRACT.md)).
+
+### Limits
+
+Every model call is charged to someone, per UTC day. A call is one page or photo read, or one live rebuild; anything
+answered from the cache is free and never counts.
+
+| Who                                                                                    | Calls a day    | Dollars a day  |
+| -------------------------------------------------------------------------------------- | -------------- | -------------- |
+| A Tomorrow user (`user_ref` on `/api/rebuild` and `/api/extract`, hashed)              | 30             | $0.50          |
+| Tomorrow requests without a `user_ref`, together (`tomorrow-unknown`)                  | only the brake | only the brake |
+| A public visitor (a random id in a signed cookie, hashed)                              | 25             | $0.40          |
+| One address, however many cookies it collects (hashed with the secret)                 | 75             | $1.50          |
+| All public visitors together (`PUBLIC_DAILY_CAP_USD`)                                  |                | $5             |
+| All Tomorrow users together (`TOMORROW_DAILY_CAP_USD`), separate from the public brake |                | $20            |
+
+Past a limit, a visitor sees "come back tomorrow" (the sample week and the recorded rebuilds are always free); Tomorrow
+gets `code: "user_limit"` (429) or `"global_limit"` (503) and uses its own code-only rebuild. The counters live in
+Upstash for two days and hold only hashed ids; the cookie (`lens_v`) is a random id with no other use.
+
+### Environment
+
+Names only; values go in `.env.local` locally and in Vercel's settings when deployed. [.env.example](.env.example)
+lists every one, with its default.
+
+| Name                                                 | What it's for                                                                                                  |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `META_API_KEY`                                       | Meta Model API. Required for any model call                                                                    |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Limits, the reading cache, and review links. Required when deployed                                            |
+| `LENS_REBUILD_SECRET`                                | Shared with Tomorrow for `/api/rebuild` and `/api/extract`; signs review links and the cookie, keys the hashes |
+| `PUBLIC_DAILY_CAP_USD`                               | The public demo's brake (default: `DAILY_SPEND_CAP_USD` if set, else 5)                                        |
+| `TOMORROW_DAILY_CAP_USD`                             | Tomorrow's users' brake (default 20)                                                                           |
+| `DAILY_SPEND_CAP_USD`                                | Older name for `PUBLIC_DAILY_CAP_USD`, read only when that isn't set                                           |
+| `TOMORROW_IMPORT_URL`                                | Where Send delivers confirmed items (default `https://bettertmrw.app/api/lens/import`)                         |
+| `LENS_PUBLIC_URL`                                    | Where review links point (default `https://lens.bettertmrw.app`)                                               |
+| `META_API_BASE_URL`, `MUSE_SPARK_MODEL`, `SAM_MODEL` | Optional overrides (Standard mode only)                                                                        |
 
 ## Evals
 

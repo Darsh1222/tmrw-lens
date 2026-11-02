@@ -13,9 +13,12 @@ export type Input = {
   added_at: string;
   pages: PreparedPage[];
   readings: (PageReading | null)[];
-  status: "ready" | "reading" | "read" | "error";
+  /** opening: still being prepared in the browser (a PDF rendering, a photo shrinking). */
+  status: "opening" | "ready" | "reading" | "read" | "error";
   /** Pages read so far, for progress. */
   done: number;
+  /** When the current read began (ms), for the honest "… 4s" in its status line. */
+  startedAt?: number;
   error: string | null;
   note: string | null;
   cost_usd: number;

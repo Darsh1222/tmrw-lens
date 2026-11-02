@@ -1,22 +1,18 @@
+import { SiteFooter, SiteHeader } from "./_lens/Chrome";
+import { Hero } from "./_lens/Hero";
 import { Lens } from "./_lens/Lens";
-import { forumCaps, forumDisplay, forumSans } from "./_lens/forum-fonts";
 import { MissDemo } from "./_lens/MissDemo";
 
 export default function Home() {
   return (
     <>
-      <Lens />
-      <div className={`${forumSans.variable} ${forumDisplay.variable} ${forumCaps.variable}`}>
+      <SiteHeader />
+      <main id="main" className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-20 px-4 pb-24 sm:gap-28 sm:px-8">
+        <Hero />
+        <Lens />
         <MissDemo />
-      </div>
-      <footer className="mx-auto w-full max-w-6xl px-4 pb-8 text-xs text-text-secondary">
-        Built for the Meta Global AI Developer Hackathon (Oct 27 to Nov 4, 2026), solo with AI coding assistance. Uses
-        Muse Spark and SAM 3.1 on Meta Model API.{" "}
-        <a className="underline" href="https://github.com/Darsh1222/tmrw-lens">
-          Source
-        </a>
-        .
-      </footer>
+      </main>
+      <SiteFooter />
     </>
   );
 }

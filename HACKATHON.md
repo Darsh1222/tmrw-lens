@@ -55,6 +55,22 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
 
 ### Nov 2
 
+- Spend limits per person, not just one shared cap. Every model call is charged to someone: a Tomorrow user (by
+  Tomorrow's opaque id, hashed) gets 30 calls and $0.50 a day; a visitor to the public demo (a signed cookie and their
+  address, hashed) gets 25 calls and $0.40. Behind those, two global brakes: $5 a day for the public demo and $20 for
+  Tomorrow's users, so demo traffic can never use up Tomorrow's budget. Anything answered from the cache is free and
+  never counts. Past a limit, visitors see "Come back tomorrow; the sample week is always free", and Tomorrow gets
+  `user_limit` or `global_limit` so it can use its own code-only rebuild. A Tomorrow request without a user id still
+  works, charged to one shared Tomorrow identity under Tomorrow's brake. The cost log adds who paid (hashed) and their
+  total so far today.
+
+- Every screen in Tomorrow's Forum look, light and dark: a hero ("Your week, read, verified, and rebuilt when life
+  happens.") with a small week where a missed session glides to its new slot; a drop zone with honest progress
+  ("Reading page 2 of 6… 4s"); results where SAM's outlines draw onto the photo one by one before the plan's cards
+  arrive; the plan as a week grid or the whole semester, each item in its course's colour with a "Verified" or "Needs
+  a look" chip; and a proof drawer with the crop, SAM's outline, the exact words, and the date math. Plus an evals
+  page, and calm error, empty, rate-limit, and not-found states. Lighthouse 93 to 100 on every score, layout shift 0.
+
 - Recovery texts fit one SMS (160 characters, plain characters), checked by a test. When nothing fits before a
   deadline, Tomorrow asks instead of dropping: "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow,
   or skip it?" When someone says they're sick: "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read

@@ -1,0 +1,370 @@
+/*
+ * The one theme file: Tomorrow's "Forum" design system, for every Lens screen.
+ * Day is parchment and ink; Night is navy and ivory, by the visitor's system
+ * setting. Crimson is the one accent (the primary action, deadlines, flags,
+ * focus); pastels are for content (one per course, status chips), never actions.
+ * Every colour in the app is a token from here; components never use raw values.
+ * (Values from Tomorrow's DESIGN_V3; every text pairing passes WCAG AA.)
+ */
+
+:root {
+  --tm-bg: #f6f1e7;
+  --tm-surface: #fbf8f2;
+  --tm-sunken: #efe8da;
+  --tm-text: #0b1b33;
+  --tm-text-2: #4a5468;
+  --tm-muted: #5a6377;
+  --tm-border: rgb(11 27 51 / 0.12);
+  --tm-border-strong: rgb(11 27 51 / 0.22);
+  --tm-border-input: rgb(11 27 51 / 0.55);
+  --tm-crimson: #9e2236;
+  --tm-crimson-fill: #9e2236;
+  --tm-on-crimson: #fbf8f2;
+  --tm-gilt: #b89b5e;
+  --tm-gilt-text: #7a5f2e;
+  --tm-sage: #d4e2cf;
+  --tm-powder: #d3e0ec;
+  --tm-blush: #f2d7d2;
+  --tm-lavender: #e0d8ec;
+  --tm-butter: #f4e9c1;
+  --tm-band: rgb(11 27 51 / 0.05);
+  --tm-scrim: rgb(11 27 51 / 0.32);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tm-bg: #0a1b33;
+    --tm-surface: #11233f;
+    --tm-sunken: #081528;
+    --tm-text: #f3ede2;
+    --tm-text-2: #b4b9c4;
+    --tm-muted: #9aa1af;
+    --tm-border: rgb(243 237 226 / 0.12);
+    --tm-border-strong: rgb(243 237 226 / 0.22);
+    --tm-border-input: rgb(243 237 226 / 0.42);
+    --tm-crimson: #e06377;
+    --tm-crimson-fill: #b8304a;
+    --tm-on-crimson: #f3ede2;
+    --tm-gilt-text: #c9ae73;
+    --tm-sage: #2b3b33;
+    --tm-powder: #263850;
+    --tm-blush: #3b2a35;
+    --tm-lavender: #312e48;
+    --tm-butter: #3a3628;
+    --tm-band: rgb(243 237 226 / 0.05);
+    --tm-scrim: rgb(4 10 20 / 0.6);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--tm-bg);
+  --color-card: var(--tm-surface);
+  --color-well: var(--tm-sunken);
+  --color-ink: var(--tm-text);
+  --color-ink-2: var(--tm-text-2);
+  --color-muted: var(--tm-muted);
+  --color-line: var(--tm-border);
+  --color-line-strong: var(--tm-border-strong);
+  --color-line-input: var(--tm-border-input);
+  --color-crimson: var(--tm-crimson);
+  --color-crimson-fill: var(--tm-crimson-fill);
+  --color-on-crimson: var(--tm-on-crimson);
+  --color-gilt: var(--tm-gilt);
+  --color-gilt-ink: var(--tm-gilt-text);
+  --color-sage: var(--tm-sage);
+  --color-powder: var(--tm-powder);
+  --color-blush: var(--tm-blush);
+  --color-lavender: var(--tm-lavender);
+  --color-butter: var(--tm-butter);
+  --color-band: var(--tm-band);
+  --color-scrim: var(--tm-scrim);
+  --font-sans: var(--font-forum-sans), ui-sans-serif, sans-serif;
+  --font-display: var(--font-forum-display), Georgia, serif;
+  --font-caps: var(--font-forum-caps), Georgia, serif;
+}
+
+html {
+  background: var(--tm-bg);
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--tm-bg);
+  color: var(--tm-text);
+  font-family: var(--font-forum-sans), ui-sans-serif, sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--tm-butter);
+  color: var(--tm-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--tm-crimson);
+  outline-offset: 2px;
+}
+
+/* The missed-session panel's frame (its tokens are the app's now). */
+.forum {
+  background: var(--tm-bg);
+  color: var(--tm-text);
+}
+
+.forum-display {
+  font-family: var(--font-forum-display), Georgia, serif;
+  font-stretch: 87.5%;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Small caps, at most one per section (Forum). */
+.forum-caps {
+  font-family: var(--font-forum-caps), Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tm-gilt-text);
+}
+
+/* A typing indicator: three dots taking turns, so it reads as "writing a reply". */
+@keyframes forum-typing {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+.forum-typing span {
+  animation: forum-typing 1.2s infinite;
+}
+.forum-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.forum-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Things that arrive: fade and rise 8px. Opacity and transform only. */
+.forum-in {
+  transition:
+    opacity 280ms ease-out,
+    transform 280ms ease-out;
+}
+.forum-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Cards flying into the plan after the outlines draw. */
+@keyframes forum-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.forum-arrive {
+  animation: forum-arrive 420ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* An outline drawing itself onto the source (pathLength 1). */
+@keyframes forum-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.forum-draw {
+  stroke-dasharray: 1;
+  animation: forum-draw 520ms ease-out both;
+}
+
+/* Honest progress: the bar is pages read over pages to read; it only grows. */
+.forum-bar {
+  transform-origin: left;
+  transition: transform 320ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forum-typing span {
+    animation: none;
+    opacity: 0.6;
+  }
+  .forum-in,
+  .forum-bar {
+    transition: none;
+  }
+  .forum-arrive,
+  .forum-draw {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Staggered arrival: 40ms apart, at most 12 steps. */
+.forum-d1 {
+  animation-delay: 40ms;
+}
+.forum-d2 {
+  animation-delay: 80ms;
+}
+.forum-d3 {
+  animation-delay: 120ms;
+}
+.forum-d4 {
+  animation-delay: 160ms;
+}
+.forum-d5 {
+  animation-delay: 200ms;
+}
+.forum-d6 {
+  animation-delay: 240ms;
+}
+.forum-d7 {
+  animation-delay: 280ms;
+}
+.forum-d8 {
+  animation-delay: 320ms;
+}
+.forum-d9 {
+  animation-delay: 360ms;
+}
+.forum-d10 {
+  animation-delay: 400ms;
+}
+.forum-d11 {
+  animation-delay: 440ms;
+}
+.forum-d12 {
+  animation-delay: 480ms;
+}
+
+/*
+ * The hero's looping preview, 7 seconds: the missed session turns into a ghost,
+ * a path draws, the block glides to its new slot and lands, holds, and resets
+ * while invisible. Paused unless on screen (.is-playing); reduced motion shows
+ * the landed state.
+ */
+@keyframes glide-block {
+  0%,
+  18% {
+    transform: translate(calc(-100% - 8px), 156px);
+    opacity: 1;
+  }
+  24% {
+    transform: translate(calc(-80% - 6px), 96px);
+  }
+  30% {
+    transform: translate(calc(-45% - 4px), 30px);
+  }
+  38%,
+  86% {
+    transform: none;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: none;
+    opacity: 0;
+  }
+}
+@keyframes glide-ghost {
+  0%,
+  8% {
+    opacity: 0;
+  }
+  14%,
+  86% {
+    opacity: 1;
+  }
+  94%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes glide-path {
+  0%,
+  16% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  34%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 0.5;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@keyframes glide-badge {
+  0%,
+  38% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  44%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  78%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+.glide .glide-block {
+  animation: glide-block 7s infinite;
+  animation-play-state: paused;
+}
+.glide .glide-ghost {
+  animation: glide-ghost 7s infinite;
+  animation-play-state: paused;
+}
+.glide .glide-path path {
+  animation: glide-path 7s infinite;
+  animation-play-state: paused;
+}
+.glide .glide-badge {
+  animation: glide-badge 7s infinite;
+  animation-play-state: paused;
+}
+.glide.is-playing .glide-block,
+.glide.is-playing .glide-ghost,
+.glide.is-playing .glide-path path,
+.glide.is-playing .glide-badge {
+  animation-play-state: running;
+}
+.glide .glide-block {
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glide .glide-block,
+  .glide .glide-ghost,
+  .glide .glide-path path,
+  .glide .glide-badge {
+    animation: none;
+  }
+  .glide .glide-path path {
+    stroke-dashoffset: 0;
+    opacity: 0.5;
+  }
+}

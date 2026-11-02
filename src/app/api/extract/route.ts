@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { readEnv } from "@/lib/env";
 import { MetaApiError, MetaIncomplete } from "@/lib/meta/client";
-import { SpendCapReached } from "@/lib/meta/spend";
+import { admitFor, chargeTo, LimitReached } from "@/lib/meta/spend";
 import { TaskFailed } from "@/lib/meta/task";
 import { fromTomorrow } from "@/lib/server/auth";
-import { kvFor, RateLimited, rateLimit } from "@/lib/server/kv";
+import { tomorrowPayer } from "@/lib/server/identity";
+import { kvFor } from "@/lib/server/kv";
 import { imageType, readPhotos } from "@/lib/server/photos";
 import { reviewStore } from "@/lib/server/review";
 import { assemble, ExtractRequest, ExtractResponse, MAX_IMAGE_BYTES, type ExtractState } from "@/lib/tomorrow/extract";
@@ -12,14 +13,14 @@ import { assemble, ExtractRequest, ExtractResponse, MAX_IMAGE_BYTES, type Extrac
 // Text-a-photo: Tomorrow sends the photos someone texted, with their existing
 // items; Lens returns what's new, what changed, what it needs to ask, and a
 // review link (docs/EXTRACT_CONTRACT.md). Server to server, with the shared
-// secret. Per person: 20 photos an hour, 60 a day, counted only when the model
-// is called; all under the daily spend cap. The photos exist only in memory
-// for this request; what was read is cached encrypted for 24 hours.
+// secret. Each photo the model reads is charged to the person (`user_ref`,
+// hashed): 30 a day and $0.50, shared with their rebuilds, under Tomorrow's
+// global brake (without a `user_ref`, the shared "tomorrow-unknown" identity);
+// a cached photo is free (src/lib/server/identity.ts). The
+// photos exist only in memory for this request; what was read is cached
+// encrypted for 24 hours.
 
 export const maxDuration = 120;
-
-const PER_HOUR = 20;
-const PER_DAY = 60;
 
 const fail = (status: number, error: string, extra?: Record<string, string>, headers?: Record<string, string>) =>
   Response.json({ error, ...extra }, { status, headers });
@@ -44,13 +45,11 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const kv = kvFor(env);
+  const payer = tomorrowPayer(env, req.user_ref);
   try {
-    const read = await readPhotos(images, {
-      env,
-      kv,
-      now: req.now,
-      onMiss: () => rateLimit(kv, req.user_ref, { perHour: PER_HOUR, perDay: PER_DAY }, new Date(), "extract"),
-    });
+    const read = await chargeTo(payer, () =>
+      readPhotos(images, { env, kv, now: req.now, onMiss: () => admitFor(env, payer) }),
+    );
     const state: ExtractState = {
       version: 1,
       zone: req.zone,
@@ -79,9 +78,13 @@ export async function POST(request: Request): Promise<Response> {
     );
     return Response.json(response);
   } catch (e) {
-    if (e instanceof RateLimited)
-      return fail(429, "Too many photos for this person right now.", undefined, { "Retry-After": String(e.retryAfterSeconds) }); // prettier-ignore
-    if (e instanceof SpendCapReached) return fail(503, "Lens has reached today's spending limit for model calls.");
+    if (e instanceof LimitReached)
+      return fail(
+        e.code === "user_limit" ? 429 : 503,
+        e.code === "user_limit" ? "This person's photo reads are used up for today." : "Lens's budget for Tomorrow is used up for today.", // prettier-ignore
+        { code: e.code },
+        { "Retry-After": String(e.retryAfterSeconds) },
+      );
     if (e instanceof MetaApiError || e instanceof MetaIncomplete || e instanceof TaskFailed)
       return fail(502, "The model didn't answer properly. Try again.");
     // No content in logs: only what failed.

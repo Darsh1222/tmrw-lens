@@ -1,21 +1,36 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import type { Env } from "@/lib/env";
 
-// The hard daily cap on model spend, shared by every visitor. Each call reserves
-// its worst case before it is sent and settles to the real cost afterwards, so
-// concurrent calls can't overshoot the cap between check and record.
+// Who pays for a model call, and the daily limits that stop them. Every metered
+// request is charged to an identity (a Tomorrow user, or a public visitor) with
+// its own calls and dollars per UTC day; behind those, two global brakes, one
+// per pool, so demo traffic can never use up what Tomorrow's users need. A
+// cached answer never reaches a model, so it is never counted.
+//
+// Each model call reserves its worst case on every bucket before it is sent and
+// settles to the real cost afterwards, so concurrent calls can't overshoot a
+// limit between check and record. Identities are hashed before they get here
+// (src/lib/server/identity.ts); the counters hold no personal data.
 
 export interface CounterStore {
   /** Atomically add `delta` to `key` and return the new total. */
   add(key: string, delta: number, ttlSeconds: number): Promise<number>;
 }
 
-export class SpendCapReached extends Error {
+export type Pool = "public" | "tomorrow";
+export type LimitCode = "user_limit" | "global_limit";
+
+/** One identity's daily allowance. `key` is already hashed. */
+export type Account = { key: string; calls: number; usd: number };
+export type Payer = { pool: Pool; accounts: Account[] };
+
+export class LimitReached extends Error {
   constructor(
-    readonly spentUsd: number,
-    readonly capUsd: number,
+    readonly code: LimitCode,
+    readonly retryAfterSeconds: number,
   ) {
-    super(`Daily spend cap reached ($${spentUsd.toFixed(4)} of $${capUsd.toFixed(2)})`);
-    this.name = "SpendCapReached";
+    super(code === "user_limit" ? "Daily limit reached for this identity" : "Daily spend cap reached for this pool");
+    this.name = "LimitReached";
   }
 }
 
@@ -52,59 +67,114 @@ export class UpstashCounterStore implements CounterStore {
 }
 
 const DAY_SECONDS = 86_400;
+const TTL = 2 * DAY_SECONDS;
 
-/** Cap days are UTC days. */
-export function spendKey(now: Date = new Date()): string {
-  return `lens:spend:${now.toISOString().slice(0, 10)}`;
+/** Limit days are UTC days. */
+const dayOf = (now: Date) => now.toISOString().slice(0, 10);
+
+export function untilTomorrow(now: Date): number {
+  return Math.max(60, DAY_SECONDS - Math.floor((now.getTime() % (DAY_SECONDS * 1000)) / 1000));
+}
+
+export const poolKey = (pool: Pool, now: Date) => `lens:spend:${pool}:${dayOf(now)}`;
+export const usdKey = (pool: Pool, a: Account, now: Date) => `lens:usd:${pool}:${a.key}:${dayOf(now)}`;
+export const callsKey = (pool: Pool, a: Account, now: Date) => `lens:calls:${pool}:${a.key}:${dayOf(now)}`;
+
+/** The pool's global brake. PUBLIC_DAILY_CAP_USD falls back to the older DAILY_SPEND_CAP_USD, then 5. */
+export function poolCapUsd(env: Env, pool: Pool): number {
+  return pool === "tomorrow" ? env.TOMORROW_DAILY_CAP_USD : (env.PUBLIC_DAILY_CAP_USD ?? env.DAILY_SPEND_CAP_USD ?? 5);
+}
+
+/** A dollar total with a cap; a reservation that would pass it is refused with `code`. */
+export type Bucket = { key: (now: Date) => string; capUsd: number; code: LimitCode };
+
+export function bucketsFor(payer: Payer | undefined, capUsd: number): Bucket[] {
+  const pool = payer?.pool ?? "public";
+  return [
+    ...(payer?.accounts ?? []).map((a): Bucket => ({ key: (n) => usdKey(pool, a, n), capUsd: a.usd, code: "user_limit" })), // prettier-ignore
+    { key: (n) => poolKey(pool, n), capUsd, code: "global_limit" },
+  ];
 }
 
 export class SpendGuard {
   constructor(
     private store: CounterStore,
-    readonly capUsd: number,
+    private buckets: Bucket[],
     private now: () => Date = () => new Date(),
   ) {}
 
   async reserve(usd: number): Promise<Reservation> {
-    const key = spendKey(this.now());
-    const total = await this.store.add(key, usd, 2 * DAY_SECONDS);
-    if (total > this.capUsd) {
-      await this.store.add(key, -usd, 2 * DAY_SECONDS);
-      throw new SpendCapReached(total - usd, this.capUsd);
+    const now = this.now();
+    const keys = this.buckets.map((b) => b.key(now));
+    for (const [n, b] of this.buckets.entries()) {
+      const total = await this.store.add(keys[n], usd, TTL);
+      if (total > b.capUsd) {
+        await Promise.all(keys.slice(0, n + 1).map((k) => this.store.add(k, -usd, TTL)));
+        throw new LimitReached(b.code, untilTomorrow(now));
+      }
     }
-    let settled = false;
+    let settled: Promise<number[]> | null = null;
     return {
       reservedUsd: usd,
-      settle: async (actualUsd: number) => {
-        if (settled) return;
-        settled = true;
-        if (actualUsd !== usd) await this.store.add(key, actualUsd - usd, 2 * DAY_SECONDS);
-      },
+      settle: (actualUsd: number) =>
+        (settled ??= Promise.all(keys.map((k) => this.store.add(k, actualUsd - usd, TTL)))),
     };
   }
 
-  async spentToday(): Promise<number> {
-    return this.store.add(spendKey(this.now()), 0, 2 * DAY_SECONDS);
+  /** Today's total in one bucket (the last is the pool's). */
+  async spentToday(bucket = this.buckets.length - 1): Promise<number> {
+    return this.store.add(this.buckets[bucket].key(this.now()), 0, TTL);
   }
 }
 
-export type Reservation = { reservedUsd: number; settle(actualUsd: number): Promise<void> };
+/** `settle` resolves to each bucket's total after settling, the identity's first. */
+export type Reservation = { reservedUsd: number; settle(actualUsd: number): Promise<number[]> };
 
-let shared: SpendGuard | undefined;
+const holder = globalThis as { __lensCounters?: CounterStore };
 
-export function spendGuardFor(env: Env): SpendGuard {
-  if (shared) return shared;
+export function counterStoreFor(env: Env): CounterStore {
+  if (holder.__lensCounters) return holder.__lensCounters;
   const deployed = env.VERCEL_ENV === "production" || env.VERCEL_ENV === "preview";
-  let store: CounterStore;
-  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
-    store = new UpstashCounterStore(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
-  } else if (deployed) {
-    // Each serverless instance would have its own in-memory total, so the cap
-    // wouldn't be a cap. Refuse model calls instead of failing open.
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN)
+    holder.__lensCounters = new UpstashCounterStore(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
+  else if (deployed)
+    // Each serverless instance would have its own in-memory totals, so a limit
+    // wouldn't be a limit. Refuse model calls instead of failing open.
     throw new Error("UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are required when deployed");
-  } else {
-    store = new MemoryCounterStore();
-  }
-  shared = new SpendGuard(store, env.DAILY_SPEND_CAP_USD);
-  return shared;
+  else holder.__lensCounters = new MemoryCounterStore();
+  return holder.__lensCounters;
 }
+
+// The payer travels with the request, so every model call it makes (however
+// deep in a task) is charged to them without threading it through each layer.
+const payers = new AsyncLocalStorage<Payer>();
+
+export const chargeTo = <T>(payer: Payer, run: () => Promise<T>): Promise<T> => payers.run(payer, run);
+export const currentPayer = (): Payer | undefined => payers.getStore();
+
+/** The guard for a call: the payer's own buckets, then their pool's brake. Scripts (no payer) use the public pool's. */
+export function spendGuardFor(env: Env, payer = currentPayer()): SpendGuard {
+  return new SpendGuard(counterStoreFor(env), bucketsFor(payer, poolCapUsd(env, payer?.pool ?? "public")));
+}
+
+/**
+ * A metered request is starting (nothing cached could answer it): count it against each of the payer's accounts.
+ * Refused, and not counted, when an account is out of calls or dollars or the pool's brake is on.
+ */
+export async function admit(store: CounterStore, payer: Payer, capUsd: number, now: Date = new Date()): Promise<void> {
+  const wait = untilTomorrow(now);
+  if ((await store.add(poolKey(payer.pool, now), 0, TTL)) >= capUsd) throw new LimitReached("global_limit", wait);
+  for (const a of payer.accounts)
+    if ((await store.add(usdKey(payer.pool, a, now), 0, TTL)) >= a.usd) throw new LimitReached("user_limit", wait);
+  const counted: string[] = [];
+  for (const a of payer.accounts) {
+    const key = callsKey(payer.pool, a, now);
+    counted.push(key);
+    if ((await store.add(key, 1, TTL)) > a.calls) {
+      await Promise.all(counted.map((k) => store.add(k, -1, TTL)));
+      throw new LimitReached("user_limit", wait);
+    }
+  }
+}
+
+export const admitFor = (env: Env, payer: Payer) => admit(counterStoreFor(env), payer, poolCapUsd(env, payer.pool));

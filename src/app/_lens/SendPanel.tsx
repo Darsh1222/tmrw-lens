@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Plan, SourceMeta } from "@/lib/plan/types";
 import { NotSendable, sendable, toImport, type ImportResponse } from "@/lib/tomorrow/contract";
+import { buttonClass } from "./ui";
 
 // Send to Tomorrow: only verified items go. Everything else waits, and says so.
 // The Lens token comes from Tomorrow's Settings; it's kept in this page only.
@@ -49,37 +50,45 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
   };
 
   return (
-    <section aria-label="Send to Tomorrow" className="flex flex-col gap-3 rounded-xl border border-border p-4">
-      <h2 className="font-semibold">Send to Tomorrow</h2>
-      <p className="text-sm text-text-secondary">
-        {count} ready to send{waiting ? `; ${waiting} wait until you answer or edit them` : ""}. Tomorrow plans study
-        time around your classes and reminds you.
-      </p>
-      <form onSubmit={send} className="flex flex-col gap-2 sm:flex-row">
+    <section aria-labelledby="send-title" className="flex flex-col gap-4 rounded-2xl border border-line bg-card p-6">
+      <div className="flex flex-col gap-1">
+        <h2 id="send-title" className="forum-display text-2xl">
+          Send to Tomorrow
+        </h2>
+        <p className="text-sm text-ink-2">
+          {count} ready to send{waiting ? `; ${waiting} wait until you answer or edit them` : ""}. Tomorrow plans study
+          time around your classes and texts you at the right moment. Only verified items go.
+        </p>
+      </div>
+      <form onSubmit={send} className="flex flex-col gap-3 sm:flex-row">
+        <label className="sr-only" htmlFor="lens-token">
+          Lens token
+        </label>
         <input
+          id="lens-token"
           type="password"
           autoComplete="off"
           value={token}
           onChange={(e) => setToken(e.target.value)}
           placeholder="Lens token from Tomorrow's Settings"
-          aria-label="Lens token"
-          className="flex-1 rounded-md border border-border bg-bg px-2 py-1.5 text-sm"
+          className="min-h-11 flex-1 rounded-lg border border-line-input bg-paper px-3 text-sm"
         />
-        <button
-          disabled={!count || token.trim().length < 8 || state.s === "sending"}
-          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-        >
+        <button disabled={!count || token.trim().length < 8 || state.s === "sending"} className={buttonClass("primary")}>
           {state.s === "sending" ? "Sending…" : `Send ${count}`}
         </button>
       </form>
       {state.s === "sent" && (
-        <p className="text-sm text-verified">
+        <p role="status" className="text-sm">
           Sent {Object.keys(state.r.created).length} to Tomorrow
           {state.r.skipped_duplicates.length ? `; ${state.r.skipped_duplicates.length} were already there` : ""}.
         </p>
       )}
-      {state.s === "error" && <p className="text-sm text-unverified">{state.message}</p>}
-      <button onClick={download} disabled={!count} className="self-start text-xs text-text-secondary underline-offset-2 hover:underline disabled:opacity-50">
+      {state.s === "error" && (
+        <p role="alert" className="text-sm text-crimson">
+          {state.message}
+        </p>
+      )}
+      <button onClick={download} disabled={!count} className={buttonClass("plain", "self-start px-0")}>
         Download what would be sent (JSON)
       </button>
     </section>

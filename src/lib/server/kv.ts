@@ -3,9 +3,9 @@ import type { Env } from "@/lib/env";
 import { MemoryCounterStore, UpstashCounterStore, type CounterStore } from "@/lib/meta/spend";
 
 // Small key-value storage for the deployed app, over Upstash's REST API (plain
-// fetch, as in spend.ts): per-visitor rate limits, and readings cached by the
-// hash of what was read so the same photo is never paid for twice. In
-// development, without Upstash, both live in memory.
+// fetch, as in spend.ts): readings cached by the hash of what was read, so the
+// same photo is never paid for twice, and review links. In development, without
+// Upstash, they live in memory.
 //
 // A cached reading holds the words on someone's photo, so it's encrypted with a
 // key derived from that photo's own bytes and stored under a hash of that key:
@@ -109,31 +109,4 @@ export function contentCache(kv: Kv, salt: string) {
       await kv.set(id, Buffer.concat([iv, c.getAuthTag(), body]).toString("base64"), DAY);
     },
   };
-}
-
-export class RateLimited extends Error {
-  constructor(readonly retryAfterSeconds: number) {
-    super("Too many reads from here for now");
-    this.name = "RateLimited";
-  }
-}
-
-/** Fixed windows per visitor. The visitor is a hash of their address, never the address itself. */
-export async function rateLimit(
-  kv: Kv,
-  visitor: string,
-  limits: { perHour: number; perDay: number },
-  now = new Date(),
-  /** Separate counters per kind of request: page reads, live rebuilds. */
-  scope = "read",
-): Promise<void> {
-  const who = `${scope === "read" ? "" : `${scope}:`}${sha256("lens-visitor", visitor).toString("hex").slice(0, 24)}`;
-  const hour = now.toISOString().slice(0, 13);
-  const day = hour.slice(0, 10);
-  const [h, d] = await Promise.all([
-    kv.add(`lens:rl:${who}:${hour}`, 1, 3600),
-    kv.add(`lens:rl:${who}:${day}`, 1, DAY),
-  ]);
-  if (d > limits.perDay) throw new RateLimited(DAY - (now.getUTCHours() * 3600 + now.getUTCMinutes() * 60));
-  if (h > limits.perHour) throw new RateLimited(3600 - now.getUTCMinutes() * 60);
 }

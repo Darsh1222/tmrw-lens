@@ -1,27 +1,29 @@
 "use client";
 
 import { DateTime } from "luxon";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import sample from "@/lib/demo/sample-week.json";
 import type { Answer } from "@/lib/plan/answer";
 import { planFrom } from "@/lib/plan/session";
 import type { PageReading, SourceReading } from "@/lib/plan/types";
 import type { SourceKind } from "@/lib/schemas/evidence";
-import { Items } from "./Items";
-import { KIND_LABEL, prepare } from "./prepare";
+import { EvidenceDrawer } from "./plan/EvidenceDrawer";
+import { SemesterView, WeekView } from "./plan/PlanViews";
+import { guessKind, KIND_LABEL, prepare } from "./prepare";
 import { QuestionCard } from "./QuestionCard";
 import { SendPanel } from "./SendPanel";
 import { metaOf, type Input } from "./types";
-import { money } from "./ui";
+import { Upload } from "./Upload";
+import { buttonClass, Chip, money, palette, Swatch } from "./ui";
 import { Viewer, type Mark } from "./Viewer";
 
-// The whole Lens flow on one page: add inputs, read them, see what was found
-// with its evidence, answer one question at a time, send to Tomorrow. The page
-// holds everything (inputs, readings, answers); the plan is recomputed from
-// them on every change, so nothing about a visitor lives on the server.
+// The whole Lens flow on one page: add inputs, read them, watch what was read
+// get outlined on the source, see the plan with every item's proof one tap
+// away, answer one question at a time, send to Tomorrow. The page holds
+// everything (inputs, readings, answers); the plan is recomputed from them on
+// every change, so nothing about a visitor lives on the server.
 
 const SAMPLE = sample as unknown as { zone: string; files: string[]; readings: SourceReading[] };
-const PICKABLE: SourceKind[] = ["testudo_screenshot", "syllabus_pdf", "whiteboard_photo", "notes_photo", "lms_screenshot"]; // prettier-ignore
 const CONCURRENCY = 3;
 
 const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "America/New_York";
@@ -41,68 +43,83 @@ export function Lens() {
   const [later, setLater] = useState<string[]>([]);
   const [error, setError] = useState<{ q: string; message: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const [paste, setPaste] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [drawer, setDrawer] = useState<string | null>(null);
+  const [view, setView] = useState<"week" | "semester">("week");
+  // The SAM moment: outlines draw on the source, then the cards arrive. "waiting" hides the cards until then.
+  const [reveal, setReveal] = useState(0);
+  const [arrival, setArrival] = useState<"waiting" | "arriving" | "done">("done");
+  const results = useRef<HTMLDivElement>(null);
+  // From the click that starts a read until the plan exists: the results area holds a screen's height, so what
+  // arrives fills it instead of pushing the page below it around.
+  const [loading, setLoading] = useState(false);
+  // Inputs being read right now: they join the plan together when the last page is in, so the plan appears once
+  // (opening on the photo SAM outlined) instead of reshuffling as each page lands.
+  const [batch, setBatch] = useState<string[]>([]);
 
   const update = (id: string, f: (i: Input) => Input) => setInputs((xs) => xs.map((x) => (x.id === id ? f(x) : x)));
 
   const readings: SourceReading[] = useMemo(
     () =>
       inputs
-        .filter((i) => i.status === "read")
+        .filter((i) => i.status === "read" && !batch.includes(i.id))
         .map((i) => ({ source: metaOf(i), pages: i.readings.filter((r): r is PageReading => r !== null) })),
-    [inputs],
+    [inputs, batch],
   );
   const session = useMemo(() => (readings.length ? planFrom(readings, { zone, answers }) : null), [readings, zone, answers]); // prettier-ignore
   const plan = session?.plan ?? null;
 
+  /** A card for an input that's still opening: final size from the start, so nothing moves when it fills in. */
+  const opening = (id: string, name: string, kind: SourceKind, label: string, added_at: string, recorded: boolean): Input => ({
+    id, name, kind, label, captured_at: null, added_at, pages: [], readings: [], status: "opening",
+    done: 0, error: null, note: null, cost_usd: 0, recorded,
+  }); // prettier-ignore
+
   async function add(files: FileList | File[]) {
-    setBusy("Getting your files ready…");
+    const list = Array.from(files);
     const now = DateTime.now().setZone(zone).toISO()!;
-    if (inputs.some((i) => i.recorded)) {
-      setInputs([]);
-      setAnswers([]);
-    }
+    const ids = list.map(() => newId());
+    if (inputs.some((i) => i.recorded)) setAnswers([]);
     setZone(browserZone());
-    for (const file of Array.from(files)) {
+    setBusy(null);
+    setInputs((xs) => {
+      const base = xs.filter((x) => !x.recorded);
+      return [
+        ...base,
+        ...list.map((f, n) => {
+          const kind = guessKind(f.name, f.type);
+          return opening(ids[n], f.name, kind, labelled(base, KIND_LABEL[kind]), now, false);
+        }),
+      ];
+    });
+    for (const [n, file] of list.entries()) {
       try {
         const p = await prepare(file, file.name);
         const taken = p.takenAt ? DateTime.fromISO(p.takenAt, { zone: browserZone(), setZone: /[+-]\d{2}:\d{2}$/.test(p.takenAt) }).toISO() : null; // prettier-ignore
-        setInputs((xs) => {
-          const base = xs.filter((x) => !x.recorded);
-          return [
-            ...base,
-            {
-              id: newId(),
-              name: file.name,
-              kind: p.kind,
-              label: labelled(base, p.label),
-              captured_at: p.kind === "whiteboard_photo" || p.kind === "notes_photo" ? taken : null,
-              added_at: now,
-              pages: p.pages,
-              readings: p.pages.map(() => null),
-              status: "ready",
-              done: 0,
-              error: null,
-              note: p.note,
-              cost_usd: 0,
-              recorded: false,
-            },
-          ];
-        });
+        update(ids[n], (x) => ({
+          ...x,
+          kind: p.kind,
+          label: x.label.startsWith(KIND_LABEL[x.kind]) ? x.label.replace(KIND_LABEL[x.kind], p.label) : x.label,
+          captured_at: p.kind === "whiteboard_photo" || p.kind === "notes_photo" ? taken : null,
+          pages: p.pages,
+          readings: p.pages.map(() => null),
+          status: "ready",
+          note: p.note,
+        }));
       } catch (e) {
-        setBusy(null);
-        alert(e instanceof Error ? e.message : "Couldn't open that file.");
+        setInputs((xs) => xs.filter((x) => x.id !== ids[n]));
+        setBusy(
+          `Couldn't open ${file.name}: ${e instanceof Error ? e.message : "it isn't a PDF, photo, or text file."}`,
+        );
       }
     }
-    setBusy(null);
   }
 
-  async function addPaste() {
-    if (!paste.trim()) return;
-    await add([new File([paste], "testudo.txt", { type: "text/plain" })]);
-    setPaste("");
+  async function addPaste(text: string) {
+    if (!text.trim()) return;
+    await add([new File([text], "testudo.txt", { type: "text/plain" })]);
   }
+
+  const remove = (id: string) => setInputs((xs) => xs.filter((x) => x.id !== id));
 
   function setKind(id: string, kind: SourceKind) {
     update(id, (i) => ({
@@ -114,9 +131,12 @@ export function Lens() {
   }
 
   async function readAll() {
+    setLoading(true);
     const todo = inputs.filter((i) => i.status === "ready" || i.status === "error");
+    setBatch(todo.map((i) => i.id));
     const jobs = todo.flatMap((i) => i.pages.map((p, n) => ({ input: i, page: p, n })));
-    for (const i of todo) update(i.id, (x) => ({ ...x, status: "reading", error: null, done: 0 }));
+    for (const i of todo)
+      update(i.id, (x) => ({ ...x, status: "reading", error: null, done: 0, startedAt: Date.now() }));
     let next = 0;
     const failed = new Set<string>();
     const worker = async () => {
@@ -142,15 +162,21 @@ export function Lens() {
       }
     };
     await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-    if (todo[0]) setAt({ input: todo[0].id, page: 0 });
+    setBatch([]);
+    setLoading(false);
+    const photo = todo.find((i) => (i.kind === "whiteboard_photo" || i.kind === "notes_photo") && !failed.has(i.id)) ?? todo[0]; // prettier-ignore
+    if (photo) setAt({ input: photo.id, page: 0 });
   }
 
   async function trySample() {
     setBusy("Opening the sample week…");
+    setLoading(true);
     setAnswers([]);
     setSelected(null);
     setLater([]);
     setZone(SAMPLE.zone);
+    // Cards first, at their final size; they all flip to read together once the files are open.
+    setInputs(SAMPLE.readings.map((r, k) => opening(r.source.id, SAMPLE.files[k], r.source.kind, r.source.label, r.source.added_at, true))); // prettier-ignore
     try {
       const out: Input[] = [];
       for (const [k, r] of SAMPLE.readings.entries()) {
@@ -174,9 +200,12 @@ export function Lens() {
         });
       }
       setInputs(out);
-      setAt({ input: out[0].id, page: 0 });
+      // Open on a photo with SAM objects: the outlines drawing on is the first thing to see.
+      const photo = out.find((i) => i.readings.some((r) => r?.objects?.length)) ?? out[0];
+      setAt({ input: photo.id, page: 0 });
     } finally {
       setBusy(null);
+      setLoading(false);
     }
   }
 
@@ -193,11 +222,37 @@ export function Lens() {
 
   function select(id: string) {
     setSelected(id);
+    setDrawer(id);
     const ev = plan?.items.find((i) => i.id === id)?.evidence[0] ?? plan?.classes.find((c) => c.id === id)?.evidence;
     const input = ev && inputs.find((i) => i.id === ev.source_id);
     if (ev && input) setAt({ input: input.id, page: Math.max(0, input.pages.findIndex((p) => (p.page ?? null) === (ev.page ?? null))) }); // prettier-ignore
-    document.getElementById(`row-${id}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
+
+  // New readings: draw the outlines again, then bring the cards in. A fallback makes sure they always arrive.
+  const readCount = readings.length;
+  const lastCount = useRef(0);
+  useEffect(() => {
+    if (readCount > lastCount.current) {
+      setReveal((r) => r + 1);
+      setArrival("waiting");
+      if (lastCount.current === 0) results.current?.scrollIntoView({ block: "start" });
+    }
+    lastCount.current = readCount;
+  }, [readCount]);
+  useEffect(() => {
+    if (arrival !== "waiting") return;
+    const t = setTimeout(() => setArrival("done"), 4000);
+    return () => clearTimeout(t);
+  }, [arrival]);
+  useEffect(() => {
+    if (arrival !== "arriving") return;
+    const t = setTimeout(() => setArrival("done"), 1200);
+    return () => clearTimeout(t);
+  }, [arrival]);
+  const revealed = useCallback(() => setArrival((a) => (a === "waiting" ? "arriving" : a)), []);
+  const arrive = (n: number) =>
+    arrival === "waiting" ? "opacity-0" : arrival === "arriving" ? `forum-arrive forum-d${Math.min(n, 12)}` : undefined;
+  const closeDrawer = useCallback(() => setDrawer(null), []);
 
   const marks: Mark[] = plan
     ? [
@@ -207,137 +262,155 @@ export function Lens() {
     : [];
   const questions = plan ? [...plan.questions].sort((a, b) => Number(later.includes(a.id)) - Number(later.includes(b.id))) : []; // prettier-ignore
   const q = questions[0] ?? null;
-  const unread = inputs.filter((i) => i.status === "ready" || i.status === "error");
-  const reading = inputs.some((i) => i.status === "reading");
   const recorded = inputs.some((i) => i.recorded);
   const cost = inputs.reduce((a, i) => a + i.cost_usd, 0);
   const asked = answers.filter((a) => !/^(edit|confirm|skip):/.test(a.question_id)).length;
+  const all = plan ? [...plan.items, ...plan.classes] : [];
+  const verified = all.filter((x) => x.status === "verified").length;
+  // Counts only for inputs in the plan: one still waiting for the rest of its batch hasn't been counted yet.
+  const found = Object.fromEntries(
+    inputs
+      .filter((i) => !batch.includes(i.id))
+      .map((i) => {
+        const mine = [
+          ...(plan?.items.filter((x) => x.evidence.some((e) => e.source_id === i.id)) ?? []),
+          ...(plan?.classes.filter((x) => x.evidence.source_id === i.id) ?? []),
+        ];
+        return [i.id, { all: mine.length, verified: mine.filter((x) => x.status === "verified").length }];
+      }),
+  );
+  const today = inputs.map((i) => i.added_at.slice(0, 10)).sort()[0] ?? "";
+  const tone = plan ? palette([...plan.items.map((i) => i.course), ...plan.classes.map((c) => c.course)]) : null;
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Tomorrow Lens</h1>
-        <p className="max-w-2xl text-text-secondary">
-          Add your week: a Testudo schedule, a syllabus, a whiteboard, your notes. Lens reads them with Muse Spark and
-          SAM 3.1, checks every date against the words it came from, and asks only what it can&apos;t settle.
-        </p>
-        <a href="#missed-session" className="self-start text-sm text-accent underline-offset-2 hover:underline">
-          And when a session gets missed, it rebuilds the plan: try it ↓
-        </a>
-      </header>
+    <div className="flex flex-col gap-20 sm:gap-28">
+      <Upload
+        inputs={inputs}
+        busy={busy}
+        onAdd={add}
+        onPaste={addPaste}
+        onRead={readAll}
+        onSample={trySample}
+        onKind={setKind}
+        onRemove={remove}
+        found={found}
+      />
 
-      <section aria-label="Add inputs" className="flex flex-col gap-3 rounded-xl border border-border p-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <button onClick={() => fileRef.current?.click()} className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white">
-            Add photos or PDFs
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            multiple
-            accept="image/*,application/pdf,.pdf,.txt"
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files?.length) void add(e.target.files);
-              e.target.value = "";
-            }}
-          />
-          <button onClick={trySample} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-surface">
-            Try the sample week
-          </button>
-          {busy && <span className="text-sm text-text-secondary">{busy}</span>}
+      <div ref={results} className={`scroll-mt-6 empty:hidden ${loading && !plan ? "min-h-[100svh]" : ""}`}>
+      {loading && !plan && (
+        <div className="flex flex-col gap-3" role="status">
+          <span className="forum-caps">II · Verify</span>
+          <p className="forum-display text-3xl text-ink-2 sm:text-4xl">Reading your week…</p>
+          <p className="text-ink-2">The plan appears here, with every date traced to the words it came from.</p>
         </div>
-        <details className="text-sm">
-          <summary className="cursor-pointer text-text-secondary">Or paste your Testudo schedule as text</summary>
-          <div className="mt-2 flex flex-col gap-2">
-            <textarea value={paste} onChange={(e) => setPaste(e.target.value)} rows={4} className="rounded-md border border-border bg-bg p-2 font-mono text-xs" aria-label="Testudo schedule text" />
-            <button onClick={addPaste} disabled={!paste.trim()} className="self-start rounded-md border border-border px-3 py-1 disabled:opacity-50">
-              Add it
-            </button>
-          </div>
-        </details>
-        <p className="text-xs text-text-secondary">
-          Photos are shrunk in your browser and read one at a time; Lens doesn&apos;t keep them. What was read is cached
-          for a day, locked so only the same photo can open it.
-        </p>
-
-        {inputs.length > 0 && (
-          <ul className="flex flex-col gap-1.5">
-            {inputs.map((i) => (
-              <li key={i.id} className="flex flex-wrap items-center gap-2 text-sm">
-                {i.status === "ready" && i.kind !== "testudo_text" && i.kind !== "syllabus_pdf" ? (
-                  <select value={i.kind} onChange={(e) => setKind(i.id, e.target.value as SourceKind)} className="rounded-md border border-border bg-bg px-1.5 py-1" aria-label={`What ${i.name} is`}>
-                    {PICKABLE.filter((k) => k !== "syllabus_pdf").map((k) => (
-                      <option key={k} value={k}>{KIND_LABEL[k]}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <span className="font-medium">{i.label}</span>
-                )}
-                <span className="text-text-secondary">{i.recorded ? "sample" : i.name}</span>
-                <span className="text-text-secondary">
-                  {i.status === "reading" && `reading ${i.done} of ${i.pages.length}…`}
-                  {i.status === "read" && (i.recorded ? "read (recorded)" : `read · ${money(i.cost_usd)}`)}
-                  {i.status === "error" && <span className="text-unverified">{i.error}</span>}
-                </span>
-                {i.note && <span className="text-xs text-text-secondary">{i.note}</span>}
-              </li>
-            ))}
-          </ul>
-        )}
-        {unread.length > 0 && (
-          <button onClick={readAll} disabled={reading} className="self-start rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
-            {reading ? "Reading…" : `Read ${unread.length === 1 ? "it" : `all ${unread.length}`}`}
-          </button>
-        )}
-        {recorded && (
-          <p className="text-xs text-text-secondary">
-            The sample week is made up, and its readings were recorded from Muse Spark and SAM 3.1, so trying it is
-            free. Add your own to read them live.
-          </p>
-        )}
-      </section>
-
+      )}
       {plan && session && (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <div className="lg:sticky lg:top-4 lg:self-start">
-            <Viewer inputs={inputs.filter((i) => i.status === "read")} at={at} onAt={setAt} marks={marks} selected={selected} onSelect={select} />
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-text-secondary">
-              <span>
-                {plan.items.filter((i) => i.status === "verified").length + plan.classes.filter((c) => c.status === "verified").length} of{" "}
-                {plan.items.length + plan.classes.length} verified · times in {zone.replace("_", " ")}
-                {!recorded && cost > 0 ? ` · read for ${money(cost)}` : ""}
-              </span>
+        <section aria-labelledby="results-title" className="flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <span className="forum-caps">II · Verify</span>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 id="results-title" className="forum-display text-3xl sm:text-4xl">
+                What Lens found.
+              </h2>
               {answers.length > 0 && (
-                <button onClick={() => setAnswers((xs) => xs.slice(0, -1))} className="hover:text-text">
+                <button onClick={() => setAnswers((xs) => xs.slice(0, -1))} className={buttonClass("plain")}>
                   Undo last answer
                 </button>
               )}
             </div>
-            {q ? (
-              <QuestionCard
-                key={q.id}
-                q={q}
-                plan={plan}
-                inputs={inputs}
-                index={asked + 1}
-                total={asked + questions.length}
-                error={error?.q === q.id ? error.message : null}
-                onAnswer={answer}
-                onLater={questions.length > 1 ? () => setLater((xs) => [...xs.filter((x) => x !== q.id), q.id]) : null}
+            <p className="text-ink-2">
+              <span className="text-ink">{all.length} found</span> · {verified} verified ·{" "}
+              {all.length - verified} {all.length - verified === 1 ? "needs" : "need"} a look · times in{" "}
+              {zone.replace("_", " ")}
+              {recorded ? " · the sample week, recorded, so it's free" : cost > 0 ? ` · read for ${money(cost)}` : ""}
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
+            <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+              <Viewer
+                inputs={inputs.filter((i) => i.status === "read")}
+                at={at}
+                onAt={setAt}
+                marks={marks}
+                selected={selected}
+                onSelect={select}
+                reveal={reveal}
+                onRevealed={revealed}
               />
+            </div>
+            <div className="flex min-w-0 flex-col gap-8">
+              {q ? (
+                <QuestionCard
+                  key={q.id}
+                  q={q}
+                  plan={plan}
+                  inputs={inputs}
+                  index={asked + 1}
+                  total={asked + questions.length}
+                  error={error?.q === q.id ? error.message : null}
+                  onAnswer={answer}
+                  onLater={questions.length > 1 ? () => setLater((xs) => [...xs.filter((x) => x !== q.id), q.id]) : null}
+                />
+              ) : (
+                <div className="rounded-2xl border border-line bg-card p-6">
+                  <p className="forum-display text-xl">No questions left.</p>
+                  <p className="mt-1 text-sm text-ink-2">Anything still marked &ldquo;needs a look&rdquo; waits for an edit before it can be sent.</p>
+                </div>
+              )}
+
+              <SendPanel plan={plan} sources={session.sources} />
+            </div>
+          </div>
+          <section aria-labelledby="plan-title" className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 id="plan-title" className="forum-display text-2xl">Your plan</h3>
+              <div role="radiogroup" aria-label="Plan view" className="flex rounded-lg border border-line-strong p-1">
+                {(["week", "semester"] as const).map((v) => (
+                  <button
+                    key={v}
+                    role="radio"
+                    aria-checked={view === v}
+                    onClick={() => setView(v)}
+                    className={`min-h-9 rounded-md px-3 text-sm capitalize ${view === v ? "bg-ink text-paper" : "text-ink-2 hover:text-ink"}`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {view === "week" ? (
+              <WeekView plan={plan} today={today} onOpen={select} arrive={arrive} />
             ) : (
-              <p className="rounded-xl border border-verified/40 bg-verified/5 p-4 text-sm">
-                No questions left. Anything still amber needs an edit before it can be sent.
+              <SemesterView plan={plan} onOpen={select} />
+            )}
+            {plan.classes.length > 0 && tone && (
+              <div className="flex flex-col gap-2">
+                <h4 className="text-sm text-ink-2">Classes, weekly</h4>
+                <ul className="flex flex-wrap gap-2">
+                  {plan.classes.map((c) => (
+                    <li key={c.id}>
+                      <button onClick={() => select(c.id)} className="flex min-h-9 items-center gap-2 rounded-lg border border-line px-3 text-sm hover:border-line-strong">
+                        <Swatch tone={tone(c.course)} />
+                        {c.course} {c.meeting_type}
+                        {c.status !== "verified" && <Chip status={c.status} />}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {plan.crossed_out.length > 0 && (
+              <p className="text-xs text-ink-2">
+                Left out because they&apos;re crossed off: {plan.crossed_out.map((c) => `\u201c${c.title}\u201d`).join(", ")}.
               </p>
             )}
-            <Items plan={plan} inputs={inputs} selected={selected} onSelect={select} onAnswer={answer} />
-            <SendPanel plan={plan} sources={session.sources} />
-          </div>
-        </div>
+          </section>
+        </section>
       )}
-    </main>
+      </div>
+
+      {plan && <EvidenceDrawer plan={plan} inputs={inputs} id={drawer} onClose={closeDrawer} onAnswer={answer} />}
+    </div>
   ); // prettier-ignore
 }

@@ -4,18 +4,18 @@ import { readEnv } from "@/lib/env";
 import { REBUILD_VERSION, rebuild } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkResponse, fallback } from "@/lib/rebuild/draft";
-import { contentCache, kvFor, RateLimited, rateLimit } from "@/lib/server/kv";
+import { admitFor, chargeTo, LimitReached } from "@/lib/meta/spend";
+import { visitorPayer } from "@/lib/server/identity";
+import { contentCache, kvFor } from "@/lib/server/kv";
 
 // "Try a missed session", live: one of the made-up demo weeks, with the reply
 // the visitor types, rebuilt by the agent right now. Only the reply comes from
-// the visitor; the plan is the recorded case's. Limited per visitor, and by the
-// daily spend cap, past which code's fallback answers (and says so). The same
-// case and reply again is answered from the cache, free.
+// the visitor; the plan is the recorded case's. Each live run is charged to the
+// visitor against their daily limit (src/lib/server/identity.ts); past it, or
+// past the public pool's brake, the recorded runs still play. The same case and
+// reply again is answered from the cache, free.
 
 export const maxDuration = 60;
-
-const PER_HOUR = 6;
-const PER_DAY = 20;
 
 const Body = z.object({ case: z.string().max(40), reply: z.string().trim().max(280).nullable() });
 
@@ -48,19 +48,21 @@ export async function POST(request: Request): Promise<Response> {
   if (hit) return Response.json({ ...hit, cached: true } satisfies DemoReply);
   if (!env.META_API_KEY) return fail(503, "Live runs aren't set up on this copy of Lens.");
 
+  const { payer, setCookie } = visitorPayer(env, request);
+  const headers: Record<string, string> = setCookie ? { "Set-Cookie": setCookie } : {};
+  let run: Awaited<ReturnType<typeof rebuild>>;
   try {
-    const visitor =
-      request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0] ?? "local";
-    await rateLimit(kv, visitor.trim(), { perHour: PER_HOUR, perDay: PER_DAY }, new Date(), "rebuild");
+    await admitFor(env, payer);
+    run = await chargeTo(payer, () => rebuild(req, { env, budgetMs: 40_000 }));
   } catch (e) {
-    if (e instanceof RateLimited)
-      return fail(429, "That's a lot of live runs in a short time. The recorded runs are still free to try.", {
-        "Retry-After": String(e.retryAfterSeconds),
-      });
+    if (e instanceof LimitReached)
+      return fail(
+        e.code === "user_limit" ? 429 : 503,
+        "That's all the live runs for today. Come back tomorrow; the recorded runs are always free.",
+        { ...headers, "Retry-After": String(e.retryAfterSeconds) },
+      );
     throw e;
   }
-
-  const run = await rebuild(req, { env, budgetMs: 40_000 });
   const response = checkResponse(req, run.response).length ? fallback(req).response("fallback") : run.response;
   const out: Omit<DemoReply, "cached"> = {
     response,
@@ -80,5 +82,5 @@ export async function POST(request: Request): Promise<Response> {
       cost_usd: Number(out.cost_usd.toFixed(6)),
     }),
   );
-  return Response.json({ ...out, cached: false } satisfies DemoReply);
+  return Response.json({ ...out, cached: false } satisfies DemoReply, { headers });
 }

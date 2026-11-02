@@ -1,17 +1,20 @@
 import { z } from "zod";
 import { readEnv } from "@/lib/env";
 import { MetaApiError, MetaIncomplete } from "@/lib/meta/client";
-import { SpendCapReached } from "@/lib/meta/spend";
+import { admitFor, chargeTo, LimitReached } from "@/lib/meta/spend";
 import type { PageReading } from "@/lib/plan/types";
 import { SourceKind } from "@/lib/schemas/evidence";
-import { kvFor, RateLimited, rateLimit } from "@/lib/server/kv";
+import { visitorPayer } from "@/lib/server/identity";
+import { kvFor } from "@/lib/server/kv";
 import { readCached } from "@/lib/server/read";
 
 // Reads one page or photo with Muse Spark (and SAM 3.1 on photos). The browser
 // has already shrunk the photo (or rendered the PDF page) and sends one at a
 // time, so every request is small and finishes well inside the time limit.
 // Nothing sent here is stored: the reading is cached for 24 hours, encrypted
-// with a key only the same image can produce (src/lib/server/kv.ts).
+// with a key only the same image can produce (src/lib/server/kv.ts). Each page
+// the model reads is charged to the visitor (a signed cookie and their address)
+// against their daily limit; a cached page is free (src/lib/server/identity.ts).
 
 export const maxDuration = 120;
 
@@ -25,8 +28,8 @@ const Meta = z.object({
 
 type Reply = { page: PageReading; cached: boolean; cost_usd: number; calls: number };
 
-const fail = (status: number, error: string, extra: Record<string, string> = {}) =>
-  Response.json({ error }, { status, headers: extra });
+const fail = (status: number, error: string, headers: Record<string, string> = {}, code?: string) =>
+  Response.json(code ? { error, code } : { error }, { status, headers });
 
 function imageMime(b: Uint8Array): "image/jpeg" | "image/png" | null {
   if (b[0] === 0xff && b[1] === 0xd8) return "image/jpeg";
@@ -59,31 +62,33 @@ export async function POST(request: Request): Promise<Response> {
 
   const env = readEnv();
   const kv = kvFor(env);
+  const { payer, setCookie } = visitorPayer(env, request);
+  const headers: Record<string, string> = setCookie ? { "Set-Cookie": setCookie } : {};
   try {
-    const visitor =
-      request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0] ?? "local";
     // Counted only when the model is called: a cached page is free for everyone.
     const {
       page: reading,
       cached,
       calls,
-    } = await readCached(
-      { kind, page, image, mime: mime ?? undefined, text },
-      { env, kv, onMiss: () => rateLimit(kv, visitor.trim(), { perHour: env.READS_PER_HOUR, perDay: env.READS_PER_DAY }) }, // prettier-ignore
+    } = await chargeTo(payer, () =>
+      readCached({ kind, page, image, mime: mime ?? undefined, text }, { env, kv, onMiss: () => admitFor(env, payer) }),
     );
     const cost = calls.reduce((a, c) => a + c.costUsd, 0);
-    return Response.json({ page: reading, cached, cost_usd: cost, calls: calls.length } satisfies Reply);
+    return Response.json({ page: reading, cached, cost_usd: cost, calls: calls.length } satisfies Reply, { headers });
   } catch (e) {
-    if (e instanceof RateLimited)
-      return fail(429, "You've read a lot of pages in a short time. Try again a bit later, or use the sample week.", {
-        "Retry-After": String(e.retryAfterSeconds),
-      });
-    if (e instanceof SpendCapReached)
-      return fail(503, "Lens has reached today's spending limit for model calls. The sample week still works.");
+    if (e instanceof LimitReached)
+      return fail(
+        e.code === "user_limit" ? 429 : 503,
+        e.code === "user_limit"
+          ? "That's all the free reading for today. Come back tomorrow; the sample week is always free."
+          : "Lens has read all it can for visitors today. Come back tomorrow; the sample week is always free.",
+        { ...headers, "Retry-After": String(e.retryAfterSeconds) },
+        e.code,
+      );
     if (e instanceof MetaApiError || e instanceof MetaIncomplete)
-      return fail(502, "The model didn't answer properly. Try this page again.");
+      return fail(502, "The model didn't answer properly. Try this page again.", headers);
     // No content in logs: only what failed.
     console.error("read failed:", e instanceof Error ? e.name : "unknown");
-    return fail(500, "Something went wrong reading this page.");
+    return fail(500, "Something went wrong reading this page.", headers);
   }
 }

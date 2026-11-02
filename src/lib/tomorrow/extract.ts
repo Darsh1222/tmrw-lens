@@ -47,7 +47,8 @@ const Term = z.object({ start: IsoDate.nullable(), end: IsoDate.nullable() }).nu
 export const ExtractRequest = z.object({
   version: z.literal(1),
   /** Tomorrow's opaque id for the person (not their phone or email): rate limits are per person. */
-  user_ref: z.string().min(8).max(64),
+  /** Tomorrow's opaque id for the person; limits are per person. Optional: without it, the shared Tomorrow identity. */
+  user_ref: z.string().min(8).max(64).optional(),
   zone: Zone,
   /** When the text arrived. */
   now: Instant,

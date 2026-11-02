@@ -5,7 +5,7 @@ import type { Answer } from "@/lib/plan/answer";
 import type { Plan, Question } from "@/lib/plan/types";
 import type { Evidence } from "@/lib/schemas/evidence";
 import type { Input } from "./types";
-import { Crop } from "./ui";
+import { buttonClass, Crop } from "./ui";
 
 // One question at a time. The likely answer is pre-selected, with its reason,
 // but nothing is applied until the person presses Answer. A conflict shows
@@ -22,8 +22,8 @@ function Evidenced({ inputs, evidence }: { inputs: Input[]; evidence: Evidence }
   return (
     <figure className="flex min-w-0 flex-col gap-1">
       {page ? <Crop page={page} evidence={evidence} /> : null}
-      <figcaption className="text-xs text-text-secondary">
-        “{evidence.quote}” · {label}
+      <figcaption className="text-xs text-ink-2">
+        &ldquo;{evidence.quote}&rdquo; · {label}
         {evidence.page ? `, page ${evidence.page}` : ""}
       </figcaption>
     </figure>
@@ -44,11 +44,11 @@ function Fields({
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...value, [k]: e.target.value });
   const field = (k: string, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
     <label key={k} className="flex flex-col gap-1 text-sm">
-      <span className="text-text-secondary">{label}</span>
+      <span className="text-ink-2">{label}</span>
       <input
         value={value[k] ?? ""}
         onChange={set(k)}
-        className="rounded-md border border-border bg-bg px-2 py-1.5"
+        className="min-h-11 rounded-lg border border-line-input bg-paper px-3"
         {...props}
       />
     </label>
@@ -105,36 +105,50 @@ export function QuestionCard({
   };
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl border border-accent/40 bg-accent/5 p-4">
-      <div className="flex items-baseline justify-between gap-2 text-xs text-text-secondary">
-        <span>
+    <form
+      onSubmit={submit}
+      className="flex flex-col gap-5 rounded-2xl border border-line bg-card p-6"
+      aria-label="A question"
+    >
+      <div className="flex items-baseline justify-between gap-2 text-sm text-ink-2">
+        <span className="forum-caps">
           Question {index} of {total}
         </span>
         {onLater && (
-          <button type="button" onClick={onLater} className="underline-offset-2 hover:underline">
+          <button type="button" onClick={onLater} className="min-h-11 underline-offset-4 hover:underline">
             Later
           </button>
         )}
       </div>
-      <p className="font-medium">{q.prompt}</p>
+      <p className="forum-display text-xl leading-snug">{q.prompt}</p>
 
       <fieldset className={conflict ? "grid gap-3 sm:grid-cols-2" : "flex flex-col gap-2"}>
         <legend className="sr-only">Answers</legend>
         {q.options.map((o) => (
           <label
             key={o.id}
-            className={`flex cursor-pointer flex-col gap-2 rounded-lg border p-3 ${choice === o.id ? "border-accent bg-bg" : "border-border"} ${conflict && !o.evidence ? "sm:col-span-2" : ""}`}
+            className={`flex cursor-pointer flex-col gap-3 rounded-xl border p-4 transition-colors ${choice === o.id ? "border-ink bg-paper" : "border-line hover:border-line-strong"} ${conflict && !o.evidence ? "sm:col-span-2" : ""}`}
           >
             <span className="flex items-center gap-2">
-              <input type="radio" name={q.id} checked={choice === o.id} onChange={() => setChoice(o.id)} />
+              <input
+                type="radio"
+                name={q.id}
+                checked={choice === o.id}
+                onChange={() => setChoice(o.id)}
+                className="h-4 w-4 accent-[var(--tm-text)]"
+              />
               <span>{o.label}</span>
-              {o.id === q.suggested && <span className="text-xs text-accent">Suggested</span>}
+              {o.id === q.suggested && (
+                <span className="rounded-md bg-butter px-1.5 py-0.5 text-xs text-ink">Suggested</span>
+              )}
             </span>
             {conflict && o.evidence ? <Evidenced inputs={inputs} evidence={o.evidence} /> : null}
           </label>
         ))}
       </fieldset>
-      {q.suggested && q.why_suggested && <p className="text-sm text-text-secondary">Why: {q.why_suggested}</p>}
+      {q.suggested && q.why_suggested && (
+        <p className="text-sm text-ink-2">Why it&apos;s suggested: {q.why_suggested}</p>
+      )}
       {!conflict && q.options.find((o) => o.evidence)?.evidence && (
         <Evidenced inputs={inputs} evidence={q.options.find((o) => o.evidence)!.evidence!} />
       )}
@@ -152,15 +166,15 @@ export function QuestionCard({
               q.input === "time" ? "e.g. 3pm or 2-3:15pm" : q.input === "dates" ? "e.g. Nov 25-29; Mar 16-20" : q.input === "course" ? "e.g. MATH141" : "" // prettier-ignore
             }
             aria-label="Your answer"
-            className="rounded-md border border-border bg-bg px-2 py-1.5"
+            className="min-h-11 rounded-lg border border-line-input bg-paper px-3"
           />
         ))}
-      {error && <p className="text-sm text-unverified">{error}</p>}
+      {error && <p className="text-sm text-crimson">{error}</p>}
       <div>
         <button
           type="submit"
           disabled={!option || (typing && q.input !== "fields" && !typed.trim())}
-          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className={buttonClass("primary")}
         >
           Answer
         </button>

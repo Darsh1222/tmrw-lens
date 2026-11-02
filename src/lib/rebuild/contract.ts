@@ -30,6 +30,8 @@ export const RebuildPlanned = z.object({
 export const RebuildRequest = z
   .object({
     version: z.literal(1),
+    /** Tomorrow's opaque id for the person (not a phone or email); limits are per person. Optional: without it, the shared Tomorrow identity. */
+    user_ref: z.string().min(8).max(64).optional(),
     zone: Zone,
     now: Instant,
     missed: z.object({

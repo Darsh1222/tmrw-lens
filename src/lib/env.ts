@@ -9,12 +9,14 @@ const schema = z.object({
   // and visitors upload their own schedules (docs/DECISIONS.md).
   MUSE_SPARK_MODEL: z.string().default("muse-spark-1.3"),
   SAM_MODEL: z.string().default("sam-3.1"),
-  DAILY_SPEND_CAP_USD: z.coerce.number().positive().default(5),
+  // Global brakes per UTC day, in USD, behind the per-identity limits (src/lib/server/identity.ts):
+  // the public demo's, and Tomorrow's users'. Demo traffic can't use up Tomorrow's budget.
+  PUBLIC_DAILY_CAP_USD: z.coerce.number().positive().optional(),
+  TOMORROW_DAILY_CAP_USD: z.coerce.number().positive().default(20),
+  // The older name for PUBLIC_DAILY_CAP_USD, read only when that isn't set.
+  DAILY_SPEND_CAP_USD: z.coerce.number().positive().optional(),
   UPSTASH_REDIS_REST_URL: z.url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
-  // Per visitor, pages or photos read with the model (the sample week is free and not counted).
-  READS_PER_HOUR: z.coerce.number().int().positive().default(40),
-  READS_PER_DAY: z.coerce.number().int().positive().default(120),
   // Where Send delivers confirmed items (Tomorrow's side of docs/IMPORT_CONTRACT.md).
   TOMORROW_IMPORT_URL: z.url().default("https://bettertmrw.app/api/lens/import"),
   // Shared with Tomorrow, which sends it as a Bearer token on POST /api/rebuild and

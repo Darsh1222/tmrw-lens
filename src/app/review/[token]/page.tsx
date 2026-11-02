@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/resolve/dates";
 import { kvFor } from "@/lib/server/kv";
 import { reviewStore } from "@/lib/server/review";
 import { assemble, type ExtractResponse, type ExtractState } from "@/lib/tomorrow/extract";
+import { SiteFooter, SiteHeader } from "../../_lens/Chrome";
 import { Badge } from "../../_lens/ui";
 
 // The review link in a text-a-photo response: what Lens read from the photo,
@@ -25,14 +26,19 @@ const when = (date: string | null, time: string | null) =>
 
 export default function Page({ params }: { params: Promise<{ token: string }> }) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-5 px-4 py-8">
-      <h1 className="text-2xl font-semibold tracking-tight">What Lens read from your photo</h1>
-      <Suspense fallback={<p className="text-text-secondary">Loading…</p>}>
-        {params.then(({ token }) => (
-          <Review token={decodeURIComponent(token)} />
-        ))}
-      </Suspense>
-    </main>
+    <>
+      <SiteHeader />
+      <main id="main" className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-12 sm:px-8">
+        <span className="forum-caps">Review</span>
+        <h1 className="forum-display text-4xl">What Lens read from your photo.</h1>
+        <Suspense fallback={<p className="text-ink-2">Loading…</p>}>
+          {params.then(({ token }) => (
+            <Review token={decodeURIComponent(token)} />
+          ))}
+        </Suspense>
+      </main>
+      <SiteFooter />
+    </>
   );
 }
 
@@ -43,7 +49,7 @@ async function Review({ token }: { token: string }) {
     : null;
   if (!loaded)
     return (
-      <p className="text-text-secondary">
+      <p className="text-ink-2">
         This link has expired (they last 24 hours) or isn&apos;t valid. Text the photo to Tomorrow again for a new one.
       </p>
     );
@@ -64,12 +70,12 @@ async function Review({ token }: { token: string }) {
       {r.changes.length > 0 && (
         <Section title="Changes to something already in your plan">
           {r.changes.map((c) => (
-            <li key={c.existing_id} className="rounded-lg border border-border p-3 text-sm">
+            <li key={c.existing_id} className="rounded-xl border border-line bg-card p-4 text-sm">
               <div className="font-medium">{c.title}</div>
               <div>
-                <s className="text-text-secondary">{when(c.from.date, c.from.time)}</s> →{" "}
+                <s className="text-ink-2">{when(c.from.date, c.from.time)}</s> →{" "}
                 <span className="font-medium">{when(c.to.date, c.to.time)}</span>{" "}
-                <span className="text-text-secondary">
+                <span className="text-ink-2">
                   {c.status === "confirmed"
                     ? "· you confirmed it"
                     : c.status === "kept"
@@ -78,7 +84,7 @@ async function Review({ token }: { token: string }) {
                   {/* prettier-ignore */}
                 </span>
               </div>
-              <blockquote className="mt-1 text-xs italic text-text-secondary">
+              <blockquote className="mt-1 text-xs italic text-ink-2">
                 From the {c.evidence.source}: “{c.evidence.quote}”
               </blockquote>
             </li>
@@ -95,14 +101,14 @@ async function Review({ token }: { token: string }) {
       {r.questions.length > 0 && (
         <Section title="Questions">
           {r.questions.map((q) => (
-            <li key={q.id} className="rounded-lg border border-border p-3 text-sm">
+            <li key={q.id} className="rounded-xl border border-line bg-card p-4 text-sm">
               <p>{q.text}</p>
-              <ul className="mt-1 list-disc pl-5 text-text-secondary">
+              <ul className="mt-1 list-disc pl-5 text-ink-2">
                 {q.options.map((o) => (
                   <li key={o.id}>
                     {o.label}
                     {o.id === q.suggested && (
-                      <span className="text-accent"> (suggested{q.why ? `: ${q.why}` : ""})</span>
+                      <span className="text-gilt-ink"> (suggested{q.why ? `: ${q.why}` : ""})</span>
                     )}
                   </li>
                 ))}
@@ -112,12 +118,12 @@ async function Review({ token }: { token: string }) {
         </Section>
       )}
       {r.duplicates.length > 0 && (
-        <p className="text-sm text-text-secondary">
+        <p className="text-sm text-ink-2">
           {r.duplicates.length} {r.duplicates.length === 1 ? "thing was" : "things were"} already in your plan with the
           same date, so nothing changes for {r.duplicates.length === 1 ? "it" : "them"}.
         </p>
       )}
-      <p className="text-xs text-text-secondary">
+      <p className="text-xs text-ink-2">
         Answer by replying to Tomorrow&apos;s text. Lens didn&apos;t keep your photo, only what it read from it, and
         this link stops working {new Date(loaded.expires_at).toUTCString().replace(" GMT", " UTC")}.
       </p>
@@ -136,16 +142,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Row({ item: i }: { item: ExtractResponse["items"][number] }) {
   return (
-    <li className="rounded-lg border border-border p-3 text-sm">
+    <li className="rounded-xl border border-line bg-card p-4 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="font-medium">{i.title}</span>
         <Badge status={i.status} />
       </div>
-      <div className="text-text-secondary">
+      <div className="text-ink-2">
         {i.kind === "class_block" ? `weekly, from ${i.start.slice(0, 10)}` : when(i.date, i.start_time)}
         {i.course ? ` · ${i.course}` : ""}
       </div>
-      <blockquote className="mt-1 text-xs italic text-text-secondary">
+      <blockquote className="mt-1 text-xs italic text-ink-2">
         From the {i.evidence[0].source}: “{i.evidence[0].quote.replace(/\s+/g, " ")}”
         {i.evidence[0].computed_from ? ` · ${i.evidence[0].computed_from}` : ""}
       </blockquote>

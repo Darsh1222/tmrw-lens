@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readEnv } from "@/lib/env";
 import { createResponse, MetaApiError, MetaIncomplete } from "@/lib/meta/client";
-import { MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
+import { bucketsFor, MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
 
 const env = readEnv({ META_API_KEY: "test-key" });
 
@@ -33,7 +33,7 @@ function harness(responses: Response[], cap = 1) {
   const sent: RequestInit[] = [];
   const lines: Record<string, unknown>[] = [];
   const store = new MemoryCounterStore();
-  const guard = new SpendGuard(store, cap);
+  const guard = new SpendGuard(store, bucketsFor(undefined, cap));
   const fetchImpl = (async (_url: string, init: RequestInit) => {
     sent.push(init);
     const next = responses.shift();
