@@ -2,7 +2,7 @@
 // up: no real student, schedule, or syllabus. Run with `pnpm fixtures`.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createCanvas, GlobalFonts, type Canvas, type SKRSContext2D } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts, loadImage, type Canvas, type SKRSContext2D } from "@napi-rs/canvas";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
 const OUT = join(import.meta.dirname, "..", "fixtures", "synthetic");
@@ -495,6 +495,72 @@ writeFileSync(
   ),
 );
 writeFileSync(join(OUT, "sticky-notes.jpg"), stickyNotes(53));
+// A course site's to-do list (Canvas/ELMS style, no real branding), screenshotted on a phone-sized window.
+function lmsScreenshot() {
+  const W = 1170,
+    H = 1500;
+  const c = createCanvas(W, H);
+  const g = c.getContext("2d");
+  g.fillStyle = "#ffffff";
+  g.fillRect(0, 0, W, H);
+  g.fillStyle = "#2d3b45";
+  g.fillRect(0, 0, W, 110);
+  g.fillStyle = "#ffffff";
+  g.font = "bold 40px Helvetica";
+  g.fillText("To Do", 40, 72);
+  g.font = "24px Helvetica";
+  g.fillText("Course site (sample data)", W - 330, 70);
+  const rows = [
+    { course: "MATH141 Calculus II", title: "Problem Set 6", due: "Due Nov 5 at 11:59pm", pts: "10 pts" },
+    { course: "ENGL101 Academic Writing", title: "Essay 2 draft", due: "Due Nov 6 at 11:59pm", pts: "20 pts" },
+    { course: "CMSC131 OOP I", title: "Project 4", due: "Due Nov 9 at 11:00pm", pts: "50 pts" },
+    { course: "HIST200 Interpreting History", title: "Reading response 7", due: "Due Nov 10", pts: "5 pts" },
+    { course: "MATH141 Calculus II", title: "Quiz 4", due: "Due Nov 12 at 10am", pts: "15 pts" },
+  ];
+  rows.forEach((r, i) => {
+    const y = 150 + i * 250;
+    g.fillStyle = "#f5f5f5";
+    g.fillRect(30, y, W - 60, 220);
+    g.fillStyle = "#0374b5";
+    g.fillRect(30, y, 10, 220);
+    g.fillStyle = "#6b7780";
+    g.font = "26px Helvetica";
+    g.fillText(r.course, 70, y + 50);
+    g.fillStyle = "#2d3b45";
+    g.font = "bold 36px Helvetica";
+    g.fillText(r.title, 70, y + 105);
+    g.fillStyle = "#2d3b45";
+    g.font = "28px Helvetica";
+    g.fillText(`${r.due}  |  ${r.pts}`, 70, y + 165);
+  });
+  return c.toBuffer("image/png");
+}
+writeFileSync(join(OUT, "canvas-todo.png"), lmsScreenshot());
+
+// A whiteboard photo too blurry to read with confidence: Lens should ask, not guess.
+async function blurred(jpeg: Buffer, px: number) {
+  const img = await loadImage(jpeg);
+  const c = createCanvas(img.width, img.height);
+  const g = c.getContext("2d");
+  g.filter = `blur(${px}px)`;
+  g.drawImage(img, 0, 0);
+  return c.toBuffer("image/jpeg", 85);
+}
+writeFileSync(
+  join(OUT, "whiteboard-blurry.jpg"),
+  await blurred(
+    whiteboard(
+      [
+        { text: "MATH141   Fri 10/30", color: "#222", size: 80 },
+        { text: "Quiz 4 Thu 11/12" },
+        { text: "PS7 due Mon 11/9" },
+      ],
+      31,
+      0.03,
+    ),
+    11,
+  ),
+);
 writeFileSync(join(OUT, "testudo-schedule.txt"), scheduleText());
 writeFileSync(join(OUT, "syllabus-math141.pdf"), await syllabusPdf());
 
@@ -518,6 +584,12 @@ const manifest = {
   "notes-week.jpg": { kind: "notes_photo", label: "notes photo", captured_at: "2026-10-25T20:15:00-04:00" },
   "notes-cmsc131.jpg": { kind: "notes_photo", label: "notes photo", captured_at: "2026-10-28T16:40:00-04:00" },
   "sticky-notes.jpg": { kind: "notes_photo", label: "sticky notes photo", captured_at: "2026-10-29T08:30:00-04:00" },
+  "canvas-todo.png": { kind: "lms_screenshot", label: "course site screenshot", captured_at: null },
+  "whiteboard-blurry.jpg": {
+    kind: "whiteboard_photo",
+    label: "whiteboard photo",
+    captured_at: "2026-10-30T10:50:00-04:00",
+  },
 };
 writeFileSync(join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
 console.log(`Wrote fixtures to ${OUT}`);

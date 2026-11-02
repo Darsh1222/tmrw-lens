@@ -6,8 +6,8 @@
   "tasks": {
     "extract_schedule": 3,
     "extract_syllabus_page": 4,
-    "extract_whiteboard": 3,
-    "extract_notes": 3,
+    "extract_whiteboard": 4,
+    "extract_notes": 4,
     "reread_crops": 1
   },
   "crops": 3,
@@ -29,10 +29,10 @@
             "evidence": {
               "quote": "- Proj 3 due Sun 11/1 11:59pm",
               "box": {
-                "x_min": 190,
-                "y_min": 264,
+                "x_min": 172,
+                "y_min": 270,
                 "x_max": 595,
-                "y_max": 298
+                "y_max": 308
               }
             },
             "crossed_out": false
@@ -48,10 +48,10 @@
             "evidence": {
               "quote": "- Proj 4 due Fri 11/13 @ 5pm (per TA)",
               "box": {
-                "x_min": 190,
-                "y_min": 355,
-                "x_max": 670,
-                "y_max": 392
+                "x_min": 172,
+                "y_min": 342,
+                "x_max": 730,
+                "y_max": 385
               }
             },
             "crossed_out": false
@@ -67,10 +67,10 @@
             "evidence": {
               "quote": "- review recursion slides before Exam 2",
               "box": {
-                "x_min": 190,
-                "y_min": 449,
-                "x_max": 715,
-                "y_max": 482
+                "x_min": 174,
+                "y_min": 433,
+                "x_max": 728,
+                "y_max": 472
               }
             },
             "crossed_out": false
@@ -79,12 +79,12 @@
       },
       "rereads": {
         "items.0": {
-          "text": "- Proj 3 due Sun 11/7 11:59pm",
-          "legible": "unsure"
+          "text": "- Proj 3 due Sun 11/1 11:59pm - Proj 4 due Fri 11/13 @ 5pm (per TA)",
+          "legible": "clear"
         },
         "items.1": {
-          "text": "- Proj 4 due Fri 11/13 @ 5pm (per",
-          "legible": "unsure"
+          "text": "- Proj 4 due Fri 11/13 @ 5pm (per TA)",
+          "legible": "clear"
         },
         "items.2": {
           "text": "- review recursion slides before Exam 2",
@@ -192,7 +192,7 @@
                 0.9204
               ],
               [
-                0.9234,
+                0.9244,
                 0.9213
               ],
               [
@@ -240,10 +240,6 @@
                 0.6278
               ],
               [
-                0.0686,
-                0.2566
-              ],
-              [
                 0.0676,
                 0.2272
               ],
@@ -281,8 +277,8 @@
                 0.0787
               ],
               [
-                0.1045,
-                0.0779
+                0.1363,
+                0.077
               ],
               [
                 0.5249,
@@ -293,7 +289,7 @@
                 0.0589
               ],
               [
-                0.8696,
+                0.8686,
                 0.058
               ],
               [
@@ -314,19 +310,11 @@
               ],
               [
                 0.9075,
-                0.0856
+                0.0848
               ],
               [
-                0.9085,
-                0.1107
-              ],
-              [
-                0.9115,
-                0.1918
-              ],
-              [
-                0.9175,
-                0.355
+                0.9155,
+                0.2963
               ],
               [
                 0.9314,
@@ -409,17 +397,17 @@
                 0.1288
               ]
             ],
-            "confidence": 0.9532163739204407
+            "confidence": 0.949367105960846
           }
         ],
         "rereads": {
           "items.0": {
-            "text": "- Proj 3 due Sun 11/1 11:59pm",
+            "text": "- Proj 3 due Sun 11/1 11:59pm - Proj 4 due Fri 11/13 @ 5pm (per TA)",
             "legible": "clear"
           },
           "items.1": {
-            "text": "- Proj 4 due Fri 11/13 @ 5pm (per",
-            "legible": "unsure"
+            "text": "- Proj 4 due Fri 11/13 @ 5pm (per TA)",
+            "legible": "clear"
           },
           "items.2": {
             "text": "- review recursion slides before Exam 2",
@@ -432,17 +420,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 3359,
+      "input_tokens": 3424,
       "cached_tokens": 0,
-      "output_tokens": 1395,
-      "cost_usd": 0.0101275
+      "output_tokens": 1139,
+      "cost_usd": 0.00912075
     },
     "reread_box": {
-      "calls": 1,
-      "input_tokens": 494,
-      "cached_tokens": 113,
-      "output_tokens": 620,
-      "cost_usd": 0.0031282
+      "calls": 2,
+      "input_tokens": 1472,
+      "cached_tokens": 226,
+      "output_tokens": 561,
+      "cost_usd": 0.00397565
     },
     "sam_segment": {
       "calls": 3,
@@ -452,11 +440,11 @@
       "cost_usd": 0.0075
     },
     "reread_sam": {
-      "calls": 1,
-      "input_tokens": 494,
-      "cached_tokens": 369,
-      "output_tokens": 639,
-      "cost_usd": 0.00292735
+      "calls": 2,
+      "input_tokens": 1458,
+      "cached_tokens": 610,
+      "output_tokens": 695,
+      "cost_usd": 0.0041052499999999995
     }
   }
 }

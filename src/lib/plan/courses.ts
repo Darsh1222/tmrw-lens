@@ -26,6 +26,9 @@ export function matchCourse(hint: string | null, known: KnownCourse[]): CourseMa
   if (!hint) return { code: null, ambiguous: [] };
   const exact = normalizeCode(hint.replace(/[^A-Za-z0-9 ]/g, ""));
   if (exact) return { code: exact, ambiguous: [] };
+  // A code followed by the course's name, as a course site writes it ("MATH141 Calculus II"): the code is written.
+  const lead = /^\s*([A-Za-z]{4})\s?(\d{3}[A-Za-z]?)\b/.exec(hint);
+  if (lead) return { code: normalizeCode(`${lead[1]}${lead[2]}`), ambiguous: [] };
   const h = hint.toLowerCase().replace(/[^a-z0-9]/g, "");
   if (!h) return { code: null, ambiguous: [] };
   const hits = known.filter((c) => {

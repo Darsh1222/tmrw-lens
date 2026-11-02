@@ -236,3 +236,33 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
 - 2026-11-01: The judge is the same model as the agent, so the owner spot-checks every recorded rebuild message before
   the README calls them human-reviewed. Run of Nov 1: the judge gave `shorten` a 2 ("only an hour still fits" when 45
   more minutes are free Thursday morning; the hour is the longest stretch), left as recorded for that review.
+- 2026-11-01: Cost–quality policy point 8 ("batch what can wait via the Batch API") doesn't apply to Lens: the Meta Model
+  API has no Batch API (checked today: no batch endpoint, jobs, or batch pricing in the API reference or the pricing
+  page; the nearest thing, `background: true` responses, is asynchronous but not discounted). Evals and recordings run
+  as ordinary calls. The policy text in CLAUDE.md and PLAN.md is unchanged; revisit if Meta adds one.
+- 2026-11-01: Text-a-photo uses the same shared secret as /api/rebuild (`LENS_REBUILD_SECRET`; name kept so nothing
+  set in Vercel changes), compared in constant time. It also signs review links (with a key derived from it).
+- 2026-11-01: Review links: what was read plus the `existing` items Tomorrow sent are stored encrypted for 24 hours under
+  a random id, with a random key that exists only in the link; the link (id, key, expiry) is HMAC-signed so it can't be
+  forged or extended. Photos are never stored. The review page is read-only in v1: answers go by replying to
+  Tomorrow's text, which relays them to `/api/extract/answer` (no model call; answers accumulate in the review).
+- 2026-11-01: A texted photo is classified first with one `minimal`-effort call (what it is, and whether it's readable:
+  cost-quality policy point 3). An unreadable photo isn't read at all: no items, one question asking for a sharper
+  one. The synthetic blurry whiteboard is classified unreadable.
+- 2026-11-01: New input kind `lms_screenshot` (Canvas, ELMS to-do and assignment lists), with its own reading task. A
+  course code written before the course's name ("MATH141 Calculus II") now counts as the course being written, as a
+  bare code already did; without that every course-site item asked "which course?" (recall 0% → 100%).
+- 2026-11-01: Changes vs existing items are code: same course, same kind of thing (quiz, problem set…), same number, or
+  an unnumbered one that says it moved (the next one coming up). A time on one side only isn't a change (date-only
+  stays date-only). The change question pre-selects the photo's version (it's newer), never applied until answered.
+  The photo-date question offers "today" (most photos are texted the day they're taken), pre-selected, not assumed.
+- 2026-11-01: Matching a texted photo against Tomorrow's existing items is v1's only cross-source merge for text-a-photo;
+  several photos in one text are merged with each other as in the app.
+- 2026-11-01: Accuracy pass on the owner's real inputs (no answer key committed; content stays in local-inputs/).
+  Confusions found: (1) a graded quiz photo gave 3 false items (its header and two printed problems); (2) a Testudo
+  screenshot with the grid fully visible but the course list cut off after one course gave 2 of 9 meeting patterns,
+  because "read the list rather than the grid" won and real Testudo grid blocks don't show times. Fixed (1): the photo
+  tasks skip printed exercises and quiz or exam papers already taken (whiteboard v4, notes v4, course site v2); the
+  quiz photo now gives 0 items, the synthetic eval went 82% → 83% fully verified with 0 invented dates, and cost per
+  photo $0.0210 → $0.0208. (2) is open: reading a grid-only class's times means computing them from where its block
+  sits against the time axis, which needs the owner's call (see HACKATHON Nov 1).

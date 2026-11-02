@@ -79,6 +79,7 @@ const FREEFORM = `${RULES}
 - course_hint is a course named or abbreviated next to the item, or in a heading above it ("MATH141", "calc", "131"). It doesn't have to be in the quote.
 - change_text is the words saying the item changed ("moved to", "postponed", "extended", "now due"), copied from the quote, or null.
 - A date written as the heading of the whole board or page isn't an item; skip it.
+- Printed exercises, questions, or problems (on a worksheet, handout, quiz, or exam paper) are the page's content, not something to do; skip them. A quiz or exam paper that has already been taken (answers or a score written on it) isn't an upcoming item; skip its title too.
 - legible is "unsure" if any word or number in the quote is hard to make out.`;
 
 const freeformCheck = (o: { items: WhiteboardExtraction["items"] }) =>
@@ -92,7 +93,7 @@ const freeformCheck = (o: { items: WhiteboardExtraction["items"] }) =>
 
 export const whiteboardTask: Task<WhiteboardExtraction> = {
   name: "extract_whiteboard",
-  version: 3,
+  version: 4,
   instructions: `You read a photo of a classroom whiteboard or a board of notes. Extract every item a student would need to act on or remember: exams, quizzes, assignments, tasks, reminders.
 ${FREEFORM}`,
   schema: WhiteboardExtraction,
@@ -102,7 +103,7 @@ ${FREEFORM}`,
 
 export const notesTask: Task<NotesExtraction> = {
   name: "extract_notes",
-  version: 3,
+  version: 4,
   instructions: `You read a photo of a student's handwritten notes or to-do list. Extract every item on it: exams, quizzes, assignments, tasks, reminders.
 ${FREEFORM}
 - crossed_out is true if the line is struck through or checked off. Still extract it.`,
@@ -111,12 +112,48 @@ ${FREEFORM}
   check: freeformCheck,
 };
 
+export const lmsTask: Task<WhiteboardExtraction> = {
+  name: "extract_lms",
+  version: 2,
+  instructions: `You read a screenshot of a course website's to-do list, assignments page, or calendar (Canvas, ELMS, or similar). Extract every assignment, quiz, exam, or task listed with what it's for.
+${FREEFORM}
+- The quote is the item's whole row or card as shown, including its due line ("Problem Set 6 MATH141 Due Nov 5 at 11:59pm 10 pts").
+- date_text and time_text are the due date and time as shown ("Nov 5", "11:59pm"), never the points or the date it was posted.`,
+  schema: WhiteboardExtraction,
+  maxOutputTokens: 8_000,
+  check: freeformCheck,
+};
+
+/** What a texted photo is, before it's read: picks the reading task, and skips reading a photo that can't be read. */
+export const PhotoClass = z.object({
+  kind: z.enum(["whiteboard_photo", "notes_photo", "syllabus_page", "testudo_screenshot", "lms_screenshot", "other"]),
+  readable: z.enum(["clear", "partly", "no"]),
+});
+export type PhotoClass = z.infer<typeof PhotoClass>;
+
+export const classifyTask: Task<PhotoClass> = {
+  name: "classify_photo",
+  version: 1,
+  instructions: `Say what this image is, for a student planner that reads schedules and deadlines:
+- whiteboard_photo: a photo of a classroom whiteboard or chalkboard.
+- notes_photo: handwritten notes, a paper planner, sticky notes, or a handwritten to-do list.
+- syllabus_page: a printed or on-screen page of a course syllabus or course schedule table.
+- testudo_screenshot: a university class schedule (a weekly grid or list of class meetings with days and times).
+- lms_screenshot: a course website's to-do list, assignments page, or calendar (Canvas, ELMS, Blackboard, Moodle).
+- other: anything else.
+readable: "clear" if the writing can be read; "partly" if some of it is blurry, cut off, or too small; "no" if almost none of it can be read.`,
+  schema: PhotoClass,
+  effort: "minimal",
+  maxOutputTokens: 300,
+};
+
 const TASKS: Record<SourceKind, Task<unknown>> = {
   testudo_screenshot: scheduleTask as Task<unknown>,
   testudo_text: scheduleTask as Task<unknown>,
   syllabus_pdf: syllabusPageTask as Task<unknown>,
   whiteboard_photo: whiteboardTask as Task<unknown>,
   notes_photo: notesTask as Task<unknown>,
+  lms_screenshot: lmsTask as Task<unknown>,
 };
 
 export function taskFor(kind: SourceKind): Task<unknown> {

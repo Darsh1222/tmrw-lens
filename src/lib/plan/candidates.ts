@@ -62,7 +62,7 @@ export const schedulePages = (r: SourceReading[]) =>
   pagesOf<ScheduleExtraction>(r, ["testudo_screenshot", "testudo_text"]);
 export const syllabusPages = (r: SourceReading[]) => pagesOf<SyllabusPageExtraction>(r, ["syllabus_pdf"]);
 const freeformPages = (r: SourceReading[]) =>
-  pagesOf<WhiteboardExtraction | NotesExtraction>(r, ["whiteboard_photo", "notes_photo"]);
+  pagesOf<WhiteboardExtraction | NotesExtraction>(r, ["whiteboard_photo", "notes_photo", "lms_screenshot"]);
 
 export function knownCourses(readings: SourceReading[]): KnownCourse[] {
   const out = new Map<string, KnownCourse>();

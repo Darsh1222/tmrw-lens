@@ -1,5 +1,6 @@
 "use client";
 
+import { KIND_LABEL } from "@/lib/extract/kinds";
 import { readExif } from "@/lib/images/exif";
 import type { SourceKind } from "@/lib/schemas/evidence";
 
@@ -40,18 +41,13 @@ export function guessKind(name: string, type: string): SourceKind {
   const n = name.toLowerCase();
   if (type === "application/pdf" || n.endsWith(".pdf")) return "syllabus_pdf";
   if (type.startsWith("text/") || n.endsWith(".txt")) return "testudo_text";
+  if (/canvas|elms|to-?do|assignments/.test(n)) return "lms_screenshot";
   if (/testudo|schedule|screen ?shot/.test(n)) return "testudo_screenshot";
   if (/board/.test(n)) return "whiteboard_photo";
   return "notes_photo";
 }
 
-export const KIND_LABEL: Record<SourceKind, string> = {
-  testudo_screenshot: "Testudo schedule",
-  testudo_text: "pasted Testudo schedule",
-  syllabus_pdf: "syllabus",
-  whiteboard_photo: "whiteboard photo",
-  notes_photo: "notes photo",
-};
+export { KIND_LABEL };
 
 async function prepareImage(file: Blob): Promise<{ page: PreparedPage; takenAt: string | null }> {
   const head = new Uint8Array(await file.slice(0, 256 * 1024).arrayBuffer());

@@ -9,7 +9,8 @@ Track: Build for Your World. Rules: public repo, only hackathon-built work shown
 3. "Here's what I found" card with evidence highlights on the source image/page; confirm/edit; then Send to Tomorrow.
 4. Send to Tomorrow: confirmed items are created in Tomorrow; Tomorrow's existing scheduler places study sessions around classes and creates reminders.
 5. FLAGSHIP Miss & rebuild: a planned session passes undone -> Tomorrow sends one check-in ("Did calc practice happen?") -> "skipped"/no reply -> Lens /rebuild agent (Muse Spark tool calling) decides what moves/drops with reasons -> returns a diff -> Tomorrow applies it and sends ONE recovery message ("Moved X to Thu 4pm because... Nothing else changed."). No guilt/streak language. Real SMS if 10DLC approves in time; otherwise Twilio WhatsApp Sandbox; app thread always.
-6. Live try-able demo at lens.bettertmrw.app: sample inputs built in, uploads allowed, per-visitor rate limit, hard daily spend cap.
+6. Text-a-photo (added Nov 1): Tomorrow relays texted photos to Lens `POST /api/extract` with the person's existing items; Lens returns verified new items (only those auto-apply), changes to existing items with evidence (applied only when answered), one question per ambiguity, and a signed 24h review link. [EXTRACT_CONTRACT.md](EXTRACT_CONTRACT.md).
+7. Live try-able demo at lens.bettertmrw.app: sample inputs built in, uploads allowed, per-visitor rate limit, hard daily spend cap.
 
 Out of scope: voice, open weights, video input, Google Calendar, Muse Image, Tomorrow redesign.
 

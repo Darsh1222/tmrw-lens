@@ -58,15 +58,18 @@ class UpstashKv extends UpstashCounterStore implements Kv {
   }
 }
 
-let shared: Kv | undefined;
+// One store per process. Next bundles route handlers and pages separately, so a
+// module-level variable would give each its own memory store in development
+// (a review link made by /api/extract wouldn't open on /review); globalThis is shared.
+const holder = globalThis as { __lensKv?: Kv };
 export function kvFor(env: Env): Kv {
-  if (shared) return shared;
+  if (holder.__lensKv) return holder.__lensKv;
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN)
-    shared = new UpstashKv(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
+    holder.__lensKv = new UpstashKv(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
   else if (env.VERCEL_ENV === "production" || env.VERCEL_ENV === "preview")
     throw new Error("UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are required when deployed");
-  else shared = new MemoryKv();
-  return shared;
+  else holder.__lensKv = new MemoryKv();
+  return holder.__lensKv;
 }
 
 const sha256 = (...parts: (string | Uint8Array)[]) => {

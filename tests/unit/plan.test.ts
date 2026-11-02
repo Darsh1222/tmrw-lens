@@ -144,6 +144,8 @@ describe("matching", () => {
     expect(matchCourse("CMSC 131", known).code).toBe("CMSC131");
     expect(matchCourse("131", known).code).toBe("CMSC131");
     expect(matchCourse("bio", known)).toEqual({ code: null, ambiguous: [] });
+    // A course site writes the code, then the name: the code is what's written.
+    expect(matchCourse("HIST200 Interpreting History", known).code).toBe("HIST200");
     expect(familyOf("PS6")).toEqual({ family: "pset", number: 6 });
     expect(familyOf("Problem Set 5")).toEqual({ family: "pset", number: 5 });
     expect(familyOf("Proj 4")).toEqual({ family: "project", number: 4 });

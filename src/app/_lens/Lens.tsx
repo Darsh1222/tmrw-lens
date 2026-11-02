@@ -21,7 +21,7 @@ import { Viewer, type Mark } from "./Viewer";
 // them on every change, so nothing about a visitor lives on the server.
 
 const SAMPLE = sample as unknown as { zone: string; files: string[]; readings: SourceReading[] };
-const PICKABLE: SourceKind[] = ["testudo_screenshot", "syllabus_pdf", "whiteboard_photo", "notes_photo"];
+const PICKABLE: SourceKind[] = ["testudo_screenshot", "syllabus_pdf", "whiteboard_photo", "notes_photo", "lms_screenshot"]; // prettier-ignore
 const CONCURRENCY = 3;
 
 const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "America/New_York";

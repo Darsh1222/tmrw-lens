@@ -33,4 +33,7 @@ jobs:
       - run: pnpm eval
       # Replays recorded rebuilds. Fails on any move Tomorrow would have to refuse, or an unkind message.
       - run: pnpm eval:rebuild
+      # Replays recorded photo readings. Fails on any invented date, anything wrong auto-applied, or a change applied
+      # before the person answers.
+      - run: pnpm eval:extract
       - run: pnpm build

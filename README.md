@@ -37,7 +37,9 @@ pnpm eval:live        # re-read fixtures whose recording is stale, then score (-
 pnpm eval:real        # the same on your own photos in local-inputs/ (git-ignored); prints numbers only
 pnpm sample           # rebuild the app's sample week from the eval recordings (after eval:live)
 pnpm eval:rebuild     # score the rebuild agent on recorded runs (free, offline)
-pnpm eval:rebuild:live  # re-run stale rebuild cases with the model and the judge (--force: all, about 11 cents)
+pnpm eval:rebuild:live  # re-run stale rebuild cases with the model and the judge (--force: all, about 12 cents)
+pnpm eval:extract     # score text-a-photo on recorded photo readings (free, offline)
+pnpm eval:extract:live  # re-read photos whose recording is stale (about 5 cents)
 ```
 
 How the app handles what people add: photos are shrunk and re-encoded in the browser (dropping EXIF, after reading the
@@ -54,13 +56,13 @@ crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM
 |                                       | with SAM                                   | without SAM  |
 | ------------------------------------- | ------------------------------------------ | ------------ |
 | Invented dates                        | **0** of 181                               | **0** of 181 |
-| Fully verified                        | **82%** (81 of 99)                         | **82%**      |
+| Fully verified                        | **83%** (82 of 99)                         | **83%**      |
 | Items found                           | 75 of 75                                   | 75 of 75     |
 | Classes right                         | 24 of 24                                   | 24 of 24     |
 | Dates right                           | 65 of 65, after answers 4 of 4             | same         |
 | Conflicts caught                      | 4 of 4, pre-selected right 4 of 4, false 0 | same         |
 | Photo quotes in an object (highlight) | 23 of 23                                   | none         |
-| Model cost per photo                  | $0.0210                                    | $0.0145      |
+| Model cost per photo                  | $0.0208                                    | $0.0139      |
 
 Every date traces to a quote and a code computation, including dates relative to another item ("the day after Quiz
 3" moves when the Quiz 3 conflict is answered), the end of every class recurrence, and every class meeting skipped for a
@@ -89,6 +91,24 @@ shortening to fit, no time left, a reply that tries to give orders, the clock ch
 | Judge score (Muse Spark, 1 to 5) | 4.73                           |                       |
 | Model cost per rebuild           | $0.0073 (3.7 turns, about 5 s) | free                  |
 | Tokens per call, cache hit rate  | 2613 in, 249 out; 82% cached   |                       |
+
+### Text a photo
+
+Tomorrow sends Lens the photos someone texts (`POST /api/extract`, [docs/EXTRACT_CONTRACT.md](docs/EXTRACT_CONTRACT.md)),
+with the items it already has. One cheap call says what each photo is and whether it can be read; then it's read and
+verified like any upload. Lens returns the new items (only verified ones are auto-applicable), changes to existing items
+with their evidence ("whiteboard says Quiz 3 → Mon Nov 2"), never applied until the person answers, one question per
+ambiguity, and a signed review link that lasts 24 hours. Four synthetic cases (`evals/extract/cases.ts`): a whiteboard
+moving a syllabus quiz, a course site's to-do list (alone, and against items already in Tomorrow), and a blurry photo:
+
+|                                           | text-a-photo        |
+| ----------------------------------------- | ------------------- |
+| Auto-applied and right (precision)        | **9 of 9**          |
+| Gold items auto-applied (recall)          | **100%**            |
+| Invented dates                            | **0** of 13         |
+| Changes caught (applied before an answer) | 2 of 2 (0)          |
+| Duplicates recognized                     | 2 of 2              |
+| Model cost per photo                      | $0.0127 (3.3 calls) |
 
 ## License
 

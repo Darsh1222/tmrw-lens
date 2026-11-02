@@ -1,12 +1,11 @@
 import { z } from "zod";
 import { readEnv } from "@/lib/env";
-import { CROP_VERSION, readPage, SEGMENTED_KINDS } from "@/lib/extract/read";
-import { rereadTask, taskFor } from "@/lib/extract/tasks";
 import { MetaApiError, MetaIncomplete } from "@/lib/meta/client";
 import { SpendCapReached } from "@/lib/meta/spend";
 import type { PageReading } from "@/lib/plan/types";
 import { SourceKind } from "@/lib/schemas/evidence";
-import { contentCache, kvFor, RateLimited, rateLimit } from "@/lib/server/kv";
+import { kvFor, RateLimited, rateLimit } from "@/lib/server/kv";
+import { readCached } from "@/lib/server/read";
 
 // Reads one page or photo with Muse Spark (and SAM 3.1 on photos). The browser
 // has already shrunk the photo (or rendered the PDF page) and sends one at a
@@ -60,24 +59,20 @@ export async function POST(request: Request): Promise<Response> {
 
   const env = readEnv();
   const kv = kvFor(env);
-  const salt = [kind, taskFor(kind).version, rereadTask(1).version, CROP_VERSION, env.MUSE_SPARK_MODEL, env.SAM_MODEL, page ?? 0].join("|"); // prettier-ignore
-  const content = image ? Buffer.concat([image, Buffer.from(`\n${text ?? ""}`)]) : (text ?? "");
-  const cache = contentCache(kv, salt);
-  const hit = await cache.get<PageReading>(content).catch(() => null);
-  if (hit) return Response.json({ page: hit, cached: true, cost_usd: 0, calls: 0 } satisfies Reply);
-
   try {
     const visitor =
       request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0] ?? "local";
-    await rateLimit(kv, visitor.trim(), { perHour: env.READS_PER_HOUR, perDay: env.READS_PER_DAY });
-    const { page: reading, calls } = await readPage(
-      kind,
-      { page, image, mime: mime ?? undefined, text: kind === "testudo_text" ? text : image ? text : null },
-      { env, sam: SEGMENTED_KINDS.includes(kind) },
+    // Counted only when the model is called: a cached page is free for everyone.
+    const {
+      page: reading,
+      cached,
+      calls,
+    } = await readCached(
+      { kind, page, image, mime: mime ?? undefined, text },
+      { env, kv, onMiss: () => rateLimit(kv, visitor.trim(), { perHour: env.READS_PER_HOUR, perDay: env.READS_PER_DAY }) }, // prettier-ignore
     );
-    await cache.set(content, reading).catch(() => {});
     const cost = calls.reduce((a, c) => a + c.costUsd, 0);
-    return Response.json({ page: reading, cached: false, cost_usd: cost, calls: calls.length } satisfies Reply);
+    return Response.json({ page: reading, cached, cost_usd: cost, calls: calls.length } satisfies Reply);
   } catch (e) {
     if (e instanceof RateLimited)
       return fail(429, "You've read a lot of pages in a short time. Try again a bit later, or use the sample week.", {

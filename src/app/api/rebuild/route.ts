@@ -1,9 +1,9 @@
-import { createHash, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import { readEnv } from "@/lib/env";
 import { REBUILD_VERSION, rebuild } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkResponse, fallback } from "@/lib/rebuild/draft";
+import { fromTomorrow } from "@/lib/server/auth";
 import { contentCache, kvFor } from "@/lib/server/kv";
 
 // Tomorrow calls this when a planned session passes undone and the check-in
@@ -20,17 +20,10 @@ const MAX_BODY = 200_000;
 const fail = (status: number, error: string, issues?: string) =>
   Response.json(issues ? { error, issues } : { error }, { status });
 
-const digest = (s: string) => createHash("sha256").update(s).digest();
-
-function authorized(header: string | null, secret: string): boolean {
-  const token = header?.match(/^Bearer (.+)$/)?.[1];
-  return !!token && timingSafeEqual(digest(token), digest(secret));
-}
-
 export async function POST(request: Request): Promise<Response> {
   const env = readEnv();
   if (!env.LENS_REBUILD_SECRET) return fail(503, "Rebuild isn't set up on this deployment.");
-  if (!authorized(request.headers.get("authorization"), env.LENS_REBUILD_SECRET)) return fail(401, "Unauthorized.");
+  if (!fromTomorrow(request.headers.get("authorization"), env.LENS_REBUILD_SECRET)) return fail(401, "Unauthorized.");
 
   const raw = await request.text();
   if (raw.length > MAX_BODY) return fail(413, "That plan is too large.");

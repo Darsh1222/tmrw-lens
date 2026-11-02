@@ -48,5 +48,15 @@
     "kind": "notes_photo",
     "label": "sticky notes photo",
     "captured_at": "2026-10-29T08:30:00-04:00"
+  },
+  "canvas-todo.png": {
+    "kind": "lms_screenshot",
+    "label": "course site screenshot",
+    "captured_at": null
+  },
+  "whiteboard-blurry.jpg": {
+    "kind": "whiteboard_photo",
+    "label": "whiteboard photo",
+    "captured_at": "2026-10-30T10:50:00-04:00"
   }
 }

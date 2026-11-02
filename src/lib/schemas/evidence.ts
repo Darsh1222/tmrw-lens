@@ -26,6 +26,8 @@ export const SourceKind = z.enum([
   "syllabus_pdf",
   "whiteboard_photo",
   "notes_photo",
+  // A screenshot of a course site's to-do or assignments list (Canvas, ELMS).
+  "lms_screenshot",
 ]);
 export type SourceKind = z.infer<typeof SourceKind>;
 

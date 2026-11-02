@@ -107,37 +107,48 @@ export function sendable(plan: Plan): { classes: ClassBlock[]; items: PlanItem[]
 
 export class NotSendable extends Error {}
 
+/** A class in the import's shape. Needs its first meeting date (verified classes always have one). */
+export function classImport(plan: Plan, sources: SourceMeta[], c: ClassBlock): z.infer<typeof ImportClass> {
+  const z_ = plan.zone;
+  return {
+    lens_id: c.id,
+    kind: "class_block" as const,
+    title: `${c.course} ${MEETING[c.meeting_type]}`,
+    course: c.course,
+    meeting_type: c.meeting_type,
+    location: c.location,
+    start: toInstant(c.first_date!.value, c.start, z_),
+    end: toInstant(c.first_date!.value, c.end, z_),
+    rrule: c.rrule,
+    exdates: c.skip_dates.map((s) => toInstant(s.date, c.start, z_)),
+    evidence: refs(plan, sources, [c.evidence], c.first_date ? explainDate(c.first_date, plan) : null),
+  };
+}
+
+/** An item in the import's shape: a date only when one is known, a time only when one is written. */
+export function itemImport(plan: Plan, sources: SourceMeta[], i: PlanItem): z.infer<typeof ImportItem> {
+  const z_ = plan.zone;
+  return {
+    lens_id: i.id,
+    kind: i.kind,
+    title: i.title,
+    course: i.course,
+    date: i.date?.value ?? null,
+    start_time: i.time?.start ?? null,
+    end_time: i.time?.end ?? null,
+    start: i.date && i.time ? toInstant(i.date.value, i.time.start, z_) : null,
+    end: i.date && i.time?.end ? toInstant(i.date.value, i.time.end, z_) : null,
+    evidence: refs(plan, sources, i.evidence, i.date ? explainDate(i.date, plan) : null),
+  };
+}
+
 export function toImport(plan: Plan, sources: SourceMeta[]): ImportRequest {
   const audit = auditPlan(plan, sources);
   if (audit.invented.length) throw new NotSendable(`${audit.invented.length} date(s) don't trace to their source`);
   const { classes, items } = sendable(plan);
-  const z_ = plan.zone;
   const out: ImportRequest["items"] = [
-    ...classes.map((c) => ({
-      lens_id: c.id,
-      kind: "class_block" as const,
-      title: `${c.course} ${MEETING[c.meeting_type]}`,
-      course: c.course,
-      meeting_type: c.meeting_type,
-      location: c.location,
-      start: toInstant(c.first_date!.value, c.start, z_),
-      end: toInstant(c.first_date!.value, c.end, z_),
-      rrule: c.rrule,
-      exdates: c.skip_dates.map((s) => toInstant(s.date, c.start, z_)),
-      evidence: refs(plan, sources, [c.evidence], c.first_date ? explainDate(c.first_date, plan) : null),
-    })),
-    ...items.map((i) => ({
-      lens_id: i.id,
-      kind: i.kind,
-      title: i.title,
-      course: i.course,
-      date: i.date?.value ?? null,
-      start_time: i.time?.start ?? null,
-      end_time: i.time?.end ?? null,
-      start: i.date && i.time ? toInstant(i.date.value, i.time.start, z_) : null,
-      end: i.date && i.time?.end ? toInstant(i.date.value, i.time.end, z_) : null,
-      evidence: refs(plan, sources, i.evidence, i.date ? explainDate(i.date, plan) : null),
-    })),
+    ...classes.map((c) => classImport(plan, sources, c)),
+    ...items.map((i) => itemImport(plan, sources, i)),
   ];
-  return ImportRequest.parse({ version: 1, zone: z_, items: out });
+  return ImportRequest.parse({ version: 1, zone: plan.zone, items: out });
 }

@@ -6,8 +6,8 @@
   "tasks": {
     "extract_schedule": 3,
     "extract_syllabus_page": 4,
-    "extract_whiteboard": 3,
-    "extract_notes": 3,
+    "extract_whiteboard": 4,
+    "extract_notes": 4,
     "reread_crops": 1
   },
   "crops": 3,
@@ -29,10 +29,10 @@
             "evidence": {
               "quote": "PHYS161 lab report - Tue 10/27 11:59pm",
               "box": {
-                "x_min": 190,
-                "y_min": 253,
-                "x_max": 825,
-                "y_max": 298
+                "x_min": 191,
+                "y_min": 273,
+                "x_max": 829,
+                "y_max": 317
               }
             },
             "crossed_out": false
@@ -48,10 +48,10 @@
             "evidence": {
               "quote": "ENGL101 draft due Wed",
               "box": {
-                "x_min": 190,
-                "y_min": 336,
-                "x_max": 620,
-                "y_max": 378
+                "x_min": 185,
+                "y_min": 370,
+                "x_max": 557,
+                "y_max": 408
               }
             },
             "crossed_out": true
@@ -67,10 +67,10 @@
             "evidence": {
               "quote": "ENGL101 draft - Fri 10/30 5pm",
               "box": {
-                "x_min": 190,
-                "y_min": 459,
-                "x_max": 680,
-                "y_max": 503
+                "x_min": 189,
+                "y_min": 483,
+                "x_max": 672,
+                "y_max": 526
               }
             },
             "crossed_out": false
@@ -86,10 +86,10 @@
             "evidence": {
               "quote": "call advisor re: spring registration",
               "box": {
-                "x_min": 190,
-                "y_min": 554,
-                "x_max": 735,
-                "y_max": 603
+                "x_min": 184,
+                "y_min": 583,
+                "x_max": 738,
+                "y_max": 624
               }
             },
             "crossed_out": false
@@ -105,10 +105,10 @@
             "evidence": {
               "quote": "calc PS6 - Thu 11/5",
               "box": {
-                "x_min": 190,
-                "y_min": 642,
-                "x_max": 475,
-                "y_max": 683
+                "x_min": 183,
+                "y_min": 674,
+                "x_max": 468,
+                "y_max": 709
               }
             },
             "crossed_out": false
@@ -117,23 +117,23 @@
       },
       "rereads": {
         "items.0": {
-          "text": "PHYS161 lab report - Tue 10/27 11:59pm",
+          "text": "This week PHYS161 lab report - Tue 10/27 11:59pm ENGL101 draft due Wed ENGL101 draft - Fri 10/30 5pm",
           "legible": "clear"
         },
         "items.1": {
-          "text": "ENGL101 draft due Wed",
+          "text": "ENGL101 draft due Wed ENGL101 draft - Fri 10/30 5pm",
           "legible": "clear"
         },
         "items.2": {
-          "text": "ENGL101 draft due Wed ☐ ENGL101 draft - Fri 10/30 5pm ☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
+          "text": "ENGL101 draft - Fri 10/30 5pm call advisor re: spring registration calc PS6 - Thu 11/5",
           "legible": "clear"
         },
         "items.3": {
-          "text": "☐ ENGL101 draft - Fri 10/30 5pm ☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
+          "text": "call advisor re: spring registration calc PS6 - Thu 11/5",
           "legible": "clear"
         },
         "items.4": {
-          "text": "call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
+          "text": "calc PS6 - Thu 11/5",
           "legible": "clear"
         }
       },
@@ -163,7 +163,7 @@
               ],
               [
                 0.088,
-                0.1368
+                0.1377
               ],
               [
                 0.09,
@@ -215,7 +215,7 @@
               ],
               [
                 0.9331,
-                0.1093
+                0.1101
               ],
               [
                 0.9301,
@@ -235,6 +235,10 @@
               ],
               [
                 0.9083,
+                0.9389
+              ],
+              [
+                0.9073,
                 0.9398
               ],
               [
@@ -270,7 +274,7 @@
                 0.9191
               ]
             ],
-            "confidence": 0.7264957427978516
+            "confidence": 0.7299578189849854
           },
           {
             "id": "paper_0",
@@ -416,23 +420,23 @@
         ],
         "rereads": {
           "items.0": {
-            "text": "PHYS161 lab report - Tue 10/27 11:59pm",
+            "text": "This week ☐ PHYS161 lab report - Tue 10/27 11:59pm ☑ ENGL101 draft due Wed ☐ ENGL101 draft - Fri 10/30 5pm",
             "legible": "clear"
           },
           "items.1": {
-            "text": "ENGL101 draft due Wed",
+            "text": "☑ ENGL101 draft due Wed ☐ ENGL101 draft - Fri 10/30 5pm",
             "legible": "clear"
           },
           "items.2": {
-            "text": "ENGL101 draft due Wed ENGL101 draft - Fri 10/30 5pm call advisor re: spring registration calc PS6 - Thu 11/5",
+            "text": "☐ ENGL101 draft - Fri 10/30 5pm ☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
             "legible": "clear"
           },
           "items.3": {
-            "text": "ENGL101 draft - Fri 10/30 5pm call advisor re: spring registration calc PS6 - Thu 11/5",
+            "text": "☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
             "legible": "clear"
           },
           "items.4": {
-            "text": "call advisor re: spring registration calc PS6 - Thu 11/5",
+            "text": "☐ calc PS6 - Thu 11/5",
             "legible": "clear"
           }
         }
@@ -442,17 +446,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 3359,
+      "input_tokens": 3424,
       "cached_tokens": 0,
-      "output_tokens": 2056,
-      "cost_usd": 0.01293675
+      "output_tokens": 1545,
+      "cost_usd": 0.01084625
     },
     "reread_box": {
       "calls": 2,
-      "input_tokens": 3309,
+      "input_tokens": 4456,
       "cached_tokens": 226,
-      "output_tokens": 1725,
-      "cost_usd": 0.0112189
+      "output_tokens": 1182,
+      "cost_usd": 0.0103449
     },
     "sam_segment": {
       "calls": 3,
@@ -463,10 +467,10 @@
     },
     "reread_sam": {
       "calls": 2,
-      "input_tokens": 3227,
-      "cached_tokens": 866,
-      "output_tokens": 1594,
-      "cost_usd": 0.00985565
+      "input_tokens": 4324,
+      "cached_tokens": 738,
+      "output_tokens": 1262,
+      "cost_usd": 0.0099567
     }
   }
 }

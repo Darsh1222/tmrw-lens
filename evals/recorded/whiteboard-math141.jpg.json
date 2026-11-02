@@ -6,8 +6,8 @@
   "tasks": {
     "extract_schedule": 3,
     "extract_syllabus_page": 4,
-    "extract_whiteboard": 3,
-    "extract_notes": 3,
+    "extract_whiteboard": 4,
+    "extract_notes": 4,
     "reread_crops": 1
   },
   "crops": 3,
@@ -20,7 +20,7 @@
         "items": [
           {
             "kind": "quiz",
-            "title": "improper integrals",
+            "title": "Quiz",
             "course_hint": "MATH 141",
             "date_text": "Fri",
             "time_text": null,
@@ -30,9 +30,9 @@
               "quote": "Quiz Fri: improper integrals",
               "box": {
                 "x_min": 95,
-                "y_min": 285,
+                "y_min": 270,
                 "x_max": 560,
-                "y_max": 375
+                "y_max": 330
               }
             }
           },
@@ -41,16 +41,16 @@
             "title": "PS5",
             "course_hint": "MATH 141",
             "date_text": null,
-            "time_text": "in discussion",
+            "time_text": null,
             "change_text": null,
             "legible": "clear",
             "evidence": {
               "quote": "PS5 graded - pick up in discussion",
               "box": {
                 "x_min": 108,
-                "y_min": 425,
-                "x_max": 626,
-                "y_max": 515
+                "y_min": 405,
+                "x_max": 662,
+                "y_max": 480
               }
             }
           },
@@ -65,10 +65,10 @@
             "evidence": {
               "quote": "Read 7.8 before Wed",
               "box": {
-                "x_min": 87,
-                "y_min": 565,
-                "x_max": 365,
-                "y_max": 645
+                "x_min": 90,
+                "y_min": 543,
+                "x_max": 445,
+                "y_max": 608
               }
             }
           }
@@ -113,7 +113,7 @@
                 0.0528
               ],
               [
-                0.0823,
+                0.0841,
                 0.047
               ],
               [
@@ -121,7 +121,7 @@
                 0.047
               ],
               [
-                0.4582,
+                0.4573,
                 0.0557
               ],
               [
@@ -157,7 +157,15 @@
                 0.6439
               ],
               [
+                0.9632,
+                0.6963
+              ],
+              [
                 0.9596,
+                0.8972
+              ],
+              [
+                0.9587,
                 0.9453
               ],
               [
@@ -219,11 +227,11 @@
               ],
               [
                 0.0358,
-                0.2478
+                0.2683
               ],
               [
                 0.0368,
-                0.1657
+                0.1672
               ],
               [
                 0.0386,
@@ -318,10 +326,6 @@
                 0.9369
               ],
               [
-                0.0624,
-                0.9355
-              ],
-              [
                 0.0377,
                 0.934
               ],
@@ -361,17 +365,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 2973,
-      "cached_tokens": 0,
-      "output_tokens": 1571,
-      "cost_usd": 0.010393
+      "input_tokens": 3038,
+      "cached_tokens": 753,
+      "output_tokens": 1649,
+      "cost_usd": 0.00997745
     },
     "reread_box": {
       "calls": 1,
-      "input_tokens": 722,
+      "input_tokens": 665,
       "cached_tokens": 113,
-      "output_tokens": 232,
-      "cost_usd": 0.0017642
+      "output_tokens": 135,
+      "cost_usd": 0.0012807
     },
     "sam_segment": {
       "calls": 3,
@@ -382,10 +386,10 @@
     },
     "reread_sam": {
       "calls": 1,
-      "input_tokens": 722,
+      "input_tokens": 665,
       "cached_tokens": 625,
-      "output_tokens": 147,
-      "cost_usd": 0.00083975
+      "output_tokens": 134,
+      "cost_usd": 0.00071325
     }
   }
 }

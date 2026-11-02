@@ -60,6 +60,16 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
   check-in, the reply, the one recovery message, what changed and why, code's check, and every tool call Muse Spark
   made. Recorded runs replay for free; "Rebuild it live" runs Muse Spark on whatever reply you type (a few runs per
   visitor, within the daily spend cap).
+- The missed-session panel is now one click: the made-up week, the session struck through, the check-in and reply,
+  Muse Spark's tool calls appearing one by one, then what changed and why ("changed 1, unchanged 2") and the recovery
+  text. It runs the agent live; the same reply again comes from Lens's cache, free; if a live run isn't possible, the
+  recorded run plays and says so.
+- Text a photo: `POST /api/extract` for Tomorrow ([docs/EXTRACT_CONTRACT.md](docs/EXTRACT_CONTRACT.md)). Send the
+  photos someone texted and their existing items; get back what's new (only verified items auto-apply), what the photo
+  changes ("whiteboard says Quiz 3 → Mon Nov 2", applied only once they answer), one question per ambiguity, and a
+  signed review link that lasts 24 hours. Course-site screenshots (Canvas, ELMS) are a new kind of input. A blurry
+  photo gets a request for a sharper one, never a guess. Evals: 9 of 9 auto-applied items right, recall 100%, 0
+  invented dates, 2 of 2 changes caught, $0.016 per photo.
 - A new case from trying the live demo: "I have practice until 9 tonight" was read as "tonight is out". Busy-until
   replies now rule out only the time before; that case moves the session to 9pm, and reasons must say what the person
   actually said. Rebuild evals: 11 of 11 right, 0 invalid moves, 0 unkind messages, judge 4.73.

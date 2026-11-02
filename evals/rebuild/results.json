@@ -35,7 +35,10 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": ["missed item: drop, expected move", "s_laundry should move or drop"]
+      "fallback_misses": [
+        "missed item: drop, expected move",
+        "s_laundry should move or drop"
+      ]
     },
     {
       "name": "tired-tonight",
@@ -45,7 +48,9 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": ["s_calc before 2026-11-05 05:00"]
+      "fallback_misses": [
+        "s_calc before 2026-11-05 05:00"
+      ]
     },
     {
       "name": "busy-until",
@@ -55,7 +60,9 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": ["s_calc before 2026-11-04 21:00"]
+      "fallback_misses": [
+        "s_calc before 2026-11-04 21:00"
+      ]
     },
     {
       "name": "no-deadline",
@@ -121,7 +128,9 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": ["s_calc before 2026-11-01 00:00"]
+      "fallback_misses": [
+        "s_calc before 2026-11-01 00:00"
+      ]
     },
     {
       "name": "partial",
@@ -131,7 +140,9 @@
         "score": 5,
         "problems": []
       },
-      "fallback_misses": ["longer than 45 min"]
+      "fallback_misses": [
+        "longer than 45 min"
+      ]
     }
   ]
 }

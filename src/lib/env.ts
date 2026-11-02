@@ -17,9 +17,12 @@ const schema = z.object({
   READS_PER_DAY: z.coerce.number().int().positive().default(120),
   // Where Send delivers confirmed items (Tomorrow's side of docs/IMPORT_CONTRACT.md).
   TOMORROW_IMPORT_URL: z.url().default("https://bettertmrw.app/api/lens/import"),
-  // Shared with Tomorrow, which sends it as a Bearer token on POST /api/rebuild
-  // (docs/REBUILD_CONTRACT.md). Unset: the route answers 503. At least 32 characters.
+  // Shared with Tomorrow, which sends it as a Bearer token on POST /api/rebuild and
+  // /api/extract (docs/REBUILD_CONTRACT.md, docs/EXTRACT_CONTRACT.md); it also signs
+  // review links. Unset: those routes answer 503. At least 32 characters.
   LENS_REBUILD_SECRET: z.string().min(32).optional(),
+  // Where review links point (text-a-photo, docs/EXTRACT_CONTRACT.md).
+  LENS_PUBLIC_URL: z.url().default("https://lens.bettertmrw.app"),
   VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
 });
 

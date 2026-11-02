@@ -46,8 +46,7 @@ export async function POST(request: Request): Promise<Response> {
   const key = JSON.stringify(req);
   const hit = await cache.get<Omit<DemoReply, "cached">>(key).catch(() => null);
   if (hit) return Response.json({ ...hit, cached: true } satisfies DemoReply);
-  if (!env.META_API_KEY)
-    return fail(503, "Live runs aren't set up on this copy of Lens. The recorded runs still work.");
+  if (!env.META_API_KEY) return fail(503, "Live runs aren't set up on this copy of Lens.");
 
   try {
     const visitor =
