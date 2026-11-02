@@ -35,6 +35,7 @@
   "dependencies": {
     "@meta-sam/parser": "0.1.0",
     "@napi-rs/canvas": "^1.0.13",
+    "@phosphor-icons/react": "2.1.7",
     "luxon": "^3.7.2",
     "next": "16.4.3",
     "pdfjs-dist": "^6.4.299",

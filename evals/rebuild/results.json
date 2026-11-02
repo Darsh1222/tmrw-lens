@@ -5,15 +5,15 @@
     "rebuilds_right": "11/11",
     "invalid_moves": 0,
     "unkind_messages": 0,
-    "judge_score": 4.73,
+    "judge_score": 5,
     "judged": "11/11",
     "fell_back": "0/11",
     "turns_per_rebuild": 3.7,
     "refused_tool_calls": 0,
-    "cost_per_rebuild": 0.00728,
-    "tokens_per_call": "2613 in, 249 out",
-    "cache_hit_rate": "82%",
-    "latency_per_rebuild_s": 5.4,
+    "cost_per_rebuild": 0.00722,
+    "tokens_per_call": "2632 in, 245 out",
+    "cache_hit_rate": "83%",
+    "latency_per_rebuild_s": 5.3,
     "fallback_rebuilds_right": "5/11"
   },
   "cases": [
@@ -89,10 +89,8 @@
       "right": true,
       "misses": [],
       "judge": {
-        "score": 2,
-        "problems": [
-          "Message says only an hour still fits before the midterm, but facts list additional free time Thu Nov 5 08:00-08:45 besides Wed 20:30-21:30."
-        ]
+        "score": 5,
+        "problems": []
       },
       "fallback_misses": []
     },

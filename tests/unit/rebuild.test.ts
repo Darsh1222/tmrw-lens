@@ -1,9 +1,10 @@
+import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { readEnv } from "@/lib/env";
 import { MemoryCounterStore, SpendGuard } from "@/lib/meta/spend";
 import { rebuild, TOOLS } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
-import { checkReason, checkResponse, Draft, fallback } from "@/lib/rebuild/draft";
+import { checkReason, checkResponse, Draft, fallback, plain } from "@/lib/rebuild/draft";
 import { REBUILD_CASES } from "../../evals/rebuild/cases";
 
 const env = readEnv({ META_API_KEY: "test-key" });
@@ -103,7 +104,7 @@ describe("message", () => {
     expect(d.move("s_laundry", "2026-11-05T17:30", null, "it has no deadline, so it made room for Calc practice").ok).toBe(true); // prettier-ignore
     expect(d.move("s_calc", "2026-11-04T21:00", 45, "the quiz is tomorrow morning").ok).toBe(true);
     expect(d.message()).toBe(
-      "Moved Calc practice to 9pm today, 45 min instead of 60, because the quiz is tomorrow morning. Moved Laundry to 5:30pm tomorrow because it has no deadline, so it made room for Calc practice. Nothing else changed.",
+      "Moved Calc practice to 9pm today, 45 min instead of 60, because the quiz is tomorrow morning. Moved Laundry to 5:30pm tomorrow to make room. Nothing else changed.",
     );
     expect(d.when(Date.parse("2026-11-06T17:30:00-05:00"))).toBe("Fri 5:30pm");
     expect(d.when(Date.parse("2026-11-12T09:00:00-05:00"))).toBe("Thu Nov 12, 9am");
@@ -115,6 +116,31 @@ describe("message", () => {
     const res = d.response("agent");
     expect(res.diff[0]).toMatchObject({ start: "2026-11-01T10:00:00-05:00", end: "2026-11-01T11:00:00-05:00" });
     expect(res.message).toMatch(/^Moved Calc practice to 10am tomorrow because/);
+  });
+});
+
+describe("the text", () => {
+  it("is plain characters: smart quotes, dashes, and accents become ASCII", () => {
+    expect(plain("Caf\u00e9 \u201cquiz\u201d \u2013 it\u2019s due\u2026 \ud83d\ude80")).toBe(
+      'Cafe "quiz" - it\'s due...',
+    );
+  });
+
+  it("puts care first and shares the day when they're unwell", () => {
+    const r = req("sick-today");
+    const d = new Draft(r);
+    d.move("s_calc", "2026-11-05T08:00", null, "the quiz is Friday morning");
+    d.move("s_outline", "2026-11-05T14:00", null, "you said today is out");
+    d.move("s_hist", "2026-11-05T15:00", null, "you said today is out");
+    expect(d.message()).toBe(
+      "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read HIST ch. 4 to 3pm tomorrow. Nothing else changed.",
+    );
+  });
+
+  it("refuses to finish a text longer than one SMS segment", () => {
+    const d = new Draft({ ...req("simple-move"), items: req("simple-move").items.map((i) => (i.id === "s_calc" ? { ...i, title: "Calc practice for the quiz on improper integrals, series, and sequences" } : i)) }); // prettier-ignore
+    d.move("s_calc", "2026-11-04T19:00", null, "it's the next free hour before the quiz tomorrow morning at ten");
+    expect(d.finish()).toMatchObject({ ok: false, problem: expect.stringMatching(/160/) });
   });
 });
 
@@ -131,9 +157,12 @@ describe("fallback", () => {
     expect(short.message).toMatch(/45 min instead of 90/);
     const none = fallback(req("no-time")).response("fallback");
     expect(none.diff[0].action).toBe("drop");
+    // Honest about the overload, never just "dropped": the best option, offered as a question.
     expect(none.message).toBe(
-      "Dropped Calc practice because there's no open time before Quiz 3. Nothing else changed.",
+      "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow, or skip it? Nothing else changed.",
     );
+    expect(none.offer).toEqual({ item_id: "s_calc", start: "2026-11-05T07:15:00-05:00", end: "2026-11-05T07:30:00-05:00" }); // prettier-ignore
+    expect(checkResponse(req("no-time"), none)).toEqual([]);
   });
 });
 
@@ -349,5 +378,16 @@ describe("POST /api/rebuild/demo", () => {
     for (let n = 0; n < 7; n++) statuses.push((await post({ case: "partial", reply: `try ${n}` }, "203.0.113.9")).status); // prettier-ignore
     expect(statuses.slice(0, 6).every((s) => s === 200)).toBe(true);
     expect(statuses[6]).toBe(429);
+  });
+});
+
+describe("every recorded rebuild text", () => {
+  const dir = new URL("../../evals/rebuild/recorded/", import.meta.url);
+  const files = readdirSync(dir).filter((f) => f.endsWith(".json"));
+  it.each(files)("%s fits one SMS segment, in plain characters", (f) => {
+    const { response } = JSON.parse(readFileSync(new URL(f, dir), "utf8")) as { response: RebuildResponse };
+    expect(response.message.length).toBeLessThanOrEqual(160);
+    expect(response.message).toMatch(/^[\x20-\x7e]+$/);
+    expect(response.message.endsWith("Nothing else changed.")).toBe(true);
   });
 });

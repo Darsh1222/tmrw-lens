@@ -53,7 +53,25 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
   pre-selected, 0 false conflicts. About 17 cents.
 - SAM 3.1 spike: it finds sticky notes, whiteboards, and sheets of paper in a photo, not handwriting.
 
+### Nov 2
+
+- Recovery texts fit one SMS (160 characters, plain characters), checked by a test. When nothing fits before a
+  deadline, Tomorrow asks instead of dropping: "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow,
+  or skip it?" When someone says they're sick: "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read
+  HIST ch. 4 to 3pm tomorrow. Nothing else changed." Every rebuild message is now human-reviewed.
+
 ### Nov 1
+
+- The missed-session panel, redesigned in Tomorrow's "Forum" look (parchment and ink by day, navy and ivory by night,
+  one crimson accent, a pastel per course): a week grid with a compressed time axis, classes quiet, sessions in their
+  course's colour, deadlines as flagged lines, and a Now line. One click plays it: the missed block turns into a dashed
+  ghost, Tomorrow checks in and the reply lands, Lens's steps stream in ("Found open time: Thu 7:30–9:30 AM"), a path
+  draws and the session glides to its new slot, "changed 1 · unchanged 7" ticks up, and the recovery text arrives.
+  Before/After toggle, a phone-style thread, code's checks as chips, and a day-by-day timeline on phones. Reduced
+  motion shows the final state with no animation. Fixed: the week now shows the plan after the change (the moved
+  session at its new time, a ghost at the old), with a test for every recorded rebuild.
+- Shortened sessions now say why accurately ("it's the longest free stretch before the midterm"). Rebuild evals: 11
+  of 11 right, judge 5.0, $0.0076 per rebuild.
 
 - **Try a missed session** on the homepage, right after the sample week: the flagship without needing Tomorrow. Pick a
   case ("too tired tonight", "practice until 9", sick today, no room, a reply that gives orders…) and see the

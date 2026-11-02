@@ -50,9 +50,33 @@ const CLOCK = /\b\d{1,2}(:\d{2})?\s?(am|pm)\b|\b\d{1,2}:\d{2}\b/i;
 
 export const unkind = (text: string) => UNKIND.test(text);
 
+/** One SMS segment: the recovery text never runs longer. */
+export const MAX_TEXT = 160;
+
+/**
+ * Plain characters only, so the text is one cheap SMS segment on every phone:
+ * smart quotes and dashes become ASCII, accents drop, anything else non-ASCII goes.
+ */
+export function plain(text: string): string {
+  return text
+    .replace(/[\u2018\u2019\u201a\u2032]/g, "'")
+    .replace(/[\u201c\u201d\u201e\u2033]/g, '"')
+    .replace(/[\u2013\u2014\u2212]/g, "-")
+    .replace(/\u2026/g, "...")
+    .replace(/[\u00a0\u202f]/g, " ")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\x20-\x7e]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// A reply that says they're unwell gets one line of care before the moves, and no reasons after it.
+const UNWELL =
+  /\b(sick|ill|fever|flu|covid|unwell|migraine|throwing up|not feeling (well|good)|feel(ing)? (awful|terrible))\b/i;
+
 export function checkReason(raw: string): { ok: true; reason: string } | { ok: false; problem: string } {
-  const reason = raw
-    .trim()
+  const reason = plain(raw)
     .replace(/^because\s+/i, "")
     .replace(/[.\s]+$/, "");
   if (reason.length < 3) return { ok: false, problem: "Give a short reason." };
@@ -140,12 +164,17 @@ export class Draft {
 
   /** "7pm today", "9:30am tomorrow", "Thu 4pm", "Thu Nov 12, 4pm". */
   when(ms: number): string {
+    const { clock, day } = this.whenParts(ms);
+    if (day === "today" || day === "tomorrow") return `${clock} ${day}`;
+    return day.includes(" ") ? `${day}, ${clock}` : `${day} ${clock}`;
+  }
+
+  whenParts(ms: number): { clock: string; day: string } {
     const d = this.local(ms);
     const days = Math.round(d.startOf("day").diff(this.local(this.now).startOf("day"), "days").days);
     const clock = d.toFormat(d.minute ? "h:mma" : "ha").toLowerCase();
-    if (days === 0) return `${clock} today`;
-    if (days === 1) return `${clock} tomorrow`;
-    return days > 1 && days < 7 ? `${d.toFormat("ccc")} ${clock}` : `${d.toFormat("ccc LLL d")}, ${clock}`;
+    const day = days === 0 ? "today" : days === 1 ? "tomorrow" : days > 1 && days < 7 ? d.toFormat("ccc") : d.toFormat("ccc LLL d"); // prettier-ignore
+    return { clock, day };
   }
 
   parseLocal(raw: string): number | string {
@@ -236,6 +265,9 @@ export class Draft {
       return { ok: false, problem: "The missed item still needs a move or a drop." };
     if (this.changes.size > MAX_CHANGES)
       return { ok: false, problem: `That changes ${this.changes.size} items; change at most ${MAX_CHANGES} (fewer is better).` }; // prettier-ignore
+    const text = this.message();
+    if (text.length > MAX_TEXT)
+      return { ok: false, problem: `The text would be ${text.length} characters; it must fit in ${MAX_TEXT}. Shorten the reasons.` }; // prettier-ignore
     return { ok: true };
   }
 
@@ -249,23 +281,97 @@ export class Draft {
     });
   }
 
-  /** "Moved Calc practice to 7pm today because …. Nothing else changed." Missed item first. */
+  /**
+   * When the missed item can't fit before its deadline, the best a person could
+   * still do: a 15-minute version ending 90 minutes before it (time to get
+   * there), not before 7 AM, not overlapping anything. Outside the free time
+   * Tomorrow sent, so it's only offered, never placed: the text asks.
+   */
+  offer(): { item_id: string; start: number; end: number } | null {
+    const m = this.missed;
+    if (this.changes.get(m.id)?.action !== "drop") return null;
+    const due = this.dueBy(m);
+    if (due === null) return null;
+    const busy = [
+      ...this.req.fixed.map((f) => span(f.start, f.end)),
+      ...this.req.items.filter((i) => i.id !== m.id).flatMap((i) => this.placement(i) ?? []),
+    ];
+    for (let s = due - 105 * MIN; s >= this.now; s -= 15 * MIN) {
+      const e = s + 15 * MIN;
+      if (this.local(s).hour < 7) break;
+      if (busy.some((b) => b.s < e && s < b.e)) continue;
+      return { item_id: m.id, start: s, end: e };
+    }
+    return null;
+  }
+
+  /**
+   * The one recovery text, built by code from the changes and the model's
+   * reasons, so it says exactly what the diff does: one SMS segment, plain
+   * characters, missed item first, and always "Nothing else changed."
+   */
   message(): string {
-    const order = [this.missed.id, ...[...this.changes.keys()].filter((id) => id !== this.missed.id)];
-    const lines = order.flatMap((id) => {
-      const c = this.changes.get(id);
-      const i = this.item(id)!;
-      if (!c) return [];
-      if (c.action === "drop") return [`Dropped ${i.title} because ${c.reason}.`];
+    const m = this.missed;
+    const title = (id: string) => plain(this.item(id)!.title);
+    const ids = [m.id, ...[...this.changes.keys()].filter((id) => id !== m.id)];
+    const moves = ids.filter((id) => this.changes.get(id)?.action === "move");
+    const shorter = (id: string) => {
+      const c = this.changes.get(id) as Extract<Change, { action: "move" }>;
       const mins = minutes({ s: c.start, e: c.end });
-      const shorter = mins < this.length(i) ? `, ${mins} min instead of ${this.length(i)},` : "";
-      return [`Moved ${i.title} to ${this.when(c.start)}${shorter} because ${c.reason}.`];
-    });
-    return [...lines, "Nothing else changed."].join(" ");
+      const full = this.length(this.item(id)!);
+      return mins < full ? `, ${mins} min instead of ${full},` : "";
+    };
+    // "Calc practice to 8am, Essay outline to 2pm and Read HIST ch. 4 to 3pm tomorrow"
+    const startOf = (id: string) => (this.changes.get(id) as Extract<Change, { action: "move" }>).start;
+    const list = (xs: string[]) => {
+      const parts = xs.map((id) => ({ id, ...this.whenParts(startOf(id)) }));
+      // Several moves the same day share it once ("... to 2pm and ... to 3pm tomorrow"); shortened ones say so in full.
+      const oneDay =
+        parts.length > 1 &&
+        parts.every((p) => p.day === parts[0].day && !shorter(p.id)) &&
+        ["today", "tomorrow"].includes(parts[0].day);
+      const each = parts.map((p) => `${title(p.id)} to ${oneDay ? p.clock : this.when(startOf(p.id))}${shorter(p.id)}`);
+      const joined = each.length > 1 ? `${each.slice(0, -1).join(", ")} and ${each.at(-1)}` : each[0];
+      return oneDay ? `${joined} ${parts[0].day}` : joined;
+    };
+    const unwell = !!this.req.missed.reply && UNWELL.test(this.req.missed.reply);
+    let text: string;
+    if (unwell && moves.length === ids.length) {
+      text = `Feel better. Moved ${list(moves)}.`;
+    } else {
+      const lines = ids.map((id) => {
+        const c = this.changes.get(id)!;
+        const deadline = this.deadline(this.item(id)!);
+        if (c.action === "drop") {
+          if (id === m.id && this.dueBy(m) !== null) {
+            const before = deadline ? plain(deadline.title) : "it's due";
+            const o = this.offer();
+            return o
+              ? `No free time before ${before}. Want a 15-min version at ${this.when(o.start)}, or skip it?`
+              : `No free time before ${before}, so ${title(id)} is off the plan.`;
+          }
+          return `Took ${title(id)} off the plan because ${c.reason}.`;
+        }
+        // Another session moved out of the way for the missed one.
+        const room =
+          id !== m.id &&
+          this.changes.get(m.id)?.action === "move" &&
+          (() => {
+            const mc = this.changes.get(m.id) as Extract<Change, { action: "move" }>;
+            const old = span(this.item(id)!.start, this.item(id)!.end);
+            return old.s < mc.end && mc.start < old.e;
+          })();
+        return room ? `Moved ${list([id])} to make room.` : `Moved ${list([id])} because ${c.reason}.`;
+      });
+      text = `${unwell ? "Feel better. " : ""}${lines.join(" ")}`;
+    }
+    return plain(`${text} Nothing else changed.`);
   }
 
   response(decided_by: RebuildResponse["decided_by"]): RebuildResponse {
-    return { version: 1, diff: this.diff(), message: this.message(), decided_by };
+    const o = this.offer();
+    const offer = o ? { item_id: o.item_id, start: this.instant(o.start), end: this.instant(o.end) } : null;
+    return { version: 1, diff: this.diff(), message: this.message(), offer, decided_by };
   }
 }
 
@@ -327,5 +433,9 @@ export function checkResponse(req: RebuildRequest, res: RebuildResponse): string
     if (!d.free(id).some((x) => x.s <= c.start && c.end <= x.e)) problems.push(`${id}: not free time`);
   }
   if (!problems.length && res.message !== d.message()) problems.push("the message doesn't match the diff");
+  if (res.message.length > MAX_TEXT || plain(res.message) !== res.message)
+    problems.push("the message isn't one plain SMS segment");
+  const o = d.offer();
+  if (JSON.stringify(res.offer ?? null) !== JSON.stringify(o ? { item_id: o.item_id, start: d.instant(o.start), end: d.instant(o.end) } : null)) problems.push("the offer doesn't match the plan"); // prettier-ignore
   return problems;
 }

@@ -83,8 +83,13 @@ export const RebuildResponse = z.object({
   version: z.literal(1),
   /** One entry per item in the request, in the same order. */
   diff: z.array(DiffEntry),
-  /** The one recovery message, ready to send as is. */
-  message: z.string().min(1).max(600),
+  /** The one recovery message, ready to send as is: plain characters, at most 160 (one SMS segment). */
+  message: z.string().min(1).max(160),
+  /**
+   * When the missed session can't fit before its deadline: a 15-minute version the text offers ("Want a 15-min
+   * version at 7:15am tomorrow, or skip it?"). It's outside the free time Tomorrow sent, so apply it only if they say yes.
+   */
+  offer: z.object({ item_id: Id, start: Instant, end: Instant }).nullable(),
   /** "fallback" when the model couldn't be used and code placed the missed item in the first open time. */
   decided_by: z.enum(["agent", "fallback"]),
 });

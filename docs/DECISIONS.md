@@ -266,3 +266,30 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   quiz photo now gives 0 items, the synthetic eval went 82% → 83% fully verified with 0 invented dates, and cost per
   photo $0.0210 → $0.0208. (2) is open: reading a grid-only class's times means computing them from where its block
   sits against the time axis, which needs the owner's call (see HACKATHON Nov 1).
+- 2026-11-01: The missed-session panel uses Tomorrow's "Forum" design (owner's request): its colour values and font
+  names (Instrument Sans, Noto Serif Display, Cinzel, via next/font) are scoped to the panel (`.forum` in
+  globals.css). Only values were taken from Tomorrow's design doc, no code. Within Forum's rules: crimson is the one
+  accent (Play button, deadline lines, focus); "green" check chips use the sage pastel; the person's text bubble is
+  inverted ink rather than crimson (Forum keeps crimson off content backgrounds); icons are Phosphor (light), the one
+  family Forum allows. The rest of Lens keeps its own tokens for now.
+- 2026-11-01: The panel's week renders the plan after the diff (`src/app/_lens/rebuild/week.ts`); a moved session sits
+  at its new time with a ghost at the old slot. `tests/unit/week.test.tsx` renders the grid and the phone timeline for
+  every recorded rebuild and checks each move's new time is drawn exactly there. Hours with nothing in them compress;
+  rows include free time a move could land in, so no phase changes the layout. Times are 12-hour; the axis uses
+  wall-clock hours, so the clock-change day lines up.
+- 2026-11-01: Motion is transform and opacity only (the glide is Web Animations along a sampled curve, 600 ms,
+  ease-out cubic; the path draws by dash offset). Every bubble, row, and chip is in the layout from the start,
+  invisible until it arrives; the panel holds its height before it renders. Measured layout shift: 0.001 desktop,
+  0.000 phone, through load and a whole run. Under reduced motion the run jumps to the final state, ghost and path
+  included.
+- 2026-11-01: Rebuild v7: a shortened session's reason says why accurately ("it's the longest free stretch before the
+  midterm"); the judge had scored "only an hour still fits" a 2 when 45 more minutes were free. Now 11/11 at 5.
+- 2026-11-02: Recovery texts (owner's review): at most 160 characters (one SMS segment) and plain ASCII, built by code
+  and enforced by `finish()` (the agent shortens its reasons) and a test over every recorded text. Several moves on
+  one day share it ("... to 8am, ... to 2pm and ... to 3pm tomorrow"); a session moved out of the way says "to make
+  room". A reply saying they're unwell opens with "Feel better." and drops the reasons. Rebuild v8.
+- 2026-11-02: Never just "Dropped X": when nothing fits before the deadline, code offers the best option and asks ("No
+  free time before Quiz 3. Want a 15-min version at 7:15am tomorrow, or skip it?"): 15 minutes ending 90 minutes
+  before the deadline (time to get there), not before 7 AM, overlapping nothing. It's outside Tomorrow's free time, so
+  the response carries it as `offer` and Tomorrow applies it only on a yes. The judge's rubric (v3) now says an offer
+  is a question, and "Feel better." is care; it had scored the offer 2 for being outside free time. 11/11 at 5.

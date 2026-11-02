@@ -15,7 +15,7 @@ export type Judgement = z.infer<typeof Judgement>;
 
 export const judgeTask: Task<Judgement> = {
   name: "judge_rebuild",
-  version: 2,
+  version: 3,
   instructions: `You grade one recovery message from a student planner. A planned session passed undone; the planner moved or dropped things and sent the student one message. You get the facts (their plan, deadlines, free time, and their reply), the changes, and the message.
 
 Score 1-5:
@@ -24,7 +24,9 @@ Score 1-5:
 3: acceptable but a clearly better choice existed, or a reason is generic.
 2: a reason is false or misleading, or the choice ignores what they said.
 1: the choice harms them (misses the deadline, overloads a day they said was out) or the message guilts, scolds, cheers, or pressures.
-The times in the message are computed by code and correct; don't grade their format. List what keeps it from a 5 (empty for a 5).`,
+The times in the message are computed by code and correct; don't grade their format.
+When nothing fits before the deadline, the text may offer a 15-minute version outside the free time ("Want a 15-min version at 7:15am tomorrow, or skip it?"). That's by design: it's a question, applied only if they say yes, so it may be shorter than the shortest version and outside the free time. Grade whether offering it is honest and helpful.
+"Feel better." before the moves, when they said they're sick, is care, not cheerleading. List what keeps it from a 5 (empty for a 5).`,
   schema: Judgement,
   check: (j) => (j.score < 5 && !j.problems.length ? "Say what keeps it from a 5." : null),
   effort: "low",

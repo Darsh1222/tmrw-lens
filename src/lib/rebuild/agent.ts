@@ -21,7 +21,7 @@ import { checkResponse, Draft, fallback, MAX_CHANGES, type Outcome } from "@/lib
 // gets an answer.
 
 /** Bump when the instructions or tools change; recorded rebuild evals go stale. */
-export const REBUILD_VERSION = 6;
+export const REBUILD_VERSION = 8;
 const TASK = "rebuild";
 
 const INSTRUCTIONS = `You rebuild a student's plan after they missed a planned study session or task. Tomorrow, their planner, sent the plan from now on: the items it placed, busy time, deadlines, and free time. You decide what moves or drops and why. Code checks every move and writes the message the student gets from your reasons.
@@ -35,7 +35,9 @@ How to work:
 6. When a tool refuses a move, read why and choose differently.
 7. Call propose_diff when the plan is ready.
 
+The whole text must fit one SMS (160 characters), so keep each reason under 60 characters.
 Reasons: one short clause that completes "Moved Calc practice to Thu 4pm because ...". Plain, calm, specific, about the plan: the deadline, what's free, what they said (accurately: "practice until 9" is not "tonight is out"). Lowercase start, no period, no clock times (code adds the time). No guilt, streaks, praise, cheerleading, or urgency, and don't mention the miss itself.
+When you shorten a session, the reason says why accurately: "it's the longest free stretch before the midterm", never that only that much time is left when other free time exists.
 When an item moves to make room, its reason says so ("it has no deadline, so it made room for Calc practice"), and the item placed in that time says what it's before ("the quiz is tomorrow morning"), not that the time was free.
 Good reasons: "it's the last free hour before the quiz", "you said tonight is out", "the essay isn't due until next week".`;
 

@@ -104,7 +104,8 @@ offset. Item ids are unique, at most 64 characters.
     },
     { "item_id": "s_outline", "action": "keep", "start": null, "end": null, "reason": null }
   ],
-  "message": "Moved Calc practice to 7:30am tomorrow because you said tonight is out and it's the last free time before the quiz. Nothing else changed.",
+  "message": "Moved Calc practice to 7:30am tomorrow because you said tonight is out and it's before the quiz. Nothing else changed.",
+  "offer": null,
   "decided_by": "agent"
 }
 ```
@@ -112,8 +113,14 @@ offset. Item ids are unique, at most 64 characters.
 - `diff` has one entry per request item, in the same order. `move` has the new `start`/`end` (it may be shorter than
   before, never below `min_minutes`); `drop` takes the item off the plan; `keep` leaves it alone.
 - At most 3 entries are not `keep`.
-- `message` is ready to send as is. It names every change, with times written by code in the person's zone, and ends
-  "Nothing else changed." No guilt, streaks, praise, or urgency (code refuses reasons that have them).
+- `message` is ready to send as is: at most 160 characters (one SMS segment), plain ASCII, built by code from the
+  changes so it names every one, times in the person's zone, ending "Nothing else changed." No guilt, streaks, praise,
+  or urgency (code refuses reasons that have them). When their reply says they're unwell it opens with "Feel better."
+- `offer`: when nothing fits before the missed session's deadline, the session is dropped and the text asks instead of
+  just dropping it: "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow, or skip it?". `offer` is that
+  slot (`item_id`, `start`, `end`): 15 minutes ending 90 minutes before the deadline, not before 7 AM, overlapping
+  nothing. It's outside the free time you sent, so apply it only if they say yes (create a 15-minute session there);
+  on "skip" or no reply, leave the drop as is. Otherwise `null`.
 - `decided_by` is `"fallback"` when the model couldn't be used (an outage, the spend cap, or no answer in time). Code then
   put the missed item in the first free time that fits before it's due, or dropped it if none does. It's still a valid
   rebuild; send it the same way.

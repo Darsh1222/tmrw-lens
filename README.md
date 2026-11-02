@@ -79,7 +79,9 @@ still free after practice and before the quiz tomorrow morning. Nothing else cha
 **Try a missed session**: eleven recorded cases replay for free, and "Rebuild it live" runs Muse Spark on your own
 reply.
 
-Eleven synthetic cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", "practice until 9", sick today,
+Every recorded message was read and approved by the owner (human-reviewed, Nov 2), not only scored by the judge,
+which is the same model as the agent. Every text fits one SMS segment (160 characters, plain ASCII), enforced by a
+test. Eleven synthetic cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", "practice until 9", sick today,
 shortening to fit, no time left, a reply that tries to give orders, the clock change, partial. Latest run
 (`evals/rebuild/results.json`):
 
@@ -88,9 +90,9 @@ shortening to fit, no time left, a reply that tries to give orders, the clock ch
 | Rebuilds right                   | **11 of 11**                   | 5 of 11               |
 | Invalid moves                    | **0**                          | 0                     |
 | Unkind messages                  | **0**                          | 0                     |
-| Judge score (Muse Spark, 1 to 5) | 4.73                           |                       |
-| Model cost per rebuild           | $0.0073 (3.7 turns, about 5 s) | free                  |
-| Tokens per call, cache hit rate  | 2613 in, 249 out; 82% cached   |                       |
+| Judge score (Muse Spark, 1 to 5) | 5.0                            |                       |
+| Model cost per rebuild           | $0.0072 (3.7 turns, about 5 s) | free                  |
+| Tokens per call, cache hit rate  | 2692 in, 254 out; 83% cached   |                       |
 
 ### Text a photo
 
