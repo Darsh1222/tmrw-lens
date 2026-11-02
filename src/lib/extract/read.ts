@@ -3,6 +3,7 @@ import { segmentImage } from "@/lib/meta/sam";
 import { runTask } from "@/lib/meta/task";
 import { rereadTask, taskFor } from "@/lib/extract/tasks";
 import { cropBoxes, cropObjects } from "@/lib/images/crop";
+import { measureGrid } from "@/lib/images/grid";
 import { objectFor } from "@/lib/plan/objects";
 import { rereadAgrees } from "@/lib/plan/verify";
 import type { PageReading, Reread, SceneObject, SourceMeta, SourceReading } from "@/lib/plan/types";
@@ -43,6 +44,8 @@ export const SEGMENTED_KINDS: SourceKind[] = ["whiteboard_photo", "notes_photo"]
 
 /** Bumped when how photos are segmented or cropped changes: recorded evals of photos are then re-read. */
 export const CROP_VERSION = 3;
+/** Bumped when how schedule grids are measured changes (src/lib/images/grid.ts): cached readings are then re-read. */
+export const GRID_VERSION = 1;
 
 export function dataUrl(bytes: Uint8Array, mime: string): string {
   return `data:${mime};base64,${Buffer.from(bytes).toString("base64")}`;
@@ -174,7 +177,13 @@ export async function readPage(
   opts: Opts & { sam?: boolean } = {},
 ): Promise<{ page: PageReading; calls: CallResult[] }> {
   const { sam = true, ...callOpts } = opts;
-  const { extraction, calls } = await extractPage(kind, p, callOpts);
+  const read = await extractPage(kind, p, callOpts);
+  const calls = read.calls;
+  // A grid's blocks and hour labels, measured from the pixels: code works out times from where they sit.
+  const extraction =
+    p.image && "view" in read.extraction && read.extraction.view === "grid"
+      ? await measureGrid(p.image, read.extraction)
+      : read.extraction;
   const page: PageReading = { page: p.page, text: p.text, extraction, rereads: {} };
   if (p.text === null && p.image) {
     if (sam && SEGMENTED_KINDS.includes(kind)) {

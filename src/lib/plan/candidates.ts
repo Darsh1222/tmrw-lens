@@ -42,6 +42,49 @@ import type {
 // check; nothing here compares sources (that's merge.ts).
 
 export const GRID_DAYS = "Read from which columns the class sits in on the grid.";
+export const GRID_TIMES =
+  "Worked out from where the block sits against the grid's time axis, to the nearest 5 minutes.";
+
+type AxisLabel = ScheduleExtraction["time_axis"][number];
+type Box = NonNullable<ScheduleExtraction["classes"][number]["block"]>;
+
+/**
+ * A grid block's times from where it sits: a straight line through the hour labels down the time axis (each label's
+ * middle is its hour line), read at the block's top and bottom edges, rounded to 5 minutes. A label more than 12
+ * minutes off the line the others make was misplaced, and is left out. Null when the axis has
+ * fewer than two readable labels, or the answer isn't a plausible class (outside 6 AM to midnight, under 15 minutes,
+ * over 5 hours).
+ */
+export function gridTimes(axis: AxisLabel[], block: Box | null): { start: string; end: string } | null {
+  if (!block) return null;
+  const points = axis.flatMap((l) => {
+    const t = parseTime(l.label_text);
+    if (!t.ok || t.kind !== "clock" || !l.evidence.box) return [];
+    const [h, m] = t.start.split(":").map(Number);
+    return [{ y: (l.evidence.box.y_min + l.evidence.box.y_max) / 2, hours: h + m / 60 }];
+  });
+  const fit = (ps: typeof points) => {
+    const my = ps.reduce((a, p) => a + p.y, 0) / ps.length;
+    const mh = ps.reduce((a, p) => a + p.hours, 0) / ps.length;
+    const slope = ps.reduce((a, p) => a + (p.y - my) * (p.hours - mh), 0) / ps.reduce((a, p) => a + (p.y - my) ** 2, 0);
+    return { my, mh, slope, off: (p: (typeof ps)[number]) => Math.abs(mh + (p.y - my) * slope - p.hours) };
+  };
+  let used = points;
+  for (;;) {
+    if (new Set(used.map((p) => p.hours)).size < 2) return null;
+    const f = fit(used);
+    const worst = used.reduce((a, p) => (f.off(p) > f.off(a) ? p : a));
+    if (used.length <= 3 || f.off(worst) <= 0.2) break;
+    used = used.filter((p) => p !== worst);
+  }
+  const { my, mh, slope } = fit(used);
+  if (!Number.isFinite(slope) || slope <= 0) return null;
+  const at = (y: number) => Math.round(((mh + (y - my) * slope) * 60) / 5) * 5;
+  const [start, end] = [at(block.y_min), at(block.y_max)];
+  if (start < 6 * 60 || end > 24 * 60 || end - start < 15 || end - start > 300) return null;
+  const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+  return { start: hhmm(start), end: hhmm(end) };
+}
 
 type Page<T> = { source: SourceMeta; page: PageReading; data: T };
 
@@ -190,8 +233,23 @@ function gridMeetings(data: ScheduleExtraction): { c: Meeting; members: { i: num
   const all = data.classes.map((c, i) => ({ c, members: [{ i, quote: c.evidence.quote }] }));
   if (data.view !== "grid") return all;
   const groups = new Map<string, typeof all>();
+  // Blocks without written times group by the times their position gives, within 10 minutes: the same class
+  // measured a pixel apart in two columns can round to neighbouring 5 minutes.
+  const placedOf = (c: Meeting) => (c.start_text && c.end_text ? null : gridTimes(data.time_axis ?? [], c.block ?? null)); // prettier-ignore
+  const mins = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3));
+  const close = (a: { start: string; end: string }, b: { start: string; end: string }) =>
+    Math.abs(mins(a.start) - mins(b.start)) <= 10 && Math.abs(mins(a.end) - mins(b.end)) <= 10;
   for (const e of all) {
-    const k = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.start_text, e.c.end_text, e.c.location].join("|");
+    const placed = placedOf(e.c);
+    const base = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.location].join("|");
+    const near = placed
+      ? [...groups.keys()].find((k) => {
+          const first = groups.get(k)![0].c;
+          const other = placedOf(first);
+          return k.startsWith(`${base}|placed|`) && other && close(placed, other);
+        })
+      : undefined;
+    const k = near ?? (placed ? `${base}|placed|${placed.start}|${placed.end}` : `${base}|${e.c.start_text}|${e.c.end_text}`); // prettier-ignore
     groups.set(k, [...(groups.get(k) ?? []), e]);
   }
   return [...groups.values()].map((g) => {
@@ -205,8 +263,16 @@ function gridMeetings(data: ScheduleExtraction): { c: Meeting; members: { i: num
           y_max: Math.max(...boxes.map((b) => b.y_max)),
         }
       : null;
+    // Every block in a group sits at the same height: the most common measurement stands for them all.
+    const blocks = g.flatMap((e) => (e.c.block ? [e.c.block] : []));
+    const common = (key: "y_min" | "y_max") => {
+      const counts = new Map<number, number>();
+      for (const b of blocks) counts.set(b[key], (counts.get(b[key]) ?? 0) + 1);
+      return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0]?.[0];
+    };
     const c: Meeting = {
       ...g[0].c,
+      block: blocks.length ? { ...blocks[0], y_min: common("y_min")!, y_max: common("y_max")! } : null,
       days_text: [...new Set(g.map((e) => e.c.days_text))].join(" "),
       evidence: { quote: g.map((e) => e.c.evidence.quote).join("\n"), box },
     };
@@ -250,10 +316,12 @@ export function classBlocks(
         fields: [0, 1, 2].map((k) => worst(...reads.map((r) => r.fields[k]))),
       };
       const days = parseDays(c.days_text);
-      const start = parseTime(c.start_text);
-      const end = parseTime(c.end_text);
-      const startT = start.ok && start.kind === "clock" ? start.start : null;
-      const endT = end.ok && end.kind === "clock" ? end.start : null;
+      const start = c.start_text ? parseTime(c.start_text) : null;
+      const end = c.end_text ? parseTime(c.end_text) : null;
+      // A grid block with no times written: from its position, unconfirmed until the person says so.
+      const placed = grid && (!c.start_text || !c.end_text) ? gridTimes(data.time_axis ?? [], c.block ?? null) : null;
+      const startT = placed?.start ?? (start?.ok && start.kind === "clock" ? start.start : null);
+      const endT = placed?.end ?? (end?.ok && end.kind === "clock" ? end.start : null);
       // On a grid, days come from which column a block sits in: no quote can prove that, so the person confirms.
       const daysCheck: Check = !days
         ? { status: "unverified", reason: `Can't read "${c.days_text}".` }
@@ -262,8 +330,16 @@ export function classBlocks(
           : read.fields[0];
       const timeCheck: Check =
         startT && endT && startT < endT
-          ? worst(read.fields[1], read.fields[2])
-          : { status: "unverified", reason: `Can't read "${c.start_text} - ${c.end_text}".` };
+          ? placed
+            ? { status: "needs_question", reason: GRID_TIMES }
+            : worst(read.fields[1], read.fields[2])
+          : {
+              status: "unverified",
+              reason:
+                c.start_text && c.end_text
+                  ? `Can't read "${c.start_text} - ${c.end_text}".`
+                  : "No times written on the block, and its place on the grid couldn't be read.",
+            };
       const key = [course, c.meeting_type, days?.join(""), startT, endT].join("|");
       if (seen.has(key)) continue; // the same meeting from a second schedule source
       seen.add(key);

@@ -1,5 +1,13 @@
 import { DateTime } from "luxon";
-import { answeredDate, candidates, classBlocks, GRID_DAYS, termBreaks, termDate } from "@/lib/plan/candidates";
+import {
+  answeredDate,
+  candidates,
+  classBlocks,
+  GRID_DAYS,
+  GRID_TIMES,
+  termBreaks,
+  termDate,
+} from "@/lib/plan/candidates";
 import { linkDependents, propagate } from "@/lib/plan/depends";
 import { formatTime, merge } from "@/lib/plan/merge";
 import type { Candidate, ClassBlock, Facts, Plan, PlanItem, Question, SourceReading, TermDate } from "@/lib/plan/types";
@@ -141,15 +149,20 @@ export function buildPlan(input: SourceReading[], { zone, facts = {} }: { zone: 
     });
   }
 
-  // Class days read off a grid: one question per screenshot, not one per class.
-  const gridSources = new Set(classes.filter((c) => c.checks.days.reason === GRID_DAYS).map((c) => c.source.id));
+  // Class days (and times, where a block shows none) read off a grid: one question per screenshot, not one per class.
+  const fromGrid = (c: ClassBlock) => c.checks.days.reason === GRID_DAYS || c.checks.time.reason === GRID_TIMES;
+  const gridSources = new Set(classes.filter(fromGrid).map((c) => c.source.id));
   for (const sourceId of gridSources) {
     const read = classes.filter((c) => c.source.id === sourceId);
+    const placed = read.some((c) => c.checks.time.reason === GRID_TIMES);
+    const what = placed
+      ? "which days each class meets from the columns, and its times from where it sits against the time axis,"
+      : "which days each class meets from the columns";
     asked.push({
       id: `q_grid_days_${sourceId}`,
       about: sourceId,
       type: "check",
-      prompt: `I read which days each class meets from the columns of the ${read[0].source.label}. Are these right? ${read.map((c) => `${c.course} ${MEETING[c.meeting_type]}: ${c.days.map((d) => WEEKDAY_NAMES[d].slice(0, 3)).join(" ")}`).join("; ")}.`,
+      prompt: `I read ${what} of the ${read[0].source.label}. Are these right? ${read.map((c) => `${c.course} ${MEETING[c.meeting_type]}: ${c.days.map((d) => WEEKDAY_NAMES[d].slice(0, 3)).join(" ")}${placed ? ` ${formatTime(c.start)}-${formatTime(c.end)}` : ""}`).join("; ")}.`, // prettier-ignore
       options: [
         { id: "confirm", label: "Yes, they're right", value: "confirm", evidence: null },
         { id: "edit", label: "Let me fix them", value: null, evidence: null },

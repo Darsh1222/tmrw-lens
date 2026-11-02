@@ -14,6 +14,8 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, extname, join } from "node:path";
 import { DateTime } from "luxon";
+import { measureGrid } from "@/lib/images/grid";
+import type { ScheduleExtraction } from "@/lib/schemas/extraction";
 import { readEnv } from "@/lib/env";
 import {
   CROP_VERSION,
@@ -234,6 +236,8 @@ async function record(file: string) {
 }
 
 function loadRec(file: string): Recording {
+  const done = measured.get(file);
+  if (done) return done;
   let rec: Recording;
   try {
     rec = JSON.parse(readFileSync(recPath(file), "utf8")) as Recording;
@@ -481,6 +485,23 @@ if (live || real) {
     for (const f of todo) await record(f);
   }
 }
+// Schedule grids are measured from the pixels in code (src/lib/images/grid.ts), here as in the app; recordings keep
+// what the model said, so a change to the measuring needs no new recording.
+const measured = new Map<string, Recording>();
+for (const f of files)
+  if (metaOf(f).kind === "testudo_screenshot" && fresh(f)) {
+    const rec = loadRec(f);
+    const inputs = await inputsOf(f);
+    const pages = await Promise.all(
+      rec.pages.map(async (p, i) => {
+        const image = inputs[i]?.image;
+        return image && "view" in p.extraction
+          ? { ...p, extraction: await measureGrid(image, p.extraction as ScheduleExtraction) }
+          : p;
+      }),
+    );
+    measured.set(f, { ...rec, pages });
+  }
 function fresh(file: string): boolean {
   try {
     loadRec(file);

@@ -1,7 +1,10 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { answerQuestion } from "@/lib/plan/answer";
 import { auditPlan } from "@/lib/plan/audit";
 import { buildPlan } from "@/lib/plan/build";
+import { GRID_TIMES, gridTimes } from "@/lib/plan/candidates";
+import { measureGrid } from "@/lib/images/grid";
 import { matchCourse, familyOf } from "@/lib/plan/courses";
 import { dedupeObjects, objectFor } from "@/lib/plan/objects";
 import { verifyReading } from "@/lib/plan/verify";
@@ -122,9 +125,10 @@ const schedule: SourceReading = {
         term_text: "Fall 2026",
         term_end: null, breaks: [],
         view: "text",
+        time_axis: [],
         classes: [
-          { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", evidence: ev("Lec  MWF  10:00am - 10:50am  ESJ 0224") },
-          { course_code: "PHYS161", section: "0101", title: "General Physics: Mechanics", meeting_type: "lecture", days_text: "MWF", start_text: "1:00pm", end_text: "1:50pm", location: "PHY 1412", evidence: ev("Lec  MWF  1:00pm - 1:50pm  PHY 1412") },
+          { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", block: null, evidence: ev("Lec  MWF  10:00am - 10:50am  ESJ 0224") },
+          { course_code: "PHYS161", section: "0101", title: "General Physics: Mechanics", meeting_type: "lecture", days_text: "MWF", start_text: "1:00pm", end_text: "1:50pm", location: "PHY 1412", block: null, evidence: ev("Lec  MWF  1:00pm - 1:50pm  PHY 1412") },
         ],
       },
     },
@@ -506,5 +510,94 @@ describe("SAM objects", () => {
       label: "sticky_note",
       outline: note.outline,
     });
+  });
+});
+
+describe("grid times from position (option a)", () => {
+  // The synthetic grid: hour lines 92px apart from y=110 (8am), each label centred on its line; 1000px tall, so the
+  // model's 0-1000 boxes are pixels.
+  const label = (text: string, hour: number) => {
+    const y = 110 + (hour - 8) * 92;
+    return { label_text: text, evidence: { quote: text, box: { x_min: 24, y_min: y - 6, x_max: 60, y_max: y + 6 } } };
+  };
+  const axis = [label("8am", 8), label("9am", 9), label("10am", 10), label("11am", 11), label("12pm", 12), label("1pm", 13), label("2pm", 14), label("3pm", 15), label("4pm", 16), label("5pm", 17)]; // prettier-ignore
+  const block = (top: number, bottom: number) => ({ x_min: 88, y_min: top, x_max: 270, y_max: bottom });
+
+  it("reads a block's top and bottom edges against the hour labels, to the nearest 5 minutes", () => {
+    expect(gridTimes(axis, block(295, 370))).toEqual({ start: "10:00", end: "10:50" });
+    expect(gridTimes(axis, block(800, 914))).toEqual({ start: "15:30", end: "16:45" });
+    // A few pixels off either way still lands on the same 5 minutes.
+    expect(gridTimes(axis, block(297, 368))).toEqual({ start: "10:00", end: "10:50" });
+  });
+
+  it("leaves out an hour label the others disagree with", () => {
+    const off = axis.map((l, i) => (i === 7 ? { ...l, evidence: { ...l.evidence, box: { ...l.evidence.box, y_min: 735, y_max: 747 } } } : l)); // prettier-ignore
+    expect(gridTimes(off, block(800, 914))).toEqual({ start: "15:30", end: "16:45" });
+  });
+
+  it("measures the model's rough boxes against the pixels: every block on the fixture lands on its time", async () => {
+    const rec = JSON.parse(readFileSync("evals/recorded/testudo-grid-blocks.png.json", "utf8"));
+    const image = new Uint8Array(readFileSync("fixtures/synthetic/testudo-grid-blocks.png"));
+    const raw = rec.pages[0].extraction;
+    const measured = await measureGrid(image, raw);
+    const truth: Record<string, string> = { "MATH141 discussion": "09:00-09:50", "MATH141 lecture": "10:00-10:50", "CMSC131 lecture": "11:00-12:15", "PHYS161 lecture": "13:00-13:50", "CMSC131 lab": "14:00-14:50", "ENGL101 lecture": "15:30-16:45" }; // prettier-ignore
+    const read = (ex: typeof raw) =>
+      ex.classes.map((c: (typeof raw.classes)[number]) => {
+        const t = gridTimes(ex.time_axis, c.block);
+        return t && `${t.start}-${t.end}` === truth[`${c.course_code} ${c.meeting_type}`];
+      });
+    // The model's own boxes put most blocks 10 to 20 minutes off; measured, all are right.
+    expect(read(raw).filter(Boolean).length).toBeLessThan(raw.classes.length);
+    expect(read(measured).every(Boolean)).toBe(true);
+  });
+
+  it("needs two readable hour labels, and a plausible class", () => {
+    expect(gridTimes([], block(295, 370))).toBeNull();
+    expect(gridTimes([label("10am", 10)], block(295, 370))).toBeNull();
+    expect(gridTimes([label("10am", 10), { ...label("ten", 11), label_text: "ten" }], block(295, 370))).toBeNull();
+    expect(gridTimes(axis, null)).toBeNull();
+    expect(gridTimes(axis, block(295, 300))).toBeNull(); // 5 minutes isn't a class
+  });
+
+  it("asks once per screenshot, listing days and times, and a yes confirms them all", () => {
+    const box = (b: ReturnType<typeof block>) => ({ quote: "", box: b });
+    const cls = (code: string, days: string, top: number, bottom: number) => ({
+      course_code: code, section: null, title: null, meeting_type: "lecture" as const, days_text: days,
+      start_text: null, end_text: null, location: null, block: block(top, bottom),
+      evidence: { ...box(block(top, top + 20)), quote: `${days}\n${code} Lec` },
+    }); // prettier-ignore
+    const reading: SourceReading = {
+      source: { id: "grid", kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null, added_at: "2026-10-29T09:00:00-04:00" }, // prettier-ignore
+      pages: [
+        {
+          page: null,
+          text: null,
+          // The second, independent read of each block's box agrees with the first.
+          rereads: {
+            "classes.0": { text: "MATH141 Lec", legible: "clear" },
+            "classes.1": { text: "MATH141 Lec", legible: "clear" },
+            "classes.2": { text: "ENGL101 Lec", legible: "clear" },
+          },
+          extraction: {
+            term_text: null,
+            term_end: null,
+            breaks: [],
+            view: "grid",
+            time_axis: axis,
+            classes: [cls("MATH141", "Monday", 295, 370), cls("MATH141", "Wednesday", 295, 370), cls("ENGL101", "Monday", 800, 914)], // prettier-ignore
+          },
+        } as unknown as SourceReading["pages"][number],
+      ],
+    };
+    const plan = buildPlan([reading], { zone: "America/New_York" });
+    const math = plan.classes.find((c) => c.course === "MATH141")!;
+    expect(math).toMatchObject({ days: [1, 3], start: "10:00", end: "10:50", status: "needs_question" });
+    expect(math.checks.time).toMatchObject({ status: "needs_question", reason: GRID_TIMES });
+    const qs = plan.questions.filter((q) => q.id.startsWith("q_grid_days_"));
+    expect(qs).toHaveLength(1);
+    expect(qs[0].prompt).toMatch(/where it sits against the time axis/);
+    expect(qs[0].prompt).toMatch(/MATH141 lecture: Mon Wed 10(:00)?(am|AM)?-10:50/);
+    const answered = answerQuestion(plan, qs[0].id, "confirm", "confirm");
+    expect(answered.classes.every((c) => c.status === "verified")).toBe(true);
   });
 });

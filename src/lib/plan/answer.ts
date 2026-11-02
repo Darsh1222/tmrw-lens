@@ -238,6 +238,8 @@ function applyToRest(plan: Plan, q: Question, value: string | null, typed: strin
     if (q.about === c.id) editClass(c, edits, until(plan));
     else if (edits[c.id]) editClass(c, { days: edits[c.id] }, until(plan));
     else c.checks.days = settled("You confirmed this.");
+    // The question listed each class's times from the grid too: what they didn't change, they confirmed.
+    if (q.about !== c.id && c.checks.time.status === "needs_question") c.checks.time = settled("You confirmed this.");
     classStatus(c);
   }
 }

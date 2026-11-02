@@ -40,9 +40,9 @@ type TermDate = { date_text: string; evidence: { quote: string } } | null;
 
 export const scheduleTask: Task<ScheduleExtraction> = {
   name: "extract_schedule",
-  version: 3,
+  version: 4,
   instructions: `You read a student's weekly class schedule from the University of Maryland's Testudo: a screenshot (grid view, list view, or both) or pasted text. Extract every class meeting: one entry per meeting pattern (a lecture on MWF and a discussion on TuTh are two entries).
-If a text list of courses is visible, read from it rather than from positions on the grid. Ignore names, IDs, and anything that isn't a class meeting. If it shows the last day of classes, fill term_end with those words and their quote. If it lists breaks or days with no classes, add each to breaks.
+If a text list of courses is visible, read from it rather than from positions on the grid. On a grid, give one entry per block (per column it sits in), with the block's whole rectangle in block, and list every hour label down the time axis in time_axis; when a block doesn't show its times, leave start_text and end_text null (code works them out from where the block sits). Ignore names, IDs, and anything that isn't a class meeting. If it shows the last day of classes, fill term_end with those words and their quote. If it lists breaks or days with no classes, add each to breaks.
 ${RULES}`,
   schema: ScheduleExtraction,
   maxOutputTokens: 12_000,
@@ -53,6 +53,7 @@ ${RULES}`,
         quote: c.evidence.quote,
         fields: [c.days_text, c.start_text, c.end_text],
       })),
+      ...o.time_axis.map((t, i) => ({ label: `time_axis[${i}]`, quote: t.evidence.quote, fields: [t.label_text] })),
       ...termRows(o),
     ]),
 };

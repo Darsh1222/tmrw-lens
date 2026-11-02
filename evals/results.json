@@ -1,11 +1,11 @@
 {
   "headline": {
-    "cases": 11,
+    "cases": 12,
     "with_sam": {
-      "fully_verified": "82/99 (83%)",
+      "fully_verified": "82/105 (78%)",
       "invented_dates": "0 of 181",
       "items_found": "75/75",
-      "classes_right": "24/24",
+      "classes_right": "30/30",
       "dates_right": "65/65",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
@@ -13,13 +13,13 @@
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "23/23",
-      "status": "verified 82, needs_question 13, conflict 4"
+      "status": "verified 82, needs_question 19, conflict 4"
     },
     "without_sam": {
-      "fully_verified": "82/99 (83%)",
+      "fully_verified": "82/105 (78%)",
       "invented_dates": "0 of 181",
       "items_found": "75/75",
-      "classes_right": "24/24",
+      "classes_right": "30/30",
       "dates_right": "65/65",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
@@ -27,13 +27,13 @@
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "0/23",
-      "status": "verified 82, needs_question 13, conflict 4"
+      "status": "verified 82, needs_question 19, conflict 4"
     },
     "cost": {
       "photos": 5,
       "box_per_photo": 0.013881860000000001,
       "sam_per_photo": 0.020794299999999998,
-      "tokens_per_call": "1472 in, 824 out",
+      "tokens_per_call": "1700 in, 964 out",
       "cache_hit_rate": "13%"
     }
   },
@@ -184,6 +184,34 @@
       "thenRight": 0,
       "photoQuotes": 4,
       "inRegion": 4,
+      "notes": []
+    },
+    {
+      "name": "schedule-grid-blocks",
+      "things": 6,
+      "verified": 0,
+      "status": {
+        "needs_question": 6
+      },
+      "goldItems": 0,
+      "found": 0,
+      "extra": [],
+      "missed": [],
+      "dates": 0,
+      "datesRight": 0,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 0,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 6,
+      "classesExpected": 6,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
       "notes": []
     },
     {

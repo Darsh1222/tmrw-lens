@@ -1,5 +1,5 @@
 import type { Env } from "@/lib/env";
-import { CROP_VERSION, readPage, SEGMENTED_KINDS } from "@/lib/extract/read";
+import { CROP_VERSION, GRID_VERSION, readPage, SEGMENTED_KINDS } from "@/lib/extract/read";
 import { rereadTask, taskFor } from "@/lib/extract/tasks";
 import type { CallResult } from "@/lib/meta/client";
 import type { PageReading } from "@/lib/plan/types";
@@ -24,7 +24,7 @@ export async function readCached(
   { env, kv, onMiss }: { env: Env; kv: Kv; onMiss?: () => Promise<void> },
 ): Promise<{ page: PageReading; cached: boolean; calls: CallResult[] }> {
   const { kind, page, image, mime, text } = input;
-  const salt = [kind, taskFor(kind).version, rereadTask(1).version, CROP_VERSION, env.MUSE_SPARK_MODEL, env.SAM_MODEL, page ?? 0].join("|"); // prettier-ignore
+  const salt = [kind, taskFor(kind).version, rereadTask(1).version, CROP_VERSION, GRID_VERSION, env.MUSE_SPARK_MODEL, env.SAM_MODEL, page ?? 0].join("|"); // prettier-ignore
   const content = image ? Buffer.concat([image, Buffer.from(`\n${text ?? ""}`)]) : (text ?? "");
   const cache = contentCache(kv, salt);
   const hit = await cache.get<PageReading>(content).catch(() => null);

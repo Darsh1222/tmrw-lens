@@ -14,6 +14,11 @@
     "label": "Testudo screenshot",
     "captured_at": null
   },
+  "testudo-grid-blocks.png": {
+    "kind": "testudo_screenshot",
+    "label": "Testudo screenshot",
+    "captured_at": null
+  },
   "syllabus-math141.pdf": {
     "kind": "syllabus_pdf",
     "label": "MATH141 syllabus",

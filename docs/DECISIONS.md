@@ -336,3 +336,12 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   scrollbar shifts nothing. The results week ends at midnight: an 11:59 PM deadline no longer opens a 12 AM row.
 - 2026-11-02: Machine-written eval outputs (rebuild and extract results and recordings) are Prettier-ignored like
   evals/results.json: CI failed on 035a4ad because the rebuild results were written by JSON.stringify.
+- 2026-11-02: Grid option (a), as agreed: a block with no times written gets them from where it sits. The model's
+  boxes alone were 10 to 30 pixels off on the synthetic grid (up to 20 minutes), more than rounding can absorb, so
+  code measures in the pixels (src/lib/images/grid.ts): each block grows from a coloured point inside the model's box
+  to its exact edges; each hour label snaps to the nearest grid line (else the middle of its ink). A straight line
+  through the labels gives the times, leaving out any label more than 12 minutes off the others; rounded to 5
+  minutes. Blocks of one class measured a step apart in two columns are one class. The model reads, code measures and
+  computes, the person confirms: the times are `needs_question` with one question per screenshot, which lists them.
+  Recordings keep the model's raw boxes; the eval replays the measuring, so changing it needs no re-recording.
+  GRID_VERSION is in the reading cache's key.

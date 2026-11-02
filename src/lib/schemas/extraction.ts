@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ModelEvidence } from "@/lib/schemas/evidence";
+import { ModelBox, ModelEvidence } from "@/lib/schemas/evidence";
 
 // What Muse Spark returns for each of the four input types, one image (or one
 // pasted text) at a time. Dates, days, and times are the words as written
@@ -16,9 +16,12 @@ export const ScheduleClass = z.object({
   title: maybe("Course title if shown"),
   meeting_type: z.enum(["lecture", "discussion", "lab", "other"]),
   days_text: text('Meeting days as written, e.g. "MWF" or "TuTh"'),
-  start_text: text('Start time as written, e.g. "10:00am"'),
-  end_text: text('End time as written, e.g. "10:50am"'),
+  start_text: maybe('Start time as written, e.g. "10:00am"; null on a grid block that shows no time'),
+  end_text: maybe('End time as written, e.g. "10:50am"; null on a grid block that shows no time'),
   location: maybe('Building and room as written, e.g. "ESJ 0224"'),
+  block: ModelBox.nullable().describe(
+    "Grid view only: the whole colored block, from its top edge to its bottom edge (not just its text); null otherwise",
+  ),
   evidence: ModelEvidence,
 });
 /** A term boundary as written, with its quote: "Classes begin Monday, August 31, 2026". */
@@ -46,6 +49,9 @@ export const ScheduleExtraction = z.object({
   view: z
     .enum(["list", "grid", "text"])
     .describe("list if a text list of classes is visible (preferred over reading grid positions)"),
+  time_axis: z
+    .array(z.object({ label_text: text('An hour label as written, e.g. "9am", "1:00 PM"'), evidence: ModelEvidence }))
+    .describe("Grid view only: every hour label down the time axis, top to bottom, each with its box; empty otherwise"),
   classes: z.array(ScheduleClass),
 });
 export type ScheduleExtraction = z.infer<typeof ScheduleExtraction>;

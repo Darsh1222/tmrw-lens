@@ -55,6 +55,12 @@ Meta models used: Muse Spark (`muse-spark-1.3`) for extraction, verification, an
 
 ### Nov 2
 
+- A Testudo grid whose blocks show no times now works: Muse Spark reads each block and the hour labels down the side,
+  and code measures them in the pixels (each block's exact top and bottom edge, each label's grid line), then works out
+  the times from where each block sits, to the nearest 5 minutes. They stay "needs a look" until you confirm them in
+  the one question for that screenshot, which lists every class's days and times. On a real Testudo screenshot: 9
+  classes found, 9 with times. Synthetic evals: classes right 30 of 30 (was 26), 0 invented dates.
+
 - Spend limits per person, not just one shared cap. Every model call is charged to someone: a Tomorrow user (by
   Tomorrow's opaque id, hashed) gets 30 calls and $0.50 a day; a visitor to the public demo (a signed cookie and their
   address, hashed) gets 25 calls and $0.40. Behind those, two global brakes: $5 a day for the public demo and $20 for

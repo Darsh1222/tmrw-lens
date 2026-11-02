@@ -63,8 +63,9 @@ const schedule: SourceReading = {
         term_end: null,
         breaks: [],
         view: "text",
+        time_axis: [],
         classes: [
-          { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", evidence: ev(classLine) }, // prettier-ignore
+          { course_code: "MATH141", section: "0121", title: "Calculus II", meeting_type: "lecture", days_text: "MWF", start_text: "10:00am", end_text: "10:50am", location: "ESJ 0224", block: null, evidence: ev(classLine) }, // prettier-ignore
         ],
       },
     },

@@ -73,7 +73,8 @@ function minutes(t: string): number {
   return ((Number(m[1]) % 12) + (m[3] === "pm" ? 12 : 0)) * 60 + Number(m[2]);
 }
 
-function scheduleScreenshot({ list = true } = {}) {
+/** `times: false` draws blocks with only the course and room, as some schedule views do: times come from position. */
+function scheduleScreenshot({ list = true, times = true } = {}) {
   const W = list ? 1600 : 1010,
     H = 1000;
   const c = createCanvas(W, H);
@@ -130,8 +131,10 @@ function scheduleScreenshot({ list = true } = {}) {
         g.font = "bold 15px Helvetica";
         g.fillText(`${course.code} ${m.type}`, x + 8, top + 20);
         g.font = "13px Helvetica";
-        g.fillText(`${m.start}-${m.end}`, x + 8, top + 38);
-        if (height > 60) g.fillText(m.room, x + 8, top + 55);
+        if (times) {
+          g.fillText(`${m.start}-${m.end}`, x + 8, top + 38);
+          if (height > 60) g.fillText(m.room, x + 8, top + 55);
+        } else g.fillText(m.room, x + 8, top + 38);
       }
 
   if (!list) return c.toBuffer("image/png");
@@ -436,6 +439,7 @@ function stickyNotes(seed: number) {
 
 writeFileSync(join(OUT, "testudo-schedule.png"), scheduleScreenshot());
 writeFileSync(join(OUT, "testudo-grid.png"), scheduleScreenshot({ list: false }));
+writeFileSync(join(OUT, "testudo-grid-blocks.png"), scheduleScreenshot({ list: false, times: false }));
 writeFileSync(join(OUT, "syllabus-cmsc131.pdf"), await cmscSyllabusPdf());
 writeFileSync(
   join(OUT, "whiteboard-math141.jpg"),
@@ -569,6 +573,7 @@ const manifest = {
   "testudo-schedule.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "testudo-schedule.txt": { kind: "testudo_text", label: "pasted Testudo schedule", captured_at: null },
   "testudo-grid.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
+  "testudo-grid-blocks.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "syllabus-math141.pdf": { kind: "syllabus_pdf", label: "MATH141 syllabus", captured_at: null },
   "syllabus-cmsc131.pdf": { kind: "syllabus_pdf", label: "CMSC131 syllabus", captured_at: null },
   "whiteboard-math141.jpg": {
