@@ -19,6 +19,11 @@
     "label": "Testudo screenshot",
     "captured_at": null
   },
+  "testudo-grid-popup.png": {
+    "kind": "testudo_screenshot",
+    "label": "Testudo screenshot",
+    "captured_at": null
+  },
   "syllabus-math141.pdf": {
     "kind": "syllabus_pdf",
     "label": "MATH141 syllabus",
@@ -58,6 +63,11 @@
     "kind": "lms_screenshot",
     "label": "course site screenshot",
     "captured_at": null
+  },
+  "dorm-wall.jpg": {
+    "kind": "notes_photo",
+    "label": "dorm wall photo",
+    "captured_at": "2026-11-01T21:40:00-05:00"
   },
   "whiteboard-blurry.jpg": {
     "kind": "whiteboard_photo",

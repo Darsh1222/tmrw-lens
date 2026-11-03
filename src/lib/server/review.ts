@@ -1,7 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import type { Kv } from "@/lib/server/kv";
 
-// Review links for text-a-photo: https://lens.bettertmrw.app/review/<token>,
+// Review links for text-a-photo: https://tmrw-lens.vercel.app/review/<token>,
 // valid for 24 hours. What was read is stored encrypted with a random key that
 // exists only inside the link, so Lens's storage alone can't open it; the link
 // is signed with Lens's secret, so it can't be forged or have its expiry

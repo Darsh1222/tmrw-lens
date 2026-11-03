@@ -24,7 +24,7 @@ const schema = z.object({
   // review links. Unset: those routes answer 503. At least 32 characters.
   LENS_REBUILD_SECRET: z.string().min(32).optional(),
   // Where review links point (text-a-photo, docs/EXTRACT_CONTRACT.md).
-  LENS_PUBLIC_URL: z.url().default("https://lens.bettertmrw.app"),
+  LENS_PUBLIC_URL: z.url().default("https://tmrw-lens.vercel.app"),
   VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
 });
 

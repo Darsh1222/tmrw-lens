@@ -25,7 +25,7 @@ disagree, the files are right.
 ## Request
 
 ```http
-POST https://lens.bettertmrw.app/api/extract
+POST https://tmrw-lens.vercel.app/api/extract
 Authorization: Bearer <LENS_REBUILD_SECRET>
 Content-Type: application/json
 ```
@@ -121,7 +121,7 @@ The whole body must stay under 4.5 MB (Vercel's limit): one 3 MB photo, or sever
       "why": "The whiteboard photo says it changed, and it's newer than your MATH141 syllabus.",
     },
   ],
-  "review": { "url": "https://lens.bettertmrw.app/review/<token>", "expires_at": "2026-10-29T15:05:00.000Z" },
+  "review": { "url": "https://tmrw-lens.vercel.app/review/<token>", "expires_at": "2026-10-29T15:05:00.000Z" },
 }
 ```
 
@@ -181,6 +181,6 @@ The four cases in [`evals/extract/cases.ts`](../evals/extract/cases.ts) use the 
 
 ```bash
 jq -n --arg img "$(base64 -i fixtures/synthetic/canvas-todo.png)" '{version:1,user_ref:"test_user_1",zone:"America/New_York",now:"2026-11-01T18:00:00-05:00",images:[{data:$img}],existing:[],term:{start:"2026-08-31",end:"2026-12-08"}}' > extract-request.json
-curl -s https://lens.bettertmrw.app/api/extract -H "Authorization: Bearer $LENS_REBUILD_SECRET" \
+curl -s https://tmrw-lens.vercel.app/api/extract -H "Authorization: Bearer $LENS_REBUILD_SECRET" \
   -H "Content-Type: application/json" --data @extract-request.json
 ```

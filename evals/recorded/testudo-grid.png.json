@@ -27,10 +27,10 @@
             "evidence": {
               "quote": "8am",
               "box": {
-                "x_min": 18,
+                "x_min": 22,
                 "y_min": 102,
-                "x_max": 55,
-                "y_max": 117
+                "x_max": 52,
+                "y_max": 116
               }
             }
           },
@@ -39,10 +39,10 @@
             "evidence": {
               "quote": "9am",
               "box": {
-                "x_min": 18,
-                "y_min": 193,
-                "x_max": 55,
-                "y_max": 208
+                "x_min": 22,
+                "y_min": 192,
+                "x_max": 52,
+                "y_max": 206
               }
             }
           },
@@ -51,10 +51,10 @@
             "evidence": {
               "quote": "10am",
               "box": {
-                "x_min": 18,
-                "y_min": 288,
+                "x_min": 22,
+                "y_min": 312,
                 "x_max": 60,
-                "y_max": 303
+                "y_max": 326
               }
             }
           },
@@ -63,10 +63,10 @@
             "evidence": {
               "quote": "11am",
               "box": {
-                "x_min": 18,
-                "y_min": 380,
-                "x_max": 60,
-                "y_max": 395
+                "x_min": 22,
+                "y_min": 407,
+                "x_max": 58,
+                "y_max": 421
               }
             }
           },
@@ -75,10 +75,10 @@
             "evidence": {
               "quote": "12pm",
               "box": {
-                "x_min": 18,
-                "y_min": 471,
-                "x_max": 60,
-                "y_max": 486
+                "x_min": 22,
+                "y_min": 517,
+                "x_max": 56,
+                "y_max": 531
               }
             }
           },
@@ -87,10 +87,10 @@
             "evidence": {
               "quote": "1pm",
               "box": {
-                "x_min": 18,
-                "y_min": 562,
-                "x_max": 55,
-                "y_max": 577
+                "x_min": 22,
+                "y_min": 617,
+                "x_max": 50,
+                "y_max": 631
               }
             }
           },
@@ -99,10 +99,10 @@
             "evidence": {
               "quote": "2pm",
               "box": {
-                "x_min": 18,
-                "y_min": 653,
-                "x_max": 55,
-                "y_max": 668
+                "x_min": 22,
+                "y_min": 707,
+                "x_max": 52,
+                "y_max": 721
               }
             }
           },
@@ -111,10 +111,10 @@
             "evidence": {
               "quote": "3pm",
               "box": {
-                "x_min": 18,
-                "y_min": 745,
-                "x_max": 55,
-                "y_max": 760
+                "x_min": 22,
+                "y_min": 797,
+                "x_max": 52,
+                "y_max": 811
               }
             }
           },
@@ -123,10 +123,10 @@
             "evidence": {
               "quote": "4pm",
               "box": {
-                "x_min": 18,
-                "y_min": 837,
-                "x_max": 55,
-                "y_max": 852
+                "x_min": 22,
+                "y_min": 892,
+                "x_max": 52,
+                "y_max": 906
               }
             }
           },
@@ -135,10 +135,10 @@
             "evidence": {
               "quote": "5pm",
               "box": {
-                "x_min": 18,
-                "y_min": 929,
-                "x_max": 55,
-                "y_max": 944
+                "x_min": 22,
+                "y_min": 957,
+                "x_max": 50,
+                "y_max": 971
               }
             }
           }
@@ -154,18 +154,68 @@
             "end_text": "10:50am",
             "location": "ESJ 0224",
             "block": {
-              "x_min": 88,
-              "y_min": 296,
+              "x_min": 87,
+              "y_min": 323,
               "x_max": 296,
-              "y_max": 370
+              "y_max": 398
             },
             "evidence": {
               "quote": "Monday\nMATH141 Lec\n10:00am-10:50am\nESJ 0224",
               "box": {
-                "x_min": 88,
-                "y_min": 83,
-                "x_max": 296,
-                "y_max": 370
+                "x_min": 87,
+                "y_min": 82,
+                "x_max": 202,
+                "y_max": 375
+              }
+            }
+          },
+          {
+            "course_code": "MATH141",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Wednesday",
+            "start_text": "10:00am",
+            "end_text": "10:50am",
+            "location": "ESJ 0224",
+            "block": {
+              "x_min": 519,
+              "y_min": 323,
+              "x_max": 717,
+              "y_max": 398
+            },
+            "evidence": {
+              "quote": "Wednesday\nMATH141 Lec\n10:00am-10:50am\nESJ 0224",
+              "box": {
+                "x_min": 519,
+                "y_min": 82,
+                "x_max": 630,
+                "y_max": 375
+              }
+            }
+          },
+          {
+            "course_code": "MATH141",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Friday",
+            "start_text": "10:00am",
+            "end_text": "10:50am",
+            "location": "ESJ 0224",
+            "block": {
+              "x_min": 924,
+              "y_min": 323,
+              "x_max": 1000,
+              "y_max": 398
+            },
+            "evidence": {
+              "quote": "Friday\nMATH141 Lec\n10:00am-10:50am\nESJ 0224",
+              "box": {
+                "x_min": 871,
+                "y_min": 82,
+                "x_max": 990,
+                "y_max": 375
               }
             }
           },
@@ -187,135 +237,10 @@
             "evidence": {
               "quote": "Tuesday\nMATH141 Dis\n9:00am-9:50am\nMTH 0101",
               "box": {
-                "x_min": 304,
-                "y_min": 83,
-                "x_max": 512,
-                "y_max": 278
-              }
-            }
-          },
-          {
-            "course_code": "CMSC131",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Tuesday",
-            "start_text": "11:00am",
-            "end_text": "12:15pm",
-            "location": "IRB 0324",
-            "block": {
-              "x_min": 304,
-              "y_min": 389,
-              "x_max": 512,
-              "y_max": 500
-            },
-            "evidence": {
-              "quote": "Tuesday\nCMSC131 Lec\n11:00am-12:15pm\nIRB 0324",
-              "box": {
-                "x_min": 304,
-                "y_min": 83,
-                "x_max": 512,
-                "y_max": 500
-              }
-            }
-          },
-          {
-            "course_code": "MATH141",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Wednesday",
-            "start_text": "10:00am",
-            "end_text": "10:50am",
-            "location": "ESJ 0224",
-            "block": {
-              "x_min": 520,
-              "y_min": 296,
-              "x_max": 704,
-              "y_max": 370
-            },
-            "evidence": {
-              "quote": "Wednesday\nMATH141 Lec\n10:00am-10:50am\nESJ 0224",
-              "box": {
-                "x_min": 520,
-                "y_min": 83,
-                "x_max": 704,
-                "y_max": 370
-              }
-            }
-          },
-          {
-            "course_code": "PHYS161",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Wednesday",
-            "start_text": "1:00pm",
-            "end_text": "1:50pm",
-            "location": "PHY 1412",
-            "block": {
-              "x_min": 520,
-              "y_min": 570,
-              "x_max": 704,
-              "y_max": 645
-            },
-            "evidence": {
-              "quote": "Wednesday\nPHYS161 Lec\n1:00pm-1:50pm\nPHY 1412",
-              "box": {
-                "x_min": 520,
-                "y_min": 83,
-                "x_max": 704,
-                "y_max": 645
-              }
-            }
-          },
-          {
-            "course_code": "CMSC131",
-            "section": null,
-            "title": null,
-            "meeting_type": "lab",
-            "days_text": "Wednesday",
-            "start_text": "2:00pm",
-            "end_text": "2:50pm",
-            "location": "CSI 2107",
-            "block": {
-              "x_min": 520,
-              "y_min": 662,
-              "x_max": 704,
-              "y_max": 740
-            },
-            "evidence": {
-              "quote": "Wednesday\nCMSC131 Lab\n2:00pm-2:50pm\nCSI 2107",
-              "box": {
-                "x_min": 520,
-                "y_min": 83,
-                "x_max": 704,
-                "y_max": 740
-              }
-            }
-          },
-          {
-            "course_code": "ENGL101",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Wednesday",
-            "start_text": "3:30pm",
-            "end_text": "4:45pm",
-            "location": "TWS 0236",
-            "block": {
-              "x_min": 520,
-              "y_min": 804,
-              "x_max": 704,
-              "y_max": 916
-            },
-            "evidence": {
-              "quote": "Wednesday\nENGL101 Lec\n3:30pm-4:45pm\nTWS 0236",
-              "box": {
-                "x_min": 520,
-                "y_min": 83,
-                "x_max": 704,
-                "y_max": 916
+                "x_min": 303,
+                "y_min": 82,
+                "x_max": 420,
+                "y_max": 260
               }
             }
           },
@@ -331,16 +256,41 @@
             "block": {
               "x_min": 708,
               "y_min": 202,
-              "x_max": 860,
+              "x_max": 915,
               "y_max": 278
             },
             "evidence": {
               "quote": "Thursday\nMATH141 Dis\n9:00am-9:50am\nMTH 0101",
               "box": {
                 "x_min": 708,
-                "y_min": 83,
-                "x_max": 860,
-                "y_max": 278
+                "y_min": 82,
+                "x_max": 830,
+                "y_max": 260
+              }
+            }
+          },
+          {
+            "course_code": "CMSC131",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Tuesday",
+            "start_text": "11:00am",
+            "end_text": "12:15pm",
+            "location": "IRB 0324",
+            "block": {
+              "x_min": 304,
+              "y_min": 418,
+              "x_max": 512,
+              "y_max": 530
+            },
+            "evidence": {
+              "quote": "Tuesday\nCMSC131 Lec\n11:00am-12:15pm\nIRB 0324",
+              "box": {
+                "x_min": 303,
+                "y_min": 82,
+                "x_max": 435,
+                "y_max": 475
               }
             }
           },
@@ -355,67 +305,17 @@
             "location": "IRB 0324",
             "block": {
               "x_min": 708,
-              "y_min": 389,
-              "x_max": 860,
-              "y_max": 500
+              "y_min": 418,
+              "x_max": 915,
+              "y_max": 530
             },
             "evidence": {
               "quote": "Thursday\nCMSC131 Lec\n11:00am-12:15pm\nIRB 0324",
               "box": {
                 "x_min": 708,
-                "y_min": 83,
-                "x_max": 860,
-                "y_max": 500
-              }
-            }
-          },
-          {
-            "course_code": "MATH141",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Friday",
-            "start_text": "10:00am",
-            "end_text": "10:50am",
-            "location": "ESJ 0224",
-            "block": {
-              "x_min": 868,
-              "y_min": 296,
-              "x_max": 1000,
-              "y_max": 370
-            },
-            "evidence": {
-              "quote": "Friday\nMATH141 Lec\n10:00am-10:50am\nESJ 0224",
-              "box": {
-                "x_min": 868,
-                "y_min": 83,
-                "x_max": 1000,
-                "y_max": 370
-              }
-            }
-          },
-          {
-            "course_code": "PHYS161",
-            "section": null,
-            "title": null,
-            "meeting_type": "lecture",
-            "days_text": "Friday",
-            "start_text": "1:00pm",
-            "end_text": "1:50pm",
-            "location": "PHY 1412",
-            "block": {
-              "x_min": 868,
-              "y_min": 570,
-              "x_max": 1000,
-              "y_max": 645
-            },
-            "evidence": {
-              "quote": "Friday\nPHYS161 Lec\n1:00pm-1:50pm\nPHY 1412",
-              "box": {
-                "x_min": 868,
-                "y_min": 83,
-                "x_max": 1000,
-                "y_max": 645
+                "y_min": 82,
+                "x_max": 830,
+                "y_max": 475
               }
             }
           },
@@ -429,18 +329,68 @@
             "end_text": "1:50pm",
             "location": "PHY 1412",
             "block": {
-              "x_min": 88,
-              "y_min": 570,
+              "x_min": 87,
+              "y_min": 628,
               "x_max": 296,
-              "y_max": 645
+              "y_max": 703
             },
             "evidence": {
               "quote": "Monday\nPHYS161 Lec\n1:00pm-1:50pm\nPHY 1412",
               "box": {
-                "x_min": 88,
-                "y_min": 83,
-                "x_max": 296,
-                "y_max": 645
+                "x_min": 87,
+                "y_min": 82,
+                "x_max": 202,
+                "y_max": 680
+              }
+            }
+          },
+          {
+            "course_code": "PHYS161",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Wednesday",
+            "start_text": "1:00pm",
+            "end_text": "1:50pm",
+            "location": "PHY 1412",
+            "block": {
+              "x_min": 519,
+              "y_min": 628,
+              "x_max": 717,
+              "y_max": 703
+            },
+            "evidence": {
+              "quote": "Wednesday\nPHYS161 Lec\n1:00pm-1:50pm\nPHY 1412",
+              "box": {
+                "x_min": 519,
+                "y_min": 82,
+                "x_max": 630,
+                "y_max": 680
+              }
+            }
+          },
+          {
+            "course_code": "PHYS161",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Friday",
+            "start_text": "1:00pm",
+            "end_text": "1:50pm",
+            "location": "PHY 1412",
+            "block": {
+              "x_min": 924,
+              "y_min": 628,
+              "x_max": 1000,
+              "y_max": 703
+            },
+            "evidence": {
+              "quote": "Friday\nPHYS161 Lec\n1:00pm-1:50pm\nPHY 1412",
+              "box": {
+                "x_min": 871,
+                "y_min": 82,
+                "x_max": 990,
+                "y_max": 680
               }
             }
           },
@@ -454,18 +404,43 @@
             "end_text": "2:50pm",
             "location": "CSI 2107",
             "block": {
-              "x_min": 88,
-              "y_min": 662,
+              "x_min": 87,
+              "y_min": 718,
               "x_max": 296,
-              "y_max": 740
+              "y_max": 793
             },
             "evidence": {
               "quote": "Monday\nCMSC131 Lab\n2:00pm-2:50pm\nCSI 2107",
               "box": {
-                "x_min": 88,
-                "y_min": 83,
-                "x_max": 296,
-                "y_max": 740
+                "x_min": 87,
+                "y_min": 82,
+                "x_max": 202,
+                "y_max": 770
+              }
+            }
+          },
+          {
+            "course_code": "CMSC131",
+            "section": null,
+            "title": null,
+            "meeting_type": "lab",
+            "days_text": "Wednesday",
+            "start_text": "2:00pm",
+            "end_text": "2:50pm",
+            "location": "CSI 2107",
+            "block": {
+              "x_min": 519,
+              "y_min": 718,
+              "x_max": 717,
+              "y_max": 793
+            },
+            "evidence": {
+              "quote": "Wednesday\nCMSC131 Lab\n2:00pm-2:50pm\nCSI 2107",
+              "box": {
+                "x_min": 519,
+                "y_min": 82,
+                "x_max": 630,
+                "y_max": 770
               }
             }
           },
@@ -479,18 +454,43 @@
             "end_text": "4:45pm",
             "location": "TWS 0236",
             "block": {
-              "x_min": 88,
-              "y_min": 804,
+              "x_min": 87,
+              "y_min": 833,
               "x_max": 296,
-              "y_max": 916
+              "y_max": 948
             },
             "evidence": {
               "quote": "Monday\nENGL101 Lec\n3:30pm-4:45pm\nTWS 0236",
               "box": {
-                "x_min": 88,
-                "y_min": 83,
-                "x_max": 296,
-                "y_max": 916
+                "x_min": 87,
+                "y_min": 82,
+                "x_max": 202,
+                "y_max": 890
+              }
+            }
+          },
+          {
+            "course_code": "ENGL101",
+            "section": null,
+            "title": null,
+            "meeting_type": "lecture",
+            "days_text": "Wednesday",
+            "start_text": "3:30pm",
+            "end_text": "4:45pm",
+            "location": "TWS 0236",
+            "block": {
+              "x_min": 519,
+              "y_min": 833,
+              "x_max": 717,
+              "y_max": 948
+            },
+            "evidence": {
+              "quote": "Wednesday\nENGL101 Lec\n3:30pm-4:45pm\nTWS 0236",
+              "box": {
+                "x_min": 519,
+                "y_min": 82,
+                "x_max": 630,
+                "y_max": 890
               }
             }
           }
@@ -498,59 +498,59 @@
       },
       "rereads": {
         "classes.0": {
-          "text": "chedule of Classes • Fal eekly view Monday Tuesday m m MATH141 9:00am-9:5 MTH 0101 am MATH141 Lec 10:00am-10:50am ESJ 0224 am CMSC13 11:00am-1 IRB 0324",
+          "text": "chedule of Classe eekly view Monday am am am MATH141 Lec 10:00am-10:50am ESJ 0224 am",
           "legible": "clear"
         },
         "classes.1": {
-          "text": "es • Fall 2026 Tuesday Wednesday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Le 10:00am-10:50a ESJ 0224",
+          "text": "Wednesday Th MA 9:0 MT MATH141 Lec 10:00am-10:50am ESJ 0224 CM 11:0 IRB",
           "legible": "clear"
         },
         "classes.2": {
-          "text": "es • Fall 2026 Tuesday Wednesday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Le 10:00am-10:50a ESJ 0224 CMSC131 Lec 11:00am-12:15pm IRB 0324 PHYS161 Lec 1:00pm-1:50pm PHY 1412",
+          "text": "t (sample data) Friday MATH141 Lec 10:00am-10:50am ESJ 0224",
           "legible": "clear"
         },
         "classes.3": {
-          "text": "Synthe Wednesday Thursday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Lec 10:00am-10:50am ESJ 0224 CMSC131 Lec 11:00am-12:15p IRB 0324",
+          "text": "es • Fall 2026 Tuesday MATH141 Dis 9:00am-9:50am MTH 0101",
           "legible": "clear"
         },
         "classes.4": {
-          "text": "Synthe Wednesday Thursday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Lec 10:00am-10:50am ESJ 0224 CMSC131 Lec 11:00am-12:15p IRB 0324 PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm",
+          "text": "Synthetic Student (sampl Thursday Frida MATH141 Dis 9:00am-9:50am MTH 0101 MAT",
           "legible": "clear"
         },
         "classes.5": {
-          "text": "Synthe Wednesday Thursday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Lec 10:00am-10:50am ESJ 0224 CMSC131 Lec 11:00am-12:15p IRB 0324 PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm TWS 0236",
+          "text": "es • Fall 2026 Tuesday W MATH141 Dis 9:00am-9:50am MTH 0101 M 10 ES CMSC131 Lec 11:00am-12:15pm IRB 0324 PI 1:0",
           "legible": "clear"
         },
         "classes.6": {
-          "text": "Synthe Wednesday Thursday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 Lec 10:00am-10:50am ESJ 0224 CMSC131 Lec 11:00am-12:15p IRB 0324 PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm TWS 0236",
+          "text": "Synthetic Student (sampl Thursday Frida MATH141 Dis 9:00am-9:50am MTH 0101 MAT 10:00 ESJ CMSC131 Lec 11:00am-12:15pm IRB 0324 PHYS 1:00p",
           "legible": "clear"
         },
         "classes.7": {
-          "text": "Synthetic Student (sample da Thursday Friday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 10:00am-1 ESJ 0224",
+          "text": "chedule of Classe eekly view Monday am am am MATH141 Lec 10:00am-10:50am ESJ 0224 am pm pm PHYS161 Lec 1:00pm-1:50pm PHY 1412 pm CMSC131 Lab 2:00pm-2:50pm CSI 2107 pm ENGL101 Lec 3:30pm-4:45pm TWS 0236 pm",
           "legible": "clear"
         },
         "classes.8": {
-          "text": "Synthetic Student (sample da Thursday Friday MATH141 Dis 9:00am-9:50am MTH 0101 MATH141 10:00am-1 ESJ 0224 CMSC131 Lec 11:00am-12:15pm IRB 0324 PHYS161 1:00pm-1:5 PHY 1412",
+          "text": "Wednesday Th MA 9:00 MT MATH141 Lec 10:00am-10:50am ESJ 0224 CM 11:0 IRB PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm TWS 0236",
           "legible": "clear"
         },
         "classes.9": {
-          "text": "nt (sample data) Friday MATH141 Lec 10:00am-10:50am ESJ 0224",
+          "text": "t (sample data) Friday MATH141 Lec 10:00am-10:50am ESJ 0224 PHYS161 Lec 1:00pm-1:50pm PHY 1412",
           "legible": "clear"
         },
         "classes.10": {
-          "text": "nt (sample data) Friday MATH141 Lec 10:00am-10:50am ESJ 0224 PHYS161 Lec 1:00pm-1:50pm PHY 1412",
+          "text": "chedule of Classe eekly view Monday am am am MATH141 Lec 10:00am-10:50am ESJ 0224 am pm pm PHYS161 Lec 1:00pm-1:50pm PHY 1412 pm CMSC131 Lab 2:00pm-2:50pm CSI 2107 pm ENGL101 Lec 3:30pm-4:45pm TWS 0236 pm",
           "legible": "clear"
         },
         "classes.11": {
-          "text": "chedule of Classes • Fal eekly view Monday Tuesday m m MATH141 9:00am-9:5 MTH 0101 am MATH141 Lec 10:00am-10:50am ESJ 0224 am CMSC13 11:00am-12 IRB 0324 pm pm PHYS161 Lec 1:00pm-1:50pm PHY 1412 m CMSC131 Lab 2:00pm-2:50pm CSI 2107 m ENGL101 Lec 3:30pm-4:45pm",
+          "text": "Wednesday Th MA 9:00 MT MATH141 Lec 10:00am-10:50am ESJ 0224 CM 11:0 IRB PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm TWS 0236",
           "legible": "clear"
         },
         "classes.12": {
-          "text": "chedule of Classes • Fal eekly view Monday Tuesday m m MATH141 9:00am-9:5 MTH 0101 am MATH141 Lec 10:00am-10:50am ESJ 0224 am CMSC13 11:00am-12 IRB 0324 pm m PHYS161 Lec 1:00pm-1:50pm PHY 1412 m CMSC131 Lab 2:00pm-2:50pm CSI 2107 m ENGL101 Lec 3:30pm-4:45pm TWS 0236 m",
+          "text": "chedule of Classe eekly view Monday am am am MATH141 Lec 10:00am-10:50am ESJ 0224 am pm pm PHYS161 Lec 1:00pm-1:50pm PHY 1412 pm CMSC131 Lab 2:00pm-2:50pm CSI 2107 pm ENGL101 Lec 3:30pm-4:45pm TWS 0236 pm",
           "legible": "clear"
         },
         "classes.13": {
-          "text": "chedule of Classes • Fal eekly view Monday Tuesday m m MATH141 9:00am-9:5 MTH 0101 am MATH141 Lec 10:00am-10:50am ESJ 0224 am CMSC13 11:00am-12 IRB 0324 pm m PHYS161 Lec 1:00pm-1:50pm PHY 1412 m CMSC131 Lab 2:00pm-2:50pm CSI 2107 m ENGL101 Lec 3:30pm-4:45pm TWS 0236 m",
+          "text": "Wednesday Th MA 9:00 MT MATH141 Lec 10:00am-10:50am ESJ 0224 CM 11:0 IRB PHYS161 Lec 1:00pm-1:50pm PHY 1412 CMSC131 Lab 2:00pm-2:50pm CSI 2107 ENGL101 Lec 3:30pm-4:45pm TWS 0236",
           "legible": "clear"
         }
       },
@@ -560,17 +560,17 @@
   "stages": {
     "extract": {
       "calls": 2,
-      "input_tokens": 8904,
-      "cached_tokens": 1777,
-      "output_tokens": 9779,
-      "cost_usd": 0.050736050000000005
+      "input_tokens": 9539,
+      "cached_tokens": 3554,
+      "output_tokens": 10266,
+      "cost_usd": 0.05164485
     },
     "reread_box": {
       "calls": 1,
-      "input_tokens": 3744,
+      "input_tokens": 3089,
       "cached_tokens": 113,
-      "output_tokens": 1958,
-      "cost_usd": 0.0128772
+      "output_tokens": 1581,
+      "cost_usd": 0.0104562
     },
     "sam_segment": {
       "calls": 0,

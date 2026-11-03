@@ -8,6 +8,11 @@ import type { ScheduleExtraction } from "@/lib/schemas/extraction";
 // is a run of one colour, so it grows from a point inside the model's box until
 // the colour changes; each hour label belongs to the nearest grid line (a row of
 // light grey across the grid), or failing that sits at the middle of its ink.
+// Something drawn over the grid (an open popup: a dark grey panel with a soft
+// shadow) can hide a block's edge. When such a panel starts within 15 minutes
+// past an edge, that edge is taken from the same class on another day, where
+// it's in the clear. Another class's block (coloured) next to an edge is not a
+// panel: back-to-back classes keep their own edges.
 // Times are worked out from these later (gridTimes in src/lib/plan/candidates.ts).
 // Where a measurement fails, the model's box stands.
 
@@ -29,7 +34,24 @@ const isBlock = (c: readonly number[]) => luma(c) < 248 && Math.max(...c) - Math
  * A block's exact top and bottom rows: the longest run of one block colour through points spread over the model's
  * box (its box can be off sideways too, and a column through text is broken up by it).
  */
-export function blockEdges(p: Pixels, box: ModelBox): { top: number; bottom: number } | null {
+export type Edges = { top: number; bottom: number; topHidden: boolean; bottomHidden: boolean };
+
+/** A panel or popup: solid dark grey, unlike a block (coloured) or the page (light). */
+const isPanel = (c: readonly number[]) => luma(c) < 185 && Math.max(...c) - Math.min(...c) < 12;
+
+/** Whether the `reach` rows past an edge (dir -1 above, +1 below) are free of a panel (3 rows of it in a row). */
+function clear(p: Pixels, x: number, edge: number, dir: 1 | -1, reach: number): boolean {
+  let run = 0;
+  for (let k = 1; k <= reach; k++) {
+    const y = edge + dir * k;
+    if (y < 0 || y >= p.height) break;
+    run = isPanel(at(p, x, y)) ? run + 1 : 0;
+    if (run >= 3) return false;
+  }
+  return true;
+}
+
+export function blockEdges(p: Pixels, box: ModelBox, reach = 12): Edges | null {
   const px = (v: number, size: number) => (v / 1000) * size;
   const x0 = px(box.x_min, p.width);
   const x1 = px(box.x_max, p.width);
@@ -40,7 +62,7 @@ export function blockEdges(p: Pixels, box: ModelBox): { top: number; bottom: num
   // Never further than half the model's height past its box: two same-coloured blocks back to back stay two.
   const lo = clampY(p, y0 - h / 2);
   const hi = clampY(p, y1 + h / 2);
-  let best: { top: number; bottom: number } | null = null;
+  let best: Edges | null = null;
   for (const fx of [0.75, 0.6, 0.85, 0.5, 0.4, 0.3, 0.95])
     for (const fy of [0.5, 0.35, 0.65, 0.2, 0.8]) {
       const x = Math.min(p.width - 1, Math.max(0, x0 + fx * (x1 - x0)));
@@ -51,7 +73,13 @@ export function blockEdges(p: Pixels, box: ModelBox): { top: number; bottom: num
       while (top - 1 >= lo && near(at(p, x, top - 1), colour)) top--;
       let bottom = seed;
       while (bottom + 1 <= hi && near(at(p, x, bottom + 1), colour)) bottom++;
-      if (!best || bottom + 1 - top > best.bottom - best.top) best = { top, bottom: bottom + 1 };
+      if (!best || bottom + 1 - top > best.bottom - best.top)
+        best = {
+          top,
+          bottom: bottom + 1,
+          topHidden: !clear(p, x, top, -1, reach),
+          bottomHidden: !clear(p, x, bottom, 1, reach),
+        };
     }
   return best;
 }
@@ -138,10 +166,30 @@ export function measureGridPixels(p: Pixels, extraction: ScheduleExtraction): Sc
     };
   });
 
-  const classes = extraction.classes.map((c) => {
-    if (!c.block) return c;
-    const e = blockEdges(p, c.block);
-    return e ? { ...c, block: { ...c.block, y_min: toModel(e.top, p.height), y_max: toModel(e.bottom, p.height) } } : c;
+  // Fifteen minutes of rows past each edge decide whether it's in the clear.
+  const edges = extraction.classes.map((c) => (c.block ? blockEdges(p, c.block, Math.max(6, Math.round(spacing / 4))) : null)); // prettier-ignore
+  const sameClass = (i: number, j: number) =>
+    extraction.classes[i].course_code === extraction.classes[j].course_code &&
+    extraction.classes[i].meeting_type === extraction.classes[j].meeting_type;
+  const tolerance = spacing / 12; // 5 minutes
+  /** The most common clear value of an edge among the same class's other blocks whose other edge agrees. */
+  const borrow = (i: number, edge: "top" | "bottom") => {
+    const other = edge === "top" ? "bottom" : "top";
+    const hidden = edge === "top" ? "topHidden" : "bottomHidden";
+    const mine = edges[i]!;
+    const values = edges.flatMap((e, j) =>
+      e && j !== i && sameClass(i, j) && !e[hidden] && Math.abs(e[other] - mine[other]) <= tolerance ? [e[edge]] : [],
+    );
+    const counts = new Map<number, number>();
+    for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0]?.[0] ?? null;
+  };
+  const classes = extraction.classes.map((c, i) => {
+    const e = edges[i];
+    if (!c.block || !e) return c;
+    const top = e.topHidden ? (borrow(i, "top") ?? e.top) : e.top;
+    const bottom = e.bottomHidden ? (borrow(i, "bottom") ?? e.bottom) : e.bottom;
+    return { ...c, block: { ...c.block, y_min: toModel(top, p.height), y_max: toModel(bottom, p.height) } };
   });
   return { ...extraction, time_axis, classes };
 }

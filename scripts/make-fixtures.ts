@@ -73,8 +73,11 @@ function minutes(t: string): number {
   return ((Number(m[1]) % 12) + (m[3] === "pm" ? 12 : 0)) * 60 + Number(m[2]);
 }
 
-/** `times: false` draws blocks with only the course and room, as some schedule views do: times come from position. */
-function scheduleScreenshot({ list = true, times = true } = {}) {
+/**
+ * `times: false` draws blocks with only the course and room, as some schedule views do: times come from position.
+ * `popup: true` leaves a dark popup open over Thursday afternoon, its shadow and panel hiding where blocks end.
+ */
+function scheduleScreenshot({ list = true, times = true, popup = false } = {}) {
   const W = list ? 1600 : 1010,
     H = 1000;
   const c = createCanvas(W, H);
@@ -137,6 +140,24 @@ function scheduleScreenshot({ list = true, times = true } = {}) {
         } else g.fillText(m.room, x + 8, top + 38);
       }
 
+  if (popup) {
+    // A course's details popup, left open: it covers the bottom of Thursday's CMSC131 lecture (11:00-12:15) from
+    // 12:00, with a soft shadow above it, the way a real one hides a block's edge.
+    const x = gx + 60 + 3 * colW - 40;
+    const top = gy + 4 * hourH;
+    for (let k = 1; k <= 10; k++) {
+      g.fillStyle = `rgba(0,0,0,${0.012 * (11 - k)})`;
+      g.fillRect(x - k, top - k, 300 + 2 * k, 150 + 2 * k);
+    }
+    g.fillStyle = "#919191";
+    g.fillRect(x, top, 300, 150);
+    g.fillStyle = "#ffffff";
+    g.font = "bold 15px Helvetica";
+    g.fillText("Course details", x + 14, top + 26);
+    g.font = "13px Helvetica";
+    g.fillText("Seats: 12 of 180 open", x + 14, top + 50);
+    g.fillText("Waitlist: 0", x + 14, top + 70);
+  }
   if (!list) return c.toBuffer("image/png");
   // List view on the right; extraction prefers it over grid positions.
   const lx = 1030;
@@ -437,9 +458,217 @@ function stickyNotes(seed: number) {
   return photograph(desk, { w: 1600, h: 1100, bg: "#6b4f36", angle: 0, seed });
 }
 
+/** A JPEG with an EXIF capture time (DateTimeOriginal + OffsetTimeOriginal), as a phone camera writes it. */
+function withCaptureTime(jpeg: Buffer, taken: string, offset: string): Buffer {
+  const ascii = (s: string) => Buffer.from(s + "\0", "ascii");
+  const date = ascii(taken); // "2026:11:01 21:40:00", 20 bytes
+  const off = ascii(offset); // "-05:00", 7 bytes
+  const tiff = Buffer.alloc(56 + date.length + off.length);
+  tiff.write("MM", 0, "ascii");
+  tiff.writeUInt16BE(42, 2);
+  tiff.writeUInt32BE(8, 4);
+  // IFD0: one entry, the pointer to the Exif IFD at 26.
+  tiff.writeUInt16BE(1, 8);
+  tiff.writeUInt16BE(0x8769, 10);
+  tiff.writeUInt16BE(4, 12);
+  tiff.writeUInt32BE(1, 14);
+  tiff.writeUInt32BE(26, 18);
+  tiff.writeUInt32BE(0, 22);
+  // Exif IFD: DateTimeOriginal and OffsetTimeOriginal, both ASCII, stored after the IFD.
+  tiff.writeUInt16BE(2, 26);
+  tiff.writeUInt16BE(0x9003, 28);
+  tiff.writeUInt16BE(2, 30);
+  tiff.writeUInt32BE(date.length, 32);
+  tiff.writeUInt32BE(56, 36);
+  tiff.writeUInt16BE(0x9011, 40);
+  tiff.writeUInt16BE(2, 42);
+  tiff.writeUInt32BE(off.length, 44);
+  tiff.writeUInt32BE(56 + date.length, 48);
+  tiff.writeUInt32BE(0, 52);
+  date.copy(tiff, 56);
+  off.copy(tiff, 56 + date.length);
+  const payload = Buffer.concat([Buffer.from("Exif\0\0", "binary"), tiff]);
+  const app1 = Buffer.alloc(4);
+  app1.writeUInt16BE(0xffe1, 0);
+  app1.writeUInt16BE(payload.length + 2, 2);
+  return Buffer.concat([jpeg.subarray(0, 2), app1, payload, jpeg.subarray(2)]);
+}
+
+/**
+ * A dorm wall, for the demo video: a painted cinder-block wall with a small whiteboard, fifteen sticky notes pinned and
+ * taped around it, and the corner of a printed schedule. Everything on it is made up.
+ */
+function dormWall(seed: number) {
+  const rand = rng(seed);
+  const W = 2000,
+    H = 1400;
+  const wall = createCanvas(W, H);
+  const g = wall.getContext("2d");
+  // Painted cinder block: cream, each block a shade off, mortar lines a little darker.
+  g.fillStyle = "#e8e1d2";
+  g.fillRect(0, 0, W, H);
+  const bw = 390,
+    bh = 195;
+  for (let row = 0; row * bh < H; row++)
+    for (let col = -1; col * bw < W; col++) {
+      const x = col * bw + (row % 2 ? bw / 2 : 0);
+      const y = row * bh;
+      const shade = 226 + Math.round((rand() - 0.5) * 8);
+      g.fillStyle = `rgb(${shade + 6},${shade},${shade - 12})`;
+      g.fillRect(x + 4, y + 4, bw - 8, bh - 8);
+    }
+  // Paint texture.
+  for (let i = 0; i < 9000; i++) {
+    g.fillStyle = `rgba(90,70,40,${rand() * 0.05})`;
+    g.fillRect(rand() * W, rand() * H, 2, 2);
+  }
+
+  const pinned = (surface: Canvas, x: number, y: number, a: number, how: "pin" | "tape", colour = "#c0392b") => {
+    g.save();
+    g.translate(x + surface.width / 2, y + surface.height / 2);
+    g.rotate(a);
+    g.shadowColor = "rgba(40,30,20,0.38)";
+    g.shadowBlur = 18;
+    g.shadowOffsetX = 6;
+    g.shadowOffsetY = 9;
+    g.drawImage(surface, -surface.width / 2, -surface.height / 2);
+    g.shadowColor = "transparent";
+    if (how === "pin") {
+      g.fillStyle = "rgba(0,0,0,0.3)";
+      g.beginPath();
+      g.arc(4, -surface.height / 2 + 30, 13, 0, Math.PI * 2);
+      g.fill();
+      const head = g.createRadialGradient(-4, -surface.height / 2 + 22, 2, 0, -surface.height / 2 + 26, 13);
+      head.addColorStop(0, "#ffffff");
+      head.addColorStop(0.25, colour);
+      head.addColorStop(1, "#3b0d0d");
+      g.fillStyle = head;
+      g.beginPath();
+      g.arc(0, -surface.height / 2 + 26, 13, 0, Math.PI * 2);
+      g.fill();
+    } else {
+      g.fillStyle = "rgba(245,240,220,0.55)";
+      g.save();
+      g.rotate((rand() - 0.5) * 0.3);
+      g.fillRect(-55, -surface.height / 2 - 18, 110, 38);
+      g.restore();
+    }
+    g.restore();
+  };
+
+  // The whiteboard, small and framed, with this week on it.
+  const board = createCanvas(820, 540);
+  {
+    const b = board.getContext("2d");
+    b.fillStyle = "#b9bec4";
+    b.fillRect(0, 0, 820, 540);
+    const face = b.createLinearGradient(0, 0, 820, 540);
+    face.addColorStop(0, "#fdfdfb");
+    face.addColorStop(1, "#e9ecea");
+    b.fillStyle = face;
+    b.fillRect(14, 14, 792, 512);
+    b.fillStyle = "rgba(110,120,140,0.09)";
+    b.font = '48px "Caveat"';
+    b.fillText("dx/dt = 3t^2", 470, 470);
+    handwrite(b, [{ text: "THIS WEEK", color: "#b0272f", size: 74 }], 60, 110, { font: "Caveat", size: 74, gap: 100, color: "#b0272f", rand }); // prettier-ignore
+    handwrite(
+      b,
+      [
+        { text: "CHEM131 quiz 2 - Mon 11/2" },
+        { text: "HIST200 outline due Wed 11/4" },
+        { text: "MATH141 HW 7 due Fri 11/6" },
+      ],
+      60,
+      225,
+      { font: "Caveat", size: 58, gap: 92, color: "#1f3a93", rand },
+    );
+  }
+  pinned(board, 560, 120, -0.012, "tape");
+
+  // The corner of a printed weekly schedule, taped at the right edge and running off the photo.
+  const sheet = createCanvas(560, 760);
+  {
+    const s = sheet.getContext("2d");
+    s.fillStyle = "#fbfbf7";
+    s.fillRect(0, 0, 560, 760);
+    s.fillStyle = "#1b1b1b";
+    s.font = "bold 26px Helvetica";
+    s.fillText("Fall 2026 · Weekly", 28, 52);
+    s.strokeStyle = "#cfcfcf";
+    s.lineWidth = 2;
+    for (let i = 0; i < 9; i++) {
+      s.beginPath();
+      s.moveTo(28, 90 + i * 72);
+      s.lineTo(560, 90 + i * 72);
+      s.stroke();
+    }
+    s.font = "18px Helvetica";
+    s.fillStyle = "#555";
+    ["8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm"].forEach((t, i) => s.fillText(t, 28, 96 + i * 72));
+    s.fillStyle = "#cfe3f6";
+    s.fillRect(110, 236, 200, 66);
+    s.fillStyle = "#f6dcc4";
+    s.fillRect(330, 380, 200, 100);
+    s.fillStyle = "#1b1b1b";
+    s.font = "bold 18px Helvetica";
+    s.fillText("MATH141", 120, 262);
+    s.fillText("CHEM131", 340, 406);
+  }
+  pinned(sheet, 1640, 610, 0.035, "tape");
+
+  // Fifteen sticky notes around the board.
+  const notes: { colour: string; lines: string[] }[] = [
+    { colour: "#fff27a", lines: ["PHYS161 HW 9", "due Fri 11/6"] },
+    { colour: "#ffb3c7", lines: ["ENGL101 draft 2", "due Thu 11/5 9am"] },
+    { colour: "#c7f2a4", lines: ["CMSC131 proj 4", "due Mon 11/9 11pm"] },
+    { colour: "#a9dcf5", lines: ["MATH141 quiz 4", "Thu 11/5 in class"] },
+    { colour: "#ffc98a", lines: ["career fair", "Wed 11/4 10am-3pm"] },
+    { colour: "#fff27a", lines: ["MATH office hrs", "Tue 11/3 2-3pm"] },
+    { colour: "#ffb3c7", lines: ["return library", "books by Sat 11/7"] },
+    { colour: "#c7f2a4", lines: ["flu shot", "Fri 11/6 1pm"] },
+    { colour: "#a9dcf5", lines: ["HIST200 ch. 6", "read by Wed 11/4"] },
+    { colour: "#fff27a", lines: ["STAT400 exam 2", "Thu 11/12"] },
+    { colour: "#ffc98a", lines: ["call mom", "Sun 11/8"] },
+    { colour: "#c7f2a4", lines: ["club mtg", "Wed 11/4 7pm"] },
+    { colour: "#ffb3c7", lines: ["laundry!!"] },
+    { colour: "#a9dcf5", lines: ["CHEM lab report", "due Tue 11/10"] },
+    { colour: "#fff27a", lines: ["buy bluebook"] },
+  ];
+  const spots: [number, number][] = [
+    [90, 110], [90, 420], [90, 730], [90, 1040], [330, 900],
+    [560, 720], [800, 760], [1040, 720], [1280, 760], [570, 1040],
+    [830, 1060], [1090, 1030], [1420, 120], [1420, 400], [1330, 1060],
+  ]; // prettier-ignore
+  notes.forEach((n, i) => {
+    const s = createCanvas(240, 240);
+    const sg = s.getContext("2d");
+    sg.fillStyle = n.colour;
+    sg.fillRect(0, 0, 240, 240);
+    sg.fillStyle = "rgba(0,0,0,0.07)";
+    sg.fillRect(0, 0, 240, 34);
+    const curl = sg.createLinearGradient(170, 170, 240, 240);
+    curl.addColorStop(0, "rgba(0,0,0,0)");
+    curl.addColorStop(1, "rgba(0,0,0,0.12)");
+    sg.fillStyle = curl;
+    sg.fillRect(0, 0, 240, 240);
+    // The writing fits the note, with room to spare: the longest line sets the size.
+    sg.font = '40px "Caveat"';
+    const widest = Math.max(...n.lines.map((l) => sg.measureText(l).width));
+    const size = Math.min(42, Math.floor((40 * 196) / widest));
+    handwrite(sg, n.lines.map((text) => ({ text })), 16, 100, { font: "Caveat", size, gap: 64, color: "#1d1d1d", rand }); // prettier-ignore
+    const [x, y] = spots[i];
+    const pins = ["#c0392b", "#1f6fb2", "#2e8b57", "#d4a017"];
+    pinned(s, x + (rand() - 0.5) * 30, y + (rand() - 0.5) * 30, (rand() - 0.5) * 0.18, i % 3 === 0 ? "tape" : "pin", pins[i % 4]); // prettier-ignore
+  });
+
+  const jpeg = photograph(wall, { w: W, h: H, bg: "#d8d0c0", angle: 0.008, seed });
+  return withCaptureTime(jpeg, "2026:11:01 21:40:00", "-05:00");
+}
+
 writeFileSync(join(OUT, "testudo-schedule.png"), scheduleScreenshot());
 writeFileSync(join(OUT, "testudo-grid.png"), scheduleScreenshot({ list: false }));
 writeFileSync(join(OUT, "testudo-grid-blocks.png"), scheduleScreenshot({ list: false, times: false }));
+writeFileSync(join(OUT, "testudo-grid-popup.png"), scheduleScreenshot({ list: false, times: false, popup: true }));
 writeFileSync(join(OUT, "syllabus-cmsc131.pdf"), await cmscSyllabusPdf());
 writeFileSync(
   join(OUT, "whiteboard-math141.jpg"),
@@ -499,6 +728,7 @@ writeFileSync(
   ),
 );
 writeFileSync(join(OUT, "sticky-notes.jpg"), stickyNotes(53));
+writeFileSync(join(OUT, "dorm-wall.jpg"), dormWall(71));
 // A course site's to-do list (Canvas/ELMS style, no real branding), screenshotted on a phone-sized window.
 function lmsScreenshot() {
   const W = 1170,
@@ -574,6 +804,7 @@ const manifest = {
   "testudo-schedule.txt": { kind: "testudo_text", label: "pasted Testudo schedule", captured_at: null },
   "testudo-grid.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "testudo-grid-blocks.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
+  "testudo-grid-popup.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "syllabus-math141.pdf": { kind: "syllabus_pdf", label: "MATH141 syllabus", captured_at: null },
   "syllabus-cmsc131.pdf": { kind: "syllabus_pdf", label: "CMSC131 syllabus", captured_at: null },
   "whiteboard-math141.jpg": {
@@ -590,6 +821,7 @@ const manifest = {
   "notes-cmsc131.jpg": { kind: "notes_photo", label: "notes photo", captured_at: "2026-10-28T16:40:00-04:00" },
   "sticky-notes.jpg": { kind: "notes_photo", label: "sticky notes photo", captured_at: "2026-10-29T08:30:00-04:00" },
   "canvas-todo.png": { kind: "lms_screenshot", label: "course site screenshot", captured_at: null },
+  "dorm-wall.jpg": { kind: "notes_photo", label: "dorm wall photo", captured_at: "2026-11-01T21:40:00-05:00" },
   "whiteboard-blurry.jpg": {
     kind: "whiteboard_photo",
     label: "whiteboard photo",

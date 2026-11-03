@@ -1,25 +1,93 @@
-# tmrw-lens
+# Tomorrow Lens
 
-Tomorrow Lens: photograph your week (schedules, syllabi, whiteboards) and get a verified, scheduled plan that rebuilds
-when you miss something. Built on Meta's Muse Spark and SAM 3.1 for the Meta Global AI Developer Hackathon.
+**Photograph your week. Get a plan where every date is proven, and that rebuilds itself when you miss something.**
 
-**Try it:** [lens.bettertmrw.app](https://lens.bettertmrw.app) (the sample week is free and instant; your own
-photos are read live).
+**Live:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app) · Built for the Meta Global AI Developer Hackathon
+(track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
+the hackathon window ([HACKATHON.md](HACKATHON.md)).
 
-Built solo with AI coding assistance during the hackathon. See [HACKATHON.md](HACKATHON.md) for what was built when,
-and [docs/PLAN.md](docs/PLAN.md) for the plan.
+## Try it in 10 seconds
+
+Open the live site and press **Try a missed session**. A made-up week plays: a study session passes undone, the
+student replies "too tired tonight", Muse Spark works out what to move (you see each tool call), the session glides to
+its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am tomorrow because you said tonight is
+out and the quiz is tomorrow morning. Nothing else changed."_ Recorded runs are free; type your own reply to run it
+live.
+
+Then press **Try the sample week** (free, instant) or upload your own syllabus, Testudo schedule, whiteboard photo, or
+notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact words, and the date math.
+
+## How Meta's models are used
+
+- **Muse Spark** (`muse-spark-1.3`, Standard mode) reads every page and photo into structured items, each with an exact
+  quote and a box; re-reads each quote from a crop of where it says it found it; classifies texted photos; and runs the
+  **rebuild agent**, a tool-calling loop (`get_day`, `find_open_time`, `move_item`, `drop_item`, `propose_diff`) that
+  decides what moves when a session is missed and why.
+- **SAM 3.1** (`sam-3.1`) outlines each sticky note, sheet, and whiteboard in a photo, so every line is tied to the
+  object it's written on, re-read from that object's crop, and highlighted on it.
+
+## Models propose, code verifies
+
+The model reads; code computes and checks. Nothing reaches the plan on the model's word alone:
+
+- Every field must appear inside its exact quote, and every quote must be read back from its own crop by a second,
+  independent call.
+- Dates, weekdays, times, "Week 7 Thu", "the day after Quiz 3", class recurrences, breaks, and daylight saving are
+  computed in code (Luxon), never by the model. Every date traces to a quote plus a computation.
+- Sources that disagree (the syllabus says Fri, the whiteboard says "moved to Mon") are never merged silently: one
+  question, the likely answer pre-selected with its reason, applied only when the person answers.
+- Anything unproven stays amber ("Needs a look") and is never sent to Tomorrow until the person confirms it.
+- In a rebuild, code computes free time, refuses any move that doesn't fit, and writes the message from the agent's
+  reasons; a check runs on the finished plan before it can leave Lens.
+
+## Results
+
+Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in CI from recorded model readings:
+
+| What                                  | Result                                                 |
+| ------------------------------------- | ------------------------------------------------------ |
+| Invented dates                        | **0** of 197 (extraction), **0** of 13 (text-a-photo)  |
+| Items found / classes right           | 93 of 93 / 36 of 36                                    |
+| Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                |
+| Rebuilds right                        | **11 of 11** (code alone: 5 of 11), 0 invalid moves    |
+| Rebuild message quality (judge, 1-5)  | **5.0**, and every message human-reviewed              |
+| Cost per photo read / per rebuild     | $0.023 with SAM / $0.0072 (3.7 model calls, about 5 s) |
+
+Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
+
+## Privacy
+
+- **Standard mode only:** Meta doesn't train on what Lens sends. Contributor models are never used.
+- **Photos are never stored.** They're shrunk in your browser, read, and dropped. What was read is cached for 24 hours,
+  encrypted with a key only the same photo can produce, so the same page is never paid for twice; then it expires.
+- No accounts, no database: Tomorrow owns the plan. Logs hold counts, costs, and hashed ids, never content.
+- Fixtures are synthetic; real inputs stay in a git-ignored folder.
+
+## Architecture
 
 ```mermaid
 flowchart LR
-  inputs["Testudo screenshot · syllabus PDF<br/>whiteboard photo · handwritten notes"] --> extract
-  subgraph Lens
-    extract["Extract<br/>Muse Spark"] --> verify["Verify<br/>quotes re-read · dates in code<br/>conflicts · merge"]
-    verify --> card["Here's what I found<br/>evidence highlights"]
-    rebuild["/api/rebuild agent<br/>Muse Spark tool calling"]
+  subgraph you["You"]
+    up["Syllabus PDF · Testudo screenshot<br/>whiteboard · notes"]
   end
-  card -- "confirmed items" --> tomorrow["Tomorrow<br/>scheduler · reminders"]
-  tomorrow -- "missed session" --> rebuild
-  rebuild -- "diff + one message" --> tomorrow
+  subgraph lens["Tomorrow Lens (Next.js on Vercel)"]
+    read["Read<br/>Muse Spark: items + quotes + boxes"]
+    sam["Segment<br/>SAM 3.1: notes, sheets, boards"]
+    check["Verify in code<br/>re-read each crop · dates in Luxon<br/>conflicts → one question"]
+    plan["Plan + proof<br/>week grid · evidence drawer"]
+    agent["Rebuild agent<br/>Muse Spark tool calling<br/>code checks every move"]
+    cache[("Upstash<br/>encrypted 24h cache<br/>per-person limits")]
+  end
+  subgraph tmrw["Tomorrow (separate app)"]
+    sched["Scheduler · SMS check-ins"]
+  end
+  up --> read --> check --> plan
+  up --> sam --> check
+  read -.- cache
+  plan -- "Send: verified items only" --> sched
+  sched -- "missed session + reply" --> agent
+  agent -- "diff + one SMS" --> sched
+  sched -- "texted photo" --> read
 ```
 
 ## Run it
@@ -80,30 +148,30 @@ lists every one, with its default.
 | `TOMORROW_DAILY_CAP_USD`                             | Tomorrow's users' brake (default 20)                                                                           |
 | `DAILY_SPEND_CAP_USD`                                | Older name for `PUBLIC_DAILY_CAP_USD`, read only when that isn't set                                           |
 | `TOMORROW_IMPORT_URL`                                | Where Send delivers confirmed items (default `https://bettertmrw.app/api/lens/import`)                         |
-| `LENS_PUBLIC_URL`                                    | Where review links point (default `https://lens.bettertmrw.app`)                                               |
+| `LENS_PUBLIC_URL`                                    | Where review links point (default `https://tmrw-lens.vercel.app`)                                              |
 | `META_API_BASE_URL`, `MUSE_SPARK_MODEL`, `SAM_MODEL` | Optional overrides (Standard mode only)                                                                        |
 
 ## Evals
 
-Eleven cases over ten synthetic fixtures (`evals/cases/`, `fixtures/synthetic/`), two with deliberate conflicts
+Fifteen cases over fourteen synthetic fixtures (`evals/cases/`, `fixtures/synthetic/`), two with deliberate conflicts
 between sources. Each photo is read once, then second-read two ways: on SAM 3.1 object crops, and on plain box
 crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM 3.1 (`evals/results.json`):
 
 |                                       | with SAM                                   | without SAM  |
 | ------------------------------------- | ------------------------------------------ | ------------ |
-| Invented dates                        | **0** of 181                               | **0** of 181 |
-| Fully verified                        | **83%** (82 of 99)                         | **83%**      |
-| Items found                           | 75 of 75                                   | 75 of 75     |
-| Classes right                         | 24 of 24                                   | 24 of 24     |
+| Invented dates                        | **0** of 197                               | **0** of 197 |
+| Fully verified                        | **75%** (97 of 129)                        | **75%**      |
+| Items found                           | 93 of 93                                   | 93 of 93     |
+| Classes right                         | 36 of 36                                   | 36 of 36     |
 | Dates right                           | 65 of 65, after answers 4 of 4             | same         |
 | Conflicts caught                      | 4 of 4, pre-selected right 4 of 4, false 0 | same         |
-| Photo quotes in an object (highlight) | 23 of 23                                   | none         |
-| Model cost per photo                  | $0.0208                                    | $0.0139      |
+| Photo quotes in an object (highlight) | 41 of 41                                   | none         |
+| Model cost per photo                  | $0.0225                                    | $0.0162      |
 
 Every date traces to a quote and a code computation, including dates relative to another item ("the day after Quiz
 3" moves when the Quiz 3 conflict is answered), the end of every class recurrence, and every class meeting skipped for a
-break. The rest of "fully verified"
-are real questions (conflicts, "in class" with no schedule, a course a note doesn't name).
+break. The rest of "fully verified" are real questions (conflicts, "in class" with no schedule, a course a note doesn't
+name, and class times worked out from where a block sits on a grid, which the person confirms in one question).
 
 ### Rebuild
 

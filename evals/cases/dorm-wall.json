@@ -1,0 +1,160 @@
+{
+  "name": "dorm-wall",
+  "description": "The demo video's opening shot: a dorm wall with a small whiteboard, fifteen sticky notes, and the corner of a printed schedule, photographed Sun Nov 1 9:40pm",
+  "zone": "America/New_York",
+  "added_at": "2026-11-01T21:45:00-05:00",
+  "sources": ["dorm-wall.jpg"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": null,
+        "title": "CHEM131 quiz 2",
+        "date": "2026-11-02",
+        "time": null,
+        "end": null,
+        "match": "quiz ?2"
+      },
+      {
+        "course": null,
+        "title": "HIST200 outline",
+        "date": "2026-11-04",
+        "time": null,
+        "end": null,
+        "match": "outline"
+      },
+      {
+        "course": null,
+        "title": "MATH141 HW 7",
+        "date": "2026-11-06",
+        "time": null,
+        "end": null,
+        "match": "hw ?7"
+      },
+      {
+        "course": null,
+        "title": "PHYS161 HW 9",
+        "date": "2026-11-06",
+        "time": null,
+        "end": null,
+        "match": "hw ?9"
+      },
+      {
+        "course": null,
+        "title": "ENGL101 draft 2",
+        "date": "2026-11-05",
+        "time": "09:00",
+        "end": null,
+        "match": "draft"
+      },
+      {
+        "course": null,
+        "title": "CMSC131 proj 4",
+        "date": "2026-11-09",
+        "time": "23:00",
+        "end": null,
+        "match": "proj"
+      },
+      {
+        "course": null,
+        "title": "MATH141 quiz 4",
+        "date": "2026-11-05",
+        "time": null,
+        "end": null,
+        "match": "quiz ?4"
+      },
+      {
+        "course": null,
+        "title": "career fair",
+        "date": "2026-11-04",
+        "time": "10:00",
+        "end": "15:00",
+        "match": "career"
+      },
+      {
+        "course": null,
+        "title": "MATH office hrs",
+        "date": "2026-11-03",
+        "time": "14:00",
+        "end": "15:00",
+        "match": "office"
+      },
+      {
+        "course": null,
+        "title": "return library books",
+        "date": "2026-11-07",
+        "time": null,
+        "end": null,
+        "match": "library"
+      },
+      {
+        "course": null,
+        "title": "flu shot",
+        "date": "2026-11-06",
+        "time": "13:00",
+        "end": null,
+        "match": "flu"
+      },
+      {
+        "course": null,
+        "title": "HIST200 ch. 6",
+        "date": "2026-11-04",
+        "time": null,
+        "end": null,
+        "match": "ch\\.? ?6"
+      },
+      {
+        "course": null,
+        "title": "STAT400 exam 2",
+        "date": "2026-11-12",
+        "time": null,
+        "end": null,
+        "match": "exam ?2"
+      },
+      {
+        "course": null,
+        "title": "call mom",
+        "date": "2026-11-08",
+        "time": null,
+        "end": null,
+        "match": "mom"
+      },
+      {
+        "course": null,
+        "title": "club mtg",
+        "date": "2026-11-04",
+        "time": "19:00",
+        "end": null,
+        "match": "club"
+      },
+      {
+        "course": null,
+        "title": "laundry",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "laundry"
+      },
+      {
+        "course": null,
+        "title": "CHEM lab report",
+        "date": "2026-11-10",
+        "time": null,
+        "end": null,
+        "match": "lab report"
+      },
+      {
+        "course": null,
+        "title": "buy bluebook",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "bluebook"
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

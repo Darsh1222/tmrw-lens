@@ -326,7 +326,7 @@ export function Lens() {
             </p>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
             <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
               <Viewer
                 inputs={inputs.filter((i) => i.status === "read")}

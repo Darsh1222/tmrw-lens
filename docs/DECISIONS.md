@@ -345,3 +345,17 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   computes, the person confirms: the times are `needs_question` with one question per screenshot, which lists them.
   Recordings keep the model's raw boxes; the eval replays the measuring, so changing it needs no re-recording.
   GRID_VERSION is in the reading cache's key.
+- 2026-11-02: A hidden block edge on a grid (an open popup's panel or its shadow within 15 minutes past the edge) is
+  taken from the same class on another day where it's in the clear, when the other edge agrees. A different colour
+  next to an edge is another class, not a panel, so back-to-back classes keep their own edges. A block the screenshot
+  doesn't show at all (the owner's class C on Wednesday) can't be read; the one grid question is where it's added.
+- 2026-11-02: Recall on the owner's real syllabus: the raw PDF text has 20 lines mentioning a date, week, or deadline;
+  2 are dated items (Exam 1, Exam 2), both found and verified. "Final exam: TBA" has no date and "(8/31)" in the title
+  is ambiguous; neither is guessed. Waiting on the owner's marks before changing anything.
+- 2026-11-02: Mobile LCP stays at 3.2 s in Lighthouse: the observed LCP is 64 ms, and the simulated figure charges all
+  JavaScript and fonts loaded before first paint to the headline. `font-display: optional` didn't move it; the real fix
+  is splitting the client bundle, which isn't a quick or safe change two days out. Skipped, as the owner allowed.
+- 2026-11-02: LENS_PUBLIC_URL defaults to https://tmrw-lens.vercel.app, the live deployment, until a custom domain is
+  attached; review links pointed at a domain that doesn't resolve.
+- 2026-11-02: The eval's grid measuring map is declared above the recording step; declared after it, loadRec threw and
+  every recording looked stale, so one `eval:live` re-recorded all fixtures ($0.36 instead of $0.06).

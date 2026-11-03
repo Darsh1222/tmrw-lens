@@ -177,6 +177,12 @@ export async function readPage(
   opts: Opts & { sam?: boolean } = {},
 ): Promise<{ page: PageReading; calls: CallResult[] }> {
   const { sam = true, ...callOpts } = opts;
+  // SAM doesn't need the reading, so it runs alongside it: a photo's wait is the slower of the two, not both.
+  const segmenting =
+    p.text === null && p.image && sam && SEGMENTED_KINDS.includes(kind)
+      ? segmentPage(p.image, p.mime ?? "image/png", callOpts)
+      : null;
+  segmenting?.catch(() => {}); // awaited below; this only keeps an early failure from going unhandled
   const read = await extractPage(kind, p, callOpts);
   const calls = read.calls;
   // A grid's blocks and hour labels, measured from the pixels: code works out times from where they sit.
@@ -186,8 +192,8 @@ export async function readPage(
       : read.extraction;
   const page: PageReading = { page: p.page, text: p.text, extraction, rereads: {} };
   if (p.text === null && p.image) {
-    if (sam && SEGMENTED_KINDS.includes(kind)) {
-      const s = await segmentPage(p.image, p.mime ?? "image/png", callOpts);
+    if (segmenting) {
+      const s = await segmenting;
       calls.push(...s.calls);
       page.objects = s.objects;
     }

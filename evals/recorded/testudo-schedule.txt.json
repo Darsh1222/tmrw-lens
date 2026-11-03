@@ -20,7 +20,7 @@
         "term_text": "Fall 2026 Schedule",
         "term_end": null,
         "breaks": [],
-        "view": "text",
+        "view": "list",
         "time_axis": [],
         "classes": [
           {
@@ -34,7 +34,7 @@
             "location": "ESJ 0224",
             "block": null,
             "evidence": {
-              "quote": "MATH141 (0121) Calculus II  4 credits\n  Lec  MWF  10:00am - 10:50am  ESJ 0224\n  Dis  TuTh  9:00am - 9:50am  MTH 0101",
+              "quote": "MATH141 (0121) Calculus II  4 credits\n  Lec  MWF  10:00am - 10:50am  ESJ 0224",
               "box": null
             }
           },
@@ -49,7 +49,7 @@
             "location": "MTH 0101",
             "block": null,
             "evidence": {
-              "quote": "MATH141 (0121) Calculus II  4 credits\n  Lec  MWF  10:00am - 10:50am  ESJ 0224\n  Dis  TuTh  9:00am - 9:50am  MTH 0101",
+              "quote": "MATH141 (0121) Calculus II  4 credits\n  Dis  TuTh  9:00am - 9:50am  MTH 0101",
               "box": null
             }
           },
@@ -64,7 +64,7 @@
             "location": "IRB 0324",
             "block": null,
             "evidence": {
-              "quote": "CMSC131 (0302) Object-Oriented Programming I  4 credits\n  Lec  TuTh  11:00am - 12:15pm  IRB 0324\n  Lab  MW  2:00pm - 2:50pm  CSI 2107",
+              "quote": "CMSC131 (0302) Object-Oriented Programming I  4 credits\n  Lec  TuTh  11:00am - 12:15pm  IRB 0324",
               "box": null
             }
           },
@@ -79,7 +79,7 @@
             "location": "CSI 2107",
             "block": null,
             "evidence": {
-              "quote": "CMSC131 (0302) Object-Oriented Programming I  4 credits\n  Lec  TuTh  11:00am - 12:15pm  IRB 0324\n  Lab  MW  2:00pm - 2:50pm  CSI 2107",
+              "quote": "CMSC131 (0302) Object-Oriented Programming I  4 credits\n  Lab  MW  2:00pm - 2:50pm  CSI 2107",
               "box": null
             }
           },
@@ -124,8 +124,8 @@
       "calls": 1,
       "input_tokens": 2109,
       "cached_tokens": 1777,
-      "output_tokens": 2588,
-      "cost_usd": 0.01168055
+      "output_tokens": 1962,
+      "cost_usd": 0.00902005
     },
     "reread_box": {
       "calls": 0,

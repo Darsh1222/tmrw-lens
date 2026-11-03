@@ -26,7 +26,7 @@ the files are right.
 ## Request
 
 ```http
-POST https://lens.bettertmrw.app/api/rebuild
+POST https://tmrw-lens.vercel.app/api/rebuild
 Authorization: Bearer <LENS_REBUILD_SECRET>
 Content-Type: application/json
 ```
@@ -153,7 +153,7 @@ network error or a 5xx without a `code`, retry once, then send nothing and log i
 ## Test it
 
 ```bash
-curl -s https://lens.bettertmrw.app/api/rebuild \
+curl -s https://tmrw-lens.vercel.app/api/rebuild \
   -H "Authorization: Bearer $LENS_REBUILD_SECRET" \
   -H "Content-Type: application/json" \
   --data @rebuild-request.json
