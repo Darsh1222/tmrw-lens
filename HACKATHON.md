@@ -154,8 +154,12 @@ Per-person spend limits and two global brakes keep the public demo from using To
   Tomorrow sends no preferences: asleep 12:30 to 8:30, study 9am to 11pm (7:30am for a morning person, 12:30am for a
   night person). Reasons are code's words from facts it checked: "Moved Lab report to Thu 12:15pm, right after ENGL101
   seminar with four days to spare." Anything about the reply comes from a note whose exact words code found in it.
-  68 cases, 3 runs each: hard rules 100%, best slot 100%, judge 4.95, and a new "would a thoughtful friend pick this
-  time?" judge at 4.94.
+  68 cases, 3 runs each: hard rules 100%, best slot 100%, judge 4.84, and a new "would a thoughtful friend pick this
+  time?" judge at 4.89.
+- Sessions spread out instead of stacking (30 minutes apart at least), with room to breathe around classes (15
+  minutes either side); reasons read like a person, at most two facts ("a clear morning, six days before it's due"),
+  and "no quiz that day" only when a quiz is near. When nothing fits, the 15-minute offer can use any awake time, since
+  the person decides; Lens's own moves stay in study hours. Rebuild logic is now frozen for the submission.
 
 ### Nov 2
 

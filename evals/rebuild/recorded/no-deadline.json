@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "5bebfde02484159aa79f152f71e2f54031592dbc645a3dbde8603709662fb88a",
   "effort": "low",
   "response": {
@@ -63,28 +63,6 @@
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-05T13:00",
-            "when": "1pm tomorrow",
-            "holds_minutes": 60,
-            "urgency": "comfortable",
-            "free_from": "2026-11-05T13:00",
-            "free_until": "2026-11-05T14:00",
-            "why_ranked": "2.3h planned that day, 1 other session that day",
-            "factors": []
-          },
-          {
-            "rank": 3,
-            "suggested_start": "2026-11-05T15:00",
-            "when": "3pm tomorrow",
-            "holds_minutes": 60,
-            "urgency": "comfortable",
-            "free_from": "2026-11-05T15:00",
-            "free_until": "2026-11-05T16:00",
-            "why_ranked": "2.3h planned that day, 1 other session that day",
-            "factors": []
-          },
-          {
-            "rank": 4,
             "suggested_start": "2026-11-05T17:00",
             "when": "5pm tomorrow",
             "holds_minutes": 60,
@@ -98,6 +76,33 @@
                 "text": "your free evening"
               }
             ]
+          },
+          {
+            "rank": 3,
+            "suggested_start": "2026-11-05T13:00",
+            "when": "1pm tomorrow",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-05T13:00",
+            "free_until": "2026-11-05T14:00",
+            "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "after ENGL101 seminar"
+              }
+            ]
+          },
+          {
+            "rank": 4,
+            "suggested_start": "2026-11-05T15:00",
+            "when": "3pm tomorrow",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-05T15:00",
+            "free_until": "2026-11-05T16:00",
+            "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+            "factors": []
           },
           {
             "rank": 5,
@@ -147,33 +152,33 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2305,
-        "output_tokens": 313,
+        "input_tokens": 2337,
+        "output_tokens": 372,
         "cached_tokens": 2033,
-        "reasoning_tokens": 196
+        "reasoning_tokens": 257
       },
-      "costUsd": 0.0019752,
-      "latencyMs": 3439
+      "costUsd": 0.0022659499999999996,
+      "latencyMs": 4884
     },
     {
       "usage": {
-        "input_tokens": 3116,
-        "output_tokens": 267,
+        "input_tokens": 3239,
+        "output_tokens": 283,
         "cached_tokens": 2289,
-        "reasoning_tokens": 123
+        "reasoning_tokens": 138
       },
-      "costUsd": 0.00251185,
-      "latencyMs": 2131
+      "costUsd": 0.0027336,
+      "latencyMs": 1903
     },
     {
       "usage": {
-        "input_tokens": 3449,
-        "output_tokens": 43,
-        "cached_tokens": 3057,
-        "reasoning_tokens": 5
+        "input_tokens": 3588,
+        "output_tokens": 41,
+        "cached_tokens": 3185,
+        "reasoning_tokens": 3
       },
-      "costUsd": 0.0011313,
-      "latencyMs": 842
+      "costUsd": 0.00115575,
+      "latencyMs": 613
     }
   ],
   "judge": {
@@ -184,13 +189,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1151,
-        "output_tokens": 1215,
+        "input_tokens": 1165,
+        "output_tokens": 2546,
         "cached_tokens": 753,
-        "reasoning_tokens": 1189
+        "reasoning_tokens": 2520
       },
-      "costUsd": 0.0057742,
-      "latencyMs": 12811
+      "costUsd": 0.01144845,
+      "latencyMs": 15564
     }
   ],
   "runs": [
@@ -255,28 +260,6 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-05T13:00",
-                "when": "1pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T13:00",
-                "free_until": "2026-11-05T14:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-05T15:00",
-                "when": "3pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T15:00",
-                "free_until": "2026-11-05T16:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 4,
                 "suggested_start": "2026-11-05T17:00",
                 "when": "5pm tomorrow",
                 "holds_minutes": 60,
@@ -290,6 +273,33 @@
                     "text": "your free evening"
                   }
                 ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-05T13:00",
+                "when": "1pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T13:00",
+                "free_until": "2026-11-05T14:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-05T15:00",
+                "when": "3pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T15:00",
+                "free_until": "2026-11-05T16:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": []
               },
               {
                 "rank": 5,
@@ -339,33 +349,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
-            "output_tokens": 313,
+            "input_tokens": 2337,
+            "output_tokens": 372,
             "cached_tokens": 2033,
-            "reasoning_tokens": 196
+            "reasoning_tokens": 257
           },
-          "costUsd": 0.0019752,
-          "latencyMs": 3439
+          "costUsd": 0.0022659499999999996,
+          "latencyMs": 4884
         },
         {
           "usage": {
-            "input_tokens": 3116,
-            "output_tokens": 267,
+            "input_tokens": 3239,
+            "output_tokens": 283,
             "cached_tokens": 2289,
-            "reasoning_tokens": 123
+            "reasoning_tokens": 138
           },
-          "costUsd": 0.00251185,
-          "latencyMs": 2131
+          "costUsd": 0.0027336,
+          "latencyMs": 1903
         },
         {
           "usage": {
-            "input_tokens": 3449,
-            "output_tokens": 43,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 5
+            "input_tokens": 3588,
+            "output_tokens": 41,
+            "cached_tokens": 3185,
+            "reasoning_tokens": 3
           },
-          "costUsd": 0.0011313,
-          "latencyMs": 842
+          "costUsd": 0.00115575,
+          "latencyMs": 613
         }
       ],
       "judge": {
@@ -376,13 +386,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1151,
-            "output_tokens": 1215,
+            "input_tokens": 1165,
+            "output_tokens": 2546,
             "cached_tokens": 753,
-            "reasoning_tokens": 1189
+            "reasoning_tokens": 2520
           },
-          "costUsd": 0.0057742,
-          "latencyMs": 12811
+          "costUsd": 0.01144845,
+          "latencyMs": 15564
         }
       ]
     },
@@ -447,28 +457,6 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-05T13:00",
-                "when": "1pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T13:00",
-                "free_until": "2026-11-05T14:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-05T15:00",
-                "when": "3pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T15:00",
-                "free_until": "2026-11-05T16:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 4,
                 "suggested_start": "2026-11-05T17:00",
                 "when": "5pm tomorrow",
                 "holds_minutes": 60,
@@ -482,6 +470,33 @@
                     "text": "your free evening"
                   }
                 ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-05T13:00",
+                "when": "1pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T13:00",
+                "free_until": "2026-11-05T14:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-05T15:00",
+                "when": "3pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T15:00",
+                "free_until": "2026-11-05T16:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": []
               },
               {
                 "rank": 5,
@@ -531,33 +546,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
+            "input_tokens": 2337,
             "output_tokens": 442,
             "cached_tokens": 2289,
-            "reasoning_tokens": 325
+            "reasoning_tokens": 324
           },
-          "costUsd": 0.00224185,
-          "latencyMs": 3011
+          "costUsd": 0.0022818499999999998,
+          "latencyMs": 3373
         },
         {
           "usage": {
-            "input_tokens": 3245,
-            "output_tokens": 351,
+            "input_tokens": 3309,
+            "output_tokens": 306,
             "cached_tokens": 2289,
-            "reasoning_tokens": 206
+            "reasoning_tokens": 162
           },
-          "costUsd": 0.0030301,
-          "latencyMs": 2452
+          "costUsd": 0.0029188499999999997,
+          "latencyMs": 1931
         },
         {
           "usage": {
-            "input_tokens": 3662,
+            "input_tokens": 3681,
             "output_tokens": 43,
             "cached_tokens": 3185,
             "reasoning_tokens": 5
           },
-          "costUsd": 0.00125675,
-          "latencyMs": 745
+          "costUsd": 0.0012805,
+          "latencyMs": 659
         }
       ],
       "judge": {
@@ -568,13 +583,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1151,
-            "output_tokens": 1385,
-            "cached_tokens": 753,
-            "reasoning_tokens": 1364
+            "input_tokens": 1165,
+            "output_tokens": 1847,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1821
           },
-          "costUsd": 0.0064967,
-          "latencyMs": 11823
+          "costUsd": 0.0080553,
+          "latencyMs": 12213
         }
       ]
     },
@@ -639,28 +654,6 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-05T13:00",
-                "when": "1pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T13:00",
-                "free_until": "2026-11-05T14:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-05T15:00",
-                "when": "3pm tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-05T15:00",
-                "free_until": "2026-11-05T16:00",
-                "why_ranked": "2.3h planned that day, 1 other session that day",
-                "factors": []
-              },
-              {
-                "rank": 4,
                 "suggested_start": "2026-11-05T17:00",
                 "when": "5pm tomorrow",
                 "holds_minutes": 60,
@@ -674,6 +667,33 @@
                     "text": "your free evening"
                   }
                 ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-05T13:00",
+                "when": "1pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T13:00",
+                "free_until": "2026-11-05T14:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-05T15:00",
+                "when": "3pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-05T15:00",
+                "free_until": "2026-11-05T16:00",
+                "why_ranked": "within 30 min of another session, 2.3h planned that day, 1 other session that day",
+                "factors": []
               },
               {
                 "rank": 5,
@@ -723,33 +743,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
-            "output_tokens": 278,
+            "input_tokens": 2337,
+            "output_tokens": 458,
             "cached_tokens": 2289,
-            "reasoning_tokens": 155
+            "reasoning_tokens": 341
           },
-          "costUsd": 0.00154485,
-          "latencyMs": 2271
+          "costUsd": 0.00234985,
+          "latencyMs": 3867
         },
         {
           "usage": {
-            "input_tokens": 3081,
-            "output_tokens": 276,
+            "input_tokens": 3325,
+            "output_tokens": 286,
             "cached_tokens": 2289,
-            "reasoning_tokens": 131
+            "reasoning_tokens": 139
           },
-          "costUsd": 0.00250635,
-          "latencyMs": 2223
+          "costUsd": 0.00285385,
+          "latencyMs": 1874
         },
         {
           "usage": {
-            "input_tokens": 3423,
-            "output_tokens": 42,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 4
+            "input_tokens": 3677,
+            "output_tokens": 44,
+            "cached_tokens": 3313,
+            "reasoning_tokens": 6
           },
-          "costUsd": 0.00109455,
-          "latencyMs": 690
+          "costUsd": 0.0011389500000000001,
+          "latencyMs": 631
         }
       ],
       "judge": {
@@ -760,13 +780,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1151,
-            "output_tokens": 1303,
+            "input_tokens": 1165,
+            "output_tokens": 2808,
             "cached_tokens": 1137,
-            "reasoning_tokens": 1282
+            "reasoning_tokens": 2787
           },
-          "costUsd": 0.0057258000000000005,
-          "latencyMs": 9662
+          "costUsd": 0.012139549999999999,
+          "latencyMs": 19515
         }
       ]
     }

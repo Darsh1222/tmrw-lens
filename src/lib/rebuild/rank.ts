@@ -18,7 +18,9 @@ import type { Draft } from "@/lib/rebuild/draft";
 //     +15  ending within 24 hours of its deadline                                 a day's buffer
 //     +8   the same day as the miss, or within 4 hours of it                      not right after the miss
 //     +4   starting at 9 PM or later, unless they study at night
-//   Either way:
+//   Either way (tight / comfortable):
+//     +4 / +12  within 30 minutes of another session: sessions spread out, not stacked
+//     +2 / +6   within 15 minutes of a class or event, either side: room to breathe
 //     -15  on the day they said they're free from (a reply offering time: "later today after 6")
 //     +30  the morning of another exam or quiz, before it: only when nothing else fits
 //     +100, plus 0.5 a minute cut, when it has to be shortened to fit
@@ -32,6 +34,8 @@ export const WEIGHTS = {
   comfortable: { perDay: 4, perLoadHour: 2, perSession: 3, offStudyTime: 8, noBuffer: 15, afterMiss: 8, lateStart: 4 },
   offered: -15,
   examMorning: 30,
+  stacked: { tight: 4, comfortable: 12 },
+  touching: { tight: 2, comfortable: 6 },
   shortened: 100,
   perMinuteCut: 0.5,
 } as const;
@@ -156,14 +160,25 @@ export function rankSlots(
   const t = taken(d, itemId);
   const exams = d.req.deadlines.filter((x) => x.id !== item.for && EXAM.test(x.title)).map((x) => Date.parse(x.due));
   const sessionsOn = (ms: number) => t.items.filter((x) => overlapMs(x, dayOf(d, ms)) > 0).length;
-  const examMorning = (s: number, e: number) =>
-    exams.some((due) => d.local(due).hasSame(d.local(s), "day") && e <= due && d.local(due).hour < 17);
+  const examMorning = (s: number) =>
+    // Starting before it that day: a session running into the quiz itself counts too.
+    exams.some((due) => d.local(due).hasSame(d.local(s), "day") && s < due && d.local(due).hour < 17);
 
+  const near = (spans: Span[], s: number, e: number, gapMin: number) =>
+    spans.some((y) => y.e <= s && s - y.e < gapMin * MIN) || spans.some((y) => y.s >= e && y.s - e < gapMin * MIN);
   const score = (start: number, minutes: number) => {
     const end = start + minutes * MIN;
     const h = d.local(start).hour;
     const why: string[] = [];
     let cost = 0;
+    if (near(t.items, start, end, 30)) {
+      cost += WEIGHTS.stacked[mode];
+      why.push("within 30 min of another session");
+    }
+    if (near(t.fixed, start, end, 15)) {
+      cost += WEIGHTS.touching[mode];
+      why.push("up against a class or event");
+    }
     if (mode === "tight") {
       const w = WEIGHTS.tight;
       cost += ((start - d.now) / HOUR) * w.perHour;
@@ -205,7 +220,7 @@ export function rankSlots(
       cost += WEIGHTS.offered;
       why.push("when they said they're free");
     }
-    if (examMorning(start, end)) {
+    if (examMorning(start)) {
       cost += WEIGHTS.examMorning;
       why.push("the morning of another exam");
     }
@@ -228,6 +243,11 @@ export function rankSlots(
       if (study) starts.add(Math.max(x.s, day.set({ hour: STUDY_HOURS[study][0] }).toMillis()));
     if (mode === "comfortable" && missEnd !== null) starts.add(Math.max(x.s, missEnd + AFTER_MISS_HOURS * HOUR));
     if (opts.offered) starts.add(Math.max(x.s, opts.offered.s));
+    // A little room from whatever's on either side of the stretch.
+    for (const k of [15, 30]) {
+      starts.add(x.s + k * MIN);
+      starts.add(x.e - (minutes + k) * MIN);
+    }
     const best = [...starts]
       .map((s) => Math.ceil(s / (5 * MIN)) * 5 * MIN)
       .filter((s) => s >= x.s && s + minutes * MIN <= x.e)
@@ -266,18 +286,26 @@ export function rankSlots(
     if (loads.size > 1 && load === minLoad && maxLoad > minLoad) factors.push({ key: "lighter", text: `a lighter ${part}` }); // prettier-ignore
     if (![...t.fixed, ...t.items].some((y) => overlapMs(y, window) > 0))
       factors.push({ key: "free_part", text: `your free ${part}` });
-    if (part === "morning" && !exams.some((e) => d.local(e).hasSame(day, "day")))
-      factors.push({ key: "fresh_morning", text: "a fresh morning, with no quiz that day" });
+    // Two ways to say most facts, picked by the day, so a week of texts doesn't read the same.
+    const alt = d.local(x.start).weekday % 2 === 1;
+    if (part === "morning" && !exams.some((e) => d.local(e).hasSame(day, "day"))) {
+      // "No quiz that day" only means something when a quiz or exam is close: within 48 hours.
+      const quizNear = d.req.deadlines.some((dl) => EXAM.test(dl.title) && Math.abs(Date.parse(dl.due) - x.start) < 48 * HOUR); // prettier-ignore
+      const fresh = alt ? "a fresh morning" : "a clear morning";
+      factors.push({ key: "fresh_morning", text: quizNear ? `${fresh} with no quiz that day` : fresh });
+    }
     if (study && h >= STUDY_HOURS[study][0] && h < STUDY_HOURS[study][1])
       factors.push({ key: "study_time", text: `in your ${study === "nights" ? "evening" : study.slice(0, -1)} study time` }); // prettier-ignore
-    const before = t.fixed.find((f) => f.e <= x.start && x.start - f.e <= 30 * MIN);
-    if (before) factors.push({ key: "after_event", text: `right after ${before.title}` });
+    // "After" only with room between: a session squeezed against the end of a class isn't a plus.
+    const before = t.fixed.find((f) => f.e <= x.start && x.start - f.e >= 15 * MIN && x.start - f.e <= 60 * MIN);
+    if (before) factors.push({ key: "after_event", text: `after ${before.title}` });
     if (due !== null) {
       // Calendar days, as people count them: Saturday morning is two days before a Monday morning deadline.
       const days = Math.round(d.local(due).startOf("day").diff(d.local(end).startOf("day"), "days").days);
-      if (days >= 7) factors.push({ key: "buffer", text: "with a week to spare" });
-      else if (days >= 2) factors.push({ key: "buffer", text: `with ${NUMBER[days]} days to spare` });
-      else if (days === 1) factors.push({ key: "buffer", text: "a day before it's due" });
+      const to = alt && deadline ? deadline.title : "it's due";
+      if (days >= 7) factors.push({ key: "buffer", text: `a week before ${to}` });
+      else if (days >= 2) factors.push({ key: "buffer", text: `${NUMBER[days]} days before ${to}` });
+      else if (days === 1) factors.push({ key: "buffer", text: `the day before ${to}` });
     }
     return { ...x, factors };
   };
@@ -290,14 +318,18 @@ export function rankSlots(
 /** Which factors combine into a reason, strongest first: urgency, then quality, and the buffer last. */
 export const FACTOR_ORDER: FactorKey[] = ["only", "last", "soonest", "longest", "lighter", "free_part", "study_time", "after_event", "fresh_morning", "buffer"]; // prettier-ignore
 
-/** The reason's words, from factor texts (and a reply phrase): "a lighter afternoon with a week to spare". */
+/**
+ * The reason's words, from factor texts (and a reply phrase), in the order given: never more than two facts, so it
+ * reads like a person ("a fresh morning with no quiz that day, six days before it's due"), not a list.
+ */
 export function compose(texts: { key: string; text: string }[]): string {
   // One urgency claim is enough ("the only time it fits" already says it's the soonest).
   const urgent = texts.filter((t) => ["only", "last", "soonest"].includes(t.key));
   const kept = texts.filter((t) => !urgent.includes(t) || t === urgent[0]);
-  const main = kept.filter((t) => t.key !== "buffer").map((t) => t.text);
-  const buffer = kept.find((t) => t.key === "buffer")?.text;
-  if (!main.length) return buffer ?? "";
-  const head = main.join(", ");
-  return buffer ? `${head}${buffer.startsWith("with") ? " " : ", "}${buffer}` : head;
+  const main = kept.filter((t) => t.key !== "buffer");
+  const buffer = kept.filter((t) => t.key === "buffer");
+  return [...main, ...buffer]
+    .slice(0, 2)
+    .map((t) => t.text)
+    .join(", ");
 }

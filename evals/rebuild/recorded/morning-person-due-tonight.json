@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "6a0b4192178c6e1c849584774277d3ad3212d633b2d57a86a3bcf73dd0fe38f4",
   "effort": "low",
   "response": {
@@ -9,12 +9,12 @@
       {
         "item_id": "s_phys",
         "action": "move",
-        "start": "2026-11-12T16:50:00-05:00",
-        "end": "2026-11-12T17:50:00-05:00",
-        "reason": "the soonest it fits before it's due"
+        "start": "2026-11-12T17:05:00-05:00",
+        "end": "2026-11-12T18:05:00-05:00",
+        "reason": "the last time it fits before it's due"
       }
     ],
-    "message": "Moved PHYS problem set to 4:50pm today, the soonest it fits before it's due. Nothing else changed.",
+    "message": "Moved PHYS problem set to 5:05pm today, the last time it fits before it's due. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -36,8 +36,8 @@
         "free": [
           {
             "rank": 1,
-            "suggested_start": "2026-11-12T16:50",
-            "when": "4:50pm today",
+            "suggested_start": "2026-11-12T17:05",
+            "when": "5:05pm today",
             "holds_minutes": 60,
             "urgency": "tight",
             "free_from": "2026-11-12T16:50",
@@ -45,12 +45,16 @@
             "why_ranked": "tight: the soonest good time wins",
             "factors": [
               {
-                "key": "soonest",
-                "text": "the soonest it fits before it's due"
+                "key": "last",
+                "text": "the last time it fits before it's due"
+              },
+              {
+                "key": "free_part",
+                "text": "your free evening"
               },
               {
                 "key": "after_event",
-                "text": "right after HIST200 lecture"
+                "text": "after HIST200 lecture"
               }
             ]
           }
@@ -61,20 +65,20 @@
       "tool": "move_item",
       "args": {
         "because": [
-          "soonest"
+          "last"
         ],
         "duration_min": "null",
         "item_id": "s_phys",
         "reason": "null",
-        "start": "2026-11-12T16:50"
+        "start": "2026-11-12T17:05"
       },
       "ok": true,
       "result": {
         "ok": true,
         "moved": "PHYS problem set",
-        "to": "Thu Nov 12 16:50-17:50",
+        "to": "Thu Nov 12 17:05-18:05",
         "minutes": 60,
-        "reason": "the soonest it fits before it's due"
+        "reason": "the last time it fits before it's due"
       }
     },
     {
@@ -90,50 +94,52 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2229,
-        "output_tokens": 447,
+        "input_tokens": 2261,
+        "output_tokens": 352,
         "cached_tokens": 2033,
-        "reasoning_tokens": 320
+        "reasoning_tokens": 226
       },
-      "costUsd": 0.0024497,
-      "latencyMs": 3804
+      "costUsd": 0.0020859499999999996,
+      "latencyMs": 2760
     },
     {
       "usage": {
-        "input_tokens": 2819,
-        "output_tokens": 337,
+        "input_tokens": 2765,
+        "output_tokens": 348,
         "cached_tokens": 2161,
-        "reasoning_tokens": 195
+        "reasoning_tokens": 227
       },
-      "costUsd": 0.0025789000000000003,
-      "latencyMs": 2942
+      "costUsd": 0.00255815,
+      "latencyMs": 2331
     },
     {
       "usage": {
-        "input_tokens": 3220,
+        "input_tokens": 3177,
         "output_tokens": 42,
-        "cached_tokens": 2801,
+        "cached_tokens": 2673,
         "reasoning_tokens": 4
       },
-      "costUsd": 0.0011224000000000002,
-      "latencyMs": 1330
+      "costUsd": 0.0012094500000000002,
+      "latencyMs": 608
     }
   ],
   "judge": {
-    "score": 5,
+    "score": 2,
     "time_score": 5,
-    "problems": []
+    "problems": [
+      "Says 5:05pm is the last time it fits before it's due, but free time runs 16:50-22:00 with a 23:00 due time, so later 60-min slots still fit."
+    ]
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1171,
-        "output_tokens": 909,
+        "input_tokens": 1185,
+        "output_tokens": 1045,
         "cached_tokens": 753,
-        "reasoning_tokens": 888
+        "reasoning_tokens": 971
       },
-      "costUsd": 0.0044987,
-      "latencyMs": 7750
+      "costUsd": 0.0050942,
+      "latencyMs": 6583
     }
   ],
   "runs": [
@@ -144,12 +150,12 @@
           {
             "item_id": "s_phys",
             "action": "move",
-            "start": "2026-11-12T16:50:00-05:00",
-            "end": "2026-11-12T17:50:00-05:00",
-            "reason": "the soonest it fits before it's due"
+            "start": "2026-11-12T17:05:00-05:00",
+            "end": "2026-11-12T18:05:00-05:00",
+            "reason": "the last time it fits before it's due"
           }
         ],
-        "message": "Moved PHYS problem set to 4:50pm today, the soonest it fits before it's due. Nothing else changed.",
+        "message": "Moved PHYS problem set to 5:05pm today, the last time it fits before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -171,8 +177,8 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-12T16:50",
-                "when": "4:50pm today",
+                "suggested_start": "2026-11-12T17:05",
+                "when": "5:05pm today",
                 "holds_minutes": 60,
                 "urgency": "tight",
                 "free_from": "2026-11-12T16:50",
@@ -180,12 +186,16 @@
                 "why_ranked": "tight: the soonest good time wins",
                 "factors": [
                   {
-                    "key": "soonest",
-                    "text": "the soonest it fits before it's due"
+                    "key": "last",
+                    "text": "the last time it fits before it's due"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   }
                 ]
               }
@@ -196,20 +206,20 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "soonest"
+              "last"
             ],
             "duration_min": "null",
             "item_id": "s_phys",
             "reason": "null",
-            "start": "2026-11-12T16:50"
+            "start": "2026-11-12T17:05"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "PHYS problem set",
-            "to": "Thu Nov 12 16:50-17:50",
+            "to": "Thu Nov 12 17:05-18:05",
             "minutes": 60,
-            "reason": "the soonest it fits before it's due"
+            "reason": "the last time it fits before it's due"
           }
         },
         {
@@ -225,50 +235,52 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2229,
-            "output_tokens": 447,
+            "input_tokens": 2261,
+            "output_tokens": 352,
             "cached_tokens": 2033,
-            "reasoning_tokens": 320
+            "reasoning_tokens": 226
           },
-          "costUsd": 0.0024497,
-          "latencyMs": 3804
+          "costUsd": 0.0020859499999999996,
+          "latencyMs": 2760
         },
         {
           "usage": {
-            "input_tokens": 2819,
-            "output_tokens": 337,
+            "input_tokens": 2765,
+            "output_tokens": 348,
             "cached_tokens": 2161,
-            "reasoning_tokens": 195
+            "reasoning_tokens": 227
           },
-          "costUsd": 0.0025789000000000003,
-          "latencyMs": 2942
+          "costUsd": 0.00255815,
+          "latencyMs": 2331
         },
         {
           "usage": {
-            "input_tokens": 3220,
+            "input_tokens": 3177,
             "output_tokens": 42,
-            "cached_tokens": 2801,
+            "cached_tokens": 2673,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0011224000000000002,
-          "latencyMs": 1330
+          "costUsd": 0.0012094500000000002,
+          "latencyMs": 608
         }
       ],
       "judge": {
-        "score": 5,
+        "score": 2,
         "time_score": 5,
-        "problems": []
+        "problems": [
+          "Says 5:05pm is the last time it fits before it's due, but free time runs 16:50-22:00 with a 23:00 due time, so later 60-min slots still fit."
+        ]
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1171,
-            "output_tokens": 909,
+            "input_tokens": 1185,
+            "output_tokens": 1045,
             "cached_tokens": 753,
-            "reasoning_tokens": 888
+            "reasoning_tokens": 971
           },
-          "costUsd": 0.0044987,
-          "latencyMs": 7750
+          "costUsd": 0.0050942,
+          "latencyMs": 6583
         }
       ]
     },
@@ -279,12 +291,12 @@
           {
             "item_id": "s_phys",
             "action": "move",
-            "start": "2026-11-12T16:50:00-05:00",
-            "end": "2026-11-12T17:50:00-05:00",
-            "reason": "the soonest it fits before it's due"
+            "start": "2026-11-12T17:05:00-05:00",
+            "end": "2026-11-12T18:05:00-05:00",
+            "reason": "the last time it fits before it's due"
           }
         ],
-        "message": "Moved PHYS problem set to 4:50pm today, the soonest it fits before it's due. Nothing else changed.",
+        "message": "Moved PHYS problem set to 5:05pm today, the last time it fits before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -295,7 +307,7 @@
         {
           "tool": "find_open_time",
           "args": {
-            "after": "null",
+            "after": "2026-11-12T16:50",
             "before": "2026-11-12T23:00",
             "item_id": "null",
             "minutes": 60
@@ -306,8 +318,8 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-12T16:50",
-                "when": "4:50pm today",
+                "suggested_start": "2026-11-12T17:05",
+                "when": "5:05pm today",
                 "holds_minutes": 60,
                 "urgency": "tight",
                 "free_from": "2026-11-12T16:50",
@@ -315,12 +327,16 @@
                 "why_ranked": "tight: the soonest good time wins",
                 "factors": [
                   {
-                    "key": "soonest",
-                    "text": "the soonest it fits before it's due"
+                    "key": "last",
+                    "text": "the last time it fits before it's due"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   }
                 ]
               }
@@ -331,20 +347,20 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "soonest"
+              "last"
             ],
             "duration_min": "null",
             "item_id": "s_phys",
             "reason": "null",
-            "start": "2026-11-12T16:50"
+            "start": "2026-11-12T17:05"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "PHYS problem set",
-            "to": "Thu Nov 12 16:50-17:50",
+            "to": "Thu Nov 12 17:05-18:05",
             "minutes": 60,
-            "reason": "the soonest it fits before it's due"
+            "reason": "the last time it fits before it's due"
           }
         },
         {
@@ -360,50 +376,52 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2229,
-            "output_tokens": 328,
+            "input_tokens": 2261,
+            "output_tokens": 483,
             "cached_tokens": 2161,
-            "reasoning_tokens": 203
+            "reasoning_tokens": 346
           },
-          "costUsd": 0.0018031500000000001,
-          "latencyMs": 2991
+          "costUsd": 0.0025019,
+          "latencyMs": 3077
         },
         {
           "usage": {
-            "input_tokens": 2700,
-            "output_tokens": 314,
+            "input_tokens": 2896,
+            "output_tokens": 365,
             "cached_tokens": 2161,
-            "reasoning_tokens": 172
+            "reasoning_tokens": 225
           },
-          "costUsd": 0.0023324,
-          "latencyMs": 2242
+          "costUsd": 0.00279415,
+          "latencyMs": 2444
         },
         {
           "usage": {
-            "input_tokens": 3078,
+            "input_tokens": 3325,
             "output_tokens": 43,
-            "cached_tokens": 2673,
+            "cached_tokens": 2801,
             "reasoning_tokens": 5
           },
-          "costUsd": 0.0010899500000000001,
-          "latencyMs": 1120
+          "costUsd": 0.0012579000000000002,
+          "latencyMs": 2948
         }
       ],
       "judge": {
-        "score": 5,
+        "score": 2,
         "time_score": 5,
-        "problems": []
+        "problems": [
+          "Says 5:05pm is 'the last time it fits before it's due' but free time runs to 10pm, so later 60-min slots before the 11pm due time still exist."
+        ]
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1171,
-            "output_tokens": 537,
+            "input_tokens": 1185,
+            "output_tokens": 999,
             "cached_tokens": 1137,
-            "reasoning_tokens": 516
+            "reasoning_tokens": 929
           },
-          "costUsd": 0.0024953,
-          "latencyMs": 4920
+          "costUsd": 0.0044763,
+          "latencyMs": 6621
         }
       ]
     },
@@ -414,12 +432,12 @@
           {
             "item_id": "s_phys",
             "action": "move",
-            "start": "2026-11-12T16:50:00-05:00",
-            "end": "2026-11-12T17:50:00-05:00",
-            "reason": "the soonest it fits before it's due"
+            "start": "2026-11-12T17:05:00-05:00",
+            "end": "2026-11-12T18:05:00-05:00",
+            "reason": "the last time it fits before it's due"
           }
         ],
-        "message": "Moved PHYS problem set to 4:50pm today, the soonest it fits before it's due. Nothing else changed.",
+        "message": "Moved PHYS problem set to 5:05pm today, the last time it fits before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -441,8 +459,8 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-12T16:50",
-                "when": "4:50pm today",
+                "suggested_start": "2026-11-12T17:05",
+                "when": "5:05pm today",
                 "holds_minutes": 60,
                 "urgency": "tight",
                 "free_from": "2026-11-12T16:50",
@@ -450,12 +468,16 @@
                 "why_ranked": "tight: the soonest good time wins",
                 "factors": [
                   {
-                    "key": "soonest",
-                    "text": "the soonest it fits before it's due"
+                    "key": "last",
+                    "text": "the last time it fits before it's due"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   }
                 ]
               }
@@ -466,20 +488,20 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "soonest"
+              "last"
             ],
             "duration_min": "null",
             "item_id": "s_phys",
             "reason": "null",
-            "start": "2026-11-12T16:50"
+            "start": "2026-11-12T17:05"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "PHYS problem set",
-            "to": "Thu Nov 12 16:50-17:50",
+            "to": "Thu Nov 12 17:05-18:05",
             "minutes": 60,
-            "reason": "the soonest it fits before it's due"
+            "reason": "the last time it fits before it's due"
           }
         },
         {
@@ -495,50 +517,52 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2229,
-            "output_tokens": 283,
+            "input_tokens": 2261,
+            "output_tokens": 307,
             "cached_tokens": 2161,
-            "reasoning_tokens": 157
+            "reasoning_tokens": 182
           },
-          "costUsd": 0.0016119,
-          "latencyMs": 2061
+          "costUsd": 0.0017539,
+          "latencyMs": 2397
         },
         {
           "usage": {
-            "input_tokens": 2655,
-            "output_tokens": 239,
+            "input_tokens": 2720,
+            "output_tokens": 346,
             "cached_tokens": 2161,
-            "reasoning_tokens": 98
+            "reasoning_tokens": 208
           },
-          "costUsd": 0.0019574,
-          "latencyMs": 1806
+          "costUsd": 0.0024934000000000002,
+          "latencyMs": 2270
         },
         {
           "usage": {
-            "input_tokens": 2958,
-            "output_tokens": 41,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 3
+            "input_tokens": 3130,
+            "output_tokens": 44,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 6
           },
-          "costUsd": 0.00107225,
-          "latencyMs": 822
+          "costUsd": 0.0011592,
+          "latencyMs": 987
         }
       ],
       "judge": {
-        "score": 5,
+        "score": 2,
         "time_score": 5,
-        "problems": []
+        "problems": [
+          "Says 5:05pm is 'the last time it fits before it's due' but free time runs 16:50-22:00, so later 60-min slots tonight still fit; 17:05 is the soonest good time before a tonight deadline, not the last."
+        ]
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1171,
-            "output_tokens": 592,
+            "input_tokens": 1185,
+            "output_tokens": 1120,
             "cached_tokens": 1137,
-            "reasoning_tokens": 566
+            "reasoning_tokens": 1033
           },
-          "costUsd": 0.0027290500000000002,
-          "latencyMs": 4748
+          "costUsd": 0.00499055,
+          "latencyMs": 7399
         }
       ]
     }

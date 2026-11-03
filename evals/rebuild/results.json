@@ -7,22 +7,22 @@
     "hard_rules": 1,
     "top1": 1,
     "top3": 1,
-    "judge_score": 4.95,
-    "judge_min": 3,
-    "time_judge": 4.94,
-    "time_judge_min": 3,
+    "judge_score": 4.84,
+    "judge_min": 1,
+    "time_judge": 4.89,
+    "time_judge_min": 1,
     "unkind_messages": 0,
     "flaky": [],
     "regressions": [],
     "unrecorded": [],
     "fell_back": "0/204",
-    "cost_per_rebuild": 0.00761,
+    "cost_per_rebuild": 0.00813,
     "turns_per_rebuild": 3.8,
-    "latency_per_rebuild_s": 8.6,
-    "tokens_per_call": "3185 in, 229 out",
-    "cache_hit_rate": "84%",
+    "latency_per_rebuild_s": 8,
+    "tokens_per_call": "3274 in, 246 out",
+    "cache_hit_rate": "83%",
     "fallback_hard_rules": 1,
-    "fallback_cases_passed": "58/68"
+    "fallback_cases_passed": "61/68"
   },
   "gates": {
     "hard rules 100%": true,
@@ -209,14 +209,14 @@
         1
       ],
       "judge": [
-        5,
-        5,
-        null
+        null,
+        3,
+        5
       ],
       "time_judge": [
-        5,
-        4,
-        null
+        null,
+        3,
+        5
       ],
       "problems": []
     },
@@ -363,7 +363,7 @@
       "group": "late-night skip",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -432,7 +432,7 @@
       "group": "due soon",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T10:55:00.000-05:00",
+      "expected_best": "2026-11-11T11:10:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -462,14 +462,14 @@
         null
       ],
       "judge": [
-        5,
-        5,
-        5
+        null,
+        null,
+        null
       ],
       "time_judge": [
-        5,
-        5,
-        5
+        null,
+        null,
+        null
       ],
       "problems": []
     },
@@ -509,12 +509,12 @@
       ],
       "judge": [
         5,
-        5,
+        4,
         5
       ],
       "time_judge": [
         5,
-        5,
+        4,
         5
       ],
       "problems": []
@@ -524,7 +524,7 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T12:15:00.000-05:00",
+      "expected_best": "2026-11-10T12:30:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -533,12 +533,12 @@
       "judge": [
         4,
         5,
-        5
+        null
       ],
       "time_judge": [
         4,
         5,
-        5
+        null
       ],
       "problems": []
     },
@@ -593,7 +593,7 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T09:00:00.000-05:00",
+      "expected_best": "2026-11-13T11:05:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -685,21 +685,21 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
-        4,
         5,
-        4
+        5,
+        5
       ],
       "time_judge": [
-        4,
         5,
-        4
+        5,
+        5
       ],
       "problems": []
     },
@@ -846,7 +846,7 @@
       "group": "load",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T12:15:00.000-05:00",
+      "expected_best": "2026-11-12T12:30:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -968,12 +968,12 @@
         1
       ],
       "judge": [
-        5,
+        4,
         5,
         5
       ],
       "time_judge": [
-        5,
+        4,
         5,
         5
       ],
@@ -1030,7 +1030,7 @@
       "group": "two misses",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T16:50:00.000-05:00",
+      "expected_best": "2026-11-11T17:05:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1076,21 +1076,21 @@
       "group": "deadline moved",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T09:00:00.000-05:00",
+      "expected_best": "2026-11-13T11:05:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
-        5,
-        5,
-        null
+        4,
+        4,
+        5
       ],
       "time_judge": [
-        5,
-        5,
-        null
+        4,
+        4,
+        5
       ],
       "problems": []
     },
@@ -1106,14 +1106,14 @@
         null
       ],
       "judge": [
-        5,
-        5,
-        5
+        null,
+        2,
+        null
       ],
       "time_judge": [
-        5,
-        5,
-        5
+        null,
+        1,
+        null
       ],
       "problems": []
     },
@@ -1129,14 +1129,14 @@
         null
       ],
       "judge": [
-        5,
-        5,
-        5
+        1,
+        null,
+        1
       ],
       "time_judge": [
-        5,
-        5,
-        5
+        1,
+        null,
+        1
       ],
       "problems": []
     },
@@ -1175,14 +1175,14 @@
         null
       ],
       "judge": [
-        5,
-        5,
-        5
+        null,
+        null,
+        null
       ],
       "time_judge": [
-        5,
-        5,
-        5
+        null,
+        null,
+        null
       ],
       "problems": []
     },
@@ -1214,19 +1214,19 @@
       "group": "study time",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T17:00:00.000-05:00",
+      "expected_best": "2026-11-12T17:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        4,
         5,
-        5,
-        5
+        4
       ],
       "time_judge": [
-        5,
+        4,
         5,
         4
       ],
@@ -1237,16 +1237,16 @@
       "group": "study time",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T16:50:00.000-05:00",
+      "expected_best": "2026-11-12T17:05:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
-        5,
-        5,
-        5
+        2,
+        2,
+        2
       ],
       "time_judge": [
         5,
@@ -1260,7 +1260,7 @@
       "group": "study time",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T12:15:00.000-05:00",
+      "expected_best": "2026-11-12T12:30:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1452,7 +1452,7 @@
       ],
       "judge": [
         5,
-        5,
+        4,
         5
       ],
       "time_judge": [
@@ -1467,7 +1467,7 @@
       "group": "everyday",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1476,12 +1476,12 @@
       "judge": [
         5,
         5,
-        null
+        5
       ],
       "time_judge": [
         5,
         5,
-        null
+        5
       ],
       "problems": []
     },
@@ -1513,21 +1513,21 @@
       "group": "everyday",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T10:50:00.000-05:00",
+      "expected_best": "2026-11-14T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
-        3,
-        3,
-        3
+        5,
+        5,
+        5
       ],
       "time_judge": [
-        3,
-        3,
-        3
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1536,7 +1536,7 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T10:50:00.000-05:00",
+      "expected_best": "2026-11-11T11:05:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1582,7 +1582,7 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1591,12 +1591,12 @@
       "judge": [
         5,
         5,
-        4
+        5
       ],
       "time_judge": [
         5,
         5,
-        4
+        5
       ],
       "problems": []
     }

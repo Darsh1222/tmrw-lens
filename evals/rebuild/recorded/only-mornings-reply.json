@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "e370e30b625c1e7218757e4677ea64c54fa9676967c6b01f3aeeab35dc4959e7",
   "effort": "low",
   "response": {
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2026-11-10T09:00:00-05:00",
         "end": "2026-11-10T10:00:00-05:00",
-        "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+        "reason": "since you said only mornings work this week, a clear morning"
       }
     ],
-    "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a fresh morning, with no quiz that day. Nothing else changed.",
+    "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a clear morning. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -25,9 +25,11 @@
     {
       "tool": "note_reply",
       "args": {
+        "from_date": "null",
         "kind": "only_part",
         "part": "morning",
-        "quote": "only mornings work for me this week"
+        "quote": "only mornings work for me this week",
+        "until": "null"
       },
       "ok": true,
       "result": {
@@ -60,11 +62,11 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning"
               },
               {
                 "key": "buffer",
-                "text": "with six days to spare"
+                "text": "six days before it's due"
               },
               {
                 "key": "reply",
@@ -74,30 +76,6 @@
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-11T09:00",
-            "when": "Wed 9am",
-            "holds_minutes": 60,
-            "urgency": "comfortable",
-            "free_from": "2026-11-11T09:00",
-            "free_until": "2026-11-11T10:00",
-            "why_ranked": "4.5h planned that day",
-            "factors": [
-              {
-                "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "buffer",
-                "text": "with five days to spare"
-              },
-              {
-                "key": "reply",
-                "text": "since you said only mornings work this week"
-              }
-            ]
-          },
-          {
-            "rank": 3,
             "suggested_start": "2026-11-12T09:00",
             "when": "Thu 9am",
             "holds_minutes": 60,
@@ -108,11 +86,35 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning"
               },
               {
                 "key": "buffer",
-                "text": "with four days to spare"
+                "text": "four days before it's due"
+              },
+              {
+                "key": "reply",
+                "text": "since you said only mornings work this week"
+              }
+            ]
+          },
+          {
+            "rank": 3,
+            "suggested_start": "2026-11-11T09:00",
+            "when": "Wed 9am",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T09:00",
+            "free_until": "2026-11-11T10:00",
+            "why_ranked": "up against a class or event, 4.5h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning"
+              },
+              {
+                "key": "buffer",
+                "text": "five days before Essay 3"
               },
               {
                 "key": "reply",
@@ -128,19 +130,15 @@
             "urgency": "comfortable",
             "free_from": "2026-11-11T10:50",
             "free_until": "2026-11-11T12:00",
-            "why_ranked": "4.5h planned that day",
+            "why_ranked": "up against a class or event, 4.5h planned that day",
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "after_event",
-                "text": "right after MATH141 lecture"
+                "text": "a fresh morning"
               },
               {
                 "key": "buffer",
-                "text": "with five days to spare"
+                "text": "five days before Essay 3"
               },
               {
                 "key": "reply",
@@ -156,7 +154,7 @@
             "urgency": "comfortable",
             "free_from": "2026-11-13T09:00",
             "free_until": "2026-11-13T10:00",
-            "why_ranked": "1.7h planned that day",
+            "why_ranked": "up against a class or event, 1.7h planned that day",
             "factors": [
               {
                 "key": "lighter",
@@ -164,11 +162,11 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning"
               },
               {
                 "key": "buffer",
-                "text": "with three days to spare"
+                "text": "three days before Essay 3"
               },
               {
                 "key": "reply",
@@ -184,7 +182,7 @@
             "urgency": "comfortable",
             "free_from": "2026-11-13T10:50",
             "free_until": "2026-11-13T12:00",
-            "why_ranked": "1.7h planned that day",
+            "why_ranked": "up against a class or event, 1.7h planned that day",
             "factors": [
               {
                 "key": "lighter",
@@ -192,15 +190,11 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "after_event",
-                "text": "right after MATH141 lecture"
+                "text": "a fresh morning"
               },
               {
                 "key": "buffer",
-                "text": "with three days to spare"
+                "text": "three days before Essay 3"
               },
               {
                 "key": "reply",
@@ -215,8 +209,8 @@
       "tool": "move_item",
       "args": {
         "because": [
-          "reply",
-          "fresh_morning"
+          "fresh_morning",
+          "reply"
         ],
         "duration_min": "null",
         "item_id": "s_essay",
@@ -229,7 +223,7 @@
         "moved": "Essay draft",
         "to": "Tue Nov 10 09:00-10:00",
         "minutes": 60,
-        "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+        "reason": "since you said only mornings work this week, a clear morning"
       }
     },
     {
@@ -245,43 +239,43 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2253,
-        "output_tokens": 184,
+        "input_tokens": 2285,
+        "output_tokens": 360,
+        "cached_tokens": 2033,
+        "reasoning_tokens": 222
+      },
+      "costUsd": 0.00214995,
+      "latencyMs": 2610
+    },
+    {
+      "usage": {
+        "input_tokens": 2690,
+        "output_tokens": 189,
         "cached_tokens": 2161,
-        "reasoning_tokens": 75
+        "reasoning_tokens": 85
       },
-      "costUsd": 0.00122115,
-      "latencyMs": 1555
+      "costUsd": 0.0017886500000000001,
+      "latencyMs": 1397
     },
     {
       "usage": {
-        "input_tokens": 2482,
-        "output_tokens": 124,
-        "cached_tokens": 2161,
-        "reasoning_tokens": 20
+        "input_tokens": 3690,
+        "output_tokens": 506,
+        "cached_tokens": 2673,
+        "reasoning_tokens": 378
       },
-      "costUsd": 0.0012524,
-      "latencyMs": 1227
+      "costUsd": 0.0038226999999999996,
+      "latencyMs": 3155
     },
     {
       "usage": {
-        "input_tokens": 3443,
-        "output_tokens": 262,
-        "cached_tokens": 2417,
-        "reasoning_tokens": 134
+        "input_tokens": 4263,
+        "output_tokens": 44,
+        "cached_tokens": 3569,
+        "reasoning_tokens": 6
       },
-      "costUsd": 0.0027585500000000002,
-      "latencyMs": 2236
-    },
-    {
-      "usage": {
-        "input_tokens": 3778,
-        "output_tokens": 41,
-        "cached_tokens": 3441,
-        "reasoning_tokens": 3
-      },
-      "costUsd": 0.00111165,
-      "latencyMs": 742
+      "costUsd": 0.0015898499999999999,
+      "latencyMs": 893
     }
   ],
   "judge": {
@@ -292,13 +286,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1335,
-        "output_tokens": 1040,
+        "input_tokens": 1343,
+        "output_tokens": 1599,
         "cached_tokens": 753,
-        "reasoning_tokens": 1014
+        "reasoning_tokens": 1578
       },
-      "costUsd": 0.00526045,
-      "latencyMs": 7772
+      "costUsd": 0.0076462,
+      "latencyMs": 11844
     }
   ],
   "runs": [
@@ -311,10 +305,304 @@
             "action": "move",
             "start": "2026-11-10T09:00:00-05:00",
             "end": "2026-11-10T10:00:00-05:00",
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+            "reason": "since you said only mornings work this week, a clear morning"
           }
         ],
-        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a fresh morning, with no quiz that day. Nothing else changed.",
+        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a clear morning. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 4,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "note_reply",
+          "args": {
+            "from_date": "null",
+            "kind": "only_part",
+            "part": "morning",
+            "quote": "only mornings work for me this week",
+            "until": "null"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "noted": "only_part",
+            "words": "since you said only mornings work this week"
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-10T09:00",
+                "when": "9am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T09:00",
+                "free_until": "2026-11-10T11:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a clear morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "six days before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a clear morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "four days before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-11T09:00",
+                "when": "Wed 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "five days before Essay 3"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-11T10:50",
+                "when": "Wed 10:50am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T12:00",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "five days before Essay 3"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-13T09:00",
+                "when": "Fri 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T09:00",
+                "free_until": "2026-11-13T10:00",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "three days before Essay 3"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 6,
+                "suggested_start": "2026-11-13T10:50",
+                "when": "Fri 10:50am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T10:50",
+                "free_until": "2026-11-13T12:00",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "three days before Essay 3"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "fresh_morning",
+              "reply"
+            ],
+            "duration_min": "null",
+            "item_id": "s_essay",
+            "reason": "null",
+            "start": "2026-11-10T09:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Essay draft",
+            "to": "Tue Nov 10 09:00-10:00",
+            "minutes": 60,
+            "reason": "since you said only mornings work this week, a clear morning"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2285,
+            "output_tokens": 360,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 222
+          },
+          "costUsd": 0.00214995,
+          "latencyMs": 2610
+        },
+        {
+          "usage": {
+            "input_tokens": 2690,
+            "output_tokens": 189,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 85
+          },
+          "costUsd": 0.0017886500000000001,
+          "latencyMs": 1397
+        },
+        {
+          "usage": {
+            "input_tokens": 3690,
+            "output_tokens": 506,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 378
+          },
+          "costUsd": 0.0038226999999999996,
+          "latencyMs": 3155
+        },
+        {
+          "usage": {
+            "input_tokens": 4263,
+            "output_tokens": 44,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 6
+          },
+          "costUsd": 0.0015898499999999999,
+          "latencyMs": 893
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1343,
+            "output_tokens": 1599,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1578
+          },
+          "costUsd": 0.0076462,
+          "latencyMs": 11844
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_essay",
+            "action": "move",
+            "start": "2026-11-10T09:00:00-05:00",
+            "end": "2026-11-10T10:00:00-05:00",
+            "reason": "since you said only mornings work this week, a clear morning"
+          }
+        ],
+        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a clear morning. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -360,11 +648,11 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with six days to spare"
+                    "text": "six days before it's due"
                   },
                   {
                     "key": "reply",
@@ -374,30 +662,6 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with five days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 3,
                 "suggested_start": "2026-11-12T09:00",
                 "when": "Thu 9am",
                 "holds_minutes": 60,
@@ -408,11 +672,35 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with four days to spare"
+                    "text": "four days before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-11T09:00",
+                "when": "Wed 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "five days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -428,19 +716,15 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T12:00",
-                "why_ranked": "4.5h planned that day",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with five days to spare"
+                    "text": "five days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -456,7 +740,7 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-13T09:00",
                 "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h planned that day",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
                 "factors": [
                   {
                     "key": "lighter",
@@ -464,11 +748,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -484,7 +768,7 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-13T10:50",
                 "free_until": "2026-11-13T12:00",
-                "why_ranked": "1.7h planned that day",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
                 "factors": [
                   {
                     "key": "lighter",
@@ -492,317 +776,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "because": [
-              "reply",
-              "fresh_morning"
-            ],
-            "duration_min": "null",
-            "item_id": "s_essay",
-            "reason": "null",
-            "start": "2026-11-10T09:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Essay draft",
-            "to": "Tue Nov 10 09:00-10:00",
-            "minutes": 60,
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2253,
-            "output_tokens": 184,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 75
-          },
-          "costUsd": 0.00122115,
-          "latencyMs": 1555
-        },
-        {
-          "usage": {
-            "input_tokens": 2482,
-            "output_tokens": 124,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 20
-          },
-          "costUsd": 0.0012524,
-          "latencyMs": 1227
-        },
-        {
-          "usage": {
-            "input_tokens": 3443,
-            "output_tokens": 262,
-            "cached_tokens": 2417,
-            "reasoning_tokens": 134
-          },
-          "costUsd": 0.0027585500000000002,
-          "latencyMs": 2236
-        },
-        {
-          "usage": {
-            "input_tokens": 3778,
-            "output_tokens": 41,
-            "cached_tokens": 3441,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.00111165,
-          "latencyMs": 742
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "time_score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1335,
-            "output_tokens": 1040,
-            "cached_tokens": 753,
-            "reasoning_tokens": 1014
-          },
-          "costUsd": 0.00526045,
-          "latencyMs": 7772
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_essay",
-            "action": "move",
-            "start": "2026-11-10T09:00:00-05:00",
-            "end": "2026-11-10T10:00:00-05:00",
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
-          }
-        ],
-        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a fresh morning, with no quiz that day. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 4,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "note_reply",
-          "args": {
-            "from_date": "null",
-            "kind": "only_part",
-            "part": "morning",
-            "quote": "only mornings work for me this week",
-            "until": "null"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "noted": "only_part",
-            "words": "since you said only mornings work this week"
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-10T09:00",
-                "when": "9am tomorrow",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-10T09:00",
-                "free_until": "2026-11-10T11:00",
-                "why_ranked": "2.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with six days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with five days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-12T09:00",
-                "when": "Thu 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-12T09:00",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "2.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with four days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 4,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "Wed 10:50am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T12:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with five days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 5,
-                "suggested_start": "2026-11-13T09:00",
-                "when": "Fri 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-13T09:00",
-                "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h planned that day",
-                "factors": [
-                  {
-                    "key": "lighter",
-                    "text": "a lighter morning"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with three days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 6,
-                "suggested_start": "2026-11-13T10:50",
-                "when": "Fri 10:50am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-13T10:50",
-                "free_until": "2026-11-13T12:00",
-                "why_ranked": "1.7h planned that day",
-                "factors": [
-                  {
-                    "key": "lighter",
-                    "text": "a lighter morning"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -831,7 +809,7 @@
             "moved": "Essay draft",
             "to": "Tue Nov 10 09:00-10:00",
             "minutes": 60,
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+            "reason": "since you said only mornings work this week, a clear morning"
           }
         },
         {
@@ -847,43 +825,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2253,
-            "output_tokens": 222,
+            "input_tokens": 2285,
+            "output_tokens": 371,
             "cached_tokens": 2161,
-            "reasoning_tokens": 85
+            "reasoning_tokens": 259
           },
-          "costUsd": 0.00138265,
-          "latencyMs": 1781
+          "costUsd": 0.0020559000000000003,
+          "latencyMs": 2448
         },
         {
           "usage": {
-            "input_tokens": 2520,
-            "output_tokens": 113,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 9
-          },
-          "costUsd": 0.0012531500000000002,
-          "latencyMs": 953
-        },
-        {
-          "usage": {
-            "input_tokens": 3470,
-            "output_tokens": 320,
-            "cached_tokens": 2417,
-            "reasoning_tokens": 192
-          },
-          "costUsd": 0.0030388000000000004,
-          "latencyMs": 2217
-        },
-        {
-          "usage": {
-            "input_tokens": 3863,
-            "output_tokens": 43,
-            "cached_tokens": 3441,
+            "input_tokens": 2701,
+            "output_tokens": 109,
+            "cached_tokens": 2289,
             "reasoning_tokens": 5
           },
-          "costUsd": 0.0012264,
-          "latencyMs": 681
+          "costUsd": 0.0013215999999999998,
+          "latencyMs": 782
+        },
+        {
+          "usage": {
+            "input_tokens": 3621,
+            "output_tokens": 317,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 168
+          },
+          "costUsd": 0.0029332,
+          "latencyMs": 2461
+        },
+        {
+          "usage": {
+            "input_tokens": 4005,
+            "output_tokens": 44,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 6
+          },
+          "costUsd": 0.00126735,
+          "latencyMs": 594
         }
       ],
       "judge": {
@@ -894,13 +872,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1335,
-            "output_tokens": 1425,
-            "cached_tokens": 1265,
-            "reasoning_tokens": 1399
+            "input_tokens": 1343,
+            "output_tokens": 763,
+            "cached_tokens": 753,
+            "reasoning_tokens": 742
           },
-          "costUsd": 0.0063335,
-          "latencyMs": 13348
+          "costUsd": 0.0040932,
+          "latencyMs": 6162
         }
       ]
     },
@@ -913,10 +891,10 @@
             "action": "move",
             "start": "2026-11-10T09:00:00-05:00",
             "end": "2026-11-10T10:00:00-05:00",
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+            "reason": "since you said only mornings work this week, a clear morning"
           }
         ],
-        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a fresh morning, with no quiz that day. Nothing else changed.",
+        "message": "Moved Essay draft to 9am tomorrow, since you said only mornings work this week, a clear morning. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -964,11 +942,11 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with six days to spare"
+                    "text": "six days before it's due"
                   },
                   {
                     "key": "reply",
@@ -978,30 +956,6 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with five days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "since you said only mornings work this week"
-                  }
-                ]
-              },
-              {
-                "rank": 3,
                 "suggested_start": "2026-11-12T09:00",
                 "when": "Thu 9am",
                 "holds_minutes": 60,
@@ -1012,11 +966,35 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with four days to spare"
+                    "text": "four days before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "since you said only mornings work this week"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-11T09:00",
+                "when": "Wed 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "five days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -1032,19 +1010,15 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T12:00",
-                "why_ranked": "4.5h planned that day",
+                "why_ranked": "up against a class or event, 4.5h planned that day",
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with five days to spare"
+                    "text": "five days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -1060,7 +1034,7 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-13T09:00",
                 "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h planned that day",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
                 "factors": [
                   {
                     "key": "lighter",
@@ -1068,11 +1042,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -1088,7 +1062,7 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-13T10:50",
                 "free_until": "2026-11-13T12:00",
-                "why_ranked": "1.7h planned that day",
+                "why_ranked": "up against a class or event, 1.7h planned that day",
                 "factors": [
                   {
                     "key": "lighter",
@@ -1096,15 +1070,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -1133,7 +1103,7 @@
             "moved": "Essay draft",
             "to": "Tue Nov 10 09:00-10:00",
             "minutes": 60,
-            "reason": "since you said only mornings work this week, a fresh morning, with no quiz that day"
+            "reason": "since you said only mornings work this week, a clear morning"
           }
         },
         {
@@ -1149,43 +1119,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2253,
-            "output_tokens": 192,
+            "input_tokens": 2285,
+            "output_tokens": 342,
             "cached_tokens": 2161,
-            "reasoning_tokens": 55
+            "reasoning_tokens": 201
           },
-          "costUsd": 0.00125515,
-          "latencyMs": 1641
+          "costUsd": 0.0019326500000000002,
+          "latencyMs": 2462
         },
         {
           "usage": {
-            "input_tokens": 2490,
-            "output_tokens": 122,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 18
+            "input_tokens": 2672,
+            "output_tokens": 133,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 29
           },
-          "costUsd": 0.0012539,
-          "latencyMs": 1014
+          "costUsd": 0.0013873499999999999,
+          "latencyMs": 1049
         },
         {
           "usage": {
-            "input_tokens": 3449,
-            "output_tokens": 283,
-            "cached_tokens": 2417,
-            "reasoning_tokens": 155
+            "input_tokens": 3616,
+            "output_tokens": 470,
+            "cached_tokens": 2545,
+            "reasoning_tokens": 320
           },
-          "costUsd": 0.0028553000000000003,
-          "latencyMs": 2169
+          "costUsd": 0.003718,
+          "latencyMs": 3013
         },
         {
           "usage": {
-            "input_tokens": 3805,
-            "output_tokens": 42,
-            "cached_tokens": 3441,
-            "reasoning_tokens": 4
+            "input_tokens": 4153,
+            "output_tokens": 45,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.00114965,
-          "latencyMs": 880
+          "costUsd": 0.0014566,
+          "latencyMs": 641
         }
       ],
       "judge": {
@@ -1196,13 +1166,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1335,
-            "output_tokens": 969,
+            "input_tokens": 1343,
+            "output_tokens": 1667,
             "cached_tokens": 1265,
-            "reasoning_tokens": 943
+            "reasoning_tokens": 1641
           },
-          "costUsd": 0.0043955,
-          "latencyMs": 6956
+          "costUsd": 0.007372,
+          "latencyMs": 11803
         }
       ]
     }

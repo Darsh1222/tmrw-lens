@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "7b713e2946f45e2dd30dd00a42b608450b3128bcfcaba5704668890ec657e7bf",
   "effort": "low",
   "response": {
@@ -72,7 +72,7 @@
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 3"
               }
             ]
           },
@@ -92,7 +92,7 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning with no quiz that day"
               }
             ]
           }
@@ -132,33 +132,33 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2395,
-        "output_tokens": 265,
-        "cached_tokens": 2161,
-        "reasoning_tokens": 138
+        "input_tokens": 2427,
+        "output_tokens": 402,
+        "cached_tokens": 2033,
+        "reasoning_tokens": 277
       },
-      "costUsd": 0.0017429000000000001,
-      "latencyMs": 2484
+      "costUsd": 0.00250595,
+      "latencyMs": 2614
     },
     {
       "usage": {
-        "input_tokens": 2939,
-        "output_tokens": 404,
-        "cached_tokens": 2289,
-        "reasoning_tokens": 262
+        "input_tokens": 3108,
+        "output_tokens": 345,
+        "cached_tokens": 2417,
+        "reasoning_tokens": 203
       },
-      "costUsd": 0.0028728499999999997,
-      "latencyMs": 3223
+      "costUsd": 0.00269255,
+      "latencyMs": 2375
     },
     {
       "usage": {
-        "input_tokens": 3407,
-        "output_tokens": 43,
-        "cached_tokens": 2289,
-        "reasoning_tokens": 5
+        "input_tokens": 3517,
+        "output_tokens": 42,
+        "cached_tokens": 3057,
+        "reasoning_tokens": 4
       },
-      "costUsd": 0.0019236,
-      "latencyMs": 694
+      "costUsd": 0.0012120499999999999,
+      "latencyMs": 578
     }
   ],
   "judge": {
@@ -169,13 +169,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1235,
-        "output_tokens": 704,
-        "cached_tokens": 753,
-        "reasoning_tokens": 683
+        "input_tokens": 1249,
+        "output_tokens": 669,
+        "cached_tokens": 1137,
+        "reasoning_tokens": 648
       },
-      "costUsd": 0.0037074499999999997,
-      "latencyMs": 7642
+      "costUsd": 0.0031538,
+      "latencyMs": 4788
     }
   ],
   "runs": [
@@ -249,7 +249,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 3"
                   }
                 ]
               },
@@ -269,7 +269,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               }
@@ -309,33 +309,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2395,
-            "output_tokens": 265,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 138
+            "input_tokens": 2427,
+            "output_tokens": 402,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 277
           },
-          "costUsd": 0.0017429000000000001,
-          "latencyMs": 2484
+          "costUsd": 0.00250595,
+          "latencyMs": 2614
         },
         {
           "usage": {
-            "input_tokens": 2939,
-            "output_tokens": 404,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 262
+            "input_tokens": 3108,
+            "output_tokens": 345,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 203
           },
-          "costUsd": 0.0028728499999999997,
-          "latencyMs": 3223
+          "costUsd": 0.00269255,
+          "latencyMs": 2375
         },
         {
           "usage": {
-            "input_tokens": 3407,
-            "output_tokens": 43,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 5
+            "input_tokens": 3517,
+            "output_tokens": 42,
+            "cached_tokens": 3057,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0019236,
-          "latencyMs": 694
+          "costUsd": 0.0012120499999999999,
+          "latencyMs": 578
         }
       ],
       "judge": {
@@ -346,13 +346,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1235,
-            "output_tokens": 704,
-            "cached_tokens": 753,
-            "reasoning_tokens": 683
+            "input_tokens": 1249,
+            "output_tokens": 669,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 648
           },
-          "costUsd": 0.0037074499999999997,
-          "latencyMs": 7642
+          "costUsd": 0.0031538,
+          "latencyMs": 4788
         }
       ]
     },
@@ -426,7 +426,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 3"
                   }
                 ]
               },
@@ -446,7 +446,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               }
@@ -486,33 +486,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2395,
-            "output_tokens": 316,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 184
+            "input_tokens": 2427,
+            "output_tokens": 262,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 133
           },
-          "costUsd": 0.00181885,
-          "latencyMs": 4911
+          "costUsd": 0.00148855,
+          "latencyMs": 1611
         },
         {
           "usage": {
-            "input_tokens": 2990,
-            "output_tokens": 363,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 219
+            "input_tokens": 2968,
+            "output_tokens": 329,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 185
           },
-          "costUsd": 0.00276235,
-          "latencyMs": 2356
+          "costUsd": 0.00244955,
+          "latencyMs": 2427
         },
         {
           "usage": {
-            "input_tokens": 3417,
+            "input_tokens": 3361,
             "output_tokens": 44,
             "cached_tokens": 2929,
             "reasoning_tokens": 6
           },
-          "costUsd": 0.00123635,
-          "latencyMs": 660
+          "costUsd": 0.0011663499999999998,
+          "latencyMs": 629
         }
       ],
       "judge": {
@@ -523,13 +523,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1235,
-            "output_tokens": 858,
-            "cached_tokens": 1137,
-            "reasoning_tokens": 832
+            "input_tokens": 1249,
+            "output_tokens": 540,
+            "cached_tokens": 881,
+            "reasoning_tokens": 514
           },
-          "costUsd": 0.00393955,
-          "latencyMs": 6704
+          "costUsd": 0.0028871500000000002,
+          "latencyMs": 4445
         }
       ]
     },
@@ -603,7 +603,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 3"
                   }
                 ]
               },
@@ -623,7 +623,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               }
@@ -663,33 +663,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2395,
-            "output_tokens": 278,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 153
+            "input_tokens": 2427,
+            "output_tokens": 385,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 253
           },
-          "costUsd": 0.00165735,
-          "latencyMs": 3258
+          "costUsd": 0.0020113,
+          "latencyMs": 2308
         },
         {
           "usage": {
-            "input_tokens": 2952,
-            "output_tokens": 316,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 173
+            "input_tokens": 3091,
+            "output_tokens": 298,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 157
           },
-          "costUsd": 0.0025150999999999997,
-          "latencyMs": 2247
+          "costUsd": 0.0024715500000000003,
+          "latencyMs": 2836
         },
         {
           "usage": {
-            "input_tokens": 3332,
+            "input_tokens": 3453,
             "output_tokens": 42,
-            "cached_tokens": 2929,
+            "cached_tokens": 3057,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0011216,
-          "latencyMs": 1054
+          "costUsd": 0.00113205,
+          "latencyMs": 832
         }
       ],
       "judge": {
@@ -700,13 +700,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1235,
-            "output_tokens": 962,
+            "input_tokens": 1249,
+            "output_tokens": 848,
             "cached_tokens": 1137,
-            "reasoning_tokens": 941
+            "reasoning_tokens": 822
           },
-          "costUsd": 0.0043815500000000005,
-          "latencyMs": 7720
+          "costUsd": 0.00391455,
+          "latencyMs": 8390
         }
       ]
     }

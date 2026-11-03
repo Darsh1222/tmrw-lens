@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "0b8d89817955713f3be30758e98fc39875077c3c87cbb74f7a25db53de6ed736",
   "effort": "low",
   "response": {
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2026-11-15T07:30:00-05:00",
         "end": "2026-11-15T08:30:00-05:00",
-        "reason": "in your morning study time, a day before it's due"
+        "reason": "in your morning study time, the day before Essay 3"
       }
     ],
-    "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, a day before it's due. Nothing else changed.",
+    "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, the day before Essay 3. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -54,7 +54,7 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning"
               },
               {
                 "key": "study_time",
@@ -62,7 +62,7 @@
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Essay 3"
               }
             ]
           },
@@ -78,7 +78,7 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning"
               },
               {
                 "key": "study_time",
@@ -106,7 +106,7 @@
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Essay 3"
               }
             ]
           }
@@ -131,7 +131,7 @@
         "moved": "Essay draft",
         "to": "Sun Nov 15 07:30-08:30",
         "minutes": 60,
-        "reason": "in your morning study time, a day before it's due"
+        "reason": "in your morning study time, the day before Essay 3"
       }
     },
     {
@@ -147,33 +147,33 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2250,
-        "output_tokens": 188,
+        "input_tokens": 2282,
+        "output_tokens": 202,
         "cached_tokens": 2033,
-        "reasoning_tokens": 58
+        "reasoning_tokens": 74
       },
-      "costUsd": 0.0013752,
-      "latencyMs": 2033
+      "costUsd": 0.0014747,
+      "latencyMs": 2211
     },
     {
       "usage": {
-        "input_tokens": 2864,
-        "output_tokens": 194,
+        "input_tokens": 2900,
+        "output_tokens": 253,
         "cached_tokens": 2161,
-        "reasoning_tokens": 68
+        "reasoning_tokens": 127
       },
-      "costUsd": 0.0020274,
-      "latencyMs": 1679
+      "costUsd": 0.00232315,
+      "latencyMs": 1617
     },
     {
       "usage": {
-        "input_tokens": 3124,
+        "input_tokens": 3220,
         "output_tokens": 42,
         "cached_tokens": 2801,
         "reasoning_tokens": 4
       },
-      "costUsd": 0.0010024,
-      "latencyMs": 753
+      "costUsd": 0.0011224000000000002,
+      "latencyMs": 596
     }
   ],
   "judge": {
@@ -184,13 +184,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1242,
-        "output_tokens": 596,
+        "input_tokens": 1257,
+        "output_tokens": 929,
         "cached_tokens": 753,
-        "reasoning_tokens": 570
+        "reasoning_tokens": 903
       },
-      "costUsd": 0.0032572,
-      "latencyMs": 6205
+      "costUsd": 0.0046911999999999995,
+      "latencyMs": 7293
     }
   ],
   "runs": [
@@ -203,10 +203,10 @@
             "action": "move",
             "start": "2026-11-15T07:30:00-05:00",
             "end": "2026-11-15T08:30:00-05:00",
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         ],
-        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, a day before it's due. Nothing else changed.",
+        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, the day before Essay 3. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -246,7 +246,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -254,7 +254,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               },
@@ -270,7 +270,7 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -298,7 +298,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               }
@@ -323,7 +323,7 @@
             "moved": "Essay draft",
             "to": "Sun Nov 15 07:30-08:30",
             "minutes": 60,
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         },
         {
@@ -339,33 +339,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 188,
+            "input_tokens": 2282,
+            "output_tokens": 202,
             "cached_tokens": 2033,
-            "reasoning_tokens": 58
+            "reasoning_tokens": 74
           },
-          "costUsd": 0.0013752,
-          "latencyMs": 2033
+          "costUsd": 0.0014747,
+          "latencyMs": 2211
         },
         {
           "usage": {
-            "input_tokens": 2864,
-            "output_tokens": 194,
+            "input_tokens": 2900,
+            "output_tokens": 253,
             "cached_tokens": 2161,
-            "reasoning_tokens": 68
+            "reasoning_tokens": 127
           },
-          "costUsd": 0.0020274,
-          "latencyMs": 1679
+          "costUsd": 0.00232315,
+          "latencyMs": 1617
         },
         {
           "usage": {
-            "input_tokens": 3124,
+            "input_tokens": 3220,
             "output_tokens": 42,
             "cached_tokens": 2801,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0010024,
-          "latencyMs": 753
+          "costUsd": 0.0011224000000000002,
+          "latencyMs": 596
         }
       ],
       "judge": {
@@ -376,13 +376,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1242,
-            "output_tokens": 596,
+            "input_tokens": 1257,
+            "output_tokens": 929,
             "cached_tokens": 753,
-            "reasoning_tokens": 570
+            "reasoning_tokens": 903
           },
-          "costUsd": 0.0032572,
-          "latencyMs": 6205
+          "costUsd": 0.0046911999999999995,
+          "latencyMs": 7293
         }
       ]
     },
@@ -395,10 +395,10 @@
             "action": "move",
             "start": "2026-11-15T07:30:00-05:00",
             "end": "2026-11-15T08:30:00-05:00",
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         ],
-        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, a day before it's due. Nothing else changed.",
+        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, the day before Essay 3. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -409,7 +409,7 @@
         {
           "tool": "find_open_time",
           "args": {
-            "after": "null",
+            "after": "2026-11-14T22:00",
             "before": "2026-11-16T09:00",
             "item_id": "null",
             "minutes": 60
@@ -438,7 +438,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -446,7 +446,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               },
@@ -462,7 +462,7 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -490,7 +490,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               }
@@ -515,7 +515,7 @@
             "moved": "Essay draft",
             "to": "Sun Nov 15 07:30-08:30",
             "minutes": 60,
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         },
         {
@@ -531,33 +531,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 269,
+            "input_tokens": 2282,
+            "output_tokens": 235,
             "cached_tokens": 2161,
-            "reasoning_tokens": 141
+            "reasoning_tokens": 98
           },
-          "costUsd": 0.00157865,
-          "latencyMs": 2043
+          "costUsd": 0.00147415,
+          "latencyMs": 1600
         },
         {
           "usage": {
-            "input_tokens": 2945,
-            "output_tokens": 341,
+            "input_tokens": 2933,
+            "output_tokens": 266,
             "cached_tokens": 2161,
-            "reasoning_tokens": 195
+            "reasoning_tokens": 119
           },
-          "costUsd": 0.0027534,
-          "latencyMs": 3067
+          "costUsd": 0.00241965,
+          "latencyMs": 1964
         },
         {
           "usage": {
-            "input_tokens": 3352,
-            "output_tokens": 43,
+            "input_tokens": 3266,
+            "output_tokens": 42,
             "cached_tokens": 2929,
-            "reasoning_tokens": 5
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.00115085,
-          "latencyMs": 709
+          "costUsd": 0.0010390999999999998,
+          "latencyMs": 1453
         }
       ],
       "judge": {
@@ -568,13 +568,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1242,
-            "output_tokens": 741,
+            "input_tokens": 1257,
+            "output_tokens": 939,
             "cached_tokens": 1137,
-            "reasoning_tokens": 720
+            "reasoning_tokens": 918
           },
-          "costUsd": 0.00345105,
-          "latencyMs": 6096
+          "costUsd": 0.0043113000000000005,
+          "latencyMs": 6046
         }
       ]
     },
@@ -587,10 +587,10 @@
             "action": "move",
             "start": "2026-11-15T07:30:00-05:00",
             "end": "2026-11-15T08:30:00-05:00",
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         ],
-        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, a day before it's due. Nothing else changed.",
+        "message": "Moved Essay draft to 7:30am tomorrow, in your morning study time, the day before Essay 3. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -630,7 +630,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -638,7 +638,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               },
@@ -654,7 +654,7 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "study_time",
@@ -682,7 +682,7 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   }
                 ]
               }
@@ -707,7 +707,7 @@
             "moved": "Essay draft",
             "to": "Sun Nov 15 07:30-08:30",
             "minutes": 60,
-            "reason": "in your morning study time, a day before it's due"
+            "reason": "in your morning study time, the day before Essay 3"
           }
         },
         {
@@ -723,33 +723,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 251,
+            "input_tokens": 2282,
+            "output_tokens": 172,
             "cached_tokens": 2161,
-            "reasoning_tokens": 123
+            "reasoning_tokens": 43
           },
-          "costUsd": 0.00150215,
-          "latencyMs": 2238
+          "costUsd": 0.0012064,
+          "latencyMs": 1340
         },
         {
           "usage": {
-            "input_tokens": 2927,
-            "output_tokens": 297,
+            "input_tokens": 2870,
+            "output_tokens": 258,
             "cached_tokens": 2161,
-            "reasoning_tokens": 150
+            "reasoning_tokens": 112
           },
-          "costUsd": 0.0025439,
-          "latencyMs": 2443
+          "costUsd": 0.0023069,
+          "latencyMs": 1692
         },
         {
           "usage": {
-            "input_tokens": 3290,
-            "output_tokens": 41,
+            "input_tokens": 3195,
+            "output_tokens": 42,
             "cached_tokens": 2801,
-            "reasoning_tokens": 3
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0012056500000000002,
-          "latencyMs": 900
+          "costUsd": 0.0010911500000000001,
+          "latencyMs": 588
         }
       ],
       "judge": {
@@ -760,13 +760,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1242,
-            "output_tokens": 824,
+            "input_tokens": 1257,
+            "output_tokens": 801,
             "cached_tokens": 1137,
-            "reasoning_tokens": 803
+            "reasoning_tokens": 775
           },
-          "costUsd": 0.0038038,
-          "latencyMs": 7333
+          "costUsd": 0.0037248000000000003,
+          "latencyMs": 5129
         }
       ]
     }

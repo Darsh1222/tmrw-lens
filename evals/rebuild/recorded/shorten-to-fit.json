@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "bfb8688d740415b05a93779a9b71c748fc7c168bebfdf5792971c0b171b0613a",
   "effort": "low",
   "response": {
@@ -11,18 +11,16 @@
         "action": "move",
         "start": "2026-11-17T20:00:00-05:00",
         "end": "2026-11-17T21:00:00-05:00",
-        "reason": "the soonest it fits before Midterm 2"
+        "reason": "the day before it's due"
       }
     ],
-    "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the soonest it fits before Midterm 2. Nothing else changed.",
+    "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the day before it's due. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
-  "turns": 5,
-  "refused": 1,
-  "refusals": [
-    "move_item: From 20:00 it can run 60 min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for 45 again."
-  ],
+  "turns": 4,
+  "refused": 0,
+  "refusals": [],
   "steps": [
     {
       "tool": "find_open_time",
@@ -45,7 +43,7 @@
         "after": "null",
         "before": "2026-11-18T10:00",
         "item_id": "null",
-        "minutes": 45
+        "minutes": 60
       },
       "ok": true,
       "result": {
@@ -56,46 +54,18 @@
             "suggested_start": "2026-11-17T20:00",
             "when": "8pm today",
             "holds_minutes": 60,
-            "urgency": "tight",
+            "urgency": "comfortable",
             "free_from": "2026-11-17T20:00",
             "free_until": "2026-11-17T21:00",
-            "why_ranked": "tight: the soonest good time wins",
+            "why_ranked": "up against a class or event, tight: the soonest good time wins",
             "factors": [
               {
                 "key": "soonest",
                 "text": "the soonest it fits before Midterm 2"
               },
               {
-                "key": "lighter",
-                "text": "a lighter evening"
-              },
-              {
                 "key": "buffer",
-                "text": "a day before it's due"
-              }
-            ]
-          },
-          {
-            "rank": 2,
-            "suggested_start": "2026-11-18T09:15",
-            "when": "9:15am tomorrow",
-            "holds_minutes": 45,
-            "urgency": "tight",
-            "free_from": "2026-11-18T09:15",
-            "free_until": "2026-11-18T10:00",
-            "why_ranked": "tight: the soonest good time wins",
-            "factors": [
-              {
-                "key": "last",
-                "text": "the last time it fits before Midterm 2"
-              },
-              {
-                "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "after_event",
-                "text": "right after Gym"
+                "text": "the day before it's due"
               }
             ]
           }
@@ -106,24 +76,7 @@
       "tool": "move_item",
       "args": {
         "because": [
-          "soonest"
-        ],
-        "duration_min": 45,
-        "item_id": "s_review",
-        "reason": "null",
-        "start": "2026-11-17T20:00"
-      },
-      "ok": false,
-      "result": {
-        "ok": false,
-        "problem": "From 20:00 it can run 60 min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for 45 again."
-      }
-    },
-    {
-      "tool": "move_item",
-      "args": {
-        "because": [
-          "soonest"
+          "buffer"
         ],
         "duration_min": 60,
         "item_id": "s_review",
@@ -136,7 +89,7 @@
         "moved": "Midterm review",
         "to": "Tue Nov 17 20:00-21:00",
         "minutes": 60,
-        "reason": "the soonest it fits before Midterm 2"
+        "reason": "the day before it's due"
       }
     },
     {
@@ -152,53 +105,43 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2241,
-        "output_tokens": 353,
+        "input_tokens": 2273,
+        "output_tokens": 322,
         "cached_tokens": 2033,
-        "reasoning_tokens": 224
+        "reasoning_tokens": 194
       },
-      "costUsd": 0.0020651999999999997,
-      "latencyMs": 3081
+      "costUsd": 0.00197345,
+      "latencyMs": 2293
     },
     {
       "usage": {
-        "input_tokens": 2638,
-        "output_tokens": 311,
+        "input_tokens": 2639,
+        "output_tokens": 263,
         "cached_tokens": 2161,
-        "reasoning_tokens": 207
+        "reasoning_tokens": 159
       },
-      "costUsd": 0.00224215,
-      "latencyMs": 2471
+      "costUsd": 0.0020394000000000002,
+      "latencyMs": 2058
     },
     {
       "usage": {
-        "input_tokens": 3228,
-        "output_tokens": 426,
+        "input_tokens": 3050,
+        "output_tokens": 619,
         "cached_tokens": 2545,
-        "reasoning_tokens": 305
+        "reasoning_tokens": 499
       },
-      "costUsd": 0.003046,
-      "latencyMs": 2982
+      "costUsd": 0.00364375,
+      "latencyMs": 3542
     },
     {
       "usage": {
-        "input_tokens": 3728,
-        "output_tokens": 225,
-        "cached_tokens": 3185,
-        "reasoning_tokens": 104
+        "input_tokens": 3730,
+        "output_tokens": 42,
+        "cached_tokens": 2929,
+        "reasoning_tokens": 4
       },
-      "costUsd": 0.00211275,
-      "latencyMs": 1944
-    },
-    {
-      "usage": {
-        "input_tokens": 4018,
-        "output_tokens": 45,
-        "cached_tokens": 3697,
-        "reasoning_tokens": 7
-      },
-      "costUsd": 0.00114705,
-      "latencyMs": 710
+      "costUsd": 0.0016190999999999998,
+      "latencyMs": 875
     }
   ],
   "judge": {
@@ -209,13 +152,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1293,
-        "output_tokens": 779,
+        "input_tokens": 1303,
+        "output_tokens": 774,
         "cached_tokens": 753,
-        "reasoning_tokens": 758
+        "reasoning_tokens": 753
       },
-      "costUsd": 0.004098699999999999,
-      "latencyMs": 5676
+      "costUsd": 0.00408995,
+      "latencyMs": 6435
     }
   ],
   "runs": [
@@ -228,227 +171,10 @@
             "action": "move",
             "start": "2026-11-17T20:00:00-05:00",
             "end": "2026-11-17T21:00:00-05:00",
-            "reason": "the soonest it fits before Midterm 2"
+            "reason": "the day before it's due"
           }
         ],
-        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the soonest it fits before Midterm 2. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 5,
-      "refused": 1,
-      "refusals": [
-        "move_item: From 20:00 it can run 60 min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for 45 again."
-      ],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-18T10:00",
-            "item_id": "null",
-            "minutes": 90
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [],
-            "note": "Nothing that long is free in that range."
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-18T10:00",
-            "item_id": "null",
-            "minutes": 45
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-17T20:00",
-                "when": "8pm today",
-                "holds_minutes": 60,
-                "urgency": "tight",
-                "free_from": "2026-11-17T20:00",
-                "free_until": "2026-11-17T21:00",
-                "why_ranked": "tight: the soonest good time wins",
-                "factors": [
-                  {
-                    "key": "soonest",
-                    "text": "the soonest it fits before Midterm 2"
-                  },
-                  {
-                    "key": "lighter",
-                    "text": "a lighter evening"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "a day before it's due"
-                  }
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-18T09:15",
-                "when": "9:15am tomorrow",
-                "holds_minutes": 45,
-                "urgency": "tight",
-                "free_from": "2026-11-18T09:15",
-                "free_until": "2026-11-18T10:00",
-                "why_ranked": "tight: the soonest good time wins",
-                "factors": [
-                  {
-                    "key": "last",
-                    "text": "the last time it fits before Midterm 2"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after Gym"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "because": [
-              "soonest"
-            ],
-            "duration_min": 45,
-            "item_id": "s_review",
-            "reason": "null",
-            "start": "2026-11-17T20:00"
-          },
-          "ok": false,
-          "result": {
-            "ok": false,
-            "problem": "From 20:00 it can run 60 min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for 45 again."
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "because": [
-              "soonest"
-            ],
-            "duration_min": 60,
-            "item_id": "s_review",
-            "reason": "null",
-            "start": "2026-11-17T20:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Midterm review",
-            "to": "Tue Nov 17 20:00-21:00",
-            "minutes": 60,
-            "reason": "the soonest it fits before Midterm 2"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 353,
-            "cached_tokens": 2033,
-            "reasoning_tokens": 224
-          },
-          "costUsd": 0.0020651999999999997,
-          "latencyMs": 3081
-        },
-        {
-          "usage": {
-            "input_tokens": 2638,
-            "output_tokens": 311,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 207
-          },
-          "costUsd": 0.00224215,
-          "latencyMs": 2471
-        },
-        {
-          "usage": {
-            "input_tokens": 3228,
-            "output_tokens": 426,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 305
-          },
-          "costUsd": 0.003046,
-          "latencyMs": 2982
-        },
-        {
-          "usage": {
-            "input_tokens": 3728,
-            "output_tokens": 225,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 104
-          },
-          "costUsd": 0.00211275,
-          "latencyMs": 1944
-        },
-        {
-          "usage": {
-            "input_tokens": 4018,
-            "output_tokens": 45,
-            "cached_tokens": 3697,
-            "reasoning_tokens": 7
-          },
-          "costUsd": 0.00114705,
-          "latencyMs": 710
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "time_score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1293,
-            "output_tokens": 779,
-            "cached_tokens": 753,
-            "reasoning_tokens": 758
-          },
-          "costUsd": 0.004098699999999999,
-          "latencyMs": 5676
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_review",
-            "action": "move",
-            "start": "2026-11-17T20:00:00-05:00",
-            "end": "2026-11-17T21:00:00-05:00",
-            "reason": "the soonest it fits before Midterm 2"
-          }
-        ],
-        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the soonest it fits before Midterm 2. Nothing else changed.",
+        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the day before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -477,7 +203,7 @@
             "after": "null",
             "before": "2026-11-18T10:00",
             "item_id": "null",
-            "minutes": 45
+            "minutes": 60
           },
           "ok": true,
           "result": {
@@ -488,46 +214,18 @@
                 "suggested_start": "2026-11-17T20:00",
                 "when": "8pm today",
                 "holds_minutes": 60,
-                "urgency": "tight",
+                "urgency": "comfortable",
                 "free_from": "2026-11-17T20:00",
                 "free_until": "2026-11-17T21:00",
-                "why_ranked": "tight: the soonest good time wins",
+                "why_ranked": "up against a class or event, tight: the soonest good time wins",
                 "factors": [
                   {
                     "key": "soonest",
                     "text": "the soonest it fits before Midterm 2"
                   },
                   {
-                    "key": "lighter",
-                    "text": "a lighter evening"
-                  },
-                  {
                     "key": "buffer",
-                    "text": "a day before it's due"
-                  }
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-18T09:15",
-                "when": "9:15am tomorrow",
-                "holds_minutes": 45,
-                "urgency": "tight",
-                "free_from": "2026-11-18T09:15",
-                "free_until": "2026-11-18T10:00",
-                "why_ranked": "tight: the soonest good time wins",
-                "factors": [
-                  {
-                    "key": "last",
-                    "text": "the last time it fits before Midterm 2"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after Gym"
+                    "text": "the day before it's due"
                   }
                 ]
               }
@@ -538,7 +236,7 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "soonest"
+              "buffer"
             ],
             "duration_min": 60,
             "item_id": "s_review",
@@ -551,7 +249,7 @@
             "moved": "Midterm review",
             "to": "Tue Nov 17 20:00-21:00",
             "minutes": 60,
-            "reason": "the soonest it fits before Midterm 2"
+            "reason": "the day before it's due"
           }
         },
         {
@@ -567,43 +265,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 326,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 198
+            "input_tokens": 2273,
+            "output_tokens": 322,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 194
           },
-          "costUsd": 0.00180965,
-          "latencyMs": 2825
+          "costUsd": 0.00197345,
+          "latencyMs": 2293
         },
         {
           "usage": {
-            "input_tokens": 2611,
-            "output_tokens": 190,
+            "input_tokens": 2639,
+            "output_tokens": 263,
             "cached_tokens": 2161,
-            "reasoning_tokens": 86
+            "reasoning_tokens": 159
           },
-          "costUsd": 0.0016941500000000002,
-          "latencyMs": 1529
+          "costUsd": 0.0020394000000000002,
+          "latencyMs": 2058
         },
         {
           "usage": {
-            "input_tokens": 3080,
-            "output_tokens": 659,
+            "input_tokens": 3050,
+            "output_tokens": 619,
             "cached_tokens": 2545,
-            "reasoning_tokens": 513
+            "reasoning_tokens": 499
           },
-          "costUsd": 0.00385125,
-          "latencyMs": 5517
+          "costUsd": 0.00364375,
+          "latencyMs": 3542
         },
         {
           "usage": {
-            "input_tokens": 3804,
-            "output_tokens": 44,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 6
+            "input_tokens": 3730,
+            "output_tokens": 42,
+            "cached_tokens": 2929,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0015793,
-          "latencyMs": 715
+          "costUsd": 0.0016190999999999998,
+          "latencyMs": 875
         }
       ],
       "judge": {
@@ -614,13 +312,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1293,
-            "output_tokens": 828,
-            "cached_tokens": 1265,
-            "reasoning_tokens": 807
+            "input_tokens": 1303,
+            "output_tokens": 774,
+            "cached_tokens": 753,
+            "reasoning_tokens": 753
           },
-          "costUsd": 0.00374375,
-          "latencyMs": 5790
+          "costUsd": 0.00408995,
+          "latencyMs": 6435
         }
       ]
     },
@@ -633,14 +331,14 @@
             "action": "move",
             "start": "2026-11-17T20:00:00-05:00",
             "end": "2026-11-17T21:00:00-05:00",
-            "reason": "the soonest it fits before Midterm 2"
+            "reason": "the day before it's due"
           }
         ],
-        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the soonest it fits before Midterm 2. Nothing else changed.",
+        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the day before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
-      "turns": 6,
+      "turns": 4,
       "refused": 0,
       "refusals": [],
       "steps": [
@@ -657,6 +355,201 @@
             "ok": true,
             "free": [],
             "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-18T10:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-17T20:00",
+                "when": "8pm today",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-17T20:00",
+                "free_until": "2026-11-17T21:00",
+                "why_ranked": "up against a class or event, tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before Midterm 2"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before it's due"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "buffer"
+            ],
+            "duration_min": 60,
+            "item_id": "s_review",
+            "reason": "null",
+            "start": "2026-11-17T20:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Midterm review",
+            "to": "Tue Nov 17 20:00-21:00",
+            "minutes": 60,
+            "reason": "the day before it's due"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2273,
+            "output_tokens": 380,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 253
+          },
+          "costUsd": 0.00207915,
+          "latencyMs": 2247
+        },
+        {
+          "usage": {
+            "input_tokens": 2697,
+            "output_tokens": 201,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 97
+          },
+          "costUsd": 0.0018484,
+          "latencyMs": 1686
+        },
+        {
+          "usage": {
+            "input_tokens": 3046,
+            "output_tokens": 677,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 557
+          },
+          "costUsd": 0.00374445,
+          "latencyMs": 4340
+        },
+        {
+          "usage": {
+            "input_tokens": 3784,
+            "output_tokens": 45,
+            "cached_tokens": 2929,
+            "reasoning_tokens": 7
+          },
+          "costUsd": 0.0016993499999999999,
+          "latencyMs": 727
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1303,
+            "output_tokens": 777,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 756
+          },
+          "costUsd": 0.0035395,
+          "latencyMs": 5018
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_review",
+            "action": "move",
+            "start": "2026-11-17T20:00:00-05:00",
+            "end": "2026-11-17T21:00:00-05:00",
+            "reason": "the soonest it fits before Midterm 2, the day before it's due"
+          }
+        ],
+        "message": "Moved Midterm review to 8pm today, 60 min instead of 90, the soonest it fits before Midterm 2, the day before it's due. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 4,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-18T10:00",
+            "item_id": "null",
+            "minutes": 90
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [],
+            "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-18T10:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-17T20:00",
+                "when": "8pm today",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-17T20:00",
+                "free_until": "2026-11-17T21:00",
+                "why_ranked": "up against a class or event, tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before Midterm 2"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before it's due"
+                  }
+                ]
+              }
+            ]
           }
         },
         {
@@ -705,78 +598,11 @@
           }
         },
         {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-17"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Tue Nov 17",
-            "busy": [
-              {
-                "what": "ENGL101 seminar",
-                "start": "11:00",
-                "end": "12:15"
-              },
-              {
-                "what": "HIST200 lecture",
-                "start": "15:30",
-                "end": "16:45"
-              },
-              {
-                "what": "Work shift",
-                "start": "21:00",
-                "end": "23:30"
-              }
-            ],
-            "planned": [],
-            "due": [],
-            "free": [
-              "20:00-21:00"
-            ]
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-18T10:00",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-17T20:00",
-                "when": "8pm today",
-                "holds_minutes": 60,
-                "urgency": "tight",
-                "free_from": "2026-11-17T20:00",
-                "free_until": "2026-11-17T21:00",
-                "why_ranked": "tight: the soonest good time wins",
-                "factors": [
-                  {
-                    "key": "soonest",
-                    "text": "the soonest it fits before Midterm 2"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "a day before it's due"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
           "tool": "move_item",
           "args": {
             "because": [
-              "soonest"
+              "soonest",
+              "buffer"
             ],
             "duration_min": 60,
             "item_id": "s_review",
@@ -789,7 +615,7 @@
             "moved": "Midterm review",
             "to": "Tue Nov 17 20:00-21:00",
             "minutes": 60,
-            "reason": "the soonest it fits before Midterm 2"
+            "reason": "the soonest it fits before Midterm 2, the day before it's due"
           }
         },
         {
@@ -805,63 +631,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 268,
+            "input_tokens": 2273,
+            "output_tokens": 266,
             "cached_tokens": 2161,
             "reasoning_tokens": 137
           },
-          "costUsd": 0.0015631500000000001,
-          "latencyMs": 2669
+          "costUsd": 0.0015946500000000002,
+          "latencyMs": 1937
         },
         {
           "usage": {
-            "input_tokens": 2553,
-            "output_tokens": 90,
+            "input_tokens": 2583,
+            "output_tokens": 398,
             "cached_tokens": 2161,
-            "reasoning_tokens": 35
+            "reasoning_tokens": 218
           },
-          "costUsd": 0.00119665,
-          "latencyMs": 951
+          "costUsd": 0.00254315,
+          "latencyMs": 2745
         },
         {
           "usage": {
-            "input_tokens": 2794,
-            "output_tokens": 60,
+            "input_tokens": 3277,
+            "output_tokens": 899,
             "cached_tokens": 2545,
-            "reasoning_tokens": 5
+            "reasoning_tokens": 747
           },
-          "costUsd": 0.000948,
-          "latencyMs": 720
+          "costUsd": 0.0051175,
+          "latencyMs": 6022
         },
         {
           "usage": {
-            "input_tokens": 2959,
-            "output_tokens": 275,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 171
+            "input_tokens": 4247,
+            "output_tokens": 45,
+            "cached_tokens": 3185,
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.0019272,
-          "latencyMs": 2814
-        },
-        {
-          "usage": {
-            "input_tokens": 3375,
-            "output_tokens": 353,
-            "cached_tokens": 2929,
-            "reasoning_tokens": 207
-          },
-          "costUsd": 0.0024971,
-          "latencyMs": 2614
-        },
-        {
-          "usage": {
-            "input_tokens": 3793,
-            "output_tokens": 42,
-            "cached_tokens": 3313,
-            "reasoning_tokens": 4
-          },
-          "costUsd": 0.00127545,
-          "latencyMs": 1326
+          "costUsd": 0.0019965,
+          "latencyMs": 1083
         }
       ],
       "judge": {
@@ -872,13 +678,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1293,
-            "output_tokens": 757,
+            "input_tokens": 1313,
+            "output_tokens": 767,
             "cached_tokens": 1265,
-            "reasoning_tokens": 731
+            "reasoning_tokens": 746
           },
-          "costUsd": 0.003442,
-          "latencyMs": 5733
+          "costUsd": 0.0035095,
+          "latencyMs": 5359
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "45df6725998b740822971ebe2e0cfa2b2f5752d2b6dd22663b533d53710d6cfd",
   "effort": "low",
   "response": {
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2026-11-10T09:00:00-05:00",
         "end": "2026-11-10T10:00:00-05:00",
-        "reason": "a fresh morning, with no quiz that day with three days to spare"
+        "reason": "a clear morning, three days before it's due"
       }
     ],
-    "message": "Moved PHYS problem set to 9am tomorrow, a fresh morning, with no quiz that day with three days to spare. Nothing else changed.",
+    "message": "Moved PHYS problem set to 9am tomorrow, a clear morning, three days before it's due. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -62,11 +62,11 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning"
               },
               {
                 "key": "buffer",
-                "text": "with three days to spare"
+                "text": "three days before it's due"
               },
               {
                 "key": "reply",
@@ -76,8 +76,8 @@
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-10T12:15",
-            "when": "12:15pm tomorrow",
+            "suggested_start": "2026-11-10T12:30",
+            "when": "12:30pm tomorrow",
             "holds_minutes": 60,
             "urgency": "comfortable",
             "free_from": "2026-11-10T12:15",
@@ -86,11 +86,11 @@
             "factors": [
               {
                 "key": "after_event",
-                "text": "right after ENGL101 seminar"
+                "text": "after ENGL101 seminar"
               },
               {
                 "key": "buffer",
-                "text": "with three days to spare"
+                "text": "three days before it's due"
               },
               {
                 "key": "reply",
@@ -100,8 +100,8 @@
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-10T16:45",
-            "when": "4:45pm tomorrow",
+            "suggested_start": "2026-11-10T17:00",
+            "when": "5pm tomorrow",
             "holds_minutes": 60,
             "urgency": "comfortable",
             "free_from": "2026-11-10T16:45",
@@ -109,12 +109,16 @@
             "why_ranked": "2.5h planned that day",
             "factors": [
               {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
                 "key": "after_event",
-                "text": "right after HIST200 lecture"
+                "text": "after HIST200 lecture"
               },
               {
                 "key": "buffer",
-                "text": "with three days to spare"
+                "text": "three days before it's due"
               },
               {
                 "key": "reply",
@@ -124,30 +128,6 @@
           },
           {
             "rank": 4,
-            "suggested_start": "2026-11-11T09:00",
-            "when": "Wed 9am",
-            "holds_minutes": 60,
-            "urgency": "comfortable",
-            "free_from": "2026-11-11T09:00",
-            "free_until": "2026-11-11T10:00",
-            "why_ranked": "4.5h planned that day",
-            "factors": [
-              {
-                "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "buffer",
-                "text": "with two days to spare"
-              },
-              {
-                "key": "reply",
-                "text": "after practice"
-              }
-            ]
-          },
-          {
-            "rank": 5,
             "suggested_start": "2026-11-12T09:00",
             "when": "Thu 9am",
             "holds_minutes": 60,
@@ -158,11 +138,39 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before it's due"
+              },
+              {
+                "key": "reply",
+                "text": "after practice"
+              }
+            ]
+          },
+          {
+            "rank": 5,
+            "suggested_start": "2026-11-11T11:05",
+            "when": "Wed 11:05am",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T10:50",
+            "free_until": "2026-11-11T13:00",
+            "why_ranked": "4.5h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning"
+              },
+              {
+                "key": "after_event",
+                "text": "after MATH141 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "two days before PHYS HW 9"
               },
               {
                 "key": "reply",
@@ -172,34 +180,6 @@
           },
           {
             "rank": 6,
-            "suggested_start": "2026-11-11T10:50",
-            "when": "Wed 10:50am",
-            "holds_minutes": 60,
-            "urgency": "comfortable",
-            "free_from": "2026-11-11T10:50",
-            "free_until": "2026-11-11T13:00",
-            "why_ranked": "4.5h planned that day",
-            "factors": [
-              {
-                "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
-              },
-              {
-                "key": "after_event",
-                "text": "right after MATH141 lecture"
-              },
-              {
-                "key": "buffer",
-                "text": "with two days to spare"
-              },
-              {
-                "key": "reply",
-                "text": "after practice"
-              }
-            ]
-          },
-          {
-            "rank": 7,
             "suggested_start": "2026-11-09T21:00",
             "when": "9pm today",
             "holds_minutes": 60,
@@ -218,7 +198,31 @@
               },
               {
                 "key": "buffer",
-                "text": "with four days to spare"
+                "text": "four days before PHYS HW 9"
+              },
+              {
+                "key": "reply",
+                "text": "after practice"
+              }
+            ]
+          },
+          {
+            "rank": 7,
+            "suggested_start": "2026-11-12T12:30",
+            "when": "Thu 12:30pm",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-12T12:15",
+            "free_until": "2026-11-12T15:30",
+            "why_ranked": "2.5h planned that day",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "after ENGL101 seminar"
+              },
+              {
+                "key": "buffer",
+                "text": "the day before it's due"
               },
               {
                 "key": "reply",
@@ -228,21 +232,25 @@
           },
           {
             "rank": 8,
-            "suggested_start": "2026-11-12T12:15",
-            "when": "Thu 12:15pm",
+            "suggested_start": "2026-11-12T17:00",
+            "when": "Thu 5pm",
             "holds_minutes": 60,
             "urgency": "comfortable",
-            "free_from": "2026-11-12T12:15",
-            "free_until": "2026-11-12T15:30",
+            "free_from": "2026-11-12T16:45",
+            "free_until": "2026-11-12T23:00",
             "why_ranked": "2.5h planned that day",
             "factors": [
               {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
                 "key": "after_event",
-                "text": "right after ENGL101 seminar"
+                "text": "after HIST200 lecture"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before it's due"
               },
               {
                 "key": "reply",
@@ -271,7 +279,7 @@
         "moved": "PHYS problem set",
         "to": "Tue Nov 10 09:00-10:00",
         "minutes": 60,
-        "reason": "a fresh morning, with no quiz that day with three days to spare"
+        "reason": "a clear morning, three days before it's due"
       }
     },
     {
@@ -287,43 +295,43 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2250,
-        "output_tokens": 276,
+        "input_tokens": 2282,
+        "output_tokens": 367,
         "cached_tokens": 2033,
-        "reasoning_tokens": 132
+        "reasoning_tokens": 218
       },
-      "costUsd": 0.0017492,
-      "latencyMs": 2180
+      "costUsd": 0.00217595,
+      "latencyMs": 3074
     },
     {
       "usage": {
-        "input_tokens": 2565,
-        "output_tokens": 268,
+        "input_tokens": 2688,
+        "output_tokens": 113,
         "cached_tokens": 2161,
-        "reasoning_tokens": 164
+        "reasoning_tokens": 9
       },
-      "costUsd": 0.00196815,
-      "latencyMs": 2031
+      "costUsd": 0.00146315,
+      "latencyMs": 1343
     },
     {
       "usage": {
-        "input_tokens": 3838,
-        "output_tokens": 798,
-        "cached_tokens": 2545,
-        "reasoning_tokens": 671
+        "input_tokens": 3801,
+        "output_tokens": 1066,
+        "cached_tokens": 2673,
+        "reasoning_tokens": 939
       },
-      "costUsd": 0.0053895,
-      "latencyMs": 7301
+      "costUsd": 0.00634145,
+      "latencyMs": 7205
     },
     {
       "usage": {
-        "input_tokens": 4706,
+        "input_tokens": 4932,
         "output_tokens": 42,
-        "cached_tokens": 3825,
+        "cached_tokens": 3697,
         "reasoning_tokens": 4
       },
-      "costUsd": 0.0018535,
-      "latencyMs": 681
+      "costUsd": 0.0022768000000000003,
+      "latencyMs": 1742
     }
   ],
   "judge": {
@@ -334,13 +342,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1330,
-        "output_tokens": 968,
-        "cached_tokens": 1265,
-        "reasoning_tokens": 947
+        "input_tokens": 1339,
+        "output_tokens": 1147,
+        "cached_tokens": 753,
+        "reasoning_tokens": 1121
       },
-      "costUsd": 0.004385,
-      "latencyMs": 8189
+      "costUsd": 0.0057202,
+      "latencyMs": 7668
     }
   ],
   "runs": [
@@ -353,10 +361,10 @@
             "action": "move",
             "start": "2026-11-10T09:00:00-05:00",
             "end": "2026-11-10T10:00:00-05:00",
-            "reason": "a fresh morning, with no quiz that day with three days to spare"
+            "reason": "a clear morning, three days before it's due"
           }
         ],
-        "message": "Moved PHYS problem set to 9am tomorrow, a fresh morning, with no quiz that day with three days to spare. Nothing else changed.",
+        "message": "Moved PHYS problem set to 9am tomorrow, a clear morning, three days before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -404,11 +412,11 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -418,8 +426,8 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm tomorrow",
+                "suggested_start": "2026-11-10T12:30",
+                "when": "12:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T12:15",
@@ -428,11 +436,11 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after ENGL101 seminar"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -442,8 +450,8 @@
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-10T16:45",
-                "when": "4:45pm tomorrow",
+                "suggested_start": "2026-11-10T17:00",
+                "when": "5pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T16:45",
@@ -451,12 +459,16 @@
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -466,30 +478,6 @@
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 5,
                 "suggested_start": "2026-11-12T09:00",
                 "when": "Thu 9am",
                 "holds_minutes": 60,
@@ -500,11 +488,39 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-11T11:05",
+                "when": "Wed 11:05am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "two days before PHYS HW 9"
                   },
                   {
                     "key": "reply",
@@ -514,34 +530,6 @@
               },
               {
                 "rank": 6,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "Wed 10:50am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 7,
                 "suggested_start": "2026-11-09T21:00",
                 "when": "9pm today",
                 "holds_minutes": 60,
@@ -560,7 +548,31 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "with four days to spare"
+                    "text": "four days before PHYS HW 9"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-12T12:30",
+                "when": "Thu 12:30pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -570,21 +582,25 @@
               },
               {
                 "rank": 8,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "Thu 12:15pm",
+                "suggested_start": "2026-11-12T17:00",
+                "when": "Thu 5pm",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T23:00",
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -613,7 +629,7 @@
             "moved": "PHYS problem set",
             "to": "Tue Nov 10 09:00-10:00",
             "minutes": 60,
-            "reason": "a fresh morning, with no quiz that day with three days to spare"
+            "reason": "a clear morning, three days before it's due"
           }
         },
         {
@@ -629,43 +645,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 276,
+            "input_tokens": 2282,
+            "output_tokens": 367,
             "cached_tokens": 2033,
-            "reasoning_tokens": 132
+            "reasoning_tokens": 218
           },
-          "costUsd": 0.0017492,
-          "latencyMs": 2180
+          "costUsd": 0.00217595,
+          "latencyMs": 3074
         },
         {
           "usage": {
-            "input_tokens": 2565,
-            "output_tokens": 268,
+            "input_tokens": 2688,
+            "output_tokens": 113,
             "cached_tokens": 2161,
-            "reasoning_tokens": 164
+            "reasoning_tokens": 9
           },
-          "costUsd": 0.00196815,
-          "latencyMs": 2031
+          "costUsd": 0.00146315,
+          "latencyMs": 1343
         },
         {
           "usage": {
-            "input_tokens": 3838,
-            "output_tokens": 798,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 671
+            "input_tokens": 3801,
+            "output_tokens": 1066,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 939
           },
-          "costUsd": 0.0053895,
-          "latencyMs": 7301
+          "costUsd": 0.00634145,
+          "latencyMs": 7205
         },
         {
           "usage": {
-            "input_tokens": 4706,
+            "input_tokens": 4932,
             "output_tokens": 42,
-            "cached_tokens": 3825,
+            "cached_tokens": 3697,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0018535,
-          "latencyMs": 681
+          "costUsd": 0.0022768000000000003,
+          "latencyMs": 1742
         }
       ],
       "judge": {
@@ -676,13 +692,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1330,
-            "output_tokens": 968,
-            "cached_tokens": 1265,
-            "reasoning_tokens": 947
+            "input_tokens": 1339,
+            "output_tokens": 1147,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1121
           },
-          "costUsd": 0.004385,
-          "latencyMs": 8189
+          "costUsd": 0.0057202,
+          "latencyMs": 7668
         }
       ]
     },
@@ -695,10 +711,10 @@
             "action": "move",
             "start": "2026-11-10T09:00:00-05:00",
             "end": "2026-11-10T10:00:00-05:00",
-            "reason": "a fresh morning, with no quiz that day with three days to spare"
+            "reason": "after practice, a clear morning"
           }
         ],
-        "message": "Moved PHYS problem set to 9am tomorrow, a fresh morning, with no quiz that day with three days to spare. Nothing else changed.",
+        "message": "Moved PHYS problem set to 9am tomorrow, after practice, a clear morning. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -746,11 +762,11 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -760,8 +776,8 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm tomorrow",
+                "suggested_start": "2026-11-10T12:30",
+                "when": "12:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T12:15",
@@ -770,11 +786,11 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after ENGL101 seminar"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -784,8 +800,8 @@
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-10T16:45",
-                "when": "4:45pm tomorrow",
+                "suggested_start": "2026-11-10T17:00",
+                "when": "5pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T16:45",
@@ -793,12 +809,16 @@
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -808,30 +828,6 @@
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 5,
                 "suggested_start": "2026-11-12T09:00",
                 "when": "Thu 9am",
                 "holds_minutes": 60,
@@ -842,11 +838,39 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-11T11:05",
+                "when": "Wed 11:05am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "two days before PHYS HW 9"
                   },
                   {
                     "key": "reply",
@@ -856,34 +880,6 @@
               },
               {
                 "rank": 6,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "Wed 10:50am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 7,
                 "suggested_start": "2026-11-09T21:00",
                 "when": "9pm today",
                 "holds_minutes": 60,
@@ -902,7 +898,31 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "with four days to spare"
+                    "text": "four days before PHYS HW 9"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-12T12:30",
+                "when": "Thu 12:30pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -912,21 +932,25 @@
               },
               {
                 "rank": 8,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "Thu 12:15pm",
+                "suggested_start": "2026-11-12T17:00",
+                "when": "Thu 5pm",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T23:00",
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -942,7 +966,7 @@
           "args": {
             "because": [
               "fresh_morning",
-              "buffer"
+              "reply"
             ],
             "duration_min": "null",
             "item_id": "s_phys",
@@ -955,7 +979,7 @@
             "moved": "PHYS problem set",
             "to": "Tue Nov 10 09:00-10:00",
             "minutes": 60,
-            "reason": "a fresh morning, with no quiz that day with three days to spare"
+            "reason": "after practice, a clear morning"
           }
         },
         {
@@ -971,43 +995,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 327,
+            "input_tokens": 2282,
+            "output_tokens": 374,
             "cached_tokens": 2161,
-            "reasoning_tokens": 182
+            "reasoning_tokens": 231
           },
-          "costUsd": 0.00182515,
-          "latencyMs": 2563
+          "costUsd": 0.0020649,
+          "latencyMs": 2102
         },
         {
           "usage": {
-            "input_tokens": 2616,
-            "output_tokens": 123,
+            "input_tokens": 2695,
+            "output_tokens": 214,
             "cached_tokens": 2161,
-            "reasoning_tokens": 19
+            "reasoning_tokens": 110
           },
-          "costUsd": 0.00141565,
-          "latencyMs": 1203
+          "costUsd": 0.00190115,
+          "latencyMs": 2198
         },
         {
           "usage": {
-            "input_tokens": 3744,
-            "output_tokens": 388,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 261
+            "input_tokens": 3909,
+            "output_tokens": 761,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 613
           },
-          "costUsd": 0.0035295,
-          "latencyMs": 3147
+          "costUsd": 0.005180199999999999,
+          "latencyMs": 4635
         },
         {
           "usage": {
-            "input_tokens": 4202,
-            "output_tokens": 42,
-            "cached_tokens": 3697,
-            "reasoning_tokens": 4
+            "input_tokens": 4732,
+            "output_tokens": 48,
+            "cached_tokens": 3825,
+            "reasoning_tokens": 10
           },
-          "costUsd": 0.0013643,
-          "latencyMs": 1347
+          "costUsd": 0.0019115,
+          "latencyMs": 776
         }
       ],
       "judge": {
@@ -1018,13 +1042,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1330,
-            "output_tokens": 1472,
-            "cached_tokens": 753,
-            "reasoning_tokens": 1446
+            "input_tokens": 1336,
+            "output_tokens": 1076,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 1050
           },
-          "costUsd": 0.0070902,
-          "latencyMs": 11604
+          "costUsd": 0.0048515,
+          "latencyMs": 6982
         }
       ]
     },
@@ -1037,10 +1061,10 @@
             "action": "move",
             "start": "2026-11-10T09:00:00-05:00",
             "end": "2026-11-10T10:00:00-05:00",
-            "reason": "after practice, a fresh morning, with no quiz that day"
+            "reason": "a clear morning, three days before it's due"
           }
         ],
-        "message": "Moved PHYS problem set to 9am tomorrow, after practice, a fresh morning, with no quiz that day. Nothing else changed.",
+        "message": "Moved PHYS problem set to 9am tomorrow, a clear morning, three days before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -1051,11 +1075,11 @@
         {
           "tool": "note_reply",
           "args": {
+            "from_date": "null",
             "kind": "not_before",
             "part": "null",
             "quote": "practice until 9",
-            "until": "2026-11-09T21:00",
-            "from_date": "null"
+            "until": "2026-11-09T21:00"
           },
           "ok": true,
           "result": {
@@ -1088,11 +1112,11 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -1102,8 +1126,8 @@
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm tomorrow",
+                "suggested_start": "2026-11-10T12:30",
+                "when": "12:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T12:15",
@@ -1112,11 +1136,11 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after ENGL101 seminar"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -1126,8 +1150,8 @@
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-10T16:45",
-                "when": "4:45pm tomorrow",
+                "suggested_start": "2026-11-10T17:00",
+                "when": "5pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-10T16:45",
@@ -1135,12 +1159,16 @@
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "with three days to spare"
+                    "text": "three days before it's due"
                   },
                   {
                     "key": "reply",
@@ -1150,30 +1178,6 @@
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T09:00",
-                "when": "Wed 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T09:00",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 5,
                 "suggested_start": "2026-11-12T09:00",
                 "when": "Thu 9am",
                 "holds_minutes": 60,
@@ -1184,11 +1188,39 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-11T11:05",
+                "when": "Wed 11:05am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "two days before PHYS HW 9"
                   },
                   {
                     "key": "reply",
@@ -1198,34 +1230,6 @@
               },
               {
                 "rank": 6,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "Wed 10:50am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h planned that day",
-                "factors": [
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after MATH141 lecture"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "after practice"
-                  }
-                ]
-              },
-              {
-                "rank": 7,
                 "suggested_start": "2026-11-09T21:00",
                 "when": "9pm today",
                 "holds_minutes": 60,
@@ -1244,7 +1248,31 @@
                   },
                   {
                     "key": "buffer",
-                    "text": "with four days to spare"
+                    "text": "four days before PHYS HW 9"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "after practice"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-12T12:30",
+                "when": "Thu 12:30pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -1254,21 +1282,25 @@
               },
               {
                 "rank": 8,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "Thu 12:15pm",
+                "suggested_start": "2026-11-12T17:00",
+                "when": "Thu 5pm",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T23:00",
                 "why_ranked": "2.5h planned that day",
                 "factors": [
                   {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
                     "key": "after_event",
-                    "text": "right after ENGL101 seminar"
+                    "text": "after HIST200 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before it's due"
                   },
                   {
                     "key": "reply",
@@ -1283,8 +1315,8 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "reply",
-              "fresh_morning"
+              "fresh_morning",
+              "buffer"
             ],
             "duration_min": "null",
             "item_id": "s_phys",
@@ -1297,7 +1329,7 @@
             "moved": "PHYS problem set",
             "to": "Tue Nov 10 09:00-10:00",
             "minutes": 60,
-            "reason": "after practice, a fresh morning, with no quiz that day"
+            "reason": "a clear morning, three days before it's due"
           }
         },
         {
@@ -1313,43 +1345,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2250,
-            "output_tokens": 275,
+            "input_tokens": 2282,
+            "output_tokens": 224,
             "cached_tokens": 2161,
-            "reasoning_tokens": 134
+            "reasoning_tokens": 84
           },
-          "costUsd": 0.0016041500000000002,
-          "latencyMs": 2334
+          "costUsd": 0.0014274000000000001,
+          "latencyMs": 1556
         },
         {
           "usage": {
-            "input_tokens": 2564,
-            "output_tokens": 150,
+            "input_tokens": 2545,
+            "output_tokens": 153,
             "cached_tokens": 2161,
-            "reasoning_tokens": 46
+            "reasoning_tokens": 49
           },
-          "costUsd": 0.0014654000000000002,
-          "latencyMs": 1199
+          "costUsd": 0.0014544,
+          "latencyMs": 1038
         },
         {
           "usage": {
-            "input_tokens": 3719,
-            "output_tokens": 427,
+            "input_tokens": 3698,
+            "output_tokens": 839,
             "cached_tokens": 2545,
-            "reasoning_tokens": 300
+            "reasoning_tokens": 712
           },
-          "costUsd": 0.003664,
-          "latencyMs": 2898
+          "costUsd": 0.00538875,
+          "latencyMs": 5609
         },
         {
           "usage": {
-            "input_tokens": 4214,
-            "output_tokens": 43,
+            "input_tokens": 4602,
+            "output_tokens": 42,
             "cached_tokens": 3697,
-            "reasoning_tokens": 5
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0013835499999999999,
-          "latencyMs": 1250
+          "costUsd": 0.0018643,
+          "latencyMs": 692
         }
       ],
       "judge": {
@@ -1360,13 +1392,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1328,
-            "output_tokens": 1589,
+            "input_tokens": 1339,
+            "output_tokens": 1135,
             "cached_tokens": 1265,
-            "reasoning_tokens": 1563
+            "reasoning_tokens": 1114
           },
-          "costUsd": 0.00702175,
-          "latencyMs": 13435
+          "costUsd": 0.005106,
+          "latencyMs": 7561
         }
       ]
     }

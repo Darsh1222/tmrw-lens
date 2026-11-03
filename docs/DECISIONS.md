@@ -424,3 +424,16 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
 - 2026-11-03: The judge (v7) sees busy time too, so "a lighter morning" and "right after the lab" can be checked, and
   answers a second question, time_score: would a thoughtful friend who knows this week pick this time (gate 4.8).
   Two live runs, $5.48; stopped at the owner's $5 checkpoint.
+- 2026-11-03: Last rebuild pass before the freeze (owner): +4 tight / +12 comfortable within 30 minutes of another
+  session; +2 / +6 within 15 minutes of a class or event; candidate starts 15 and 30 minutes into each stretch;
+  "after <event>" only with 15-60 minutes between; "no quiz that day" only with a quiz or exam within 48 hours;
+  buffers read "six days before it's due"; at most two facts per reason; two phrasings picked by the day. Offers use
+  awake time (sleep, the hour before bed, and quiet hours still bind; study hours don't, since the person decides).
+  Fixed: the exam-morning penalty missed a session running into the quiz itself. Code finishes what it words: a
+  two-fact reason over 160 characters keeps its first fact; a plan finished at the turn limit, and code's fallback,
+  clear the rest of today when the reply rules it out. One full run ($2.78), then make-room and sick-today re-run
+  (the only recordings that went through the two changed code paths, so the others stand): $8.47 of the $10 cap.
+- 2026-11-03: Known and left for the freeze (owner decides): the agent's brief still states the old assumed sleep
+  ("23:00-07:00"), so the judge reads 11:15pm offers as during sleep (they're awake time under the 00:30 default);
+  "the last time it fits" can be said of a session 15 minutes into a long evening stretch. Both are small code fixes
+  but change what the model sees, so re-measuring needs a full run, past the cap.

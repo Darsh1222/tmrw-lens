@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "de21202a9d609ad0bb1d2772563d5252e2c17ca85391993a03b10c262399f2d0",
   "effort": "low",
   "response": {
@@ -11,7 +11,7 @@
         "action": "move",
         "start": "2026-11-11T09:00:00-05:00",
         "end": "2026-11-11T10:00:00-05:00",
-        "reason": "a fresh morning, with no quiz that day, a day before it's due"
+        "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
       },
       {
         "item_id": "s_outline",
@@ -21,7 +21,7 @@
         "reason": null
       }
     ],
-    "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
+    "message": "Moved Calc practice to 9am tomorrow, a fresh morning with no quiz that day, the day before Quiz 4. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -49,15 +49,15 @@
             "urgency": "comfortable",
             "free_from": "2026-11-11T09:00",
             "free_until": "2026-11-11T10:00",
-            "why_ranked": "5.5h planned that day, 1 other session that day",
+            "why_ranked": "up against a class or event, 5.5h planned that day, 1 other session that day",
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning with no quiz that day"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 4"
               }
             ]
           },
@@ -77,14 +77,14 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning with no quiz that day"
               }
             ]
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-11T10:50",
-            "when": "10:50am tomorrow",
+            "suggested_start": "2026-11-11T11:05",
+            "when": "11:05am tomorrow",
             "holds_minutes": 60,
             "urgency": "comfortable",
             "free_from": "2026-11-11T10:50",
@@ -93,22 +93,22 @@
             "factors": [
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning with no quiz that day"
               },
               {
                 "key": "after_event",
-                "text": "right after MATH141 lecture"
+                "text": "after MATH141 lecture"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 4"
               }
             ]
           },
           {
             "rank": 4,
-            "suggested_start": "2026-11-11T16:50",
-            "when": "4:50pm tomorrow",
+            "suggested_start": "2026-11-11T17:05",
+            "when": "5:05pm tomorrow",
             "holds_minutes": 60,
             "urgency": "comfortable",
             "free_from": "2026-11-11T16:50",
@@ -117,18 +117,18 @@
             "factors": [
               {
                 "key": "after_event",
-                "text": "right after CHEM135 lab"
+                "text": "after CHEM135 lab"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 4"
               }
             ]
           },
           {
             "rank": 5,
-            "suggested_start": "2026-11-11T20:00",
-            "when": "8pm tomorrow",
+            "suggested_start": "2026-11-11T20:30",
+            "when": "8:30pm tomorrow",
             "holds_minutes": 60,
             "urgency": "comfortable",
             "free_from": "2026-11-11T20:00",
@@ -137,7 +137,7 @@
             "factors": [
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 4"
               }
             ]
           }
@@ -162,7 +162,7 @@
         "moved": "Calc practice",
         "to": "Wed Nov 11 09:00-10:00",
         "minutes": 60,
-        "reason": "a fresh morning, with no quiz that day, a day before it's due"
+        "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
       }
     },
     {
@@ -178,33 +178,33 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2305,
-        "output_tokens": 323,
-        "cached_tokens": 2289,
-        "reasoning_tokens": 197
+        "input_tokens": 2337,
+        "output_tokens": 269,
+        "cached_tokens": 2033,
+        "reasoning_tokens": 142
       },
-      "costUsd": 0.0017361,
-      "latencyMs": 2592
+      "costUsd": 0.0018282,
+      "latencyMs": 1846
     },
     {
       "usage": {
-        "input_tokens": 3257,
-        "output_tokens": 233,
+        "input_tokens": 3244,
+        "output_tokens": 196,
         "cached_tokens": 2289,
-        "reasoning_tokens": 87
+        "reasoning_tokens": 50
       },
-      "costUsd": 0.0025436,
-      "latencyMs": 1878
+      "costUsd": 0.0023701,
+      "latencyMs": 1399
     },
     {
       "usage": {
-        "input_tokens": 3560,
+        "input_tokens": 3510,
         "output_tokens": 43,
         "cached_tokens": 3185,
         "reasoning_tokens": 5
       },
-      "costUsd": 0.00112925,
-      "latencyMs": 689
+      "costUsd": 0.00106675,
+      "latencyMs": 887
     }
   ],
   "judge": {
@@ -215,13 +215,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1325,
-        "output_tokens": 890,
+        "input_tokens": 1339,
+        "output_tokens": 1633,
         "cached_tokens": 753,
-        "reasoning_tokens": 864
+        "reasoning_tokens": 1607
       },
-      "costUsd": 0.0046104499999999994,
-      "latencyMs": 7378
+      "costUsd": 0.0077856999999999996,
+      "latencyMs": 10484
     }
   ],
   "runs": [
@@ -234,7 +234,7 @@
             "action": "move",
             "start": "2026-11-11T09:00:00-05:00",
             "end": "2026-11-11T10:00:00-05:00",
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           },
           {
             "item_id": "s_outline",
@@ -244,7 +244,7 @@
             "reason": null
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning with no quiz that day, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -272,15 +272,15 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T09:00",
                 "free_until": "2026-11-11T10:00",
-                "why_ranked": "5.5h planned that day, 1 other session that day",
+                "why_ranked": "up against a class or event, 5.5h planned that day, 1 other session that day",
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
@@ -300,14 +300,14 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
+                "suggested_start": "2026-11-11T11:05",
+                "when": "11:05am tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
@@ -316,22 +316,22 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "after MATH141 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
+                "suggested_start": "2026-11-11T17:05",
+                "when": "5:05pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
@@ -340,18 +340,18 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after CHEM135 lab"
+                    "text": "after CHEM135 lab"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T20:00",
-                "when": "8pm tomorrow",
+                "suggested_start": "2026-11-11T20:30",
+                "when": "8:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T20:00",
@@ -360,7 +360,7 @@
                 "factors": [
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               }
@@ -385,7 +385,7 @@
             "moved": "Calc practice",
             "to": "Wed Nov 11 09:00-10:00",
             "minutes": 60,
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           }
         },
         {
@@ -401,33 +401,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
-            "output_tokens": 323,
-            "cached_tokens": 2289,
-            "reasoning_tokens": 197
+            "input_tokens": 2337,
+            "output_tokens": 269,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 142
           },
-          "costUsd": 0.0017361,
-          "latencyMs": 2592
+          "costUsd": 0.0018282,
+          "latencyMs": 1846
         },
         {
           "usage": {
-            "input_tokens": 3257,
-            "output_tokens": 233,
+            "input_tokens": 3244,
+            "output_tokens": 196,
             "cached_tokens": 2289,
-            "reasoning_tokens": 87
+            "reasoning_tokens": 50
           },
-          "costUsd": 0.0025436,
-          "latencyMs": 1878
+          "costUsd": 0.0023701,
+          "latencyMs": 1399
         },
         {
           "usage": {
-            "input_tokens": 3560,
+            "input_tokens": 3510,
             "output_tokens": 43,
             "cached_tokens": 3185,
             "reasoning_tokens": 5
           },
-          "costUsd": 0.00112925,
-          "latencyMs": 689
+          "costUsd": 0.00106675,
+          "latencyMs": 887
         }
       ],
       "judge": {
@@ -438,13 +438,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1325,
-            "output_tokens": 890,
+            "input_tokens": 1339,
+            "output_tokens": 1633,
             "cached_tokens": 753,
-            "reasoning_tokens": 864
+            "reasoning_tokens": 1607
           },
-          "costUsd": 0.0046104499999999994,
-          "latencyMs": 7378
+          "costUsd": 0.0077856999999999996,
+          "latencyMs": 10484
         }
       ]
     },
@@ -457,7 +457,7 @@
             "action": "move",
             "start": "2026-11-11T09:00:00-05:00",
             "end": "2026-11-11T10:00:00-05:00",
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           },
           {
             "item_id": "s_outline",
@@ -467,7 +467,7 @@
             "reason": null
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning with no quiz that day, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -495,15 +495,15 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T09:00",
                 "free_until": "2026-11-11T10:00",
-                "why_ranked": "5.5h planned that day, 1 other session that day",
+                "why_ranked": "up against a class or event, 5.5h planned that day, 1 other session that day",
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
@@ -523,14 +523,14 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
+                "suggested_start": "2026-11-11T11:05",
+                "when": "11:05am tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
@@ -539,22 +539,22 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "after MATH141 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
+                "suggested_start": "2026-11-11T17:05",
+                "when": "5:05pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
@@ -563,18 +563,18 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after CHEM135 lab"
+                    "text": "after CHEM135 lab"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T20:00",
-                "when": "8pm tomorrow",
+                "suggested_start": "2026-11-11T20:30",
+                "when": "8:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T20:00",
@@ -583,7 +583,7 @@
                 "factors": [
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               }
@@ -608,7 +608,7 @@
             "moved": "Calc practice",
             "to": "Wed Nov 11 09:00-10:00",
             "minutes": 60,
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           }
         },
         {
@@ -624,33 +624,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
-            "output_tokens": 303,
+            "input_tokens": 2337,
+            "output_tokens": 298,
             "cached_tokens": 2289,
-            "reasoning_tokens": 175
+            "reasoning_tokens": 172
           },
-          "costUsd": 0.0016511,
-          "latencyMs": 2536
+          "costUsd": 0.0016698499999999999,
+          "latencyMs": 1980
         },
         {
           "usage": {
-            "input_tokens": 3237,
-            "output_tokens": 221,
+            "input_tokens": 3273,
+            "output_tokens": 209,
             "cached_tokens": 2289,
-            "reasoning_tokens": 70
+            "reasoning_tokens": 63
           },
-          "costUsd": 0.0024676,
-          "latencyMs": 2824
+          "costUsd": 0.0024616,
+          "latencyMs": 1404
         },
         {
           "usage": {
-            "input_tokens": 3528,
-            "output_tokens": 44,
+            "input_tokens": 3552,
+            "output_tokens": 43,
             "cached_tokens": 3185,
-            "reasoning_tokens": 6
+            "reasoning_tokens": 5
           },
-          "costUsd": 0.0010935,
-          "latencyMs": 712
+          "costUsd": 0.00111925,
+          "latencyMs": 614
         }
       ],
       "judge": {
@@ -661,13 +661,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1325,
-            "output_tokens": 947,
+            "input_tokens": 1339,
+            "output_tokens": 1023,
             "cached_tokens": 1265,
-            "reasoning_tokens": 926
+            "reasoning_tokens": 997
           },
-          "costUsd": 0.0042895,
-          "latencyMs": 7482
+          "costUsd": 0.00463,
+          "latencyMs": 7339
         }
       ]
     },
@@ -680,7 +680,7 @@
             "action": "move",
             "start": "2026-11-11T09:00:00-05:00",
             "end": "2026-11-11T10:00:00-05:00",
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           },
           {
             "item_id": "s_outline",
@@ -690,7 +690,7 @@
             "reason": null
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning with no quiz that day, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -718,15 +718,15 @@
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T09:00",
                 "free_until": "2026-11-11T10:00",
-                "why_ranked": "5.5h planned that day, 1 other session that day",
+                "why_ranked": "up against a class or event, 5.5h planned that day, 1 other session that day",
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
@@ -746,14 +746,14 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning with no quiz that day"
                   }
                 ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
+                "suggested_start": "2026-11-11T11:05",
+                "when": "11:05am tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
@@ -762,22 +762,22 @@
                 "factors": [
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "after_event",
-                    "text": "right after MATH141 lecture"
+                    "text": "after MATH141 lecture"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
+                "suggested_start": "2026-11-11T17:05",
+                "when": "5:05pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
@@ -786,18 +786,18 @@
                 "factors": [
                   {
                     "key": "after_event",
-                    "text": "right after CHEM135 lab"
+                    "text": "after CHEM135 lab"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T20:00",
-                "when": "8pm tomorrow",
+                "suggested_start": "2026-11-11T20:30",
+                "when": "8:30pm tomorrow",
                 "holds_minutes": 60,
                 "urgency": "comfortable",
                 "free_from": "2026-11-11T20:00",
@@ -806,7 +806,7 @@
                 "factors": [
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   }
                 ]
               }
@@ -831,7 +831,7 @@
             "moved": "Calc practice",
             "to": "Wed Nov 11 09:00-10:00",
             "minutes": 60,
-            "reason": "a fresh morning, with no quiz that day, a day before it's due"
+            "reason": "a fresh morning with no quiz that day, the day before Quiz 4"
           }
         },
         {
@@ -847,33 +847,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2305,
-            "output_tokens": 235,
+            "input_tokens": 2337,
+            "output_tokens": 251,
             "cached_tokens": 2289,
-            "reasoning_tokens": 105
+            "reasoning_tokens": 121
           },
-          "costUsd": 0.0013621,
-          "latencyMs": 2093
+          "costUsd": 0.0014701,
+          "latencyMs": 1681
         },
         {
           "usage": {
-            "input_tokens": 3169,
-            "output_tokens": 208,
+            "input_tokens": 3226,
+            "output_tokens": 227,
             "cached_tokens": 2289,
-            "reasoning_tokens": 57
+            "reasoning_tokens": 78
           },
-          "costUsd": 0.0023273499999999997,
-          "latencyMs": 1645
+          "costUsd": 0.00247935,
+          "latencyMs": 1628
         },
         {
           "usage": {
-            "input_tokens": 3447,
-            "output_tokens": 44,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 6
+            "input_tokens": 3523,
+            "output_tokens": 42,
+            "cached_tokens": 3185,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.00113305,
-          "latencyMs": 1203
+          "costUsd": 0.00107875,
+          "latencyMs": 868
         }
       ],
       "judge": {
@@ -884,13 +884,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1325,
-            "output_tokens": 977,
+            "input_tokens": 1339,
+            "output_tokens": 1980,
             "cached_tokens": 1265,
-            "reasoning_tokens": 951
+            "reasoning_tokens": 1954
           },
-          "costUsd": 0.004417,
-          "latencyMs": 8566
+          "costUsd": 0.00869725,
+          "latencyMs": 13885
         }
       ]
     }

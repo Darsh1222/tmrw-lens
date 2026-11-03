@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "5f3a21b534f62301ec3e33bba6fbd6efa7a4099899d71daded3d67518af55cab",
   "effort": "low",
   "response": {
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2027-03-14T09:00:00-04:00",
         "end": "2027-03-14T10:00:00-04:00",
-        "reason": "so tonight can be off, a day before it's due"
+        "reason": "so tonight can be off, the day before Quiz 4"
       }
     ],
-    "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, a day before it's due. Nothing else changed.",
+    "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, the day before Quiz 4. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -66,11 +66,11 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning with no quiz that day"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Quiz 4"
               },
               {
                 "key": "reply",
@@ -94,7 +94,7 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning with no quiz that day"
               },
               {
                 "key": "reply",
@@ -123,7 +123,7 @@
         "moved": "Calc practice",
         "to": "Sun Mar 14 09:00-10:00",
         "minutes": 60,
-        "reason": "so tonight can be off, a day before it's due"
+        "reason": "so tonight can be off, the day before Quiz 4"
       }
     },
     {
@@ -139,43 +139,43 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2241,
-        "output_tokens": 304,
+        "input_tokens": 2273,
+        "output_tokens": 300,
         "cached_tokens": 2033,
-        "reasoning_tokens": 165
+        "reasoning_tokens": 166
       },
-      "costUsd": 0.00185695,
-      "latencyMs": 2443
+      "costUsd": 0.00187995,
+      "latencyMs": 2151
     },
     {
       "usage": {
-        "input_tokens": 2588,
-        "output_tokens": 133,
+        "input_tokens": 2616,
+        "output_tokens": 220,
         "cached_tokens": 2161,
-        "reasoning_tokens": 29
+        "reasoning_tokens": 116
       },
-      "costUsd": 0.0014231500000000002,
-      "latencyMs": 1033
+      "costUsd": 0.0018279000000000001,
+      "latencyMs": 3006
     },
     {
       "usage": {
-        "input_tokens": 3011,
-        "output_tokens": 406,
+        "input_tokens": 3125,
+        "output_tokens": 477,
         "cached_tokens": 2545,
-        "reasoning_tokens": 283
+        "reasoning_tokens": 354
       },
-      "costUsd": 0.00268975,
-      "latencyMs": 3275
+      "costUsd": 0.003134,
+      "latencyMs": 2915
     },
     {
       "usage": {
-        "input_tokens": 3483,
-        "output_tokens": 43,
-        "cached_tokens": 2929,
-        "reasoning_tokens": 5
+        "input_tokens": 3669,
+        "output_tokens": 45,
+        "cached_tokens": 3057,
+        "reasoning_tokens": 7
       },
-      "costUsd": 0.0013146,
-      "latencyMs": 717
+      "costUsd": 0.0014148,
+      "latencyMs": 627
     }
   ],
   "judge": {
@@ -186,13 +186,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1068,
-        "output_tokens": 619,
-        "cached_tokens": 753,
-        "reasoning_tokens": 593
+        "input_tokens": 1083,
+        "output_tokens": 1147,
+        "cached_tokens": 1009,
+        "reasoning_tokens": 1121
       },
-      "costUsd": 0.00313745,
-      "latencyMs": 4898
+      "costUsd": 0.0051186,
+      "latencyMs": 8891
     }
   ],
   "runs": [
@@ -205,10 +205,10 @@
             "action": "move",
             "start": "2027-03-14T09:00:00-04:00",
             "end": "2027-03-14T10:00:00-04:00",
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -260,11 +260,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   },
                   {
                     "key": "reply",
@@ -288,7 +288,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "reply",
@@ -317,7 +317,7 @@
             "moved": "Calc practice",
             "to": "Sun Mar 14 09:00-10:00",
             "minutes": 60,
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         },
         {
@@ -333,43 +333,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 304,
+            "input_tokens": 2273,
+            "output_tokens": 300,
             "cached_tokens": 2033,
-            "reasoning_tokens": 165
+            "reasoning_tokens": 166
           },
-          "costUsd": 0.00185695,
-          "latencyMs": 2443
+          "costUsd": 0.00187995,
+          "latencyMs": 2151
         },
         {
           "usage": {
-            "input_tokens": 2588,
-            "output_tokens": 133,
+            "input_tokens": 2616,
+            "output_tokens": 220,
             "cached_tokens": 2161,
-            "reasoning_tokens": 29
+            "reasoning_tokens": 116
           },
-          "costUsd": 0.0014231500000000002,
-          "latencyMs": 1033
+          "costUsd": 0.0018279000000000001,
+          "latencyMs": 3006
         },
         {
           "usage": {
-            "input_tokens": 3011,
-            "output_tokens": 406,
+            "input_tokens": 3125,
+            "output_tokens": 477,
             "cached_tokens": 2545,
-            "reasoning_tokens": 283
+            "reasoning_tokens": 354
           },
-          "costUsd": 0.00268975,
-          "latencyMs": 3275
+          "costUsd": 0.003134,
+          "latencyMs": 2915
         },
         {
           "usage": {
-            "input_tokens": 3483,
-            "output_tokens": 43,
-            "cached_tokens": 2929,
-            "reasoning_tokens": 5
+            "input_tokens": 3669,
+            "output_tokens": 45,
+            "cached_tokens": 3057,
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.0013146,
-          "latencyMs": 717
+          "costUsd": 0.0014148,
+          "latencyMs": 627
         }
       ],
       "judge": {
@@ -380,13 +380,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1068,
-            "output_tokens": 619,
-            "cached_tokens": 753,
-            "reasoning_tokens": 593
+            "input_tokens": 1083,
+            "output_tokens": 1147,
+            "cached_tokens": 1009,
+            "reasoning_tokens": 1121
           },
-          "costUsd": 0.00313745,
-          "latencyMs": 4898
+          "costUsd": 0.0051186,
+          "latencyMs": 8891
         }
       ]
     },
@@ -399,10 +399,10 @@
             "action": "move",
             "start": "2027-03-14T09:00:00-04:00",
             "end": "2027-03-14T10:00:00-04:00",
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -413,11 +413,9 @@
         {
           "tool": "note_reply",
           "args": {
-            "from_date": "null",
             "kind": "not_today",
             "part": "null",
-            "quote": "not tonight",
-            "until": "null"
+            "quote": "not tonight"
           },
           "ok": true,
           "result": {
@@ -454,11 +452,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   },
                   {
                     "key": "reply",
@@ -482,7 +480,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "reply",
@@ -511,7 +509,7 @@
             "moved": "Calc practice",
             "to": "Sun Mar 14 09:00-10:00",
             "minutes": 60,
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         },
         {
@@ -527,43 +525,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 279,
+            "input_tokens": 2273,
+            "output_tokens": 219,
             "cached_tokens": 2161,
-            "reasoning_tokens": 147
+            "reasoning_tokens": 119
           },
-          "costUsd": 0.0016099,
-          "latencyMs": 2334
+          "costUsd": 0.0013949000000000001,
+          "latencyMs": 1775
         },
         {
           "usage": {
-            "input_tokens": 2563,
-            "output_tokens": 133,
+            "input_tokens": 2535,
+            "output_tokens": 153,
             "cached_tokens": 2161,
-            "reasoning_tokens": 29
+            "reasoning_tokens": 49
           },
-          "costUsd": 0.0013919000000000002,
-          "latencyMs": 1369
+          "costUsd": 0.0014419,
+          "latencyMs": 976
         },
         {
           "usage": {
-            "input_tokens": 2986,
-            "output_tokens": 414,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 291
+            "input_tokens": 2977,
+            "output_tokens": 409,
+            "cached_tokens": 2417,
+            "reasoning_tokens": 264
           },
-          "costUsd": 0.0026925,
-          "latencyMs": 3054
+          "costUsd": 0.0028008,
+          "latencyMs": 3175
         },
         {
           "usage": {
-            "input_tokens": 3466,
-            "output_tokens": 43,
+            "input_tokens": 3453,
+            "output_tokens": 42,
             "cached_tokens": 2929,
-            "reasoning_tokens": 5
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.00129335,
-          "latencyMs": 884
+          "costUsd": 0.0012728499999999998,
+          "latencyMs": 806
         }
       ],
       "judge": {
@@ -574,13 +572,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1068,
-            "output_tokens": 684,
-            "cached_tokens": 1009,
-            "reasoning_tokens": 663
+            "input_tokens": 1083,
+            "output_tokens": 1050,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1029
           },
-          "costUsd": 0.0031321,
-          "latencyMs": 5620
+          "costUsd": 0.00498795,
+          "latencyMs": 8492
         }
       ]
     },
@@ -593,10 +591,10 @@
             "action": "move",
             "start": "2027-03-14T09:00:00-04:00",
             "end": "2027-03-14T10:00:00-04:00",
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         ],
-        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, a day before it's due. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, so tonight can be off, the day before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -648,11 +646,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Quiz 4"
                   },
                   {
                     "key": "reply",
@@ -676,7 +674,7 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning with no quiz that day"
                   },
                   {
                     "key": "reply",
@@ -691,8 +689,8 @@
           "tool": "move_item",
           "args": {
             "because": [
-              "buffer",
-              "reply"
+              "reply",
+              "buffer"
             ],
             "duration_min": "null",
             "item_id": "s_calc",
@@ -705,7 +703,7 @@
             "moved": "Calc practice",
             "to": "Sun Mar 14 09:00-10:00",
             "minutes": 60,
-            "reason": "so tonight can be off, a day before it's due"
+            "reason": "so tonight can be off, the day before Quiz 4"
           }
         },
         {
@@ -721,43 +719,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2241,
-            "output_tokens": 335,
+            "input_tokens": 2273,
+            "output_tokens": 457,
             "cached_tokens": 2161,
-            "reasoning_tokens": 200
+            "reasoning_tokens": 323
           },
-          "costUsd": 0.0018479000000000002,
-          "latencyMs": 2975
+          "costUsd": 0.0024064,
+          "latencyMs": 2598
         },
         {
           "usage": {
-            "input_tokens": 2619,
-            "output_tokens": 199,
+            "input_tokens": 2773,
+            "output_tokens": 140,
             "cached_tokens": 2161,
-            "reasoning_tokens": 95
+            "reasoning_tokens": 36
           },
-          "costUsd": 0.0017424,
-          "latencyMs": 1566
+          "costUsd": 0.0016841500000000001,
+          "latencyMs": 1022
         },
         {
           "usage": {
-            "input_tokens": 3108,
-            "output_tokens": 644,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 499
+            "input_tokens": 3202,
+            "output_tokens": 722,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 599
           },
-          "costUsd": 0.0038225,
-          "latencyMs": 4823
+          "costUsd": 0.0041307,
+          "latencyMs": 4402
         },
         {
           "usage": {
-            "input_tokens": 3818,
-            "output_tokens": 43,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 5
+            "input_tokens": 3991,
+            "output_tokens": 45,
+            "cached_tokens": 3185,
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.0015925499999999999,
-          "latencyMs": 690
+          "costUsd": 0.0016765,
+          "latencyMs": 629
         }
       ],
       "judge": {
@@ -768,13 +766,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1068,
-            "output_tokens": 669,
+            "input_tokens": 1083,
+            "output_tokens": 887,
             "cached_tokens": 1009,
-            "reasoning_tokens": 643
+            "reasoning_tokens": 866
           },
-          "costUsd": 0.00306835,
-          "latencyMs": 5267
+          "costUsd": 0.0040136,
+          "latencyMs": 5488
         }
       ]
     }

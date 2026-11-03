@@ -466,3 +466,27 @@ describe("replies that give orders", () => {
     for (const r of ["too tired tonight", "practice until 9", "did half", "no", "I'll do it this weekend"]) expect(ORDERS.test(r)).toBe(false); // prettier-ignore
   });
 });
+
+describe("code finishes what it words", () => {
+  it("keeps one fact when two would push the text past one SMS", () => {
+    // The real make-room week: "the only time it fits before Quiz 3" and "the day before Quiz 3" come to 162 characters.
+    const d = new Draft(req("make-room"));
+    expect(d.move("s_laundry", "2026-11-05T17:30", null, "it has no deadline, so it made room for Calc practice").ok).toBe(true); // prettier-ignore
+    const keys = d
+      .factorsAt("s_calc", d.parseLocal("2026-11-04T21:00") as number, 60)
+      .map((f) => f.key)
+      .slice(0, 2);
+    expect(keys).toHaveLength(2);
+    expect(d.move("s_calc", "2026-11-04T21:00", null, keys).ok).toBe(true);
+    expect(d.message().length).toBeGreaterThan(160);
+    expect(d.finish()).toMatchObject({ ok: true });
+    expect(d.message()).toBe("Moved Calc practice to 9pm today, the only time it fits before Quiz 3. Moved Laundry to 5:30pm tomorrow to make room. Nothing else changed."); // prettier-ignore
+  });
+
+  it("clears the rest of today when they're sick, even without the model", () => {
+    const r = req("sick-today");
+    const res = fallback(r).response("fallback");
+    expect(res.diff.filter((x) => x.action !== "keep").map((x) => x.item_id).sort()).toEqual(["s_calc", "s_hist", "s_outline"]); // prettier-ignore
+    expect(checkResponse(r, res)).toEqual([]);
+  });
+});

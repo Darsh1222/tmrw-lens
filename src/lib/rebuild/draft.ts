@@ -17,7 +17,8 @@ import {
 
 type Span = { s: number; e: number };
 export type Change =
-  { action: "move"; start: number; end: number; reason: string } | { action: "drop"; reason: string };
+  // `short`: for the missed item, the reason with one fact instead of two, for when two don't fit one SMS.
+  { action: "move"; start: number; end: number; reason: string; short?: string } | { action: "drop"; reason: string };
 export type Outcome = { ok: true; [k: string]: unknown } | { ok: false; problem: string };
 
 const MIN = 60_000;
@@ -144,6 +145,8 @@ export class Draft {
 
   /** What the rules keep everything out of (src/lib/rebuild/rules.ts): sleep, the hour before bed, quiet hours. */
   readonly off: RuleSpan[];
+  /** The same without study hours: an offer may use any awake time, since the person decides. */
+  readonly awakeOff: RuleSpan[];
   /** The 90 minutes after the missed session, when its deadline isn't within 24 hours. */
   readonly gap: RuleSpan | null;
 
@@ -152,6 +155,7 @@ export class Draft {
     this.zone = req.zone;
     const horizon = Math.max(this.now, ...req.open_windows.map((w) => Date.parse(w.end)), ...req.items.map((i) => Date.parse(i.end)), ...req.deadlines.map((d) => Date.parse(d.due))); // prettier-ignore
     this.off = blocked(req, this.now, horizon);
+    this.awakeOff = blocked(req, this.now, horizon, { studyHours: false });
     this.gap = missGap(req);
   }
 
@@ -423,6 +427,7 @@ export class Draft {
       };
     }
     let words = reason.reason;
+    let short = words;
     if (missed) {
       // Code words the reason, from what it checked true of this exact time.
       const factors = this.factorsAt(id, s, mins);
@@ -436,8 +441,9 @@ export class Draft {
       const chosen = [...offered].filter((f) => keys!.includes(f.key));
       chosen.sort((a, b) => (a.key === "reply" ? -1 : b.key === "reply" ? 1 : FACTOR_ORDER.indexOf(a.key as Factor["key"]) - FACTOR_ORDER.indexOf(b.key as Factor["key"]))); // prettier-ignore
       words = compose(chosen);
+      short = compose(chosen.slice(0, 1));
     }
-    this.changes.set(id, { action: "move", start: s, end: e, reason: words });
+    this.changes.set(id, { action: "move", start: s, end: e, reason: words, ...(short !== words && { short }) });
     return { ok: true, moved: i.title, to: this.at({ s, e }), minutes: mins, reason: words };
   }
 
@@ -472,10 +478,31 @@ export class Draft {
       return { ok: false, problem: "The missed item still needs a move or a drop." };
     if (this.changes.size > MAX_CHANGES)
       return { ok: false, problem: `That changes ${this.changes.size} items; change at most ${MAX_CHANGES} (fewer is better).` }; // prettier-ignore
+    // Code wrote the missed item's reason, so when two facts don't fit one SMS, code keeps the first.
+    const c = this.changes.get(this.missed.id);
+    if (this.message().length > MAX_TEXT && c?.action === "move" && c.short)
+      this.changes.set(this.missed.id, { ...c, reason: c.short, short: undefined });
     const text = this.message();
     if (text.length > MAX_TEXT)
       return { ok: false, problem: `The text would be ${text.length} characters; it must fit in ${MAX_TEXT}. Shorten the reasons.` }; // prettier-ignore
     return { ok: true };
+  }
+
+  /**
+   * When their reply rules out today, code clears what's still planned later today itself: each to its best time after
+   * today, or off the plan if none. Used when the model ran out of turns, and by code's fallback.
+   */
+  clearToday(): void {
+    if (!this.req.missed.reply || !TODAY_OUT.test(this.req.missed.reply)) return;
+    const tomorrow = this.local(this.now).plus({ days: 1 }).startOf("day").toMillis();
+    for (const i of this.req.items) {
+      const p = i.id === this.missed.id || this.changes.has(i.id) ? null : this.placement(i);
+      if (!p || p.s < this.now || p.s >= tomorrow) continue;
+      const best = rankSlots(this, i.id, { after: tomorrow })[0];
+      if (best)
+        this.changes.set(i.id, { action: "move", start: best.start, end: best.start + best.minutes * MIN, reason: "it clears today" }); // prettier-ignore
+      else this.changes.set(i.id, { action: "drop", reason: "it clears today" });
+    }
   }
 
   diff(): DiffEntry[] {
@@ -491,7 +518,7 @@ export class Draft {
   /**
    * When the missed item can't fit before its deadline, the best a person could
    * still do: a 15-minute version ending 90 minutes before it (time to get
-   * there), not before 7 AM, not overlapping anything. Outside the free time
+   * there), in awake time (study hours don't bind: they decide), not overlapping anything. Outside the free time
    * Tomorrow sent, so it's only offered, never placed: the text asks.
    */
   /** Whether the missed item's shortest version still fits in free time before it's due. */
@@ -513,10 +540,9 @@ export class Draft {
     ];
     for (let s = due - 105 * MIN; s >= this.now; s -= 15 * MIN) {
       const e = s + 15 * MIN;
-      if (this.local(s).hour < 7) break;
       if (busy.some((b) => b.s < e && s < b.e)) continue;
-      // An offer the person accepts becomes a move, so it keeps the same rules (not the 90 minutes: it's due soon).
-      if (this.off.some((b) => b.s < e && s < b.e)) continue;
+      // Awake time, outside sleep, the hour before bed, and quiet hours; study hours don't bind, since they decide.
+      if (this.awakeOff.some((b) => b.s < e && s < b.e)) continue;
       return { item_id: m.id, start: s, end: e };
     }
     return null;
@@ -625,6 +651,7 @@ export function fallback(req: RebuildRequest): Draft {
     const texts = [...(out ? [{ key: "reply", text: d.local(d.now).hour >= 17 ? "so tonight can be off" : "so today can be off" }] : []), ...chosen]; // prettier-ignore
     const reason = compose(texts) || (due === null ? "the first good time open" : `the first good time before ${what}`);
     d.changes.set(m.id, { action: "move", start: best.start, end: best.start + best.minutes * MIN, reason });
+    d.clearToday();
     return d;
   }
   const reason =

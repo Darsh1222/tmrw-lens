@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "5a79c9ea5f934b119d676ee4f292a237889f28ff2ee9ff999fa2cc359194fdc8",
   "effort": "low",
   "response": {
@@ -54,7 +54,7 @@
               },
               {
                 "key": "after_event",
-                "text": "right after HIST200 lecture"
+                "text": "after HIST200 lecture"
               }
             ]
           }
@@ -94,33 +94,33 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2224,
-        "output_tokens": 522,
-        "cached_tokens": 2161,
-        "reasoning_tokens": 391
+        "input_tokens": 2256,
+        "output_tokens": 406,
+        "cached_tokens": 2033,
+        "reasoning_tokens": 280
       },
-      "costUsd": 0.0026214000000000003,
-      "latencyMs": 3789
+      "costUsd": 0.0023092,
+      "latencyMs": 3657
     },
     {
       "usage": {
-        "input_tokens": 2898,
-        "output_tokens": 416,
+        "input_tokens": 2813,
+        "output_tokens": 343,
         "cached_tokens": 2161,
-        "reasoning_tokens": 273
+        "reasoning_tokens": 202
       },
-      "costUsd": 0.0030134000000000003,
-      "latencyMs": 2973
+      "costUsd": 0.0025969,
+      "latencyMs": 2338
     },
     {
       "usage": {
-        "input_tokens": 3378,
+        "input_tokens": 3220,
         "output_tokens": 42,
         "cached_tokens": 2801,
         "reasoning_tokens": 4
       },
-      "costUsd": 0.0013199000000000002,
-      "latencyMs": 702
+      "costUsd": 0.0011224000000000002,
+      "latencyMs": 800
     }
   ],
   "judge": {
@@ -131,13 +131,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1164,
-        "output_tokens": 572,
+        "input_tokens": 1178,
+        "output_tokens": 613,
         "cached_tokens": 753,
-        "reasoning_tokens": 551
+        "reasoning_tokens": 592
       },
-      "costUsd": 0.0030577,
-      "latencyMs": 4392
+      "costUsd": 0.0032494499999999996,
+      "latencyMs": 4245
     }
   ],
   "runs": [
@@ -193,7 +193,7 @@
                   },
                   {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   }
                 ]
               }
@@ -233,33 +233,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2224,
-            "output_tokens": 522,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 391
+            "input_tokens": 2256,
+            "output_tokens": 406,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 280
           },
-          "costUsd": 0.0026214000000000003,
-          "latencyMs": 3789
+          "costUsd": 0.0023092,
+          "latencyMs": 3657
         },
         {
           "usage": {
-            "input_tokens": 2898,
-            "output_tokens": 416,
+            "input_tokens": 2813,
+            "output_tokens": 343,
             "cached_tokens": 2161,
-            "reasoning_tokens": 273
+            "reasoning_tokens": 202
           },
-          "costUsd": 0.0030134000000000003,
-          "latencyMs": 2973
+          "costUsd": 0.0025969,
+          "latencyMs": 2338
         },
         {
           "usage": {
-            "input_tokens": 3378,
+            "input_tokens": 3220,
             "output_tokens": 42,
             "cached_tokens": 2801,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0013199000000000002,
-          "latencyMs": 702
+          "costUsd": 0.0011224000000000002,
+          "latencyMs": 800
         }
       ],
       "judge": {
@@ -270,13 +270,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1164,
-            "output_tokens": 572,
+            "input_tokens": 1178,
+            "output_tokens": 613,
             "cached_tokens": 753,
-            "reasoning_tokens": 551
+            "reasoning_tokens": 592
           },
-          "costUsd": 0.0030577,
-          "latencyMs": 4392
+          "costUsd": 0.0032494499999999996,
+          "latencyMs": 4245
         }
       ]
     },
@@ -332,7 +332,7 @@
                   },
                   {
                     "key": "after_event",
-                    "text": "right after HIST200 lecture"
+                    "text": "after HIST200 lecture"
                   }
                 ]
               }
@@ -372,172 +372,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2224,
-            "output_tokens": 471,
+            "input_tokens": 2256,
+            "output_tokens": 393,
             "cached_tokens": 2161,
-            "reasoning_tokens": 346
+            "reasoning_tokens": 266
           },
-          "costUsd": 0.00240465,
-          "latencyMs": 29569
+          "costUsd": 0.0021131500000000003,
+          "latencyMs": 2692
         },
         {
           "usage": {
-            "input_tokens": 2847,
-            "output_tokens": 382,
+            "input_tokens": 2800,
+            "output_tokens": 426,
             "cached_tokens": 2161,
-            "reasoning_tokens": 241
+            "reasoning_tokens": 280
           },
-          "costUsd": 0.00280515,
-          "latencyMs": 2959
+          "costUsd": 0.0029334,
+          "latencyMs": 2623
         },
         {
           "usage": {
-            "input_tokens": 3293,
-            "output_tokens": 46,
-            "cached_tokens": 2801,
-            "reasoning_tokens": 8
-          },
-          "costUsd": 0.00123065,
-          "latencyMs": 673
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "time_score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1164,
-            "output_tokens": 1097,
-            "cached_tokens": 1137,
-            "reasoning_tokens": 1076
-          },
-          "costUsd": 0.00486655,
-          "latencyMs": 8154
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_phys",
-            "action": "move",
-            "start": "2026-11-12T17:00:00-05:00",
-            "end": "2026-11-12T18:00:00-05:00",
-            "reason": "the soonest it fits before it's due"
-          }
-        ],
-        "message": "Moved PHYS problem set to 5pm today, the soonest it fits before it's due. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-12T23:00",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-12T17:00",
-                "when": "5pm today",
-                "holds_minutes": 60,
-                "urgency": "tight",
-                "free_from": "2026-11-12T17:00",
-                "free_until": "2026-11-12T23:00",
-                "why_ranked": "tight: the soonest good time wins",
-                "factors": [
-                  {
-                    "key": "soonest",
-                    "text": "the soonest it fits before it's due"
-                  },
-                  {
-                    "key": "free_part",
-                    "text": "your free evening"
-                  },
-                  {
-                    "key": "after_event",
-                    "text": "right after HIST200 lecture"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "because": [
-              "soonest"
-            ],
-            "duration_min": "null",
-            "item_id": "s_phys",
-            "reason": "null",
-            "start": "2026-11-12T17:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "PHYS problem set",
-            "to": "Thu Nov 12 17:00-18:00",
-            "minutes": 60,
-            "reason": "the soonest it fits before it's due"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2224,
-            "output_tokens": 336,
-            "cached_tokens": 2033,
-            "reasoning_tokens": 212
-          },
-          "costUsd": 0.0019717,
-          "latencyMs": 2815
-        },
-        {
-          "usage": {
-            "input_tokens": 2712,
-            "output_tokens": 344,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 203
-          },
-          "costUsd": 0.0024749,
-          "latencyMs": 2535
-        },
-        {
-          "usage": {
-            "input_tokens": 3120,
-            "output_tokens": 41,
+            "input_tokens": 3290,
+            "output_tokens": 45,
             "cached_tokens": 2673,
-            "reasoning_tokens": 3
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.00113395,
-          "latencyMs": 1174
+          "costUsd": 0.00136345,
+          "latencyMs": 685
         }
       ],
       "judge": {
@@ -548,13 +409,152 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1164,
-            "output_tokens": 463,
+            "input_tokens": 1178,
+            "output_tokens": 604,
             "cached_tokens": 1137,
-            "reasoning_tokens": 437
+            "reasoning_tokens": 578
           },
-          "costUsd": 0.00217205,
-          "latencyMs": 3831
+          "costUsd": 0.0027888,
+          "latencyMs": 4527
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_phys",
+            "action": "move",
+            "start": "2026-11-12T17:00:00-05:00",
+            "end": "2026-11-12T18:00:00-05:00",
+            "reason": "the soonest it fits before it's due"
+          }
+        ],
+        "message": "Moved PHYS problem set to 5pm today, the soonest it fits before it's due. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 3,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "2026-11-12T17:00",
+            "before": "2026-11-12T23:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-12T17:00",
+                "when": "5pm today",
+                "holds_minutes": 60,
+                "urgency": "tight",
+                "free_from": "2026-11-12T17:00",
+                "free_until": "2026-11-12T23:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before it's due"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "after HIST200 lecture"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "soonest"
+            ],
+            "duration_min": "null",
+            "item_id": "s_phys",
+            "reason": "null",
+            "start": "2026-11-12T17:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "PHYS problem set",
+            "to": "Thu Nov 12 17:00-18:00",
+            "minutes": 60,
+            "reason": "the soonest it fits before it's due"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2256,
+            "output_tokens": 374,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 238
+          },
+          "costUsd": 0.0020324,
+          "latencyMs": 2208
+        },
+        {
+          "usage": {
+            "input_tokens": 2781,
+            "output_tokens": 346,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 224
+          },
+          "costUsd": 0.00256965,
+          "latencyMs": 3217
+        },
+        {
+          "usage": {
+            "input_tokens": 3191,
+            "output_tokens": 42,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 4
+          },
+          "costUsd": 0.00122695,
+          "latencyMs": 837
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1178,
+            "output_tokens": 579,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 558
+          },
+          "costUsd": 0.00268255,
+          "latencyMs": 3600
         }
       ]
     }

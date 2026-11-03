@@ -73,11 +73,12 @@ export function nights(req: RebuildRequest, from: number, to: number): { bed: nu
  * Time nothing may be placed in: each night from an hour before bedtime until waking, the daily quiet hours, and the
  * time outside study hours (from the latest end to the earliest start).
  */
-export function blocked(req: RebuildRequest, from: number, to: number): Span[] {
+export function blocked(req: RebuildRequest, from: number, to: number, opts: { studyHours?: boolean } = {}): Span[] {
   const out: Span[] = nights(req, from, to).map((n) => ({ s: n.bed - SLEEP_BUFFER_MIN * MIN, e: n.wake }));
   const last = DateTime.fromMillis(to, { zone: req.zone }).startOf("day").plus({ days: 1 });
   const study = studyHours(req);
-  const off = [{ start: study.end, end: study.start }];
+  // An offer (applied only if they say yes) may use any awake time; what Lens places itself stays in study hours.
+  const off = opts.studyHours === false ? [] : [{ start: study.end, end: study.start }];
   for (const q of [...(req.prefs?.quiet ?? []), ...off]) {
     const [sh, sm] = clock(q.start);
     const [eh, em] = clock(q.end);
@@ -160,20 +161,21 @@ export function hardRuleViolations(req: RebuildRequest, res: RebuildResponse): s
   const moves = res.diff.filter((x) => x.action === "move" && x.start && x.end);
   const horizon = Math.max(now, ...moves.map((x) => Date.parse(x.end!)), ...(res.offer ? [Date.parse(res.offer.end)] : [])); // prettier-ignore
   const off = blocked(req, now, horizon);
+  const awakeOff = blocked(req, now, horizon, { studyHours: false });
   const gap = missGap(req);
   const fixed = req.fixed.map((f) => ({ what: f.title, s: Date.parse(f.start), e: Date.parse(f.end) }));
-  const check = (id: string, x: Span, missed: boolean) => {
+  const check = (id: string, x: Span, missed: boolean, rules = off) => {
     const i = req.items.find((y) => y.id === id)!;
     const due = dueOf(req, i);
     if (x.s < now) out.push(`${id}: starts in the past`);
     if (due !== null && x.e > due) out.push(`${id}: finishes after it's due`);
     for (const f of fixed) if (overlaps(x, f)) out.push(`${id}: overlaps ${f.what}`);
     for (const [other, y] of where) if (other !== id && y && overlaps(x, y)) out.push(`${id}: overlaps ${other}`);
-    for (const b of off) if (overlaps(x, b)) out.push(`${id}: in sleep, the hour before bed, quiet hours, or outside study hours`); // prettier-ignore
+    for (const b of rules) if (overlaps(x, b)) out.push(`${id}: in sleep, the hour before bed, quiet hours, or outside study hours`); // prettier-ignore
     if (missed && gap && overlaps(x, gap)) out.push(`${id}: within ${MISS_GAP_MIN} min of the missed session`);
   };
   for (const x of moves) check(x.item_id, { s: Date.parse(x.start!), e: Date.parse(x.end!) }, x.item_id === req.missed.item_id); // prettier-ignore
-  if (res.offer) check(res.offer.item_id, { s: Date.parse(res.offer.start), e: Date.parse(res.offer.end) }, false);
+  if (res.offer) check(res.offer.item_id, { s: Date.parse(res.offer.start), e: Date.parse(res.offer.end) }, false, awakeOff); // prettier-ignore
 
   // The message, read on its own: its times are the moves' (and the offer's), and only changed items are named.
   const said = messageTimes(req, res.message);

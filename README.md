@@ -51,7 +51,7 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 | Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                                    |
 | Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)                               |
 | Rebuilds: placement (code's oracle)   | top-1 **100%**, top-3 **100%**; 68 of 68 cases pass                        |
-| Rebuild message quality (judge, 1-5)  | **4.95**; best time **4.94** ("would a thoughtful friend pick this time?") |
+| Rebuild message quality (judge, 1-5)  | **4.84**; best time **4.89** ("would a thoughtful friend pick this time?") |
 | Cost per photo read / per rebuild     | $0.023 with SAM / $0.0076 (3.8 model calls, about 9 s)                     |
 
 Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
@@ -209,11 +209,11 @@ case 1. Each case runs 3 times; a flaky case fails. The gates, all passing
 | ------------------------------------- | ------------------------------ | --------------------- |
 | Hard rules kept (gate: 100%)          | **100%** of 204 runs           | 100% of 68            |
 | Placement top-1 / top-3 (gates 85/98) | **100% / 100%**                | –                     |
-| Cases passed, all 3 runs              | **68 of 68**, 0 flaky          | 58 of 68              |
-| Judge, tone and clarity (gate: 4.8)   | **4.95**                       |                       |
-| Best time: would a friend pick it?    | **4.94** (gate: 4.8)           |                       |
+| Cases passed, all 3 runs              | **68 of 68**, 0 flaky          | 61 of 68              |
+| Judge, tone and clarity (gate: 4.8)   | **4.84**                       |                       |
+| Best time: would a friend pick it?    | **4.89** (gate: 4.8)           |                       |
 | Every text one plain SMS              | yes, enforced by a test        | yes                   |
-| Model cost per rebuild                | $0.0076 (3.8 turns, about 9 s) | free                  |
+| Model cost per rebuild                | $0.0081 (3.8 turns, about 8 s) | free                  |
 | Tokens per call, cache hit rate       | 3038 in, 219 out; 84% cached   |                       |
 
 ### Text a photo

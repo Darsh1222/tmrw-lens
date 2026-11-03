@@ -1,6 +1,6 @@
 {
-  "agent_version": 21,
-  "judge_version": 7,
+  "agent_version": 22,
+  "judge_version": 8,
   "request_sha": "f0145f4d2fbd1dce9f9196e9ae89fa7db10995458be0a0ac7291f5b24c32d652",
   "effort": "low",
   "response": {
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2026-11-14T09:00:00-05:00",
         "end": "2026-11-14T10:00:00-05:00",
-        "reason": "on the weekend, as you said with two days to spare"
+        "reason": "on the weekend, as you said, two days before it's due"
       }
     ],
-    "message": "Moved Essay draft to Sat 9am, on the weekend, as you said with two days to spare. Nothing else changed.",
+    "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, two days before it's due. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -66,11 +66,11 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a clear morning"
               },
               {
                 "key": "buffer",
-                "text": "with two days to spare"
+                "text": "two days before it's due"
               },
               {
                 "key": "reply",
@@ -94,11 +94,11 @@
               },
               {
                 "key": "fresh_morning",
-                "text": "a fresh morning, with no quiz that day"
+                "text": "a fresh morning"
               },
               {
                 "key": "buffer",
-                "text": "a day before it's due"
+                "text": "the day before Essay 3"
               },
               {
                 "key": "reply",
@@ -127,7 +127,7 @@
         "moved": "Essay draft",
         "to": "Sat Nov 14 09:00-10:00",
         "minutes": 60,
-        "reason": "on the weekend, as you said with two days to spare"
+        "reason": "on the weekend, as you said, two days before it's due"
       }
     },
     {
@@ -143,43 +143,43 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2251,
-        "output_tokens": 519,
+        "input_tokens": 2283,
+        "output_tokens": 285,
         "cached_tokens": 2033,
-        "reasoning_tokens": 375
+        "reasoning_tokens": 123
       },
-      "costUsd": 0.0027832,
-      "latencyMs": 5012
+      "costUsd": 0.0018287,
+      "latencyMs": 2048
     },
     {
       "usage": {
-        "input_tokens": 2814,
-        "output_tokens": 199,
+        "input_tokens": 2592,
+        "output_tokens": 236,
         "cached_tokens": 2161,
-        "reasoning_tokens": 95
+        "reasoning_tokens": 132
       },
-      "costUsd": 0.00198615,
-      "latencyMs": 3722
+      "costUsd": 0.0018659000000000002,
+      "latencyMs": 1750
     },
     {
       "usage": {
-        "input_tokens": 3320,
-        "output_tokens": 364,
-        "cached_tokens": 2801,
-        "reasoning_tokens": 239
+        "input_tokens": 3124,
+        "output_tokens": 366,
+        "cached_tokens": 2545,
+        "reasoning_tokens": 241
       },
-      "costUsd": 0.0026159,
-      "latencyMs": 2629
+      "costUsd": 0.002661,
+      "latencyMs": 2627
     },
     {
       "usage": {
-        "input_tokens": 3751,
-        "output_tokens": 43,
-        "cached_tokens": 3313,
-        "reasoning_tokens": 5
+        "input_tokens": 3558,
+        "output_tokens": 41,
+        "cached_tokens": 3057,
+        "reasoning_tokens": 3
       },
-      "costUsd": 0.0012272000000000001,
-      "latencyMs": 1090
+      "costUsd": 0.00125905,
+      "latencyMs": 1445
     }
   ],
   "judge": {
@@ -190,13 +190,13 @@
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1352,
-        "output_tokens": 817,
+        "input_tokens": 1367,
+        "output_tokens": 1069,
         "cached_tokens": 753,
-        "reasoning_tokens": 796
+        "reasoning_tokens": 1048
       },
-      "costUsd": 0.00433395,
-      "latencyMs": 7838
+      "costUsd": 0.0054237,
+      "latencyMs": 7325
     }
   ],
   "runs": [
@@ -209,10 +209,10 @@
             "action": "move",
             "start": "2026-11-14T09:00:00-05:00",
             "end": "2026-11-14T10:00:00-05:00",
-            "reason": "on the weekend, as you said with two days to spare"
+            "reason": "on the weekend, as you said, two days before it's due"
           }
         ],
-        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said with two days to spare. Nothing else changed.",
+        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, two days before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -264,11 +264,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with two days to spare"
+                    "text": "two days before it's due"
                   },
                   {
                     "key": "reply",
@@ -292,11 +292,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -325,7 +325,7 @@
             "moved": "Essay draft",
             "to": "Sat Nov 14 09:00-10:00",
             "minutes": 60,
-            "reason": "on the weekend, as you said with two days to spare"
+            "reason": "on the weekend, as you said, two days before it's due"
           }
         },
         {
@@ -341,241 +341,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2251,
-            "output_tokens": 519,
+            "input_tokens": 2283,
+            "output_tokens": 285,
             "cached_tokens": 2033,
-            "reasoning_tokens": 375
+            "reasoning_tokens": 123
           },
-          "costUsd": 0.0027832,
-          "latencyMs": 5012
+          "costUsd": 0.0018287,
+          "latencyMs": 2048
         },
         {
           "usage": {
-            "input_tokens": 2814,
-            "output_tokens": 199,
+            "input_tokens": 2592,
+            "output_tokens": 236,
             "cached_tokens": 2161,
-            "reasoning_tokens": 95
+            "reasoning_tokens": 132
           },
-          "costUsd": 0.00198615,
-          "latencyMs": 3722
+          "costUsd": 0.0018659000000000002,
+          "latencyMs": 1750
         },
         {
           "usage": {
-            "input_tokens": 3320,
-            "output_tokens": 364,
-            "cached_tokens": 2801,
-            "reasoning_tokens": 239
-          },
-          "costUsd": 0.0026159,
-          "latencyMs": 2629
-        },
-        {
-          "usage": {
-            "input_tokens": 3751,
-            "output_tokens": 43,
-            "cached_tokens": 3313,
-            "reasoning_tokens": 5
-          },
-          "costUsd": 0.0012272000000000001,
-          "latencyMs": 1090
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "time_score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1352,
-            "output_tokens": 817,
-            "cached_tokens": 753,
-            "reasoning_tokens": 796
-          },
-          "costUsd": 0.00433395,
-          "latencyMs": 7838
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_essay",
-            "action": "move",
-            "start": "2026-11-14T09:00:00-05:00",
-            "end": "2026-11-14T10:00:00-05:00",
-            "reason": "on the weekend, as you said, a fresh morning, with no quiz that day"
-          }
-        ],
-        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, a fresh morning, with no quiz that day. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 4,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "note_reply",
-          "args": {
-            "from_date": "2026-11-14",
-            "kind": "from_day",
-            "part": "null",
-            "quote": "I'll do it this weekend",
-            "until": "null"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "noted": "from_day",
-            "words": "on the weekend, as you said"
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-14T09:00",
-                "when": "Sat 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-14T09:00",
-                "free_until": "2026-11-14T23:00",
-                "why_ranked": "0h planned that day",
-                "factors": [
-                  {
-                    "key": "free_part",
-                    "text": "your free morning"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "with two days to spare"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "on the weekend, as you said"
-                  }
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-15T09:00",
-                "when": "Sun 9am",
-                "holds_minutes": 60,
-                "urgency": "comfortable",
-                "free_from": "2026-11-15T09:00",
-                "free_until": "2026-11-15T23:00",
-                "why_ranked": "0h planned that day, under a day before it's due",
-                "factors": [
-                  {
-                    "key": "free_part",
-                    "text": "your free morning"
-                  },
-                  {
-                    "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
-                  },
-                  {
-                    "key": "buffer",
-                    "text": "a day before it's due"
-                  },
-                  {
-                    "key": "reply",
-                    "text": "on the weekend, as you said"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "because": [
-              "reply",
-              "fresh_morning"
-            ],
-            "duration_min": "null",
-            "item_id": "s_essay",
-            "reason": "null",
-            "start": "2026-11-14T09:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Essay draft",
-            "to": "Sat Nov 14 09:00-10:00",
-            "minutes": 60,
-            "reason": "on the weekend, as you said, a fresh morning, with no quiz that day"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2251,
-            "output_tokens": 360,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 220
-          },
-          "costUsd": 0.00196665,
-          "latencyMs": 3258
-        },
-        {
-          "usage": {
-            "input_tokens": 2655,
-            "output_tokens": 191,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 87
-          },
-          "costUsd": 0.0017534,
-          "latencyMs": 1662
-        },
-        {
-          "usage": {
-            "input_tokens": 3153,
-            "output_tokens": 402,
+            "input_tokens": 3124,
+            "output_tokens": 366,
             "cached_tokens": 2545,
-            "reasoning_tokens": 274
+            "reasoning_tokens": 241
           },
-          "costUsd": 0.00285025,
-          "latencyMs": 3076
+          "costUsd": 0.002661,
+          "latencyMs": 2627
         },
         {
           "usage": {
-            "input_tokens": 3627,
+            "input_tokens": 3558,
             "output_tokens": 41,
             "cached_tokens": 3057,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.0013453,
-          "latencyMs": 770
+          "costUsd": 0.00125905,
+          "latencyMs": 1445
         }
       ],
       "judge": {
@@ -586,13 +388,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1357,
-            "output_tokens": 983,
+            "input_tokens": 1367,
+            "output_tokens": 1069,
             "cached_tokens": 753,
-            "reasoning_tokens": 962
+            "reasoning_tokens": 1048
           },
-          "costUsd": 0.0050457,
-          "latencyMs": 8529
+          "costUsd": 0.0054237,
+          "latencyMs": 7325
         }
       ]
     },
@@ -605,10 +407,10 @@
             "action": "move",
             "start": "2026-11-14T09:00:00-05:00",
             "end": "2026-11-14T10:00:00-05:00",
-            "reason": "on the weekend, as you said, a fresh morning, with no quiz that day"
+            "reason": "on the weekend, as you said, two days before it's due"
           }
         ],
-        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, a fresh morning, with no quiz that day. Nothing else changed.",
+        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, two days before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -660,11 +462,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a clear morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "with two days to spare"
+                    "text": "two days before it's due"
                   },
                   {
                     "key": "reply",
@@ -688,11 +490,11 @@
                   },
                   {
                     "key": "fresh_morning",
-                    "text": "a fresh morning, with no quiz that day"
+                    "text": "a fresh morning"
                   },
                   {
                     "key": "buffer",
-                    "text": "a day before it's due"
+                    "text": "the day before Essay 3"
                   },
                   {
                     "key": "reply",
@@ -708,7 +510,7 @@
           "args": {
             "because": [
               "reply",
-              "fresh_morning"
+              "buffer"
             ],
             "duration_min": "null",
             "item_id": "s_essay",
@@ -721,7 +523,7 @@
             "moved": "Essay draft",
             "to": "Sat Nov 14 09:00-10:00",
             "minutes": 60,
-            "reason": "on the weekend, as you said, a fresh morning, with no quiz that day"
+            "reason": "on the weekend, as you said, two days before it's due"
           }
         },
         {
@@ -737,43 +539,43 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2251,
-            "output_tokens": 426,
+            "input_tokens": 2283,
+            "output_tokens": 579,
             "cached_tokens": 2161,
-            "reasoning_tokens": 280
+            "reasoning_tokens": 440
           },
-          "costUsd": 0.0022471500000000003,
-          "latencyMs": 3430
+          "costUsd": 0.0029374,
+          "latencyMs": 3640
         },
         {
           "usage": {
-            "input_tokens": 2721,
-            "output_tokens": 167,
+            "input_tokens": 2906,
+            "output_tokens": 359,
             "cached_tokens": 2161,
-            "reasoning_tokens": 63
+            "reasoning_tokens": 255
           },
-          "costUsd": 0.0017339,
-          "latencyMs": 1478
+          "costUsd": 0.00278115,
+          "latencyMs": 2150
         },
         {
           "usage": {
-            "input_tokens": 3195,
-            "output_tokens": 320,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 192
+            "input_tokens": 3561,
+            "output_tokens": 547,
+            "cached_tokens": 2801,
+            "reasoning_tokens": 422
           },
-          "costUsd": 0.0024134499999999997,
-          "latencyMs": 2681
+          "costUsd": 0.0036949,
+          "latencyMs": 3815
         },
         {
           "usage": {
-            "input_tokens": 3587,
-            "output_tokens": 44,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 6
+            "input_tokens": 4176,
+            "output_tokens": 45,
+            "cached_tokens": 3441,
+            "reasoning_tokens": 7
           },
-          "costUsd": 0.00116725,
-          "latencyMs": 990
+          "costUsd": 0.00162615,
+          "latencyMs": 1937
         }
       ],
       "judge": {
@@ -784,13 +586,211 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1357,
-            "output_tokens": 1003,
+            "input_tokens": 1367,
+            "output_tokens": 935,
             "cached_tokens": 1265,
-            "reasoning_tokens": 982
+            "reasoning_tokens": 914
           },
-          "costUsd": 0.0045675,
-          "latencyMs": 9375
+          "costUsd": 0.004291,
+          "latencyMs": 7002
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_essay",
+            "action": "move",
+            "start": "2026-11-14T09:00:00-05:00",
+            "end": "2026-11-14T10:00:00-05:00",
+            "reason": "on the weekend, as you said, two days before it's due"
+          }
+        ],
+        "message": "Moved Essay draft to Sat 9am, on the weekend, as you said, two days before it's due. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 4,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "note_reply",
+          "args": {
+            "from_date": "2026-11-14",
+            "kind": "from_day",
+            "part": "null",
+            "quote": "I'll do it this weekend",
+            "until": "null"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "noted": "from_day",
+            "words": "on the weekend, as you said"
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-14T09:00",
+                "when": "Sat 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T09:00",
+                "free_until": "2026-11-14T23:00",
+                "why_ranked": "0h planned that day",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a clear morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "two days before it's due"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "on the weekend, as you said"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-15T09:00",
+                "when": "Sun 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-15T09:00",
+                "free_until": "2026-11-15T23:00",
+                "why_ranked": "0h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "the day before Essay 3"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "on the weekend, as you said"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "reply",
+              "buffer"
+            ],
+            "duration_min": "null",
+            "item_id": "s_essay",
+            "reason": "null",
+            "start": "2026-11-14T09:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Essay draft",
+            "to": "Sat Nov 14 09:00-10:00",
+            "minutes": 60,
+            "reason": "on the weekend, as you said, two days before it's due"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2283,
+            "output_tokens": 459,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 319
+          },
+          "costUsd": 0.0024274,
+          "latencyMs": 3116
+        },
+        {
+          "usage": {
+            "input_tokens": 2786,
+            "output_tokens": 128,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 24
+          },
+          "costUsd": 0.0015086,
+          "latencyMs": 1025
+        },
+        {
+          "usage": {
+            "input_tokens": 3210,
+            "output_tokens": 379,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 254
+          },
+          "costUsd": 0.00268295,
+          "latencyMs": 2747
+        },
+        {
+          "usage": {
+            "input_tokens": 3657,
+            "output_tokens": 41,
+            "cached_tokens": 3185,
+            "reasoning_tokens": 3
+          },
+          "costUsd": 0.001242,
+          "latencyMs": 692
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1367,
+            "output_tokens": 830,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 809
+          },
+          "costUsd": 0.00384475,
+          "latencyMs": 11064
         }
       ]
     }
