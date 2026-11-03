@@ -4,6 +4,7 @@ fixtures/
 evals/recorded/
 evals/results.json
 evals/rebuild/results.json
+evals/rebuild/REVIEW.md
 evals/rebuild/recorded/
 evals/extract/results.json
 evals/extract/recorded/
