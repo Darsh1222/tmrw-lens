@@ -130,7 +130,8 @@ answered from the cache is free and never counts.
 | All public visitors together (`PUBLIC_DAILY_CAP_USD`)                                  |                | $5             |
 | All Tomorrow users together (`TOMORROW_DAILY_CAP_USD`), separate from the public brake |                | $20            |
 
-Past a limit, a visitor sees "come back tomorrow" (the sample week and the recorded rebuilds are always free); Tomorrow
+The owner skips the per-visitor and per-address rows: visiting `/owner?key=<OWNER_KEY>` once sets a signed,
+httpOnly cookie; their calls still count toward the public brake and are logged as `owner`. Past a limit, a visitor sees "come back tomorrow" (the sample week and the recorded rebuilds are always free); Tomorrow
 gets `code: "user_limit"` (429) or `"global_limit"` (503) and uses its own code-only rebuild. The counters live in
 Upstash for two days and hold only hashed ids; the cookie (`lens_v`) is a random id with no other use.
 
@@ -139,17 +140,18 @@ Upstash for two days and hold only hashed ids; the cookie (`lens_v`) is a random
 Names only; values go in `.env.local` locally and in Vercel's settings when deployed. [.env.example](.env.example)
 lists every one, with its default.
 
-| Name                                                 | What it's for                                                                                                  |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `META_API_KEY`                                       | Meta Model API. Required for any model call                                                                    |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Limits, the reading cache, and review links. Required when deployed                                            |
-| `LENS_REBUILD_SECRET`                                | Shared with Tomorrow for `/api/rebuild` and `/api/extract`; signs review links and the cookie, keys the hashes |
-| `PUBLIC_DAILY_CAP_USD`                               | The public demo's brake (default: `DAILY_SPEND_CAP_USD` if set, else 5)                                        |
-| `TOMORROW_DAILY_CAP_USD`                             | Tomorrow's users' brake (default 20)                                                                           |
-| `DAILY_SPEND_CAP_USD`                                | Older name for `PUBLIC_DAILY_CAP_USD`, read only when that isn't set                                           |
-| `TOMORROW_IMPORT_URL`                                | Where Send delivers confirmed items (default `https://bettertmrw.app/api/lens/import`)                         |
-| `LENS_PUBLIC_URL`                                    | Where review links point (default `https://tmrw-lens.vercel.app`)                                              |
-| `META_API_BASE_URL`, `MUSE_SPARK_MODEL`, `SAM_MODEL` | Optional overrides (Standard mode only)                                                                        |
+| Name                                                 | What it's for                                                                                                             |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `META_API_KEY`                                       | Meta Model API. Required for any model call                                                                               |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Limits, the reading cache, and review links. Required when deployed                                                       |
+| `LENS_REBUILD_SECRET`                                | Shared with Tomorrow for `/api/rebuild` and `/api/extract`; signs review links and the cookie, keys the hashes            |
+| `PUBLIC_DAILY_CAP_USD`                               | The public demo's brake (default: `DAILY_SPEND_CAP_USD` if set, else 5)                                                   |
+| `TOMORROW_DAILY_CAP_USD`                             | Tomorrow's users' brake (default 20)                                                                                      |
+| `DAILY_SPEND_CAP_USD`                                | Older name for `PUBLIC_DAILY_CAP_USD`, read only when that isn't set                                                      |
+| `TOMORROW_IMPORT_URL`                                | Where Send delivers confirmed items (default `https://bettertmrw.app/api/lens/import`)                                    |
+| `OWNER_KEY`                                          | Secret. `/owner?key=…` sets a signed cookie that skips the per-visitor and per-address limits (public brake still counts) |
+| `LENS_PUBLIC_URL`                                    | Where review links point (default `https://tmrw-lens.vercel.app`)                                                         |
+| `META_API_BASE_URL`, `MUSE_SPARK_MODEL`, `SAM_MODEL` | Optional overrides (Standard mode only)                                                                                   |
 
 ## Evals
 

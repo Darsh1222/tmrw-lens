@@ -23,6 +23,9 @@ const schema = z.object({
   // /api/extract (docs/REBUILD_CONTRACT.md, docs/EXTRACT_CONTRACT.md); it also signs
   // review links. Unset: those routes answer 503. At least 32 characters.
   LENS_REBUILD_SECRET: z.string().min(32).optional(),
+  // The owner's key: visiting /owner?key=<it> sets a signed cookie that skips the per-visitor and per-address limits
+  // (the public brake still counts). Unset: there's no owner. At least 24 characters.
+  OWNER_KEY: z.string().min(24).optional(),
   // Where review links point (text-a-photo, docs/EXTRACT_CONTRACT.md).
   LENS_PUBLIC_URL: z.url().default("https://tmrw-lens.vercel.app"),
   VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),

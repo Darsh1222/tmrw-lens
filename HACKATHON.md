@@ -148,6 +148,9 @@ Per-person spend limits and two global brakes keep the public demo from using To
 
 ### Nov 2
 
+- An owner bypass for running the live demo and the SMS loop: with `OWNER_KEY` set, `/owner?key=…` sets a signed
+  httpOnly cookie that skips the per-visitor and per-address limits. The owner's calls still count toward the $5
+  public brake and are logged as `owner`.
 - A popup left open over a Testudo grid no longer cuts a class short: when a dark panel or its shadow starts just past
   a block's edge, that edge is taken from the same class on another day. On the real screenshot, Thursday's 3:00-4:15
   lecture now reads 3:00-4:15 (it read 3:50). New synthetic fixture with a popup: 6 of 6 classes right.

@@ -359,3 +359,9 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   attached; review links pointed at a domain that doesn't resolve.
 - 2026-11-02: The eval's grid measuring map is declared above the recording step; declared after it, loadRec threw and
   every recording looked stale, so one `eval:live` re-recorded all fixtures ($0.36 instead of $0.06).
+- 2026-11-02: Owner bypass (owner's spec): OWNER_KEY, and `/owner?key=…` sets a cookie holding an HMAC of a fixed label
+  under the key (never the key itself), httpOnly, 30 days. Owner requests are charged to one `owner` account with no
+  calls or dollar limit, in the public pool, so the $5 brake still stops them. A wrong key, or no OWNER_KEY, is a 404.
+  The key travels in the query string once, as specified; the route redirects at once so it leaves the address bar,
+  but platform request logs may keep the URL, so rotating the key after the hackathon is advised.
+- 2026-11-02: Commits in this repo use the owner's GitHub noreply address from now on (owner); history isn't rewritten.

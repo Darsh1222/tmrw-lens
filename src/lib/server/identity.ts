@@ -15,6 +15,9 @@ import type { Account, Payer } from "@/lib/meta/spend";
 //   for next time. One address can still collect many cookies, so the address
 //   has its own, larger allowance: room for a few people on one network, not
 //   for unlimited fresh cookies.
+// - The owner: a cookie signed with OWNER_KEY, set by visiting /owner?key=…
+//   No per-visitor or per-address limit; still under the public pool's brake,
+//   and logged as "owner".
 // Hashes are keyed with LENS_REBUILD_SECRET, so a hashed address can't be
 // reversed by trying every address.
 
@@ -26,6 +29,7 @@ export const LIMITS = {
 } as const;
 
 export const VISITOR_COOKIE = "lens_v";
+export const OWNER_COOKIE = "lens_owner";
 const COOKIE_DAYS = 30;
 
 const secretOf = (env: Env) => env.LENS_REBUILD_SECRET ?? "lens-unsigned-local-development";
@@ -48,8 +52,35 @@ function cookieId(env: Env, header: string | null): string | null {
   return timingSafeEqual(want, Buffer.from(sig)) ? id : null;
 }
 
+const ownerMark = (key: string) => createHmac("sha256", key).update("lens-owner-v1").digest("hex");
+const sameText = (a: string, b: string) => {
+  const [x, y] = [Buffer.from(a), Buffer.from(b)];
+  return x.length === y.length && timingSafeEqual(x, y);
+};
+
+/** Whether `key` is the owner's key: compared as hashes, in constant time. */
+export function isOwnerKey(env: Env, key: string | null): boolean {
+  if (!env.OWNER_KEY || !key) return false;
+  const h = (s: string) => createHmac("sha256", "lens-owner-key").update(s).digest("hex");
+  return sameText(h(key), h(env.OWNER_KEY));
+}
+
+/** The cookie that marks the owner's browser: a signature only OWNER_KEY can make, never the key itself. */
+export function ownerCookie(env: Env): string {
+  const secure = env.VERCEL_ENV ? "; Secure" : "";
+  return `${OWNER_COOKIE}=${ownerMark(env.OWNER_KEY!)}; Path=/; Max-Age=${COOKIE_DAYS * 86_400}; HttpOnly; SameSite=Lax${secure}`; // prettier-ignore
+}
+
+export function isOwner(env: Env, request: Request): boolean {
+  if (!env.OWNER_KEY) return false;
+  const sent = request.headers.get("cookie")?.match(new RegExp(`(?:^|;\\s*)${OWNER_COOKIE}=([0-9a-f]{64})`))?.[1];
+  return !!sent && sameText(sent, ownerMark(env.OWNER_KEY));
+}
+
 /** The visitor's payer, and the cookie to set when they didn't send a valid one. */
 export function visitorPayer(env: Env, request: Request): { payer: Payer; setCookie: string | null } {
+  if (isOwner(env, request))
+    return { payer: { pool: "public", accounts: [{ key: "owner", calls: Infinity, usd: Infinity }] }, setCookie: null };
   const address =
     request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   const known = cookieId(env, request.headers.get("cookie"));

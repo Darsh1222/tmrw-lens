@@ -17,7 +17,7 @@ import {
   type Payer,
 } from "@/lib/meta/spend";
 import { RebuildRequest } from "@/lib/rebuild/contract";
-import { LIMITS, tomorrowPayer, VISITOR_COOKIE, visitorPayer } from "@/lib/server/identity";
+import { isOwner, LIMITS, ownerCookie, tomorrowPayer, VISITOR_COOKIE, visitorPayer } from "@/lib/server/identity";
 
 const env = readEnv({});
 const user = (key: string, calls = 3, usd = 1): Payer => ({ pool: "tomorrow", accounts: [{ key, calls, usd }] });
@@ -219,5 +219,50 @@ describe("POST /api/rebuild limits", () => {
     const res = await post({ ...base, user_ref: "user_global_test" });
     expect(res.status).toBe(503);
     expect(await res.json()).toMatchObject({ code: "global_limit" });
+  });
+});
+
+describe("the owner", () => {
+  const KEY = "k".repeat(32);
+  const owned = readEnv({ OWNER_KEY: KEY });
+  afterEach(() => vi.unstubAllEnvs());
+  const visit = async (key: string | null) => {
+    const { GET } = await import("@/app/owner/route");
+    return GET(new Request(`http://lens.test/owner${key === null ? "" : `?key=${key}`}`));
+  };
+
+  it("gets a signed cookie from /owner with the right key, and a plain 404 otherwise", async () => {
+    vi.stubEnv("OWNER_KEY", KEY);
+    const ok = await visit(KEY);
+    expect(ok.status).toBe(303);
+    expect(ok.headers.get("location")).toBe("/");
+    const cookie = ok.headers.get("set-cookie")!;
+    expect(cookie).toMatch(/^lens_owner=[0-9a-f]{64}; Path=\/; .*HttpOnly; SameSite=Lax/);
+    expect(cookie).not.toContain(KEY);
+    for (const wrong of ["nope", KEY.slice(1), null]) {
+      const r = await visit(wrong);
+      expect(r.status).toBe(404);
+      expect(r.headers.get("set-cookie")).toBeNull();
+    }
+    vi.stubEnv("OWNER_KEY", "");
+    expect((await visit(KEY)).status).toBe(404);
+  });
+
+  it("skips the per-visitor and per-address limits, but not the public brake, and is logged as owner", async () => {
+    const cookie = ownerCookie(owned).split(";")[0];
+    const req = new Request("http://lens.test/api/read", { headers: { "x-real-ip": "198.51.100.77", cookie } });
+    const { payer, setCookie } = visitorPayer(owned, req);
+    expect(setCookie).toBeNull();
+    expect(payer).toEqual({ pool: "public", accounts: [{ key: "owner", calls: Infinity, usd: Infinity }] });
+    const store: CounterStore = new MemoryCounterStore();
+    for (let n = 0; n < LIMITS.address.calls + 5; n++) await admit(store, payer, 5);
+    await expect(new SpendGuard(store, bucketsFor(payer, 5)).reserve(4.9)).resolves.toBeDefined();
+    expect(limit(await new SpendGuard(store, bucketsFor(payer, 5)).reserve(0.2).catch((e) => e))).toBe("global_limit");
+    await store.add(poolKey("public", new Date()), 0.1, 60); // the pool reaches its $5
+    expect(limit(await admit(store, payer, 5).catch((e) => e))).toBe("global_limit");
+    // A forged cookie, or the cookie on a deployment with another key, is an ordinary visitor.
+    const other = readEnv({ OWNER_KEY: "z".repeat(32) });
+    expect(visitorPayer(other, req).payer.accounts[0].key).not.toBe("owner");
+    expect(isOwner(readEnv({}), req)).toBe(false);
   });
 });
