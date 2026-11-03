@@ -98,20 +98,23 @@ html {
 @keyframes lens-flash {
   0%,
   60% {
-    box-shadow: 0 0 0 3px var(--tm-crimson);
+    outline-color: var(--tm-crimson);
   }
   100% {
-    box-shadow: 0 0 0 3px transparent;
+    outline-color: transparent;
   }
 }
 [data-flash] {
+  /* Outside the section, with room: it frames it without touching its label or text. Paint only, no layout. */
+  outline: 2px solid transparent;
+  outline-offset: 14px;
   border-radius: 1rem;
   animation: lens-flash 1.8s ease-out 1;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-flash] {
     animation: none;
-    box-shadow: 0 0 0 3px var(--tm-crimson);
+    outline-color: var(--tm-crimson);
   }
 }
 
