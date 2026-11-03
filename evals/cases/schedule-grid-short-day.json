@@ -1,0 +1,60 @@
+{
+  "name": "schedule-grid-short-day",
+  "description": "Testudo grid with no times on its blocks; MATH141's lecture is 3:00-4:15 Monday and Wednesday but 3:00-3:50 Thursday, with a tooltip just under Thursday's block (in the clear): each day keeps its own time",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["testudo-grid-short-day.png"],
+  "expect": {
+    "term_start": null,
+    "classes": [
+      {
+        "course": "MATH141",
+        "type": "lecture",
+        "days": "MW",
+        "start": "15:00",
+        "end": "16:15"
+      },
+      {
+        "course": "MATH141",
+        "type": "lecture",
+        "days": "Th",
+        "start": "15:00",
+        "end": "15:50"
+      },
+      {
+        "course": "MATH141",
+        "type": "discussion",
+        "days": "TuTh",
+        "start": "09:00",
+        "end": "09:50"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lecture",
+        "days": "TuTh",
+        "start": "11:00",
+        "end": "12:15"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lab",
+        "days": "MW",
+        "start": "14:00",
+        "end": "14:50"
+      },
+      {
+        "course": "PHYS161",
+        "type": "lecture",
+        "days": "MWF",
+        "start": "13:00",
+        "end": "13:50"
+      }
+    ],
+    "items": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": [],
+    "term_end": null,
+    "breaks": []
+  }
+}

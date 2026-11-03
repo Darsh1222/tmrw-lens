@@ -5,6 +5,7 @@ import { auditPlan } from "@/lib/plan/audit";
 import { buildPlan } from "@/lib/plan/build";
 import { GRID_TIMES, gridTimes } from "@/lib/plan/candidates";
 import { measureGrid } from "@/lib/images/grid";
+import type { Covered } from "@/lib/schemas/extraction";
 import { matchCourse, familyOf } from "@/lib/plan/courses";
 import { dedupeObjects, objectFor } from "@/lib/plan/objects";
 import { verifyReading } from "@/lib/plan/verify";
@@ -549,6 +550,26 @@ describe("grid times from position (option a)", () => {
     // The model's own boxes put most blocks 10 to 20 minutes off; measured, all are right.
     expect(read(raw).filter(Boolean).length).toBeLessThan(raw.classes.length);
     expect(read(measured).every(Boolean)).toBe(true);
+  });
+
+  it("trusts a block's own edge unless a popup lies over it: a shorter day keeps its time, a covered edge is asked", async () => {
+    const times = async (fixture: string) => {
+      const rec = JSON.parse(readFileSync(`evals/recorded/${fixture}.json`, "utf8"));
+      const ex = await measureGrid(new Uint8Array(readFileSync(`fixtures/synthetic/${fixture}`)), rec.pages[0].extraction); // prettier-ignore
+      return ex.classes.map((c) => {
+        const t = gridTimes(ex.time_axis, c.block);
+        return `${c.course_code} ${c.meeting_type} ${c.days_text}: ${t?.start}-${t?.end}${(c as Covered).covered ? ` covered ${(c as Covered).covered}` : ""}`; // prettier-ignore
+      });
+    };
+    // A tooltip 10 minutes under Thursday's 3:00-3:50 lecture, page between them: 3:50 stands, nothing borrowed.
+    const short = await times("testudo-grid-short-day.png");
+    expect(short.filter((t) => t.startsWith("MATH141 lecture"))).toEqual(
+      expect.arrayContaining([expect.stringMatching(/Thu\w*: 15:00-15:50$/), expect.stringMatching(/Mon\w*: 15:00-16:15$/)]), // prettier-ignore
+    );
+    // A popup over the end of Thursday's CMSC131 lecture: what shows is marked covered, never filled in from Tuesday.
+    const popup = await times("testudo-grid-popup.png");
+    expect(popup.find((t) => /^CMSC131 lecture Thu/.test(t))).toMatch(/11:00-11:55 covered bottom$/);
+    expect(popup.find((t) => /^CMSC131 lecture Tue/.test(t))).toMatch(/11:00-12:15$/);
   });
 
   it("needs two readable hour labels, and a plausible class", () => {

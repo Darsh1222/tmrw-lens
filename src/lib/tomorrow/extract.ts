@@ -191,7 +191,9 @@ export function assemble(state: ExtractState, review: ExtractResponse["review"])
   const ready = sendable(plan);
   const readyIds = new Set([...ready.items, ...ready.classes].map((x) => x.id));
   const skipped = new Set(plan.skipped ?? []);
-  const auto = (id: string) => !invented && readyIds.has(id);
+  // Optional items ("only if you have a conflict") are offered, never applied on their own.
+  const optional = new Set(plan.items.filter((i) => i.optional).map((i) => i.id));
+  const auto = (id: string) => !invented && readyIds.has(id) && !optional.has(id);
 
   const changes: ExtractResponse["changes"] = [];
   const duplicates: ExtractResponse["duplicates"] = [];

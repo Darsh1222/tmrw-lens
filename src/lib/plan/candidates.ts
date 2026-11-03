@@ -31,6 +31,7 @@ import {
 import { objectFor, regionOf } from "@/lib/plan/objects";
 import { toEvidence, type Evidence, type ModelEvidence } from "@/lib/schemas/evidence";
 import type {
+  Covered,
   NotesExtraction,
   ScheduleExtraction,
   SyllabusPageExtraction,
@@ -44,6 +45,10 @@ import type {
 export const GRID_DAYS = "Read from which columns the class sits in on the grid.";
 export const GRID_TIMES =
   "Worked out from where the block sits against the grid's time axis, to the nearest 5 minutes.";
+/** A popup on the screenshot lies over the block's edge: what shows is only part of the class. */
+export const gridCovered = (edges: ("top" | "bottom")[]) =>
+  `Something drawn over the screenshot (an open popup) covers where this block ${edges.length > 1 ? "starts and ends" : edges[0] === "top" ? "starts" : "ends"}, so its ${edges.length > 1 ? "times" : edges[0] === "top" ? "start time" : "end time"} couldn't be read.`; // prettier-ignore
+const coveredOf = (c: Meeting): ("top" | "bottom")[] => (c as Meeting & Covered).covered ?? [];
 
 type AxisLabel = ScheduleExtraction["time_axis"][number];
 type Box = NonNullable<ScheduleExtraction["classes"][number]["block"]>;
@@ -241,7 +246,8 @@ function gridMeetings(data: ScheduleExtraction): { c: Meeting; members: { i: num
     Math.abs(mins(a.start) - mins(b.start)) <= 10 && Math.abs(mins(a.end) - mins(b.end)) <= 10;
   for (const e of all) {
     const placed = placedOf(e.c);
-    const base = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.location].join("|");
+    // A block a popup covers stays on its own: its visible part isn't the class's time.
+    const base = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.location, coveredOf(e.c).join("+")].join("|");
     const near = placed
       ? [...groups.keys()].find((k) => {
           const first = groups.get(k)![0].c;
@@ -328,10 +334,13 @@ export function classBlocks(
         : grid && contains(c.evidence.quote, c.days_text)
           ? { status: "needs_question", reason: GRID_DAYS }
           : read.fields[0];
+      const cover = [...new Set(members.flatMap(({ i }) => coveredOf(data.classes[i])))];
       const timeCheck: Check =
         startT && endT && startT < endT
           ? placed
-            ? { status: "needs_question", reason: GRID_TIMES }
+            ? cover.length
+              ? { status: "unverified", reason: gridCovered(cover) }
+              : { status: "needs_question", reason: GRID_TIMES }
             : worst(read.fields[1], read.fields[2])
           : {
               status: "unverified",
@@ -469,8 +478,80 @@ function rawItems(readings: SourceReading[], known: KnownCourse[]) {
 
 const needs = (reason: string): Check => ({ status: "needs_question", reason });
 
+type Noted = { text: string; evidence: Evidence };
+type Line = { days_text: string; time_text: string; location: string | null; evidence: Evidence };
+/** What a syllabus says beyond its dated items, from any of its pages. Only what's checked against the page is kept. */
+export type SyllabusNotes = {
+  source: SourceMeta;
+  course: string | null;
+  in_class: Noted | null;
+  tentative: { text: string; evidence: Evidence; page: number | null } | null;
+  notice: Noted | null;
+  lectures: Line[];
+  office_hours: Line[];
+  quizzes: { text: string; where: string | null; evidence: Evidence } | null;
+  weights: { component: string; weight: string; evidence: Evidence }[];
+  topics: string[];
+};
+
+export function syllabusNotes(readings: SourceReading[]): Map<string, SyllabusNotes> {
+  const out = new Map<string, SyllabusNotes>();
+  for (const { source, page, data } of syllabusPages(readings)) {
+    const n = out.get(source.id) ?? {
+      source,
+      course: null,
+      in_class: null,
+      tentative: null,
+      notice: null,
+      lectures: [],
+      office_hours: [],
+      quizzes: null,
+      weights: [],
+      topics: [],
+    };
+    out.set(source.id, n);
+    if (!n.course && data.course_code) n.course = normalizeCode(data.course_code);
+    const checked = (key: string, quote: string, fields: (string | null)[]) => {
+      const r = verifyReading(page, key, quote, fields);
+      return r.quote.status === "verified" && r.fields.every((f) => f.status === "verified");
+    };
+    const note = (key: "exams_in_class" | "dates_tentative" | "conflict_notice") => {
+      const x = data[key];
+      return x && checked(key, x.evidence.quote, [x.text]) ? { text: x.text, evidence: evidenceOf(x.evidence, source, page) } : null; // prettier-ignore
+    };
+    // A note quoted from one item's own row ("Midterm 1, Wed Oct 21, in class") is that item's time, not a rule.
+    const own = (quote: string) => data.items.some((it) => contains(quote, it.evidence.quote) || contains(it.evidence.quote, quote)); // prettier-ignore
+    if (data.exams_in_class && !own(data.exams_in_class.evidence.quote)) n.in_class ??= note("exams_in_class");
+    const t = note("dates_tentative");
+    if (!n.tentative && t) n.tentative = { ...t, page: page.page };
+    n.notice ??= note("conflict_notice");
+    for (const [k, list] of [
+      ["lectures", n.lectures],
+      ["office_hours", n.office_hours],
+    ] as const)
+      (data[k] ?? []).forEach((m, i) => {
+        if (checked(`${k}.${i}`, m.evidence.quote, [m.days_text, m.time_text]))
+          list.push({ days_text: m.days_text, time_text: m.time_text, location: m.location, evidence: evidenceOf(m.evidence, source, page) }); // prettier-ignore
+      });
+    const q = data.quizzes;
+    if (!n.quizzes && q && checked("quizzes", q.evidence.quote, [q.text, q.where_text]))
+      n.quizzes = { text: q.text, where: q.where_text, evidence: evidenceOf(q.evidence, source, page) };
+    (data.grade_weights ?? []).forEach((g, i) => {
+      if (checked(`grade_weights.${i}`, g.evidence.quote, [g.component, g.weight_text]))
+        n.weights.push({ component: g.component, weight: g.weight_text, evidence: evidenceOf(g.evidence, source, page) }); // prettier-ignore
+    });
+    // Topics are for study plans, never dates: kept when the page's own text has them.
+    for (const topic of data.topics ?? []) if (page.text === null || contains(page.text, topic)) n.topics.push(topic);
+  }
+  return out;
+}
+
+/** "TBA", "TBD", "to be announced": no date yet, and none to invent. */
+export const TBA = /^\s*(?:date\s*)?(?:tba|tbd|to be (?:announced|determined))\b/i;
+
 export function candidates(readings: SourceReading[], term: TermDate, zone: string): Candidate[] {
   const known = knownCourses(readings);
+  const notes = syllabusNotes(readings);
   return rawItems(readings, known).map(({ source, page, key, raw }) => {
     const read = verifyReading(
       page,
@@ -496,8 +577,11 @@ export function candidates(readings: SourceReading[], term: TermDate, zone: stri
     let date: Candidate["date"] = null;
     let dateCheck: Check = ok;
     let dateNeeds: Candidate["date_needs"] = null;
+    const tba = raw.date_text !== null && TBA.test(raw.date_text);
     if (raw.date_text === null) {
       if (kind !== "task") dateCheck = needs("No date is written next to it.");
+    } else if (tba) {
+      dateCheck = needs(`The date is "${raw.date_text}": there's none to add until it's announced.`);
     } else if (dateRead.status !== "verified") {
       dateCheck = dateRead;
     } else {
@@ -528,7 +612,17 @@ export function candidates(readings: SourceReading[], term: TermDate, zone: stri
       }
     }
 
+    // A syllabus's exams: held in class (but not the final), and dated tentatively, when its pages say so. Exams,
+    // not quizzes: "2 in-class exams" says nothing about quizzes.
+    const n = source.kind === "syllabus_pdf" ? notes.get(source.id) : undefined;
+    const exam = raw.kind === "exam" && family !== "final";
+    const extra: Pick<Candidate, "in_class" | "tentative" | "tba"> = {
+      ...(tba && { tba: true }),
+      ...(n?.in_class && exam && raw.time_text === null && { in_class: { ...n.in_class, lectures: n.lectures } }),
+      ...(n?.tentative && kind === "exam" && date && n.tentative.page === page.page && { tentative: { text: n.tentative.text, evidence: n.tentative.evidence } }), // prettier-ignore
+    };
     return {
+      ...extra,
       id: `${source.id}:${page.page ?? 0}:${key}`,
       source,
       kind,

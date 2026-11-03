@@ -9,10 +9,13 @@ import type { ScheduleExtraction } from "@/lib/schemas/extraction";
 // the colour changes; each hour label belongs to the nearest grid line (a row of
 // light grey across the grid), or failing that sits at the middle of its ink.
 // Something drawn over the grid (an open popup: a dark grey panel with a soft
-// shadow) can hide a block's edge. When such a panel starts within 15 minutes
-// past an edge, that edge is taken from the same class on another day, where
-// it's in the clear. Another class's block (coloured) next to an edge is not a
-// panel: back-to-back classes keep their own edges.
+// shadow) can cover a block's edge. An edge counts as covered only when the
+// panel actually lies over the block: past the edge there's nothing but the
+// block's own colour in shadow, then the panel. If page, a grid line, or another
+// block shows first, the block ended in the clear and its edge stands, however
+// close a popup is: a class can be shorter on one day than another. A covered
+// edge is never filled in from another day; the class's time is left for the
+// person to confirm (classBlocks in src/lib/plan/candidates.ts).
 // Times are worked out from these later (gridTimes in src/lib/plan/candidates.ts).
 // Where a measurement fails, the model's box stands.
 
@@ -34,21 +37,33 @@ const isBlock = (c: readonly number[]) => luma(c) < 248 && Math.max(...c) - Math
  * A block's exact top and bottom rows: the longest run of one block colour through points spread over the model's
  * box (its box can be off sideways too, and a column through text is broken up by it).
  */
-export type Edges = { top: number; bottom: number; topHidden: boolean; bottomHidden: boolean };
+export type Edges = { top: number; bottom: number; topCovered: boolean; bottomCovered: boolean };
 
 /** A panel or popup: solid dark grey, unlike a block (coloured) or the page (light). */
 const isPanel = (c: readonly number[]) => luma(c) < 185 && Math.max(...c) - Math.min(...c) < 12;
 
-/** Whether the `reach` rows past an edge (dir -1 above, +1 below) are free of a panel (3 rows of it in a row). */
-function clear(p: Pixels, x: number, edge: number, dir: 1 | -1, reach: number): boolean {
+/** The block's colour under a shadow: every channel darkened by about the same share. */
+function shaded(c: readonly number[], colour: readonly number[]): boolean {
+  const k = luma(c) / luma(colour);
+  return k < 1 && k > 0.4 && c.every((v, i) => Math.abs(v - colour[i] * k) <= 14);
+}
+
+/**
+ * Whether a panel lies over the block at this edge: going past it (dir -1 above, +1 below), only the block's colour in
+ * shadow until 3 rows of panel, within `reach` rows. Anything else first (page, a grid line, another block) and the
+ * block ended in the clear.
+ */
+function covered(p: Pixels, x: number, edge: number, dir: 1 | -1, colour: readonly number[], reach: number): boolean {
   let run = 0;
   for (let k = 1; k <= reach; k++) {
     const y = edge + dir * k;
-    if (y < 0 || y >= p.height) break;
-    run = isPanel(at(p, x, y)) ? run + 1 : 0;
-    if (run >= 3) return false;
+    if (y < 0 || y >= p.height) return false;
+    const c = at(p, x, y);
+    if (isPanel(c)) {
+      if (++run >= 3) return true;
+    } else if (run || !shaded(c, colour)) return false;
   }
-  return true;
+  return false;
 }
 
 export function blockEdges(p: Pixels, box: ModelBox, reach = 12): Edges | null {
@@ -77,8 +92,8 @@ export function blockEdges(p: Pixels, box: ModelBox, reach = 12): Edges | null {
         best = {
           top,
           bottom: bottom + 1,
-          topHidden: !clear(p, x, top, -1, reach),
-          bottomHidden: !clear(p, x, bottom, 1, reach),
+          topCovered: covered(p, x, top, -1, colour, reach),
+          bottomCovered: covered(p, x, bottom, 1, colour, reach),
         };
     }
   return best;
@@ -166,30 +181,13 @@ export function measureGridPixels(p: Pixels, extraction: ScheduleExtraction): Sc
     };
   });
 
-  // Fifteen minutes of rows past each edge decide whether it's in the clear.
-  const edges = extraction.classes.map((c) => (c.block ? blockEdges(p, c.block, Math.max(6, Math.round(spacing / 4))) : null)); // prettier-ignore
-  const sameClass = (i: number, j: number) =>
-    extraction.classes[i].course_code === extraction.classes[j].course_code &&
-    extraction.classes[i].meeting_type === extraction.classes[j].meeting_type;
-  const tolerance = spacing / 12; // 5 minutes
-  /** The most common clear value of an edge among the same class's other blocks whose other edge agrees. */
-  const borrow = (i: number, edge: "top" | "bottom") => {
-    const other = edge === "top" ? "bottom" : "top";
-    const hidden = edge === "top" ? "topHidden" : "bottomHidden";
-    const mine = edges[i]!;
-    const values = edges.flatMap((e, j) =>
-      e && j !== i && sameClass(i, j) && !e[hidden] && Math.abs(e[other] - mine[other]) <= tolerance ? [e[edge]] : [],
-    );
-    const counts = new Map<number, number>();
-    for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
-    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0]?.[0] ?? null;
-  };
-  const classes = extraction.classes.map((c, i) => {
-    const e = edges[i];
+  // A shadow and the panel past an edge, within 15 minutes of rows, mean the edge is covered.
+  const classes = extraction.classes.map((c) => {
+    const e = c.block ? blockEdges(p, c.block, Math.max(6, Math.round(spacing / 4))) : null;
     if (!c.block || !e) return c;
-    const top = e.topHidden ? (borrow(i, "top") ?? e.top) : e.top;
-    const bottom = e.bottomHidden ? (borrow(i, "bottom") ?? e.bottom) : e.bottom;
-    return { ...c, block: { ...c.block, y_min: toModel(top, p.height), y_max: toModel(bottom, p.height) } };
+    const cover = [...(e.topCovered ? ["top" as const] : []), ...(e.bottomCovered ? ["bottom" as const] : [])];
+    const block = { ...c.block, y_min: toModel(e.top, p.height), y_max: toModel(e.bottom, p.height) };
+    return { ...c, block, ...(cover.length && { covered: cover }) };
   });
   return { ...extraction, time_axis, classes };
 }

@@ -9,6 +9,7 @@ import {
   parseDays,
   parseTime,
   resolveDate,
+  weekdayOf,
   weeklyRrule,
 } from "@/lib/resolve/dates";
 
@@ -85,6 +86,19 @@ export function auditPlan(plan: Plan, sources: SourceMeta[]): DateAudit {
     if (t.rule === "answer") return;
     if (!contains(t.evidence.quote, t.text)) return fail(`"${t.text}" isn't in its quote`);
     if (t.rule === "in_class") {
+      // From the syllabus's own lecture line: those days include the item's, and that time recomputes.
+      if (t.lecture) {
+        const l = t.lecture;
+        const p = parseTime(l.time_text);
+        const date = plan.items.find((i) => i.id === about)?.date?.value;
+        if (!contains(l.evidence.quote, l.days_text) || !contains(l.evidence.quote, l.time_text))
+          return fail("its lecture line isn't in its quote");
+        if (!date || !parseDays(l.days_text)?.includes(weekdayOf(date)))
+          return fail("its lecture doesn't meet that day");
+        if (!p.ok || p.kind !== "clock" || p.start !== tt.start || p.end !== tt.end)
+          fail("doesn't match the lecture it came from");
+        return;
+      }
       const b = plan.classes.find((c) => c.id === t.class_id);
       if (!b || b.start !== tt.start || b.end !== tt.end) fail("doesn't match the class it came from");
       return;

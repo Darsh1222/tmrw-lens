@@ -31,6 +31,9 @@ export function explainDate(d: TracedDate, plan: Plan): string {
     case "offset": {
       const ref = i.ref ? plan.items.find((x) => x.id === i.ref!.item_id) : null;
       const days = i.ref ? Math.round((Date.parse(d.value) - Date.parse(i.ref.date)) / 86_400_000) : 0;
+      // A notice period shows its arithmetic: "Wed Nov 11 (Exam 2) - 7 days = Wed Nov 4".
+      if (ref && i.ref && /\bin advance\b/i.test(t.text))
+        return `${said}: ${formatDate(i.ref.date)} (${ref.title}) - ${plural(-days, "day")} = ${formatDate(d.value)}.`;
       return ref && i.ref
         ? `${said}: ${ago(days)} ${ref.title} (${formatDate(i.ref.date)}).`
         : `${said}, counted from the date it names.`;
@@ -51,6 +54,8 @@ export function explainTime(tt: TracedTime, plan: Plan): string {
     case "clock":
       return `"${t.text}", as written.`;
     case "in_class": {
+      if (t.lecture)
+        return `Time inferred from your lecture schedule: "${t.text}", and the syllabus lists lecture "${t.lecture.days_text}" at "${t.lecture.time_text}", ${range}.`; // prettier-ignore
       const c = plan.classes.find((x) => x.id === t.class_id);
       return `"${t.text}": your ${c ? `${c.course} ${c.meeting_type}` : "class"} that day, ${range}.`;
     }

@@ -24,6 +24,9 @@ export const ScheduleClass = z.object({
   ),
   evidence: ModelEvidence,
 });
+/** Added by code after measuring a grid, never by the model: the block edges a popup covers (src/lib/images/grid.ts). */
+export type Covered = { covered?: ("top" | "bottom")[] };
+
 /** A term boundary as written, with its quote: "Classes begin Monday, August 31, 2026". */
 const TermDate = (what: string) =>
   z
@@ -67,6 +70,18 @@ export const SyllabusItem = z.object({
   weight_text: maybe('Grade weight as written, e.g. "15%"'),
   evidence: ModelEvidence,
 });
+/** Words on the page that say something about its items, as written, with the quote they're in. */
+const Note = (what: string, example: string) =>
+  z
+    .object({ text: text(`${what} as written, e.g. ${example}`), evidence: ModelEvidence })
+    .nullable()
+    .describe(`Only if this page says it: ${what.toLowerCase()}`);
+const Meeting = z.object({
+  days_text: text('Days as written, e.g. "MW", "Monday and Wednesday", "(Th)"'),
+  time_text: text('Time as written, e.g. "15:00 - 16:15", "10:30-11:30 AM"'),
+  location: maybe('Building and room as written, e.g. "SYM 0200"'),
+  evidence: ModelEvidence,
+});
 export const SyllabusPageExtraction = z.object({
   course_code: maybe("Course code if this page names it"),
   course_title: maybe("Course title if this page names it"),
@@ -74,8 +89,40 @@ export const SyllabusPageExtraction = z.object({
   term_end: TermDate("Last day of classes"),
   breaks: Breaks,
   items: z.array(SyllabusItem),
+  lectures: z.array(Meeting).describe("Lecture meeting times this page lists: one entry per days-and-time pattern"),
+  exams_in_class: Note("Words saying the exams are held in class", '"in-class"'),
+  dates_tentative: Note("Words saying the dates may change", '"TENTATIVE", "subject to change"'),
+  conflict_notice: Note(
+    "How far ahead a known conflict with an exam must be reported",
+    '"at least one week (7 days) in advance"',
+  ),
+  quizzes: z
+    .object({
+      text: text('What it says about quizzes, as written, e.g. "about 10 quizzes given in discussion"'),
+      where_text: maybe('Where they\'re given, as written: "discussion", "lecture", "lab", "section"'),
+      evidence: ModelEvidence,
+    })
+    .nullable()
+    .describe("Only if this page says how or where quizzes are given (with or without dates)"),
+  office_hours: z.array(Meeting).describe("The instructor's office hours this page lists (never their name)"),
+  grade_weights: z
+    .array(
+      z.object({
+        component: text('What is graded, as written, e.g. "Final Exam", "Quizzes"'),
+        weight_text: text('Its weight as written, e.g. "40%", "50% (25% each)"'),
+        evidence: ModelEvidence,
+      }),
+    )
+    .describe("The grade breakdown, if this page lists one"),
+  topics: z
+    .array(text('One topic line as written, e.g. "6. Integration by Parts (8.1)"'))
+    .describe("The list of topics or textbook sections covered, if this page has one, each line as written"),
 });
-export type SyllabusPageExtraction = z.infer<typeof SyllabusPageExtraction>;
+/** What syllabus task v5 added; readings from before it (the demo's, older recordings) don't have them. */
+type SyllabusV5 = "lectures" | "exams_in_class" | "dates_tentative" | "conflict_notice" | "quizzes" | "office_hours" | "grade_weights" | "topics"; // prettier-ignore
+type SyllabusRead = z.infer<typeof SyllabusPageExtraction>;
+export type SyllabusPageExtraction = Omit<SyllabusRead, SyllabusV5> & Partial<Pick<SyllabusRead, SyllabusV5>>;
+export type SyllabusMeeting = z.infer<typeof Meeting>;
 
 // 3 and 4. Whiteboard photo and handwritten notes: free-form, often messy.
 const FreeformItem = z.object({

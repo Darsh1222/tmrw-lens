@@ -61,14 +61,25 @@ type GoldItem = {
   end: string | null;
   sources?: number;
   conflict?: boolean;
+  /** Its date is "TBA": it must have none. */
+  tba?: boolean;
+  /** Derived and optional ("only if you have a conflict"). */
+  optional?: boolean;
+  /** Its source says the date may change. */
+  tentative?: boolean;
 };
 type GoldConflict = { title: string; course: string; fields: string[]; options: string[]; suggested: string };
 type Expect = {
   term_start: string | null;
   term_end?: string | null;
+  /** Question ids (prefixes) Lens must ask. */
+  asks?: string[];
+  /** Course info a syllabus gives: how many grade weights and topics. */
+  course_info?: { course: string; weights: number; topics: number }[];
   /** First and last day of each break the sources list; [] when none do (then Lens should ask, if there are classes). */
   breaks?: [string, string][];
-  classes: { course: string; type: string; days: string; start: string; end: string }[];
+  /** `status`, when given, must match too (a class a popup covers is "unverified": asked, never filled in). */
+  classes: { course: string; type: string; days: string; start: string; end: string; status?: string }[];
   items: GoldItem[];
   conflicts: GoldConflict[];
   crossed_out: string[];
@@ -323,6 +334,12 @@ function scoreDates(gold: GoldItem[], plan: Plan, s: Score, after: boolean) {
         continue;
       }
     }
+    if (!after) {
+      if (!!g.tba !== !!item.tba) s.notes.push(`${g.title}: ${item.tba ? "TBA" : "not TBA"}, expected the other`);
+      if (g.tba && item.date) s.wrong.push(`${g.title}: TBA but dated ${item.date.value}`);
+      if (!!g.optional !== !!item.optional) s.notes.push(`${g.title}: optional ${!!item.optional}`);
+      if (!!g.tentative !== !!item.tentative) s.notes.push(`${g.title}: tentative ${!!item.tentative}`);
+    }
     if (!g.date) continue;
     if (after) s.thenDates++;
     else s.dates++;
@@ -376,7 +393,8 @@ function score(c: Case, plan: Plan, sources: SourceMeta[]): Score {
         k.meeting_type === g.type &&
         k.days.join() === days &&
         k.start === g.start &&
-        k.end === g.end,
+        k.end === g.end &&
+        (!g.status || k.status === g.status),
     );
     if (i >= 0) {
       s.classesRight++;
@@ -388,6 +406,12 @@ function score(c: Case, plan: Plan, sources: SourceMeta[]): Score {
 
   // Items: one-to-one by course and title (or family and number).
   scoreDates(x.items, plan, s, false);
+  for (const id of x.asks ?? []) if (!plan.questions.some((q) => q.id.startsWith(id))) s.notes.push(`didn't ask ${id}`);
+  for (const ci of x.course_info ?? []) {
+    const got = plan.courses?.find((k) => k.course === ci.course);
+    if (got?.weights.length !== ci.weights || got.topics.length !== ci.topics)
+      s.notes.push(`${ci.course} course info: ${got?.weights.length ?? 0} weights, ${got?.topics.length ?? 0} topics`);
+  }
 
   // Conflicts: caught, with the same options, and the right answer pre-selected.
   for (const g of x.conflicts) {

@@ -20,7 +20,7 @@ export type Session = {
   errors: Record<string, string>;
 };
 
-const FACT = /^q_(term_start|term_end|breaks|photo_date_)/;
+const FACT = /^q_(term_start|term_end|breaks|photo_date_|office_hours_|quiz_section_)/;
 
 function factFrom(plan: Plan, q: Question, a: Answer, added: string | null): Partial<Facts> | null {
   const option = q.options.find((o) => o.id === a.option_id);
@@ -41,6 +41,14 @@ function factFrom(plan: Plan, q: Question, a: Answer, added: string | null): Par
   if (q.id === "q_term_start") return { term_start: date() };
   if (q.id === "q_term_end") return { term_end: date() };
   if (q.id.startsWith("q_photo_date_")) return { photo_dates: { [q.about]: date() } };
+  if (q.id.startsWith("q_office_hours_"))
+    return { office_hours: { [q.about]: { add: option.value === "add", question: q.id } } };
+  if (q.id.startsWith("q_quiz_section_")) {
+    if (option.value?.startsWith("class:"))
+      return { quiz_sections: { [q.about]: { class_id: option.value.slice(6), text: option.label, question: q.id } } };
+    if (!typed) throw new BadAnswer("no section");
+    return { quiz_sections: { [q.about]: { class_id: null, text: typed, question: q.id } } };
+  }
   if (option.value === "none") return { breaks: [] };
   // "Nov 25-29; Mar 16-20": each range resolved in code, with the plan's term start for the year.
   const inputs = {
@@ -66,6 +74,8 @@ function mergeFacts(a: Facts, b: Partial<Facts>): Facts {
     ...a,
     ...b,
     photo_dates: { ...a.photo_dates, ...b.photo_dates },
+    office_hours: { ...a.office_hours, ...b.office_hours },
+    quiz_sections: { ...a.quiz_sections, ...b.quiz_sections },
     separate: [...(a.separate ?? []), ...(b.separate ?? [])],
   };
 }

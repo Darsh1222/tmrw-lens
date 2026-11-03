@@ -129,6 +129,8 @@ What Lens guarantees:
 
 - `auto_apply: true` only for an item that's verified (its quote read back the same on a second, independent read of its
   crop; its date computed in code from the words; nothing to ask), with a date, or a task. Everything else waits.
+  An optional item ("Tell your instructor about any exam conflict (Exam 2) (only if you have a conflict)", derived from
+  a syllabus's notice rule) is never `auto_apply`; its title says when it applies.
 - **No invented dates or times.** A deadline with no time written has `start_time: null`; date-only stays date-only. A
   time on only one side of a comparison isn't a change.
 - A change to an existing item is never applied until the person answers its question.

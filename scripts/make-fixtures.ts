@@ -56,6 +56,20 @@ const COURSES: Course[] = [
   },
 ];
 
+/** A class that's shorter one day: MATH141's lecture runs 3:00-4:15 Monday and Wednesday but 3:00-3:50 Thursday. */
+const SHORT_THURSDAY: typeof COURSES = [
+  {
+    ...COURSES[0],
+    meetings: [
+      { type: "Lec", days: "MW", start: "3:00pm", end: "4:15pm", room: "SYM 0200" },
+      { type: "Lec", days: "Th", start: "3:00pm", end: "3:50pm", room: "CHM 1402" },
+      { type: "Dis", days: "TuTh", start: "9:00am", end: "9:50am", room: "MTH 0101" },
+    ],
+  },
+  COURSES[1],
+  COURSES[2],
+];
+
 const DAY_TOKENS = ["M", "Tu", "W", "Th", "F"];
 function splitDays(days: string): number[] {
   const out: number[] = [];
@@ -76,8 +90,9 @@ function minutes(t: string): number {
 /**
  * `times: false` draws blocks with only the course and room, as some schedule views do: times come from position.
  * `popup: true` leaves a dark popup open over Thursday afternoon, its shadow and panel hiding where blocks end.
+ * `tooltip: true` leaves a hover tooltip just under Thursday's short MATH141 lecture, in the clear (for SHORT_THURSDAY).
  */
-function scheduleScreenshot({ list = true, times = true, popup = false } = {}) {
+function scheduleScreenshot({ list = true, times = true, popup = false, tooltip = false, courses = COURSES } = {}) {
   const W = list ? 1600 : 1010,
     H = 1000;
   const c = createCanvas(W, H);
@@ -122,7 +137,7 @@ function scheduleScreenshot({ list = true, times = true, popup = false } = {}) {
     g.fillStyle = "#666";
     g.fillText(`${((hr + 11) % 12) + 1}${hr < 12 ? "am" : "pm"}`, gx, y + 5);
   }
-  for (const course of COURSES)
+  for (const course of courses)
     for (const m of course.meetings)
       for (const d of splitDays(m.days)) {
         const top = gy + ((minutes(m.start) - startHour * 60) / 60) * hourH;
@@ -157,6 +172,17 @@ function scheduleScreenshot({ list = true, times = true, popup = false } = {}) {
     g.font = "13px Helvetica";
     g.fillText("Seats: 12 of 180 open", x + 14, top + 50);
     g.fillText("Waitlist: 0", x + 14, top + 70);
+  }
+  if (tooltip) {
+    // "MATH141 meets at ...": a hover tooltip 10 minutes under the end of Thursday's 3:00-3:50 lecture, page showing
+    // between them, the way a real one sits. Close to the block, but not over it: 3:50 stands.
+    const x = gx + 60 + 3 * colW - 10;
+    const top = gy + 8 * hourH;
+    g.fillStyle = "rgba(110,110,110,0.85)";
+    g.fillRect(x, top, 250, 34);
+    g.fillStyle = "#ffffff";
+    g.font = "14px Helvetica";
+    g.fillText("MATH141 meets at CHM 1402", x + 10, top + 22);
   }
   if (!list) return c.toBuffer("image/png");
   // List view on the right; extraction prefers it over grid positions.
@@ -276,6 +302,66 @@ async function cmscSyllabusPdf() {
     if (text)
       page.drawText(text, { x: 56, y, size: size ?? 11, font: isBold ? bold : font, color: rgb(0.1, 0.1, 0.1) });
     y -= (size ?? 11) + 10;
+  }
+  return doc.save();
+}
+
+/**
+ * A syllabus with the patterns real ones use: exams "in-class" with tentative dates (the time comes from the lecture
+ * line), a TBA final, a notice rule for exam conflicts, quizzes "in discussion" with no dates, office hours, grade
+ * weights, and a topic list. Two pages. No instructor is named.
+ */
+async function policySyllabusPdf() {
+  const doc = await newPdf();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  const pages: [string, boolean?, number?][][] = [
+    [
+      ["PHYS161 General Physics: Mechanics, Fall 2026", true, 17],
+      ["Synthetic syllabus for testing (not a real course page)"],
+      ["Lecture: 13:00 - 13:50 (MWF) PHY 1412"],
+      ["Office Hours: Tuesday and Thursday, 2:00-3:00 PM (PHY 1201)"],
+      ["Discussion: attend the section you registered for."],
+      [""],
+      ["Quizzes", true, 13],
+      ["About 12 short quizzes will be given in discussion during the term."],
+      [""],
+      ["Exams", true, 13],
+      ["There will be two in-class midterms and a common final exam. These dates are TENTATIVE:"],
+      ["Midterm 1: October 7, 2026 (Wednesday)"],
+      ["Midterm 2: November 18, 2026 (Wednesday)"],
+      ["Final exam: TBA"],
+      ["The final covers the whole course. Its date will be announced near the end of the term."],
+    ],
+    [
+      ["Exam Policies", true, 13],
+      ["Known conflicts: if you have a conflict with an exam date, tell the instructor in writing"],
+      ["at least one week (7 days) in advance. Without notice, a missed exam counts as zero."],
+      [""],
+      ["Grade Distribution", true, 13],
+      ["Final Exam - 35%"],
+      ["Midterms - 40% (20% each)"],
+      ["Quizzes - 15%"],
+      ["Labs - 10%"],
+      [""],
+      ["Topics", true, 13],
+      ["1. Vectors and Motion in One Dimension (1-2)"],
+      ["2. Motion in Two Dimensions (3-4)"],
+      ["3. Newton's Laws (5-6)"],
+      ["4. Work and Energy (7-8)"],
+      ["5. Momentum and Collisions (9)"],
+      ["6. Rotation (10-11)"],
+      ["7. Oscillations (14)"],
+    ],
+  ];
+  for (const lines of pages) {
+    const page = doc.addPage([612, 792]);
+    let y = 740;
+    for (const [text, isBold, size] of lines) {
+      if (text)
+        page.drawText(text, { x: 56, y, size: size ?? 11, font: isBold ? bold : font, color: rgb(0.1, 0.1, 0.1) });
+      y -= (size ?? 11) + 10;
+    }
   }
   return doc.save();
 }
@@ -669,7 +755,12 @@ writeFileSync(join(OUT, "testudo-schedule.png"), scheduleScreenshot());
 writeFileSync(join(OUT, "testudo-grid.png"), scheduleScreenshot({ list: false }));
 writeFileSync(join(OUT, "testudo-grid-blocks.png"), scheduleScreenshot({ list: false, times: false }));
 writeFileSync(join(OUT, "testudo-grid-popup.png"), scheduleScreenshot({ list: false, times: false, popup: true }));
+writeFileSync(
+  join(OUT, "testudo-grid-short-day.png"),
+  scheduleScreenshot({ list: false, times: false, tooltip: true, courses: SHORT_THURSDAY }),
+);
 writeFileSync(join(OUT, "syllabus-cmsc131.pdf"), await cmscSyllabusPdf());
+writeFileSync(join(OUT, "syllabus-phys161-policies.pdf"), await policySyllabusPdf());
 writeFileSync(
   join(OUT, "whiteboard-math141.jpg"),
   whiteboard(
@@ -805,8 +896,10 @@ const manifest = {
   "testudo-grid.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "testudo-grid-blocks.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "testudo-grid-popup.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
+  "testudo-grid-short-day.png": { kind: "testudo_screenshot", label: "Testudo screenshot", captured_at: null },
   "syllabus-math141.pdf": { kind: "syllabus_pdf", label: "MATH141 syllabus", captured_at: null },
   "syllabus-cmsc131.pdf": { kind: "syllabus_pdf", label: "CMSC131 syllabus", captured_at: null },
+  "syllabus-phys161-policies.pdf": { kind: "syllabus_pdf", label: "PHYS161 syllabus", captured_at: null },
   "whiteboard-math141.jpg": {
     kind: "whiteboard_photo",
     label: "whiteboard photo",

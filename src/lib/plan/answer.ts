@@ -221,7 +221,8 @@ function applyToItem(plan: Plan, item: PlanItem, q: Question, value: string | nu
 
 /** Questions about a class, or a whole screenshot's class days. */
 function applyToRest(plan: Plan, q: Question, value: string | null, typed: string | null | undefined) {
-  const classes = plan.classes.filter((c) => c.id === q.about || c.source.id === q.about);
+  // A screenshot's question settles only the classes it listed: not one a popup covers, which has its own.
+  const classes = plan.classes.filter((c) => c.id === q.about || (c.source.id === q.about && c.checks.time.status !== "unverified")); // prettier-ignore
   if (q.type !== "check" || !classes.length) throw new UnsupportedAnswer(`${q.id} is a fact; see session.ts`);
   if (value === "confirm") {
     for (const c of classes) {

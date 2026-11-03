@@ -75,6 +75,8 @@ export type TimeTrace = {
   rule: "clock" | "in_class" | "before_item" | "answer";
   /** For "in class": the class block whose meeting time was used. */
   class_id: string | null;
+  /** For "in class" with no class block: the syllabus's own lecture line it was taken from. */
+  lecture?: { days_text: string; time_text: string; evidence: Evidence };
   /** For "before Midterm 1": the item whose start time was used. */
   item_id?: string;
 };
@@ -101,6 +103,12 @@ export type Candidate = {
   date_text: string | null;
   /** Unresolved time words, e.g. "in class" with no schedule, kept for the question. */
   time_text: string | null;
+  /** A syllabus exam its page says is held in class ("2 in-class exams"): those words, and the lecture lines to use. */
+  in_class?: { text: string; evidence: Evidence; lectures: { days_text: string; time_text: string; evidence: Evidence }[] }; // prettier-ignore
+  /** Words saying its date may change ("TENTATIVE"), from its page. */
+  tentative?: { text: string; evidence: Evidence };
+  /** Its date is written as "TBA" or "TBD": no date until it's announced. */
+  tba?: boolean;
   evidence: Evidence;
   checks: { quote: Check; title: Check; course: Check; date: Check; time: Check };
   /** Why the date couldn't be resolved, and candidate dates when it's a choice. */
@@ -115,6 +123,8 @@ export type ClassBlock = {
   section: string | null;
   title: string | null;
   meeting_type: "lecture" | "discussion" | "lab" | "other";
+  /** A note on every meeting: "Quiz day: quizzes happen in this discussion", "Office hours (optional)". */
+  marker?: string;
   days: Weekday[];
   start: string;
   end: string;
@@ -184,6 +194,23 @@ export type PlanItem = {
    */
   depends_on: { item_id: string | null; text: string; offset_days: number } | null;
   status: Status;
+  /** Its source says the date may change ("TENTATIVE"): a later source's date is the likely one. */
+  tentative?: { text: string; evidence: Evidence };
+  /** Its date is "TBA": it stays undated until the person adds it. */
+  tba?: boolean;
+  /** Only some people need it, and when: "Only if you have a conflict". */
+  optional?: string;
+};
+
+/** What a syllabus says about a course that isn't a date: for study plans, never for the calendar. */
+export type CourseInfo = {
+  course: string;
+  /** "Final Exam": "40%", as written. */
+  weights: { component: string; weight: string; evidence: Evidence }[];
+  /** Topic lines as written, in order. */
+  topics: string[];
+  /** "about 10 quizzes given in discussion", and which section they're in once the person says. */
+  quizzes: { text: string; where: string | null; evidence: Evidence; section: string | null } | null;
 };
 
 /** The first or last day of classes. */
@@ -214,6 +241,10 @@ export type Facts = {
   breaks?: { name: string; text: string; start: string; end: string; question: string }[];
   /** Candidate ids that are two different items, from answering "They're two different items". */
   separate?: [string, string][];
+  /** Per course: whether to add the office hours a syllabus lists. */
+  office_hours?: Record<string, { add: boolean; question: string }>;
+  /** Per course: the discussion section quizzes happen in (a class block id, or what they typed). */
+  quiz_sections?: Record<string, { class_id: string | null; text: string; question: string }>;
 };
 
 export type Plan = {
@@ -228,4 +259,6 @@ export type Plan = {
   skipped?: string[];
   /** Crossed-out lines, kept so the card can say they were left out on purpose. */
   crossed_out: Candidate[];
+  /** Per course, from its syllabus: grade weights, topics, quizzes. */
+  courses?: CourseInfo[];
 };

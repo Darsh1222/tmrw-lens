@@ -165,6 +165,21 @@ Per-person spend limits and two global brakes keep the public demo from using To
   10:45pm", not 11:15pm). "The only", "the soonest", "the last", "the longest", and "a lighter" are said only when code
   checked them true of that exact time; anything else is refused. 68 cases, 3 runs each: hard rules 100%, best slot
   100%, judge 4.95, best time 4.98. Rebuild logic is now frozen until after the submission.
+- Correction to Nov 2: classes can be shorter on some days. The real MATH141 lecture is 3:00-4:15 Monday and
+  Wednesday but 3:00-3:50 Thursday, so Thursday's 3:50 was right. A block's edge now stands unless a popup actually
+  lies over it (the block's colour runs, in shadow, straight into the panel); a tooltip 10 minutes below, with page
+  between, changes nothing. A covered edge is never filled in from another day: that class's time is asked about. The
+  real screenshot reads Thursday 3:00-3:50 again. New synthetic fixture with a short Thursday and a tooltip under it:
+  6 of 6 classes right; the popup fixture: Tuesday 11:00-12:15, Thursday asked. Classes right 43 of 43.
+- Syllabi say more than dates. Lens now reads, from the syllabus itself: "in-class" exams (timed from that day's
+  lecture, labelled "time inferred from your lecture schedule", with both quotes), tentative dates (a later source's
+  date is pre-selected, and the question says the syllabus called them tentative), a TBA final (kept undated, with a
+  note to check back near the last week), a notice rule ("at least one week (7 days) in advance": an optional task
+  before each exam, "Wed Nov 11 (Exam 2) - 7 days = Wed Nov 4", moving with the exam), quizzes "in discussion" (one
+  question: which section; its meetings become quiz days, never invented dates), office hours (added only if you say
+  yes), and grade weights and topics (kept as course info for study plans). On a real MATH141 syllabus: both exams at
+  3:00-4:15 PM, tentative; final TBA; notices Sep 23 and Nov 4; 0 invented dates. New synthetic fixture with the same
+  patterns: 6 of 6 items, 0 invented. Extraction evals: no regressions (71% fully verified, 0 of 201 dates invented).
 
 ### Nov 2
 

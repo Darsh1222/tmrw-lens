@@ -444,3 +444,16 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   refused in move_item and fails the final check. The final check skips the missed item's reason: code composed it
   from factors checked within what the reply leaves, which a fresh Draft can't see (it sent busy-until, tired-tonight,
   and sick-fever-quiz-tomorrow to code's fallback; those three re-run after the fix). One full run ($2.75) + $0.11.
+- 2026-11-03: Grid edges (owner's correction): no borrowing from other days. An edge is covered only when, past it,
+  there's nothing but the block's own colour in shadow (each channel darkened by about the same share) until 3 rows of
+  panel, within 15 minutes of rows. A covered class's time is unverified, with its own question (not in the grid
+  question); covered blocks never group with uncovered ones. GRID_VERSION 2.
+- 2026-11-03: Syllabus task v5 reads lecture lines, the in-class / tentative / conflict-notice words, quizzes, office
+  hours, grade weights, and topics, each quote checked against the page. "In-class" applies to exams only (not
+  quizzes, not the final), and never when its quote is one item's own row. A tentative note marks the exams on its own
+  page. TBA/TBD dates stay null. Notice items are optional tasks (`depends_on` the exam, offset -N, resolved by a
+  "in advance" rule in resolveDate so the audit recomputes them); they never auto_apply in the extract API, and Send
+  appends "(only if you have a conflict)" to the title since the import contract has no optional flag. Quiz sections
+  and office hours are facts (rebuilds from answers). Topics are kept only if the page's text has them word for word.
+- 2026-11-03: Known gap: Tomorrow's import skips a lens_id it already has, so a tentative exam that later moves
+  reaches Tomorrow only through the extract API's change detection (moved/contradiction), not a second Send.

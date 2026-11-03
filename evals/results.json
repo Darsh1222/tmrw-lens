@@ -1,40 +1,40 @@
 {
   "headline": {
-    "cases": 14,
+    "cases": 16,
     "with_sam": {
-      "fully_verified": "97/129 (75%)",
-      "invented_dates": "0 of 197",
-      "items_found": "93/93",
-      "classes_right": "36/36",
-      "dates_right": "81/81",
+      "fully_verified": "101/142 (71%)",
+      "invented_dates": "0 of 201",
+      "items_found": "99/99",
+      "classes_right": "43/43",
+      "dates_right": "85/85",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
       "conflicts_caught": "4/4",
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "41/41",
-      "status": "verified 97, needs_question 28, conflict 4"
+      "status": "verified 101, needs_question 36, conflict 4, unverified 1"
     },
     "without_sam": {
-      "fully_verified": "97/129 (75%)",
-      "invented_dates": "0 of 197",
-      "items_found": "93/93",
-      "classes_right": "36/36",
-      "dates_right": "81/81",
+      "fully_verified": "101/142 (71%)",
+      "invented_dates": "0 of 201",
+      "items_found": "99/99",
+      "classes_right": "43/43",
+      "dates_right": "85/85",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
       "conflicts_caught": "4/4",
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "0/41",
-      "status": "verified 97, needs_question 26, conflict 4, unverified 2"
+      "status": "verified 101, needs_question 34, conflict 4, unverified 3"
     },
     "cost": {
       "photos": 6,
       "box_per_photo": 0.01622396666666667,
       "sam_per_photo": 0.0225432,
-      "tokens_per_call": "1761 in, 1136 out",
-      "cache_hit_rate": "15%"
+      "tokens_per_call": "2262 in, 1267 out",
+      "cache_hit_rate": "18%"
     }
   },
   "cases": [
@@ -245,6 +245,35 @@
     },
     {
       "name": "schedule-grid-popup",
+      "things": 7,
+      "verified": 0,
+      "status": {
+        "needs_question": 6,
+        "unverified": 1
+      },
+      "goldItems": 0,
+      "found": 0,
+      "extra": [],
+      "missed": [],
+      "dates": 0,
+      "datesRight": 0,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 0,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 7,
+      "classesExpected": 7,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
+      "notes": []
+    },
+    {
+      "name": "schedule-grid-short-day",
       "things": 6,
       "verified": 0,
       "status": {
@@ -429,6 +458,35 @@
       "wrong": [],
       "invented": [],
       "datesAudited": 13,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 0,
+      "classesExpected": 0,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
+      "notes": []
+    },
+    {
+      "name": "syllabus-policies",
+      "things": 6,
+      "verified": 4,
+      "status": {
+        "verified": 4,
+        "needs_question": 2
+      },
+      "goldItems": 6,
+      "found": 6,
+      "extra": [],
+      "missed": [],
+      "dates": 4,
+      "datesRight": 4,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 4,
       "conflictsExpected": 0,
       "conflictsCaught": 0,
       "suggestedRight": 0,

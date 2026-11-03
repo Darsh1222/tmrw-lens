@@ -95,15 +95,21 @@ function describe(v: { date: string | null; time: string | null }): string {
  * whiteboard or notes over a document, because it's usually the newer word. Always returns a reason.
  */
 function suggest(versions: { c: Candidate; i: number }[]): { index: number; why: string } {
-  const score = (c: Candidate) => (c.change_text ? 2 : 0) + (isPhoto(c) && c.source.captured_at ? 1 : 0);
+  // A date its own source calls tentative ("TENTATIVE", "subject to change") gives way to a later word.
+  const score = (c: Candidate) =>
+    (c.change_text ? 2 : 0) + (isPhoto(c) && c.source.captured_at ? 1 : 0) + (c.tentative ? 0 : 0.5);
   const best = [...versions].sort((x, y) => score(y.c) - score(x.c))[0];
   const others = versions.filter((v) => v !== best).map((v) => sourceName(v.c));
-  const s = score(best.c);
+  const s = Math.floor(score(best.c));
+  const yielded = versions.find((v) => v !== best && v.c.tentative)?.c;
+  const tentative = yielded ? ` The ${sourceName(yielded)} says its dates are "${yielded.tentative!.text}".` : "";
   if (s === 0) {
-    const official = versions.find((v) => !isPhoto(v.c)) ?? best;
+    const official = versions.find((v) => !isPhoto(v.c) && !v.c.tentative) ?? versions.find((v) => !isPhoto(v.c)) ?? best; // prettier-ignore
     return {
       index: official.i,
-      why: `The ${sourceName(official.c)} is the official schedule, and nothing here says it changed.`,
+      why: official.c.tentative
+        ? `The ${sourceName(official.c)} is the official schedule, though it says its dates are "${official.c.tentative.text}".` // prettier-ignore
+        : `The ${sourceName(official.c)} is the official schedule, and nothing here says it changed.${tentative}`,
     };
   }
   const taken = best.c.source.captured_at
@@ -112,7 +118,7 @@ function suggest(versions: { c: Candidate; i: number }[]): { index: number; why:
   const why = best.c.change_text
     ? `The ${sourceName(best.c)}${taken} and says "${best.c.change_text}".`
     : `The ${sourceName(best.c)}${taken}, and what's written by hand is usually newer than the ${others.join(" and ")}.`;
-  return { index: best.i, why };
+  return { index: best.i, why: why + tentative };
 }
 
 export function merge(
@@ -220,6 +226,8 @@ export function merge(
       conflict,
       depends_on: null,
       status: worst(...Object.values(checks)).status,
+      ...(!dateConflict && dateFrom.tentative && { tentative: dateFrom.tentative }),
+      ...(!dateConflict && !dateFrom.date && members.some((c) => c.tba) && { tba: true }),
     });
   }
   return { items, questions };

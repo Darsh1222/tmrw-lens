@@ -124,7 +124,24 @@ export function parseRelative(text: string): Relative | null {
 }
 
 /** Resolves a date as written. Pure: the same text and inputs always give the same answer. */
+/**
+ * "at least one week (7 days) in advance": how many days ahead of something it must happen. A number of days written
+ * out wins over the words around it ("one week (7 days)" is 7).
+ */
+export function parseNotice(text: string): number | null {
+  const t = normalize(text);
+  if (!/\bin advance\b|\bahead\b|\bprior\b|\bbefore\b/.test(t)) return null;
+  const days = /\b(\d+)\s*days?\b/.exec(t);
+  if (days) return Number(days[1]);
+  const m = /\b(a|an|one|two|three|four|\d+)\s+(days?|weeks?)\b/.exec(t);
+  return m ? (COUNT[m[1]] ?? Number(m[1])) * (m[2].startsWith("week") ? 7 : 1) : null;
+}
+
 export function resolveDate(text: string, inputs: DateInputs): DateResult {
+  // A notice period ("at least one week (7 days) in advance") counts back from the item it's for.
+  const notice = inputs.ref && /\bin advance\b/.test(normalize(text)) ? parseNotice(text) : null;
+  if (notice !== null && inputs.ref)
+    return { ok: true, date: iso(day(inputs.ref.date).minus({ days: notice })), rule: "offset" };
   // "the day before Oct 30" is Oct 29; "before Midterm 1" depends on another item, which the caller looks up.
   const rel = parseRelative(text);
   if (rel) {
@@ -340,7 +357,11 @@ export function parseDays(text: string): Weekday[] | null {
     ["tues", 2], ["thurs", 4], ["mon", 1], ["tue", 2], ["wed", 3], ["thu", 4], ["fri", 5], ["sat", 6], ["sun", 7],
     ["th", 4], ["tu", 2], ["su", 7], ["sa", 6], ["m", 1], ["t", 2], ["w", 3], ["r", 4], ["f", 5],
   ]; // prettier-ignore
-  let rest = text.toLowerCase().replace(/[^a-z]/g, "");
+  // "Monday and Wednesday", "Tue & Thu": joining words aren't days.
+  let rest = text
+    .toLowerCase()
+    .replace(/\b(and|or)\b/g, "")
+    .replace(/[^a-z]/g, "");
   if (!rest) return null;
   const out = new Set<Weekday>();
   while (rest) {

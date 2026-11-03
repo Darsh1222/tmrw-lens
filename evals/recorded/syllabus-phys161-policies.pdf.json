@@ -1,0 +1,236 @@
+{
+  "file": "syllabus-phys161-policies.pdf",
+  "sha256": "86b80a8440eb169d219d6750e083b8eec619f2e66a056384e9b7460e2497a502",
+  "model": "muse-spark-1.3",
+  "sam_model": "sam-3.1",
+  "tasks": {
+    "extract_schedule": 4,
+    "extract_syllabus_page": 5,
+    "extract_whiteboard": 4,
+    "extract_notes": 4,
+    "reread_crops": 1
+  },
+  "crops": 3,
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "pages": [
+    {
+      "page": 1,
+      "text": "PHYS161 General Physics: Mechanics, Fall 2026 \nSynthetic syllabus for testing (not a real course page)\nLecture: 13:00 - 13:50 (MWF) PHY 1412\nOffice Hours: Tuesday and Thursday, 2:00-3:00 PM (PHY 1201)\nDiscussion: attend the section you registered for. \nQuizzes \nAbout 12 short quizzes will be given in discussion during the term. \nExams \nThere will be two in-class midterms and a common final exam. These dates are TENTATIVE:\nMidterm 1: October 7, 2026 (Wednesday)\nMidterm 2: November 18, 2026 (Wednesday)\nFinal exam: TBA\nThe final covers the whole course. Its date will be announced near the end of the term.",
+      "extraction": {
+        "course_code": "PHYS161",
+        "course_title": "General Physics: Mechanics",
+        "term_start": null,
+        "term_end": null,
+        "breaks": [],
+        "items": [
+          {
+            "kind": "exam",
+            "title": "Midterm 1",
+            "date_text": "October 7, 2026 (Wednesday)",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "Midterm 1: October 7, 2026 (Wednesday)",
+              "box": null
+            }
+          },
+          {
+            "kind": "exam",
+            "title": "Midterm 2",
+            "date_text": "November 18, 2026 (Wednesday)",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "Midterm 2: November 18, 2026 (Wednesday)",
+              "box": null
+            }
+          },
+          {
+            "kind": "exam",
+            "title": "Final exam",
+            "date_text": "TBA",
+            "time_text": null,
+            "weight_text": null,
+            "evidence": {
+              "quote": "Final exam: TBA",
+              "box": null
+            }
+          }
+        ],
+        "lectures": [
+          {
+            "days_text": "(MWF)",
+            "time_text": "13:00 - 13:50",
+            "location": "PHY 1412",
+            "evidence": {
+              "quote": "Lecture: 13:00 - 13:50 (MWF) PHY 1412",
+              "box": null
+            }
+          }
+        ],
+        "exams_in_class": {
+          "text": "in-class",
+          "evidence": {
+            "quote": "There will be two in-class midterms and a common final exam. These dates are TENTATIVE:",
+            "box": null
+          }
+        },
+        "dates_tentative": {
+          "text": "TENTATIVE",
+          "evidence": {
+            "quote": "There will be two in-class midterms and a common final exam. These dates are TENTATIVE:",
+            "box": null
+          }
+        },
+        "conflict_notice": null,
+        "quizzes": {
+          "text": "About 12 short quizzes will be given in discussion during the term.",
+          "where_text": "discussion",
+          "evidence": {
+            "quote": "About 12 short quizzes will be given in discussion during the term.",
+            "box": null
+          }
+        },
+        "office_hours": [
+          {
+            "days_text": "Tuesday and Thursday",
+            "time_text": "2:00-3:00 PM",
+            "location": "PHY 1201",
+            "evidence": {
+              "quote": "Office Hours: Tuesday and Thursday, 2:00-3:00 PM (PHY 1201)",
+              "box": null
+            }
+          }
+        ],
+        "grade_weights": [],
+        "topics": []
+      },
+      "rereads": {},
+      "sam": null
+    },
+    {
+      "page": 2,
+      "text": "Exam Policies \nKnown conflicts: if you have a conflict with an exam date, tell the instructor in writing\nat least one week (7 days) in advance. Without notice, a missed exam counts as zero. \nGrade Distribution \nFinal Exam - 35%\nMidterms - 40% (20% each)\nQuizzes - 15%\nLabs - 10% \nTopics \n1. Vectors and Motion in One Dimension (1-2)\n2. Motion in Two Dimensions (3-4)\n3. Newton's Laws (5-6)\n4. Work and Energy (7-8)\n5. Momentum and Collisions (9)\n6. Rotation (10-11)\n7. Oscillations (14)",
+      "extraction": {
+        "course_code": null,
+        "course_title": null,
+        "term_start": null,
+        "term_end": null,
+        "breaks": [],
+        "items": [],
+        "lectures": [],
+        "exams_in_class": null,
+        "dates_tentative": null,
+        "conflict_notice": {
+          "text": "at least one week (7 days) in advance",
+          "evidence": {
+            "quote": "at least one week (7 days) in advance. Without notice, a missed exam counts as zero.",
+            "box": {
+              "x_min": 90,
+              "y_min": 107,
+              "x_max": 821,
+              "y_max": 129
+            }
+          }
+        },
+        "quizzes": null,
+        "office_hours": [],
+        "grade_weights": [
+          {
+            "component": "Final Exam",
+            "weight_text": "35%",
+            "evidence": {
+              "quote": "Final Exam - 35%",
+              "box": {
+                "x_min": 90,
+                "y_min": 188,
+                "x_max": 235,
+                "y_max": 206
+              }
+            }
+          },
+          {
+            "component": "Midterms",
+            "weight_text": "40% (20% each)",
+            "evidence": {
+              "quote": "Midterms - 40% (20% each)",
+              "box": {
+                "x_min": 90,
+                "y_min": 212,
+                "x_max": 295,
+                "y_max": 232
+              }
+            }
+          },
+          {
+            "component": "Quizzes",
+            "weight_text": "15%",
+            "evidence": {
+              "quote": "Quizzes - 15%",
+              "box": {
+                "x_min": 90,
+                "y_min": 239,
+                "x_max": 211,
+                "y_max": 258
+              }
+            }
+          },
+          {
+            "component": "Labs",
+            "weight_text": "10%",
+            "evidence": {
+              "quote": "Labs - 10%",
+              "box": {
+                "x_min": 90,
+                "y_min": 264,
+                "x_max": 165,
+                "y_max": 282
+              }
+            }
+          }
+        ],
+        "topics": [
+          "1. Vectors and Motion in One Dimension (1-2)",
+          "2. Motion in Two Dimensions (3-4)",
+          "3. Newton's Laws (5-6)",
+          "4. Work and Energy (7-8)",
+          "5. Momentum and Collisions (9)",
+          "6. Rotation (10-11)",
+          "7. Oscillations (14)"
+        ]
+      },
+      "rereads": {},
+      "sam": null
+    }
+  ],
+  "stages": {
+    "extract": {
+      "calls": 2,
+      "input_tokens": 12644,
+      "cached_tokens": 7394,
+      "output_tokens": 3498,
+      "cost_usd": 0.0225381
+    },
+    "reread_box": {
+      "calls": 0,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0
+    },
+    "sam_segment": {
+      "calls": 0,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0
+    },
+    "reread_sam": {
+      "calls": 0,
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0
+    }
+  }
+}

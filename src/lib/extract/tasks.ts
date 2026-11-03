@@ -60,11 +60,12 @@ ${RULES}`,
 
 export const syllabusPageTask: Task<SyllabusPageExtraction> = {
   name: "extract_syllabus_page",
-  version: 4,
-  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. Skip grading tables and policies unless they give a date. If the page says when classes begin, fill term_start with those words and their quote; if it says the last day of classes, fill term_end the same way. Add each break or day with no classes it lists (Thanksgiving break, spring break, "no class") to breaks, with its dates as written; these are not items.
+  version: 5,
+  instructions: `You read one page of a course syllabus. Extract every dated or due item on this page: exams, quizzes, assignments, projects, readings. An exam whose date is "TBA" or "TBD" is still an item: date_text is those words as written. If the page says when classes begin, fill term_start with those words and their quote; if it says the last day of classes, fill term_end the same way. Add each break or day with no classes it lists (Thanksgiving break, spring break, "no class") to breaks, with its dates as written; these are not items.
+Also read, only where this page says them: the lecture times (lectures); the words saying exams are held in class (exams_in_class, e.g. "in-class"); the words saying dates may change (dates_tentative, e.g. "TENTATIVE"); how far ahead an exam conflict must be reported (conflict_notice, e.g. "at least one week (7 days) in advance"); what it says about quizzes and where they're given (quizzes); office hours; the grade breakdown (grade_weights); and the list of topics or textbook sections (topics). These are not items. Never copy a person's name or email into any field.
 ${RULES}`,
   schema: SyllabusPageExtraction,
-  maxOutputTokens: 12_000,
+  maxOutputTokens: 14_000,
   check: (o) =>
     fieldsInQuotes([
       ...o.items.map((it, i) => ({
@@ -73,6 +74,10 @@ ${RULES}`,
         fields: [it.title, it.date_text, it.time_text],
       })),
       ...termRows(o),
+      ...[...(o.lectures ?? []).map((m, i) => [`lectures[${i}]`, m] as const), ...(o.office_hours ?? []).map((m, i) => [`office_hours[${i}]`, m] as const)].map(([label, m]) => ({ label, quote: m.evidence.quote, fields: [m.days_text, m.time_text, m.location] })), // prettier-ignore
+      ...(["exams_in_class", "dates_tentative", "conflict_notice"] as const).flatMap((k) => (o[k] ? [{ label: k, quote: o[k].evidence.quote, fields: [o[k].text] }] : [])), // prettier-ignore
+      ...(o.quizzes ? [{ label: "quizzes", quote: o.quizzes.evidence.quote, fields: [o.quizzes.text, o.quizzes.where_text] }] : []), // prettier-ignore
+      ...(o.grade_weights ?? []).map((g, i) => ({ label: `grade_weights[${i}]`, quote: g.evidence.quote, fields: [g.component, g.weight_text] })), // prettier-ignore
     ]),
 };
 

@@ -5,7 +5,7 @@
   "sam_model": "sam-3.1",
   "tasks": {
     "extract_schedule": 4,
-    "extract_syllabus_page": 4,
+    "extract_syllabus_page": 5,
     "extract_whiteboard": 4,
     "extract_notes": 4,
     "reread_crops": 1
@@ -33,9 +33,9 @@
               "quote": "Project 3 due Sun Nov 1, 11:59pm",
               "box": {
                 "x_min": 90,
-                "y_min": 187,
-                "x_max": 400,
-                "y_max": 205
+                "y_min": 205,
+                "x_max": 340,
+                "y_max": 225
               }
             }
           },
@@ -49,9 +49,9 @@
               "quote": "Exam 2: Wed Nov 11, 1:00pm - 2:15pm, IRB 0324",
               "box": {
                 "x_min": 90,
-                "y_min": 214,
-                "x_max": 525,
-                "y_max": 232
+                "y_min": 228,
+                "x_max": 470,
+                "y_max": 248
               }
             }
           },
@@ -65,9 +65,9 @@
               "quote": "Exam 2 corrections due one week after Exam 2",
               "box": {
                 "x_min": 90,
-                "y_min": 239,
-                "x_max": 490,
-                "y_max": 257
+                "y_min": 253,
+                "x_max": 440,
+                "y_max": 272
               }
             }
           },
@@ -81,9 +81,9 @@
               "quote": "Project 4 due Fri Nov 13, 11:59pm",
               "box": {
                 "x_min": 90,
-                "y_min": 265,
-                "x_max": 400,
-                "y_max": 283
+                "y_min": 278,
+                "x_max": 340,
+                "y_max": 297
               }
             }
           },
@@ -97,9 +97,9 @@
               "quote": "Quiz 5: Tue Nov 17, in class",
               "box": {
                 "x_min": 90,
-                "y_min": 291,
-                "x_max": 335,
-                "y_max": 309
+                "y_min": 303,
+                "x_max": 300,
+                "y_max": 322
               }
             }
           },
@@ -113,9 +113,9 @@
               "quote": "Project 5 due Fri Dec 4, 11:59pm",
               "box": {
                 "x_min": 90,
-                "y_min": 317,
-                "x_max": 395,
-                "y_max": 335
+                "y_min": 328,
+                "x_max": 340,
+                "y_max": 347
               }
             }
           },
@@ -129,13 +129,21 @@
               "quote": "Final exam: Sat Dec 12, 4:00pm - 6:00pm",
               "box": {
                 "x_min": 90,
-                "y_min": 343,
-                "x_max": 460,
-                "y_max": 361
+                "y_min": 352,
+                "x_max": 380,
+                "y_max": 372
               }
             }
           }
-        ]
+        ],
+        "lectures": [],
+        "exams_in_class": null,
+        "dates_tentative": null,
+        "conflict_notice": null,
+        "quizzes": null,
+        "office_hours": [],
+        "grade_weights": [],
+        "topics": []
       },
       "rereads": {},
       "sam": null
@@ -144,10 +152,10 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 4117,
-      "cached_tokens": 1521,
-      "output_tokens": 1367,
-      "cost_usd": 0.0092829
+      "input_tokens": 6322,
+      "cached_tokens": 3697,
+      "output_tokens": 1910,
+      "cost_usd": 0.0119533
     },
     "reread_box": {
       "calls": 0,

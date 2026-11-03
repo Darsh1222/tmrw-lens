@@ -1,6 +1,6 @@
 {
   "name": "schedule-grid-popup",
-  "description": "Testudo grid with no times on its blocks and a popup left open over Thursday: a hidden block edge is taken from the same class on Tuesday",
+  "description": "Testudo grid with no times on its blocks and a popup left open over Thursday, covering the end of the CMSC131 lecture: Tuesday's block reads 11:00-12:15; Thursday's covered one is never filled in from Tuesday, it's asked about",
   "zone": "America/New_York",
   "added_at": "2026-10-29T09:00:00-04:00",
   "sources": ["testudo-grid-popup.png"],
@@ -24,9 +24,17 @@
       {
         "course": "CMSC131",
         "type": "lecture",
-        "days": "TuTh",
+        "days": "Tu",
         "start": "11:00",
         "end": "12:15"
+      },
+      {
+        "course": "CMSC131",
+        "type": "lecture",
+        "days": "Th",
+        "start": "11:00",
+        "end": "11:55",
+        "status": "unverified"
       },
       {
         "course": "CMSC131",

@@ -45,7 +45,7 @@ export const SEGMENTED_KINDS: SourceKind[] = ["whiteboard_photo", "notes_photo"]
 /** Bumped when how photos are segmented or cropped changes: recorded evals of photos are then re-read. */
 export const CROP_VERSION = 3;
 /** Bumped when how schedule grids are measured changes (src/lib/images/grid.ts): cached readings are then re-read. */
-export const GRID_VERSION = 1;
+export const GRID_VERSION = 2;
 
 export function dataUrl(bytes: Uint8Array, mime: string): string {
   return `data:${mime};base64,${Buffer.from(bytes).toString("base64")}`;

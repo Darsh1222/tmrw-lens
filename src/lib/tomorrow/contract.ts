@@ -113,7 +113,8 @@ export function classImport(plan: Plan, sources: SourceMeta[], c: ClassBlock): z
   return {
     lens_id: c.id,
     kind: "class_block" as const,
-    title: `${c.course} ${MEETING[c.meeting_type]}`,
+    // "MATH141 office hours", "MATH141 discussion (quiz day)": what code noted on it, in the title Tomorrow shows.
+    title: c.title && c.meeting_type === "other" && c.marker ? `${c.course} ${c.title.toLowerCase()}` : `${c.course} ${MEETING[c.meeting_type]}${c.marker?.startsWith("Quiz day") ? " (quiz day)" : ""}`, // prettier-ignore
     course: c.course,
     meeting_type: c.meeting_type,
     location: c.location,
@@ -131,7 +132,8 @@ export function itemImport(plan: Plan, sources: SourceMeta[], i: PlanItem): z.in
   return {
     lens_id: i.id,
     kind: i.kind,
-    title: i.title,
+    // The contract has no "optional": the title says when it applies.
+    title: i.optional ? `${i.title} (${i.optional.toLowerCase()})` : i.title,
     course: i.course,
     date: i.date?.value ?? null,
     start_time: i.time?.start ?? null,

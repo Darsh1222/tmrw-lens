@@ -1,0 +1,75 @@
+{
+  "name": "syllabus-policies",
+  "description": "PHYS161 syllabus with the patterns real ones use: in-class midterms on tentative dates (times from the lecture line), a TBA final (no date invented), a 7-day notice rule for exam conflicts (optional tasks, with the date math), quizzes in discussion with no dates (one question), office hours (asked before adding), grade weights and topics (course info)",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-phys161-policies.pdf"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": "PHYS161",
+        "title": "Midterm 1",
+        "date": "2026-10-07",
+        "time": "13:00",
+        "end": "13:50",
+        "tentative": true
+      },
+      {
+        "course": "PHYS161",
+        "title": "Midterm 2",
+        "date": "2026-11-18",
+        "time": "13:00",
+        "end": "13:50",
+        "tentative": true
+      },
+      {
+        "course": "PHYS161",
+        "title": "Final exam",
+        "date": null,
+        "time": null,
+        "end": null,
+        "tba": true
+      },
+      {
+        "course": "PHYS161",
+        "title": "Conflict notice, Midterm 1",
+        "match": "exam conflict \\(Midterm 1\\)",
+        "date": "2026-09-30",
+        "time": null,
+        "end": null,
+        "optional": true
+      },
+      {
+        "course": "PHYS161",
+        "title": "Conflict notice, Midterm 2",
+        "match": "exam conflict \\(Midterm 2\\)",
+        "date": "2026-11-11",
+        "time": null,
+        "end": null,
+        "optional": true
+      },
+      {
+        "course": "PHYS161",
+        "title": "Conflict notice, Final exam",
+        "match": "exam conflict \\(Final exam\\)",
+        "date": null,
+        "time": null,
+        "end": null,
+        "optional": true
+      }
+    ],
+    "asks": ["q_quiz_section_PHYS161", "q_office_hours_PHYS161"],
+    "course_info": [
+      {
+        "course": "PHYS161",
+        "weights": 4,
+        "topics": 7
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

@@ -24,6 +24,11 @@
     "label": "Testudo screenshot",
     "captured_at": null
   },
+  "testudo-grid-short-day.png": {
+    "kind": "testudo_screenshot",
+    "label": "Testudo screenshot",
+    "captured_at": null
+  },
   "syllabus-math141.pdf": {
     "kind": "syllabus_pdf",
     "label": "MATH141 syllabus",
@@ -32,6 +37,11 @@
   "syllabus-cmsc131.pdf": {
     "kind": "syllabus_pdf",
     "label": "CMSC131 syllabus",
+    "captured_at": null
+  },
+  "syllabus-phys161-policies.pdf": {
+    "kind": "syllabus_pdf",
+    "label": "PHYS161 syllabus",
     "captured_at": null
   },
   "whiteboard-math141.jpg": {

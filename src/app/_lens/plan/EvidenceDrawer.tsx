@@ -127,9 +127,21 @@ export function EvidenceDrawer({
               <dl className="grid grid-cols-[88px_1fr] gap-x-4 gap-y-3 text-sm">
                 <dt className="text-muted">When</dt>
                 <dd>
-                  {item.date ? formatDate(item.date.value) : item.kind === "task" ? "No date" : "Date to settle"}
+                  {item.date ? formatDate(item.date.value) : item.tba ? "Date TBA" : item.kind === "task" ? "No date" : "Date to settle"}
                   {item.time ? `, ${formatTime(item.time.start)}${item.time.end ? `–${formatTime(item.time.end)}` : ""}` : ""}
                 </dd>
+                {item.optional && (
+                  <>
+                    <dt className="text-muted">Optional</dt>
+                    <dd>{item.optional}.</dd>
+                  </>
+                )}
+                {item.tentative && (
+                  <>
+                    <dt className="text-muted">Tentative</dt>
+                    <dd>The syllabus says &ldquo;{item.tentative.text}&rdquo;. A later date from a newer source is the likely one.</dd>
+                  </>
+                )}
                 {item.date && (
                   <>
                     <dt className="text-muted">Date math</dt>
@@ -154,6 +166,12 @@ export function EvidenceDrawer({
             )}
             {cls && (
               <dl className="grid grid-cols-[88px_1fr] gap-x-4 gap-y-3 text-sm">
+                {cls.marker && (
+                  <>
+                    <dt className="text-muted">Note</dt>
+                    <dd>{cls.marker}</dd>
+                  </>
+                )}
                 <dt className="text-muted">Meets</dt>
                 <dd>
                   {cls.days.map((d) => WEEKDAY_NAMES[d].slice(0, 3)).join(" ")} · {formatTime(cls.start)}–{formatTime(cls.end)}
