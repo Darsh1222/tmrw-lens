@@ -33,7 +33,7 @@ const settle = (page: Page) => page.waitForTimeout(400);
 const centre = async (el: Locator) => (await el.evaluate((n) => n.scrollIntoView({ block: "center" })), settle(el.page())); // prettier-ignore
 const away = async (page: Page) => (await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight)), settle(page)); // prettier-ignore
 
-test("the hero's preview: plays only when seen, pauses away, resumes where it was, then offers Replay", async ({
+test("the hero's preview: plays only when seen, pauses away, resumes where it was, and loops while seen", async ({
   page,
 }) => {
   lightOnly();
@@ -63,7 +63,7 @@ test("the hero's preview: plays only when seen, pauses away, resumes where it wa
   await page.waitForTimeout(500);
   expect(await progress(glide)).toBeGreaterThan(frozen); // and goes on from there, not from the start
   await expect(glide).toHaveAttribute("data-anim", "done", { timeout: 9000 });
-  await expect(glide.getByRole("button", { name: "Replay" })).toBeVisible();
+  await expect(glide).toHaveAttribute("data-anim", "playing", { timeout: 5000 }); // again, after a 3 s hold
   expect(await shift(page)).toBeLessThan(0.001); // 0 to three decimals, as Lighthouse reports it
 });
 

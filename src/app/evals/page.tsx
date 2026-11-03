@@ -91,7 +91,7 @@ export default function Evals() {
   return (
     <>
       <SiteHeader />
-      <main id="main" className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-20 px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
+      <main id="main" className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-20 px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
         <header className="flex max-w-3xl flex-col gap-4">
           <span className="forum-caps">Evals</span>
           <h1 className="forum-display text-5xl leading-[1.05] sm:text-6xl">

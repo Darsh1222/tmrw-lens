@@ -462,3 +462,8 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   hero's buttons are links (#missed-session, #sample-week) that start the demos, so they work as plain anchors.
 - 2026-11-03: The Tomorrow token is kept in localStorage (key lens_tomorrow_token) after a send Tomorrow accepts; it's
   removed on "Forget token" or a 401. Storage errors only mean it isn't remembered.
+- 2026-11-03: Site structure for a first visit (owner's brief): sticky bar with one primary action; a 3-step "How to
+  try it" strip whose links flash their target (data-flash, 1.8 s; a static outline under reduced motion); sections
+  I-IV in order, II · Prove always shown (an empty state before a plan); IV · Results reads evals/*.json at build time.
+  The hero preview now loops (3 s hold) while in view instead of offering Replay. The page passes `home` to the header
+  (usePathname in the bar broke prerendering of /review/[token]). One 1120px column everywhere.

@@ -190,6 +190,13 @@ Per-person spend limits and two global brakes keep the public demo from using To
   against a limit (a Playwright test checks that neither makes a model call); typing your own reply runs it live.
 - Send to Tomorrow remembers the token in your browser after the first send Tomorrow accepts ("Connected to Tomorrow",
   with "Forget token"); if Tomorrow refuses it, it's forgotten and the box comes back.
+- The site, made clear for a first visit: a sticky top bar (How it works, Try it, Results, GitHub, and one "Try a
+  missed session" button; a menu on phones) that underlines the section you're in; a "How to try it" strip of three
+  steps that each jump to the right place and outline it for a moment; four labelled sections in order (I · Read, II ·
+  Prove, III · Rebuild, IV · Results, the last as stat cards read from the eval results); guidance in each flow (what
+  files and limits, what happens next, a one-time "Tap any item" hint, what Tomorrow is); and a footer with the pitch,
+  the models, and the privacy line. Lighthouse accessibility 100 and layout shift 0 on home and evals, phone and
+  desktop; no WCAG AA violations in either theme (axe); no sideways scroll at 390px; keyboard-only works.
 
 ### Nov 2
 

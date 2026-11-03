@@ -90,8 +90,12 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
           Send to Tomorrow
         </h2>
         <p className="text-sm text-ink-2">
-          {count} ready to send{waiting ? `; ${waiting} wait until you answer or edit them` : ""}. Tomorrow plans study
-          time around your classes and texts you at the right moment. Only verified items go.
+          Tomorrow is the texting assistant that keeps this plan going: it plans study time around your classes, texts
+          you when a session slips, and asks Lens to rebuild the week.
+        </p>
+        <p className="text-sm">
+          {count} ready to send{waiting ? `; ${waiting} wait until you answer or edit them` : ""}. Only verified items
+          go.
         </p>
       </div>
       <form onSubmit={send} className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -140,9 +144,15 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
           {state.message}
         </p>
       )}
-      <button onClick={download} disabled={!count} className={buttonClass("plain", "self-start px-0")}>
-        Download what would be sent (JSON)
-      </button>
+      <details className="text-sm text-ink-2">
+        <summary className="cursor-pointer hover:text-ink">Details</summary>
+        <div className="mt-2 flex flex-col items-start gap-1">
+          <p>Each item goes with its quote and date math. The connection uses a token from Tomorrow&apos;s Settings.</p>
+          <button onClick={download} disabled={!count} className={buttonClass("plain", "min-h-9 px-0 underline underline-offset-4")}>
+            Download what would be sent
+          </button>
+        </div>
+      </details>
     </section>
   ); // prettier-ignore
 }

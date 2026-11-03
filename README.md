@@ -16,8 +16,9 @@ its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am
 soonest it fits before Quiz 3. Nothing else changed."_ The recorded runs are free and never count against a limit; type
 your own reply to run it live.
 
-Then press **Try the sample week** (free, instant, no limits) or upload your own syllabus, Testudo schedule, whiteboard
-photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact words, and the date math.
+Then step 2, **See the proof**, opens the sample week (free, instant, no limits); or **Upload your own** syllabus,
+Testudo schedule, whiteboard photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact
+words, and the date math.
 
 ## How Meta's models are used
 

@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buttonClass } from "./ui";
 import { useReducedMotion, useSeen } from "./useSeen";
 
 // The first screen: what Lens is, in one sentence, and the two ways in. Beside
 // it, a small week where a missed session turns into a ghost and glides to its
-// new slot: once, when it's in view (useSeen), paused while it isn't, with a
-// Replay after. Under reduced motion it shows the landed state, ghost and all.
+// new slot, on a loop: it plays only while it's in view (useSeen), pauses where
+// it is when it isn't, and holds the landed state 3 seconds before going again.
+// Under reduced motion it shows the landed state, ghost and all.
 
 function GlidePreview() {
   const { attach, started, visible } = useSeen();
@@ -16,6 +17,12 @@ function GlidePreview() {
   const [round, setRound] = useState(0);
   const [done, setDone] = useState(false);
   const state = reduced || done ? "done" : !started ? "idle" : visible ? "playing" : "paused";
+  // Landed: hold it a moment, then go again, but only while someone can see it.
+  useEffect(() => {
+    if (!done || reduced || !visible) return;
+    const t = setTimeout(() => (setDone(false), setRound((r) => r + 1)), 3000);
+    return () => clearTimeout(t);
+  }, [done, reduced, visible]);
   const block = "absolute rounded-lg border border-line px-2 py-1.5 text-[11px] leading-tight";
   return (
     <div
@@ -81,48 +88,33 @@ function GlidePreview() {
           <span className="glide-badge absolute -top-2.5 right-1 rounded border border-line-strong bg-card px-1 text-[10px]">Moved</span>
         </div>
       </div>
-      {/* Over the card's corner, so showing it moves nothing. */}
-      <button
-        type="button"
-        onClick={() => (setDone(false), setRound((r) => r + 1))}
-        className={`absolute bottom-3 right-3 min-h-9 rounded-md border border-line-strong bg-paper px-3 text-xs text-ink-2 hover:text-ink ${done && !reduced ? "" : "invisible"}`}
-        aria-hidden={!done || reduced}
-        tabIndex={done && !reduced ? 0 : -1}
-      >
-        Replay
-      </button>
     </div>
   ); // prettier-ignore
 }
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="grid items-center gap-12 pt-10 sm:pt-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+    <section aria-labelledby="hero-title" className="grid items-center gap-10 pt-10 sm:pt-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
       <div className="flex flex-col gap-6">
         <span className="forum-caps">Tomorrow Lens</span>
         <h1 id="hero-title" className="forum-display text-[2.75rem] leading-[1.05] sm:text-6xl">
           Your week, read, verified, and <em className="text-crimson">rebuilt</em> when life happens.
         </h1>
         <p className="max-w-xl text-lg text-ink-2">
-          Photograph a syllabus, your Testudo schedule, or a whiteboard. Lens reads it with Muse Spark and SAM 3.1,
-          checks every date against the words it came from, and when you miss a session, rebuilds the rest of the week.
+          Drop in a syllabus, schedule or whiteboard photo. Lens builds a plan you can verify. Miss a session, and it
+          rebuilds the week.
         </p>
-        <div className="flex flex-wrap gap-3">
-          <a href="#missed-session" className={buttonClass("primary", "px-5")}>
-            Try a missed session
-          </a>
-          <a href="#sample-week" className={buttonClass("quiet", "px-5")}>
-            Try the sample week
-          </a>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <a href="#missed-session" className={buttonClass("primary", "px-5")}>
+              Try a missed session
+            </a>
+            <a href="#upload" className={buttonClass("quiet", "px-5")}>
+              Upload your own
+            </a>
+          </div>
+          <p className="text-sm text-ink-2">10 seconds, free, no sign-up.</p>
         </div>
-        <p className="text-sm text-ink-2">
-          About 10 seconds each, free, no sign-up: watch a week rebuild after a missed session, or open a sample week
-          and tap any date to see the words it came from. Or{" "}
-          <a href="#upload" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
-            upload your own
-          </a>
-          .
-        </p>
         <p className="text-sm text-ink-2">
           0 invented dates in 201 · every rebuild rule kept in 204 runs ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">

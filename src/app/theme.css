@@ -90,6 +90,29 @@
 html {
   background: var(--tm-bg);
   scrollbar-gutter: stable;
+  /* The sticky bar is 64px: a section a link jumps to starts just under it. */
+  scroll-padding-top: 80px;
+}
+
+/* Where a "How to try it" step lands: outlined for a moment, so it's clear where to look. */
+@keyframes lens-flash {
+  0%,
+  60% {
+    box-shadow: 0 0 0 3px var(--tm-crimson);
+  }
+  100% {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+[data-flash] {
+  border-radius: 1rem;
+  animation: lens-flash 1.8s ease-out 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-flash] {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--tm-crimson);
+  }
 }
 
 body {

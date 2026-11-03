@@ -75,15 +75,15 @@ export function Upload({
   const done = live.reduce((a, i) => a + i.done, 0);
 
   return (
-    <section id="upload" aria-labelledby="upload-title" className="flex flex-col gap-6 scroll-mt-24">
+    <section id="upload" aria-labelledby="upload-title" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <span className="forum-caps">I · Read</span>
         <h2 id="upload-title" className="forum-display text-3xl sm:text-4xl">
           Add your week.
         </h2>
         <p className="max-w-2xl text-ink-2">
-          A syllabus, your Testudo schedule, a whiteboard, your notes, a course site&apos;s to-do list. Photos are
-          shrunk in your browser and read one at a time; Lens keeps none of them.
+          Add a syllabus, your Testudo schedule, a whiteboard or notes photo, or a course site&apos;s to-do list. Lens
+          reads each page with Muse Spark, outlines photos with SAM 3.1, and keeps none of them.
         </p>
       </div>
 
@@ -100,7 +100,7 @@ export function Upload({
         <UploadSimple size={32} weight="light" aria-hidden className="text-ink-2" />
         <div className="flex flex-col gap-1">
           <p className="text-lg">Drop PDFs, photos, or screenshots here</p>
-          <p className="text-sm text-ink-2">Up to 12 pages a PDF. JPEG, PNG, HEIC, or PDF.</p>
+          <p className="text-sm text-ink-2">PDF (up to 12 pages), JPEG, PNG, or HEIC. Up to 25 pages a day, free.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           <button onClick={() => fileRef.current?.click()} className={buttonClass("primary")}>
@@ -143,6 +143,10 @@ export function Upload({
           </div>
         </details>
       </div>
+      <p className="text-sm text-ink-2">
+        Next, Lens reads each page, checks every date against its words, and asks about anything unclear. You&apos;ll
+        review everything before anything is sent.
+      </p>
       {busy && (
         <p role="status" className="text-sm text-ink-2">
           {busy}

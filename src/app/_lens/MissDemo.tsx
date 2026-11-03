@@ -454,7 +454,7 @@ function Frame({
   anim?: string;
 }) {
   return (
-    <section id="missed-session" aria-label="Try a missed session" className="scroll-mt-6">
+    <section id="missed-session" aria-label="Try a missed session">
       <div
         ref={frameRef}
         data-anim={anim}

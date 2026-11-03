@@ -3,6 +3,7 @@
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import sample from "@/lib/demo/sample-week.json";
+import { useStored, writeStored } from "./stored";
 import type { Answer } from "@/lib/plan/answer";
 import { planFrom } from "@/lib/plan/session";
 import type { PageReading, SourceReading } from "@/lib/plan/types";
@@ -24,6 +25,8 @@ import { Viewer, type Mark } from "./Viewer";
 // everything (inputs, readings, answers); the plan is recomputed from them on
 // every change, so nothing about a visitor lives on the server.
 
+/** Set once the "Tap any item" hint is dismissed. */
+const HINT = "lens_hint_proof";
 const SAMPLE = sample as unknown as { zone: string; files: string[]; readings: SourceReading[] };
 const CONCURRENCY = 3;
 
@@ -297,6 +300,7 @@ export function Lens() {
   const asked = answers.filter((a) => !/^(edit|confirm|skip):/.test(a.question_id)).length;
   const all = plan ? [...plan.items, ...plan.classes] : [];
   const verified = all.filter((x) => x.status === "verified").length;
+  const hintSeen = useStored(HINT) !== null;
   // Counts only for inputs in the plan: one still waiting for the rest of its batch hasn't been counted yet.
   const found = Object.fromEntries(
     inputs
@@ -326,10 +330,27 @@ export function Lens() {
         found={found}
       />
 
-      <div ref={results} className={`scroll-mt-6 empty:hidden ${loading && !plan ? "min-h-[100svh]" : ""}`}>
+      <section id="prove" aria-labelledby="prove-title" className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <span className="forum-caps">II · Prove</span>
+        <h2 id="prove-title" className="forum-display text-3xl sm:text-4xl">
+          Every date, with its proof.
+        </h2>
+        <p className="max-w-2xl text-ink-2">
+          Each item links to the exact words it came from and how its date was worked out. Tap one to see it.
+        </p>
+      </div>
+      <div ref={results} className={loading && !plan ? "min-h-[100svh]" : ""}>
+      {!loading && !plan && (
+        <div className="flex flex-col items-start gap-4 rounded-2xl border border-line bg-card p-6">
+          <p className="text-ink-2">Nothing to prove yet. Open the sample week to see a verified plan, or add your own above.</p>
+          <button onClick={trySample} className={buttonClass("quiet")}>
+            Open the sample week
+          </button>
+        </div>
+      )}
       {loading && !plan && (
         <div className="flex flex-col gap-3" role="status">
-          <span className="forum-caps">II · Verify</span>
           <p className="forum-display text-3xl text-ink-2 sm:text-4xl">Reading your week…</p>
           <p className="text-ink-2">The plan appears here, with every date traced to the words it came from.</p>
         </div>
@@ -337,11 +358,10 @@ export function Lens() {
       {plan && session && (
         <section aria-labelledby="results-title" className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
-            <span className="forum-caps">II · Verify</span>
             <div className="flex flex-wrap items-end justify-between gap-4">
-              <h2 id="results-title" className="forum-display text-3xl sm:text-4xl">
+              <h3 id="results-title" className="forum-display text-2xl sm:text-3xl">
                 What Lens found.
-              </h2>
+              </h3>
               {answers.length > 0 && (
                 <button onClick={() => setAnswers((xs) => xs.slice(0, -1))} className={buttonClass("plain")}>
                   Undo last answer
@@ -354,6 +374,20 @@ export function Lens() {
               {zone.replace("_", " ")}
               {recorded ? " · the sample week, recorded, so it's free" : cost > 0 ? ` · read for ${money(cost)}` : ""}
             </p>
+            {all.length === 0 ? (
+              <p role="status" className="rounded-2xl border border-line bg-card p-4 text-sm">
+                Lens didn&apos;t find any dates or classes here. Try a sharper photo, or a page that lists dates.
+              </p>
+            ) : (
+              !hintSeen && (
+                <p className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-card px-4 py-3 text-sm">
+                  <span>Tap any item to see where it came from.</span>
+                  <button onClick={() => writeStored(HINT, "1")} className={buttonClass("plain", "min-h-9 px-2")}>
+                    Got it
+                  </button>
+                </p>
+              )
+            )}
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
@@ -441,6 +475,7 @@ export function Lens() {
         </section>
       )}
       </div>
+      </section>
 
       {plan && <EvidenceDrawer plan={plan} inputs={inputs} id={drawer} onClose={closeDrawer} onAnswer={answer} />}
     </div>
