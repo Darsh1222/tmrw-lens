@@ -199,6 +199,12 @@ body {
   transition: transform 320ms ease-out;
 }
 
+/* Out of view: everything animating inside stops where it is, and goes on from there when it's back. */
+.anim-paused,
+.anim-paused * {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .forum-typing span {
     animation: none;
@@ -256,10 +262,10 @@ body {
 }
 
 /*
- * The hero's looping preview, 7 seconds: the missed session turns into a ghost,
- * a path draws, the block glides to its new slot and lands, holds, and resets
- * while invisible. Paused unless on screen (.is-playing); reduced motion shows
- * the landed state.
+ * The hero's preview, 7 seconds, once: the missed session turns into a ghost,
+ * a path draws, and the block glides to its new slot and lands, and stays.
+ * Paused unless on screen (.is-playing); Replay runs it again. Reduced motion
+ * shows the landed state.
  */
 @keyframes glide-block {
   0%,
@@ -274,14 +280,9 @@ body {
     transform: translate(calc(-45% - 4px), 30px);
   }
   38%,
-  86% {
-    transform: none;
-    opacity: 1;
-  }
-  94%,
   100% {
     transform: none;
-    opacity: 0;
+    opacity: 1;
   }
 }
 @keyframes glide-ghost {
@@ -290,12 +291,8 @@ body {
     opacity: 0;
   }
   14%,
-  86% {
-    opacity: 1;
-  }
-  94%,
   100% {
-    opacity: 0;
+    opacity: 1;
   }
 }
 @keyframes glide-path {
@@ -305,14 +302,9 @@ body {
     opacity: 1;
   }
   34%,
-  86% {
-    stroke-dashoffset: 0;
-    opacity: 0.5;
-  }
-  94%,
   100% {
     stroke-dashoffset: 0;
-    opacity: 0;
+    opacity: 0.5;
   }
 }
 @keyframes glide-badge {
@@ -333,19 +325,19 @@ body {
   }
 }
 .glide .glide-block {
-  animation: glide-block 7s infinite;
+  animation: glide-block 7s 1 both;
   animation-play-state: paused;
 }
 .glide .glide-ghost {
-  animation: glide-ghost 7s infinite;
+  animation: glide-ghost 7s 1 both;
   animation-play-state: paused;
 }
 .glide .glide-path path {
-  animation: glide-path 7s infinite;
+  animation: glide-path 7s 1 both;
   animation-play-state: paused;
 }
 .glide .glide-badge {
-  animation: glide-badge 7s infinite;
+  animation: glide-badge 7s 1 both;
   animation-play-state: paused;
 }
 .glide.is-playing .glide-block,

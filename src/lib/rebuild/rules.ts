@@ -6,7 +6,7 @@ import type { RebuildPlanned, RebuildRequest, RebuildResponse } from "@/lib/rebu
 // them); hardRuleViolations checks a finished rebuild against them again from
 // scratch, independently of how it was made, including what its message says.
 //
-// 1. Nothing overlaps classes and other busy time, sleep, quiet hours, or another item.
+// 1. Nothing overlaps classes and other busy time, sleep, quiet hours, time outside study hours, or another item.
 // 2. Every move is after now and finishes before it's due.
 // 3. Nothing lands within 90 minutes of the missed session's end, unless its deadline is within 24 hours.
 // 4. Nothing ends within an hour of bedtime.
@@ -15,8 +15,22 @@ import type { RebuildPlanned, RebuildRequest, RebuildResponse } from "@/lib/rebu
 export const MISS_GAP_MIN = 90;
 export const SLEEP_BUFFER_MIN = 60;
 export const URGENT_HOURS = 24;
-/** Assumed when Tomorrow doesn't send the person's sleep. */
-export const DEFAULT_SLEEP = { start: "23:00", end: "07:00" } as const;
+/** Assumed when Tomorrow doesn't send the person's sleep: a student's. */
+export const DEFAULT_SLEEP = { start: "00:30", end: "08:30" } as const;
+
+/** Their sleep: as sent, or a student's default (a morning person up at 7, a night person to bed at 1:30). */
+export function sleepOf(req: RebuildRequest): { start: string; end: string } {
+  if (req.prefs?.sleep) return req.prefs.sleep;
+  const t = req.prefs?.study_time;
+  return t === "mornings" ? { start: "23:00", end: "07:00" } : t === "nights" ? { start: "01:30", end: "09:30" } : DEFAULT_SLEEP; // prettier-ignore
+}
+
+/** Study hours when Tomorrow doesn't send them: 9am to 11pm; from 7:30am for a morning person, to 12:30am for a night one. */
+export function studyHours(req: RebuildRequest): { start: string; end: string } {
+  if (req.prefs?.study_hours) return req.prefs.study_hours;
+  const t = req.prefs?.study_time;
+  return { start: t === "mornings" ? "07:30" : "09:00", end: t === "nights" ? "00:30" : "23:00" };
+}
 
 const MIN = 60_000;
 export type Span = { s: number; e: number };
@@ -35,7 +49,7 @@ export const missedOf = (req: RebuildRequest) => req.items.find((i) => i.id === 
 
 /** Each night between `from` and `to`: bedtime and waking, in the person's zone (daylight saving included). */
 export function nights(req: RebuildRequest, from: number, to: number): { bed: number; wake: number }[] {
-  const sleep = req.prefs?.sleep ?? DEFAULT_SLEEP;
+  const sleep = sleepOf(req);
   const [bh, bm] = clock(sleep.start);
   const [wh, wm] = clock(sleep.end);
   const out: { bed: number; wake: number }[] = [];
@@ -55,11 +69,16 @@ export function nights(req: RebuildRequest, from: number, to: number): { bed: nu
   return out;
 }
 
-/** Time nothing may be placed in: each night from an hour before bedtime until waking, and the daily quiet hours. */
+/**
+ * Time nothing may be placed in: each night from an hour before bedtime until waking, the daily quiet hours, and the
+ * time outside study hours (from the latest end to the earliest start).
+ */
 export function blocked(req: RebuildRequest, from: number, to: number): Span[] {
   const out: Span[] = nights(req, from, to).map((n) => ({ s: n.bed - SLEEP_BUFFER_MIN * MIN, e: n.wake }));
   const last = DateTime.fromMillis(to, { zone: req.zone }).startOf("day").plus({ days: 1 });
-  for (const q of req.prefs?.quiet ?? []) {
+  const study = studyHours(req);
+  const off = [{ start: study.end, end: study.start }];
+  for (const q of [...(req.prefs?.quiet ?? []), ...off]) {
     const [sh, sm] = clock(q.start);
     const [eh, em] = clock(q.end);
     for (
@@ -150,7 +169,7 @@ export function hardRuleViolations(req: RebuildRequest, res: RebuildResponse): s
     if (due !== null && x.e > due) out.push(`${id}: finishes after it's due`);
     for (const f of fixed) if (overlaps(x, f)) out.push(`${id}: overlaps ${f.what}`);
     for (const [other, y] of where) if (other !== id && y && overlaps(x, y)) out.push(`${id}: overlaps ${other}`);
-    for (const b of off) if (overlaps(x, b)) out.push(`${id}: in sleep, the hour before bed, or quiet hours`);
+    for (const b of off) if (overlaps(x, b)) out.push(`${id}: in sleep, the hour before bed, quiet hours, or outside study hours`); // prettier-ignore
     if (missed && gap && overlaps(x, gap)) out.push(`${id}: within ${MISS_GAP_MIN} min of the missed session`);
   };
   for (const x of moves) check(x.item_id, { s: Date.parse(x.start!), e: Date.parse(x.end!) }, x.item_id === req.missed.item_id); // prettier-ignore

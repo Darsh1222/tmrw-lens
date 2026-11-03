@@ -5,28 +5,31 @@
     "effort": "low",
     "cases_passed": "68/68",
     "hard_rules": 1,
-    "top1": 0.989247311827957,
+    "top1": 1,
     "top3": 1,
-    "judge_score": 4.9,
-    "judge_min": 2,
+    "judge_score": 4.95,
+    "judge_min": 3,
+    "time_judge": 4.94,
+    "time_judge_min": 3,
     "unkind_messages": 0,
     "flaky": [],
     "regressions": [],
     "unrecorded": [],
     "fell_back": "0/204",
-    "cost_per_rebuild": 0.00678,
-    "turns_per_rebuild": 3.5,
-    "latency_per_rebuild_s": 7.2,
-    "tokens_per_call": "3038 in, 219 out",
+    "cost_per_rebuild": 0.00761,
+    "turns_per_rebuild": 3.8,
+    "latency_per_rebuild_s": 8.6,
+    "tokens_per_call": "3185 in, 229 out",
     "cache_hit_rate": "84%",
     "fallback_hard_rules": 1,
-    "fallback_cases_passed": "51/68"
+    "fallback_cases_passed": "58/68"
   },
   "gates": {
     "hard rules 100%": true,
     "top-1 >= 85%": true,
     "top-3 >= 98%": true,
     "judge >= 4.8": true,
+    "best-time judge >= 4.8": true,
     "0 regressions": true,
     "0 flaky": true,
     "every case recorded": true,
@@ -49,6 +52,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -63,6 +71,11 @@
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -85,6 +98,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -94,11 +112,16 @@
       "flaky": false,
       "expected_best": "2026-11-04T21:00:00.000-05:00",
       "ranks": [
-        2,
-        2,
+        1,
+        1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -121,6 +144,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -135,6 +163,11 @@
         null
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -157,6 +190,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -173,7 +211,12 @@
       "judge": [
         5,
         5,
-        5
+        null
+      ],
+      "time_judge": [
+        5,
+        4,
+        null
       ],
       "problems": []
     },
@@ -189,6 +232,11 @@
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -211,6 +259,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -229,6 +282,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -236,13 +294,18 @@
       "group": "live bug",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -254,13 +317,18 @@
       "group": "late-night skip",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -272,13 +340,18 @@
       "group": "late-night skip",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -290,13 +363,18 @@
       "group": "late-night skip",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -319,6 +397,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -326,13 +409,18 @@
       "group": "due soon",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T22:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -355,6 +443,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -371,7 +464,12 @@
       "judge": [
         5,
         5,
-        2
+        5
+      ],
+      "time_judge": [
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -391,6 +489,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -398,13 +501,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -423,7 +531,12 @@
         1
       ],
       "judge": [
+        4,
         5,
+        5
+      ],
+      "time_judge": [
+        4,
         5,
         5
       ],
@@ -434,13 +547,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-09T21:00:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -452,13 +570,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T16:50:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -470,13 +593,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "expected_best": "2026-11-13T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -488,13 +616,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -506,13 +639,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T19:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -524,13 +662,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -542,7 +685,30 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T16:45:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        4,
+        5,
+        4
+      ],
+      "time_judge": [
+        4,
+        5,
+        4
+      ],
+      "problems": []
+    },
+    {
+      "name": "no-reply-friday-night",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-14T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -553,20 +719,7 @@
         5,
         5
       ],
-      "problems": []
-    },
-    {
-      "name": "no-reply-friday-night",
-      "group": "reply",
-      "pass": true,
-      "flaky": false,
-      "expected_best": "2026-11-14T07:30:00.000-05:00",
-      "ranks": [
-        1,
-        1,
-        1
-      ],
-      "judge": [
+      "time_judge": [
         5,
         5,
         5
@@ -589,6 +742,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -596,13 +754,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -614,13 +777,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-14T07:30:00.000-05:00",
+      "expected_best": "2026-11-14T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -632,13 +800,18 @@
       "group": "load",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T21:30:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -650,13 +823,18 @@
       "group": "load",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T09:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -668,16 +846,21 @@
       "group": "load",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "expected_best": "2026-11-12T12:15:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
-        3,
-        3,
-        3
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -686,13 +869,18 @@
       "group": "weekend",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-14T07:30:00.000-05:00",
+      "expected_best": "2026-11-14T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -715,6 +903,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -733,6 +926,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -740,13 +938,18 @@
       "group": "dst",
       "pass": true,
       "flaky": false,
-      "expected_best": "2027-03-14T08:30:00.000-04:00",
+      "expected_best": "2027-03-14T09:00:00.000-04:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -758,7 +961,7 @@
       "group": "midnight",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T17:00:00.000-05:00",
+      "expected_best": "2026-11-12T17:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -767,7 +970,12 @@
       "judge": [
         5,
         5,
-        4
+        5
+      ],
+      "time_judge": [
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -776,13 +984,18 @@
       "group": "midnight",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T08:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -794,13 +1007,18 @@
       "group": "two misses",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-09T17:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -823,6 +1041,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -841,6 +1064,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -848,7 +1076,7 @@
       "group": "deadline moved",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "expected_best": "2026-11-13T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -856,8 +1084,13 @@
       ],
       "judge": [
         5,
-        4,
-        4
+        5,
+        null
+      ],
+      "time_judge": [
+        5,
+        5,
+        null
       ],
       "problems": []
     },
@@ -873,6 +1106,11 @@
         null
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -895,6 +1133,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -909,6 +1152,11 @@
         null
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -931,6 +1179,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -949,6 +1202,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -956,7 +1214,7 @@
       "group": "study time",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T21:30:00.000-05:00",
+      "expected_best": "2026-11-11T17:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -966,6 +1224,11 @@
         5,
         5,
         5
+      ],
+      "time_judge": [
+        5,
+        5,
+        4
       ],
       "problems": []
     },
@@ -985,6 +1248,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -992,7 +1260,7 @@
       "group": "study time",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T12:00:00.000-05:00",
+      "expected_best": "2026-11-12T12:15:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1001,7 +1269,12 @@
       "judge": [
         5,
         5,
-        4
+        5
+      ],
+      "time_judge": [
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1010,13 +1283,18 @@
       "group": "quiet hours",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-09T19:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1028,13 +1306,18 @@
       "group": "quiet hours",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T20:00:00.000-05:00",
+      "expected_best": "2026-11-12T09:30:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1046,13 +1329,18 @@
       "group": "injection",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1064,13 +1352,18 @@
       "group": "injection",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-09T18:30:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1082,7 +1375,7 @@
       "group": "injection",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "expected_best": "2026-11-12T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1090,8 +1383,13 @@
       ],
       "judge": [
         5,
-        4,
-        4
+        5,
+        5
+      ],
+      "time_judge": [
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1107,6 +1405,11 @@
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1129,6 +1432,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -1136,13 +1444,18 @@
       "group": "everyday",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-12T08:00:00.000-05:00",
+      "expected_best": "2026-11-12T10:30:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1154,7 +1467,30 @@
       "group": "everyday",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-10T19:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        null
+      ],
+      "time_judge": [
+        5,
+        5,
+        null
+      ],
+      "problems": []
+    },
+    {
+      "name": "only-mornings-reply",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1165,20 +1501,7 @@
         5,
         5
       ],
-      "problems": []
-    },
-    {
-      "name": "only-mornings-reply",
-      "group": "reply",
-      "pass": true,
-      "flaky": false,
-      "expected_best": "2026-11-10T07:30:00.000-05:00",
-      "ranks": [
-        1,
-        1,
-        1
-      ],
-      "judge": [
+      "time_judge": [
         5,
         5,
         5
@@ -1190,13 +1513,18 @@
       "group": "everyday",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "expected_best": "2026-11-13T10:50:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        3,
+        3,
+        3
+      ],
+      "time_judge": [
         3,
         3,
         3
@@ -1219,6 +1547,11 @@
         5,
         5
       ],
+      "time_judge": [
+        5,
+        5,
+        5
+      ],
       "problems": []
     },
     {
@@ -1226,13 +1559,18 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-09T14:10:00.000-05:00",
+      "expected_best": "2026-11-10T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
         1
       ],
       "judge": [
+        5,
+        5,
+        5
+      ],
+      "time_judge": [
         5,
         5,
         5
@@ -1244,7 +1582,7 @@
       "group": "reply",
       "pass": true,
       "flaky": false,
-      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "expected_best": "2026-11-11T09:00:00.000-05:00",
       "ranks": [
         1,
         1,
@@ -1253,7 +1591,12 @@
       "judge": [
         5,
         5,
-        5
+        4
+      ],
+      "time_judge": [
+        5,
+        5,
+        4
       ],
       "problems": []
     }

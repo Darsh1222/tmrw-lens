@@ -139,7 +139,11 @@ export function Trace({
             const { icon: Icon, label } = plain(s, d);
             const visible = n < shown;
             return (
-              <li key={n} className={`forum-in ${visible ? "" : "forum-hidden hidden"}`}>
+              <li
+                key={n}
+                className={`forum-in ${visible ? "" : "forum-hidden hidden"}`}
+                data-step={visible ? "" : undefined}
+              >
                 <button
                   onClick={() => setDetail(detail === n ? null : n)}
                   aria-expanded={detail === n}

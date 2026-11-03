@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "6af2a2bbead824a892e76660bc4d4a906db646ae32f56cd994200e24f51cd7da",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "6bfbdfcfdfc20128bb47673cba955a526d211e699d700152fc47ceeb77b65165",
   "effort": "low",
   "response": {
     "version": 1,
@@ -11,7 +11,7 @@
         "action": "drop",
         "start": null,
         "end": null,
-        "reason": "there's no free time left before the quiz"
+        "reason": "nothing fits before the quiz"
       }
     ],
     "message": "Not enough free time before Quiz 4, so Calc practice is off the plan. Nothing else changed.",
@@ -81,53 +81,17 @@
           }
         ],
         "free": [
-          "07:30-11:00",
+          "09:00-11:00",
           "12:15-15:30",
-          "16:45-22:30"
+          "16:45-23:00"
         ]
-      }
-    },
-    {
-      "tool": "get_day",
-      "args": {
-        "date": "2026-11-11"
-      },
-      "ok": true,
-      "result": {
-        "ok": true,
-        "date": "Wed Nov 11",
-        "busy": [
-          {
-            "what": "MATH141 lecture",
-            "start": "10:00",
-            "end": "10:50"
-          },
-          {
-            "what": "PHYS161 lecture",
-            "start": "13:00",
-            "end": "13:50"
-          },
-          {
-            "what": "CHEM135 lab",
-            "start": "14:00",
-            "end": "16:50"
-          },
-          {
-            "what": "Robotics club",
-            "start": "21:00",
-            "end": "22:45"
-          }
-        ],
-        "planned": [],
-        "due": [],
-        "free": []
       }
     },
     {
       "tool": "drop_item",
       "args": {
         "item_id": "s_calc",
-        "reason": "there's no free time left before the quiz"
+        "reason": "nothing fits before the quiz"
       },
       "ok": true,
       "result": {
@@ -148,69 +112,70 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2202,
-        "output_tokens": 172,
+        "input_tokens": 2237,
+        "output_tokens": 290,
         "cached_tokens": 2033,
-        "reasoning_tokens": 45
+        "reasoning_tokens": 163
       },
-      "costUsd": 0.0012472,
-      "latencyMs": 1413
+      "costUsd": 0.0017924500000000001,
+      "latencyMs": 2551
     },
     {
       "usage": {
-        "input_tokens": 2418,
-        "output_tokens": 135,
+        "input_tokens": 2571,
+        "output_tokens": 162,
         "cached_tokens": 2161,
-        "reasoning_tokens": 31
+        "reasoning_tokens": 58
       },
-      "costUsd": 0.00121915,
-      "latencyMs": 1529
+      "costUsd": 0.00152515,
+      "latencyMs": 1376
     },
     {
       "usage": {
-        "input_tokens": 2597,
-        "output_tokens": 122,
-        "cached_tokens": 2417,
-        "reasoning_tokens": 15
-      },
-      "costUsd": 0.00110605,
-      "latencyMs": 978
-    },
-    {
-      "usage": {
-        "input_tokens": 2948,
-        "output_tokens": 304,
+        "input_tokens": 2777,
+        "output_tokens": 110,
         "cached_tokens": 2545,
-        "reasoning_tokens": 208
+        "reasoning_tokens": 55
       },
-      "costUsd": 0.0021775,
-      "latencyMs": 3029
+      "costUsd": 0.00113925,
+      "latencyMs": 4912
     },
     {
       "usage": {
-        "input_tokens": 3286,
+        "input_tokens": 3003,
+        "output_tokens": 202,
+        "cached_tokens": 2673,
+        "reasoning_tokens": 109
+      },
+      "costUsd": 0.00167195,
+      "latencyMs": 1975
+    },
+    {
+      "usage": {
+        "input_tokens": 3239,
         "output_tokens": 41,
-        "cached_tokens": 2161,
+        "cached_tokens": 2929,
         "reasoning_tokens": 3
       },
-      "costUsd": 0.0019046500000000001,
-      "latencyMs": 1207
+      "costUsd": 0.0010011,
+      "latencyMs": 1387
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 908,
-        "output_tokens": 1419,
-        "cached_tokens": 625,
-        "reasoning_tokens": 1400
+        "input_tokens": 1176,
+        "output_tokens": 1815,
+        "cached_tokens": 753,
+        "reasoning_tokens": 1789
       },
-      "costUsd": 0.00647825,
-      "latencyMs": 9241
+      "costUsd": 0.00835545,
+      "latencyMs": 14651
     }
   ],
   "runs": [
@@ -223,7 +188,7 @@
             "action": "drop",
             "start": null,
             "end": null,
-            "reason": "there's no free time left before the quiz"
+            "reason": "nothing fits before the quiz"
           }
         ],
         "message": "Not enough free time before Quiz 4, so Calc practice is off the plan. Nothing else changed.",
@@ -293,53 +258,17 @@
               }
             ],
             "free": [
-              "07:30-11:00",
+              "09:00-11:00",
               "12:15-15:30",
-              "16:45-22:30"
+              "16:45-23:00"
             ]
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-11"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Wed Nov 11",
-            "busy": [
-              {
-                "what": "MATH141 lecture",
-                "start": "10:00",
-                "end": "10:50"
-              },
-              {
-                "what": "PHYS161 lecture",
-                "start": "13:00",
-                "end": "13:50"
-              },
-              {
-                "what": "CHEM135 lab",
-                "start": "14:00",
-                "end": "16:50"
-              },
-              {
-                "what": "Robotics club",
-                "start": "21:00",
-                "end": "22:45"
-              }
-            ],
-            "planned": [],
-            "due": [],
-            "free": []
           }
         },
         {
           "tool": "drop_item",
           "args": {
             "item_id": "s_calc",
-            "reason": "there's no free time left before the quiz"
+            "reason": "nothing fits before the quiz"
           },
           "ok": true,
           "result": {
@@ -360,69 +289,70 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2202,
-            "output_tokens": 172,
+            "input_tokens": 2237,
+            "output_tokens": 290,
             "cached_tokens": 2033,
-            "reasoning_tokens": 45
+            "reasoning_tokens": 163
           },
-          "costUsd": 0.0012472,
-          "latencyMs": 1413
+          "costUsd": 0.0017924500000000001,
+          "latencyMs": 2551
         },
         {
           "usage": {
-            "input_tokens": 2418,
-            "output_tokens": 135,
+            "input_tokens": 2571,
+            "output_tokens": 162,
             "cached_tokens": 2161,
-            "reasoning_tokens": 31
+            "reasoning_tokens": 58
           },
-          "costUsd": 0.00121915,
-          "latencyMs": 1529
+          "costUsd": 0.00152515,
+          "latencyMs": 1376
         },
         {
           "usage": {
-            "input_tokens": 2597,
-            "output_tokens": 122,
-            "cached_tokens": 2417,
-            "reasoning_tokens": 15
-          },
-          "costUsd": 0.00110605,
-          "latencyMs": 978
-        },
-        {
-          "usage": {
-            "input_tokens": 2948,
-            "output_tokens": 304,
+            "input_tokens": 2777,
+            "output_tokens": 110,
             "cached_tokens": 2545,
-            "reasoning_tokens": 208
+            "reasoning_tokens": 55
           },
-          "costUsd": 0.0021775,
-          "latencyMs": 3029
+          "costUsd": 0.00113925,
+          "latencyMs": 4912
         },
         {
           "usage": {
-            "input_tokens": 3286,
+            "input_tokens": 3003,
+            "output_tokens": 202,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 109
+          },
+          "costUsd": 0.00167195,
+          "latencyMs": 1975
+        },
+        {
+          "usage": {
+            "input_tokens": 3239,
             "output_tokens": 41,
-            "cached_tokens": 2161,
+            "cached_tokens": 2929,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.0019046500000000001,
-          "latencyMs": 1207
+          "costUsd": 0.0010011,
+          "latencyMs": 1387
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 908,
-            "output_tokens": 1419,
-            "cached_tokens": 625,
-            "reasoning_tokens": 1400
+            "input_tokens": 1176,
+            "output_tokens": 1815,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1789
           },
-          "costUsd": 0.00647825,
-          "latencyMs": 9241
+          "costUsd": 0.00835545,
+          "latencyMs": 14651
         }
       ]
     },
@@ -435,7 +365,256 @@
             "action": "drop",
             "start": null,
             "end": null,
-            "reason": "the quiz is tomorrow morning with no free time left before it"
+            "reason": "nothing long enough is free before the quiz"
+          }
+        ],
+        "message": "Not enough free time before Quiz 4, so Calc practice is off the plan. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 7,
+      "refused": 1,
+      "refusals": [
+        "drop_item: Leave clock times out of the reason; Lens adds the time."
+      ],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-12T08:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [],
+            "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-12T08:00",
+            "item_id": "null",
+            "minutes": 45
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [],
+            "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "get_day",
+          "args": {
+            "date": "2026-11-12"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "date": "Thu Nov 12",
+            "busy": [
+              {
+                "what": "ENGL101 seminar",
+                "start": "11:00",
+                "end": "12:15"
+              },
+              {
+                "what": "HIST200 lecture",
+                "start": "15:30",
+                "end": "16:45"
+              }
+            ],
+            "planned": [],
+            "due": [
+              {
+                "title": "Quiz 4",
+                "at": "08:00"
+              }
+            ],
+            "free": [
+              "09:00-11:00",
+              "12:15-15:30",
+              "16:45-23:00"
+            ]
+          }
+        },
+        {
+          "tool": "get_day",
+          "args": {
+            "date": "2026-11-11"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "date": "Wed Nov 11",
+            "busy": [
+              {
+                "what": "MATH141 lecture",
+                "start": "10:00",
+                "end": "10:50"
+              },
+              {
+                "what": "PHYS161 lecture",
+                "start": "13:00",
+                "end": "13:50"
+              },
+              {
+                "what": "CHEM135 lab",
+                "start": "14:00",
+                "end": "16:50"
+              },
+              {
+                "what": "Robotics club",
+                "start": "21:00",
+                "end": "22:45"
+              }
+            ],
+            "planned": [],
+            "due": [],
+            "free": [
+              "22:45-23:00"
+            ]
+          }
+        },
+        {
+          "tool": "drop_item",
+          "args": {
+            "item_id": "s_calc",
+            "reason": "nothing that long is free before the 08:00 quiz"
+          },
+          "ok": false,
+          "result": {
+            "ok": false,
+            "problem": "Leave clock times out of the reason; Lens adds the time."
+          }
+        },
+        {
+          "tool": "drop_item",
+          "args": {
+            "item_id": "s_calc",
+            "reason": "nothing long enough is free before the quiz"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "dropped": "Calc practice"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2237,
+            "output_tokens": 276,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 148
+          },
+          "costUsd": 0.00159215,
+          "latencyMs": 4414
+        },
+        {
+          "usage": {
+            "input_tokens": 2557,
+            "output_tokens": 244,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 140
+          },
+          "costUsd": 0.00185615,
+          "latencyMs": 3098
+        },
+        {
+          "usage": {
+            "input_tokens": 2845,
+            "output_tokens": 119,
+            "cached_tokens": 2545,
+            "reasoning_tokens": 64
+          },
+          "costUsd": 0.0012625,
+          "latencyMs": 1454
+        },
+        {
+          "usage": {
+            "input_tokens": 3080,
+            "output_tokens": 264,
+            "cached_tokens": 2801,
+            "reasoning_tokens": 209
+          },
+          "costUsd": 0.0018909,
+          "latencyMs": 2259
+        },
+        {
+          "usage": {
+            "input_tokens": 3467,
+            "output_tokens": 327,
+            "cached_tokens": 3057,
+            "reasoning_tokens": 228
+          },
+          "costUsd": 0.0023608,
+          "latencyMs": 3742
+        },
+        {
+          "usage": {
+            "input_tokens": 3838,
+            "output_tokens": 89,
+            "cached_tokens": 3441,
+            "reasoning_tokens": 16
+          },
+          "costUsd": 0.00139065,
+          "latencyMs": 999
+        },
+        {
+          "usage": {
+            "input_tokens": 3961,
+            "output_tokens": 41,
+            "cached_tokens": 3825,
+            "reasoning_tokens": 3
+          },
+          "costUsd": 0.000918,
+          "latencyMs": 2240
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1176,
+            "output_tokens": 1170,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1144
+          },
+          "costUsd": 0.0051918,
+          "latencyMs": 9457
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_calc",
+            "action": "drop",
+            "start": null,
+            "end": null,
+            "reason": "nothing fits before the quiz"
           }
         ],
         "message": "Not enough free time before Quiz 4, so Calc practice is off the plan. Nothing else changed.",
@@ -479,6 +658,41 @@
         {
           "tool": "get_day",
           "args": {
+            "date": "2026-11-12"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "date": "Thu Nov 12",
+            "busy": [
+              {
+                "what": "ENGL101 seminar",
+                "start": "11:00",
+                "end": "12:15"
+              },
+              {
+                "what": "HIST200 lecture",
+                "start": "15:30",
+                "end": "16:45"
+              }
+            ],
+            "planned": [],
+            "due": [
+              {
+                "title": "Quiz 4",
+                "at": "08:00"
+              }
+            ],
+            "free": [
+              "09:00-11:00",
+              "12:15-15:30",
+              "16:45-23:00"
+            ]
+          }
+        },
+        {
+          "tool": "get_day",
+          "args": {
             "date": "2026-11-11"
           },
           "ok": true,
@@ -509,41 +723,8 @@
             ],
             "planned": [],
             "due": [],
-            "free": []
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-12"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Thu Nov 12",
-            "busy": [
-              {
-                "what": "ENGL101 seminar",
-                "start": "11:00",
-                "end": "12:15"
-              },
-              {
-                "what": "HIST200 lecture",
-                "start": "15:30",
-                "end": "16:45"
-              }
-            ],
-            "planned": [],
-            "due": [
-              {
-                "title": "Quiz 4",
-                "at": "08:00"
-              }
-            ],
             "free": [
-              "07:30-11:00",
-              "12:15-15:30",
-              "16:45-22:30"
+              "22:45-23:00"
             ]
           }
         },
@@ -551,7 +732,7 @@
           "tool": "drop_item",
           "args": {
             "item_id": "s_calc",
-            "reason": "the quiz is tomorrow morning with no free time left before it"
+            "reason": "nothing fits before the quiz"
           },
           "ok": true,
           "result": {
@@ -572,291 +753,70 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2202,
-            "output_tokens": 177,
+            "input_tokens": 2237,
+            "output_tokens": 158,
             "cached_tokens": 2161,
-            "reasoning_tokens": 50
+            "reasoning_tokens": 29
           },
-          "costUsd": 0.00112765,
-          "latencyMs": 2627
+          "costUsd": 0.00109065,
+          "latencyMs": 2405
         },
         {
           "usage": {
-            "input_tokens": 2423,
-            "output_tokens": 136,
+            "input_tokens": 2439,
+            "output_tokens": 206,
             "cached_tokens": 2161,
-            "reasoning_tokens": 32
+            "reasoning_tokens": 102
           },
-          "costUsd": 0.00122965,
-          "latencyMs": 1502
+          "costUsd": 0.0015471500000000002,
+          "latencyMs": 1762
         },
         {
           "usage": {
-            "input_tokens": 2603,
-            "output_tokens": 128,
+            "input_tokens": 2689,
+            "output_tokens": 111,
             "cached_tokens": 2417,
-            "reasoning_tokens": 21
-          },
-          "costUsd": 0.00113905,
-          "latencyMs": 1432
-        },
-        {
-          "usage": {
-            "input_tokens": 2960,
-            "output_tokens": 369,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 269
-          },
-          "costUsd": 0.00246875,
-          "latencyMs": 3467
-        },
-        {
-          "usage": {
-            "input_tokens": 3363,
-            "output_tokens": 42,
-            "cached_tokens": 2161,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0020051500000000002,
-          "latencyMs": 596
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 908,
-            "output_tokens": 983,
-            "cached_tokens": 881,
-            "reasoning_tokens": 964
-          },
-          "costUsd": 0.004343649999999999,
-          "latencyMs": 6879
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_calc",
-            "action": "drop",
-            "start": null,
-            "end": null,
-            "reason": "no free time left before the quiz tomorrow morning"
-          }
-        ],
-        "message": "Not enough free time before Quiz 4, so Calc practice is off the plan. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 6,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-12T08:00",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [],
-            "note": "Nothing that long is free in that range."
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-12T08:00",
-            "item_id": "null",
-            "minutes": 45
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [],
-            "note": "Nothing that long is free in that range."
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-12"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Thu Nov 12",
-            "busy": [
-              {
-                "what": "ENGL101 seminar",
-                "start": "11:00",
-                "end": "12:15"
-              },
-              {
-                "what": "HIST200 lecture",
-                "start": "15:30",
-                "end": "16:45"
-              }
-            ],
-            "planned": [],
-            "due": [
-              {
-                "title": "Quiz 4",
-                "at": "08:00"
-              }
-            ],
-            "free": [
-              "07:30-11:00",
-              "12:15-15:30",
-              "16:45-22:30"
-            ]
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-11"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Wed Nov 11",
-            "busy": [
-              {
-                "what": "MATH141 lecture",
-                "start": "10:00",
-                "end": "10:50"
-              },
-              {
-                "what": "PHYS161 lecture",
-                "start": "13:00",
-                "end": "13:50"
-              },
-              {
-                "what": "CHEM135 lab",
-                "start": "14:00",
-                "end": "16:50"
-              },
-              {
-                "what": "Robotics club",
-                "start": "21:00",
-                "end": "22:45"
-              }
-            ],
-            "planned": [],
-            "due": [],
-            "free": []
-          }
-        },
-        {
-          "tool": "drop_item",
-          "args": {
-            "item_id": "s_calc",
-            "reason": "no free time left before the quiz tomorrow morning"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "dropped": "Calc practice"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2202,
-            "output_tokens": 197,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 70
-          },
-          "costUsd": 0.00121265,
-          "latencyMs": 1498
+          "costUsd": 0.0011742999999999999,
+          "latencyMs": 1739
         },
         {
           "usage": {
-            "input_tokens": 2443,
-            "output_tokens": 116,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 12
+            "input_tokens": 3036,
+            "output_tokens": 199,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 106
           },
-          "costUsd": 0.0011696500000000002,
-          "latencyMs": 970
+          "costUsd": 0.00170045,
+          "latencyMs": 2010
         },
         {
           "usage": {
-            "input_tokens": 2603,
-            "output_tokens": 141,
-            "cached_tokens": 2417,
-            "reasoning_tokens": 86
-          },
-          "costUsd": 0.0011943,
-          "latencyMs": 1332
-        },
-        {
-          "usage": {
-            "input_tokens": 2860,
-            "output_tokens": 147,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 92
-          },
-          "costUsd": 0.00140025,
-          "latencyMs": 1537
-        },
-        {
-          "usage": {
-            "input_tokens": 3123,
-            "output_tokens": 187,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 89
-          },
-          "costUsd": 0.0023214,
-          "latencyMs": 1498
-        },
-        {
-          "usage": {
-            "input_tokens": 3344,
+            "input_tokens": 3269,
             "output_tokens": 41,
-            "cached_tokens": 3057,
+            "cached_tokens": 2929,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.00099155,
-          "latencyMs": 1655
+          "costUsd": 0.0010386,
+          "latencyMs": 1027
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 908,
-            "output_tokens": 1346,
-            "cached_tokens": 881,
-            "reasoning_tokens": 1330
+            "input_tokens": 1176,
+            "output_tokens": 1180,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1154
           },
-          "costUsd": 0.0058864,
-          "latencyMs": 9143
+          "costUsd": 0.0052343,
+          "latencyMs": 8879
         }
       ]
     }

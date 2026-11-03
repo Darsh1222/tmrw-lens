@@ -83,11 +83,12 @@ deployments' environment variables. Send it from your server only.
     { "start": "2026-11-05T07:30:00-05:00", "end": "2026-11-05T09:30:00-05:00" },
   ],
   // Optional, please send it: how the person lives, for the rules no move may break. Local "HH:mm" times.
-  // Without it Lens assumes sleep 23:00-07:00, no quiet hours, no study-time preference.
+  // Without it Lens assumes a student: sleep 00:30-08:30, study 09:00-23:00, no quiet hours.
   "prefs": {
     "sleep": { "start": "23:30", "end": "07:30" }, // bedtime and waking; no session ends within an hour of bedtime
     "quiet": [{ "start": "18:00", "end": "19:30" }], // daily hours nothing goes in; may cross midnight; or null
     "study_time": "mornings", // "mornings" | "afternoons" | "nights" | null: a tie-breaker, never a rule
+    "study_hours": { "start": "09:00", "end": "23:00" }, // earliest start, latest end; nothing outside them
   },
 }
 ```

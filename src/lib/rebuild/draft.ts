@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { loadHours } from "@/lib/rebuild/rank";
+import { compose, FACTOR_ORDER, rankSlots, type Factor } from "@/lib/rebuild/rank";
 import type { DiffEntry, RebuildPlanned, RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import {
   blocked,
@@ -60,32 +60,38 @@ const CLOCK = /\b\d{1,2}(:\d{2})?\s?(am|pm)\b|\b\d{1,2}:\d{2}\b/i;
 
 export const unkind = (text: string) => UNKIND.test(text);
 
-/** A reason that says what the student said or is: "you said tonight is out", "you're free after practice". */
-const YOU_SAID = /\byou(?:'re| are| said| asked| mentioned| told| did| have| can't| cannot)\b/i;
-const words = (s: string) => new Set(s.toLowerCase().match(/[a-z]{3,}/g) ?? []);
-
-/**
- * Whether a reason puts words in their mouth: it says what they said, but there was no reply, or the reply is a word or
- * two that shares nothing with it ("no", "ok", "skipped"). Longer replies (and other languages) are the judge's to read.
- */
-export function inventsReply(reason: string, reply: string | null): boolean {
-  if (!YOU_SAID.test(reason)) return false;
-  if (!reply) return true;
-  const said = words(reply);
-  if (said.size > 2) return false;
-  const claim = words(reason.slice(reason.search(YOU_SAID)));
-  return ![...claim].some((w) => said.has(w));
-}
-
 /** Replies that say part was done: what's left is shorter on purpose, so "there's room for more" doesn't apply. */
 const PARTIAL = /\b(half|partial(ly)?|part of|some of|got through|did \d+|\d+ ?%|most of)\b/i;
 
 /**
- * Claims a reason can make that code can check: soonest, last, only, longest, lightest. "First thing" and "next week"
- * aren't claims about the plan. A reason with one must be one code found true for that slot (Draft.truths).
+ * What their reply means for the plan, in a form code can apply and word: the agent reads the reply and notes it with
+ * the exact words it rests on; code checks those words are in the reply and say that, keeps the missed session out of
+ * what it rules out, and writes the paraphrase ("so tonight can be off", "since you said only mornings work this week").
+ * Nothing in a message paraphrases the reply any other way.
  */
-const SUPERLATIVE =
-  /\b(soonest|earliest|latest|last|only|longest|lightest|first(?! thing)|next(?! (week|month|mon|tue|wed|thu|fri|sat|sun)\w*))\b/i;
+export type ReplyKind = "not_today" | "not_before" | "only_part" | "partial" | "from_day";
+export type ReplyNote = {
+  kind: ReplyKind;
+  quote: string;
+  at: number | null;
+  part: "morning" | "afternoon" | "evening" | null;
+  phrase: string;
+};
+const NOTE_WORDS: Record<ReplyKind, RegExp> = {
+  not_today: /\b(tonight|today|tired|exhausted|sick|ill|fever|late|cansad[oa]|noche|hoy)\b/i,
+  not_before: /\b(until|till|til|after|busy|free)\b|\b\d{1,2}(:\d{2})?\s?(am|pm)?\b/i,
+  only_part: /\b(mornings?|afternoons?|evenings?|nights?)\b/i,
+  partial: /\b(half|partial(ly)?|part of|some of|got through|did \d+|\d+ ?%|most of)\b/i,
+  from_day: /\b(tomorrow|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i,
+};
+const PART_WORDS = { morning: /morning/i, afternoon: /afternoon/i, evening: /evening|night/i } as const;
+const PART_HOURS = { morning: [0, 12], afternoon: [12, 17], evening: [17, 24] } as const;
+const normal = (s: string) =>
+  plain(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9%: ]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 /** One SMS segment: the recovery text never runs longer. */
 export const MAX_TEXT = 160;
@@ -129,6 +135,8 @@ export function checkReason(raw: string): { ok: true; reason: string } | { ok: f
 
 export class Draft {
   readonly changes = new Map<string, Change>();
+  /** What their reply means, once the agent notes it (noteReply). */
+  note: ReplyNote | null = null;
   /** Items already told once that their stretch holds more: a second, identical ask stands (a partial session). */
   private toldRoom = new Set<string>();
   readonly now: number;
@@ -196,8 +204,9 @@ export class Draft {
       ...this.req.fixed.map((f) => span(f.start, f.end)),
       ...this.req.items.filter((i) => i.id !== except).flatMap((i) => this.placement(i) ?? []),
     ];
-    // The rules' time is never free, whatever Tomorrow's windows say.
-    return minus(merged(open), [...busy, ...this.off, ...(this.gap ? [this.gap] : [])])
+    // The rules' time is never free, whatever Tomorrow's windows say; nor, for the missed item, what their reply rules out.
+    const ruledOut = except === this.missed.id ? this.replyBlock() : [];
+    return minus(merged(open), [...busy, ...this.off, ...(this.gap ? [this.gap] : []), ...ruledOut])
       .map((x) => ({ s: Math.ceil(Math.max(x.s, this.now) / STEP) * STEP, e: x.e }))
       .filter((x) => x.e - x.s >= STEP);
   }
@@ -214,8 +223,93 @@ export class Draft {
         : x.s >= night.bed
           ? `That's while they sleep (${this.hhmm(night.bed)}-${this.hhmm(night.wake)}).`
           : `It would run into the hour before bedtime (${this.hhmm(night.bed)}); it has to finish by ${this.hhmm(night.bed - SLEEP_BUFFER_MIN * MIN)}.`; // prettier-ignore
-    if (this.off.some(hit)) return "That's in their quiet hours.";
+    if (this.off.some(hit)) return "That's in their quiet hours, or outside their study hours.";
     return null;
+  }
+
+  /** Time the noted reply rules out for the missed item. */
+  replyBlock(): Span[] {
+    const n = this.note;
+    if (!n) return [];
+    const tomorrow = this.local(this.now).plus({ days: 1 }).startOf("day").toMillis();
+    if (n.kind === "not_today") return [{ s: this.now, e: tomorrow }];
+    if ((n.kind === "not_before" || n.kind === "from_day") && n.at) return [{ s: this.now, e: n.at }];
+    if (n.kind === "only_part" && n.part) {
+      const [a, b] = PART_HOURS[n.part];
+      const out: Span[] = [];
+      for (let k = 0; k < 15; k++) {
+        const day = this.local(this.now).plus({ days: k }).startOf("day");
+        if (a > 0) out.push({ s: day.toMillis(), e: day.plus({ hours: a }).toMillis() });
+        if (b < 24) out.push({ s: day.plus({ hours: b }).toMillis(), e: day.plus({ days: 1 }).toMillis() });
+      }
+      return out;
+    }
+    return [];
+  }
+
+  /** Records what their reply means, from words in it that say so; code applies and words it. */
+  noteReply(
+    kind: ReplyKind,
+    quote: string,
+    until: string | null,
+    fromDate: string | null,
+    part: ReplyNote["part"],
+  ): Outcome {
+    const reply = this.req.missed.reply;
+    if (!reply) return { ok: false, problem: "They didn't reply; there's nothing to note." };
+    if (!quote.trim() || !normal(reply).includes(normal(quote)))
+      return { ok: false, problem: `Quote their exact words; ${JSON.stringify(quote)} isn't in their reply ${JSON.stringify(reply)}.` }; // prettier-ignore
+    if (!NOTE_WORDS[kind].test(quote))
+      return { ok: false, problem: `${JSON.stringify(quote)} doesn't say that (${kind}).` };
+    let at: number | null = null;
+    if (kind === "not_before") {
+      const t = until ? this.parseLocal(until) : 'Give until: when they\'re free from, "YYYY-MM-DDTHH:mm".';
+      if (typeof t === "string") return { ok: false, problem: t };
+      if (t <= this.now) return { ok: false, problem: "That time has passed." };
+      at = t;
+    }
+    if (kind === "from_day") {
+      const t = fromDate ? this.parseLocal(`${fromDate}T00:00`) : 'Give from_date, "YYYY-MM-DD".';
+      if (typeof t === "string") return { ok: false, problem: t };
+      at = Math.max(t, this.now);
+    }
+    if (kind === "only_part" && (!part || !PART_WORDS[part].test(quote)))
+      return { ok: false, problem: `Give part (morning, afternoon, or evening) as their words say it.` };
+    const noun = quote.match(/\b([a-z]+)\s+(?:until|till|til)\b/i)?.[1]?.toLowerCase();
+    const notNoun = ["busy", "be", "am", "im", "out", "tomorrow", "today", "tonight", "day", "week", "morning", "afternoon", "evening", "all"]; // prettier-ignore
+    const phrase =
+      kind === "not_today"
+        ? this.local(this.now).hour >= 17 ? "so tonight can be off" : "so today can be off"
+        : kind === "not_before"
+          ? noun && !notNoun.includes(noun) ? `after ${noun}` : "once you're free"
+          : kind === "only_part"
+            ? `since you said only ${part}s work${/this week/i.test(quote) ? " this week" : ""}`
+            : kind === "partial"
+              ? /half/i.test(quote) ? "for the half that's left" : "for the part that's left"
+              : /weekend/i.test(quote)
+                ? "on the weekend, as you said"
+                : /tomorrow/i.test(quote)
+                  ? "so today can be off"
+                  : `on ${this.local(at!).toFormat("cccc")}, as you said`; // prettier-ignore
+    this.note = { kind, quote, at, part: kind === "only_part" ? part : null, phrase };
+    return { ok: true, noted: kind, words: phrase };
+  }
+
+  /**
+   * A time their noted reply offers ("can do it later today after 6"): from then to the end of that day. "Practice until
+   * 9" says when they're busy, not that they want 9pm, so it offers nothing.
+   */
+  offered(): Span | undefined {
+    const n = this.note;
+    if (n?.kind !== "not_before" || !n.at || !/\b(can|could|i'?ll|will|free after|after \d)/i.test(n.quote))
+      return undefined;
+    return { s: n.at, e: this.local(n.at).endOf("day").toMillis() };
+  }
+
+  /** The factors code checked true of placing `id` at [s, s + minutes): what its reason may say. */
+  factorsAt(id: string, s: number, minutes: number): Factor[] {
+    const offered = id === this.missed.id ? this.offered() : undefined;
+    return rankSlots(this, id, { minutes, at: s, offered })[0]?.factors ?? [];
   }
 
   // Times as people read them, always in their zone.
@@ -272,47 +366,21 @@ export class Draft {
   }
 
   /**
-   * The claims that are true of placing `id` at [s, e), with or without " before <deadline>": the soonest open time
-   * that fits, the last one before its deadline, the only one, the longest stretch (when shortened), the lightest day.
+   * `because`: for the missed item, 1-2 keys of the slot's factors (and "reply" once noted), which code words; for any
+   * other item, a short reason in words.
    */
-  truths(id: string, s: number, e: number): string[] {
-    const i = this.item(id)!;
-    const mins = (e - s) / MIN;
-    const due = this.dueBy(i) ?? Infinity;
-    const dl = this.deadline(i)?.title;
-    const before = dl ? ` before ${plain(dl)}` : Number.isFinite(due) ? " before it's due" : "";
-    const spans = this.free(id)
-      .map((x) => ({ s: x.s, e: Math.min(x.e, due) }))
-      .filter((x) => x.e > x.s);
-    const fit = spans.filter((x) => x.e - x.s >= mins * MIN);
-    const mine = fit.find((x) => x.s <= s && e <= x.e);
-    const out: string[] = [];
-    if (!mine) return out;
-    // "Soonest" only if nothing earlier fits even its shortest version; else it's the soonest it fits in full.
-    const anyFirst = spans.find((x) => x.e - x.s >= Math.min(mins, this.shortest(i)) * MIN);
-    if (s === fit[0].s)
-      out.push(anyFirst && anyFirst.s < s ? "it's the soonest time it fits in full" : "it's the soonest open time");
-    // "Last" and "only" likewise: plain only when no shorter version fits elsewhere.
-    const any = spans.filter((x) => x.e - x.s >= Math.min(mins, this.shortest(i)) * MIN);
-    if (Number.isFinite(due) && mine === fit.at(-1))
-      out.push(any.at(-1)!.s > mine.s ? "it's the last time it fits in full" : "it's the last open time");
-    if (fit.length === 1)
-      // A stretch, not a time: a long stretch holds many starts, so "the only time" would read false.
-      out.push(any.length > 1 ? "it's the only free stretch it fits in full" : "it's the only free stretch that fits");
-    if (mins < this.length(i) && spans.every((x) => x.e - x.s <= mine.e - mine.s))
-      out.push("it's the longest free stretch");
-    const load = (ms: number) => loadHours(this, ms, id);
-    // Lightest only when another day it could go on is actually heavier.
-    if (fit.every((x) => load(x.s) >= load(s)) && fit.some((x) => load(x.s) > load(s)))
-      out.push("it's the lightest day");
-    return out.flatMap((t) => (before ? [t, `${t}${before}`] : [t]));
-  }
-
-  move(id: string, start: string, durationMin: number | null, rawReason: string): Outcome {
+  move(id: string, start: string, durationMin: number | null, because: string | string[]): Outcome {
     const i = this.item(id);
     if (!i) return { ok: false, problem: `There's no item ${id}. Use an id from the list.` };
-    const reason = checkReason(rawReason);
+    const missed = id === this.missed.id;
+    const keys = Array.isArray(because) ? because : null;
+    if (missed && (!keys || !keys.length || keys.length > 2))
+      return { ok: false, problem: 'For the missed item, give because: 1 or 2 keys from the slot\'s factors (or "reply").' }; // prettier-ignore
+    const reason = keys ? { ok: true as const, reason: "" } : checkReason(String(because));
     if (!reason.ok) return reason;
+    // What they said is only ever worded by code, from a noted reply.
+    if (!missed && /\byou(?:'re| are| said| asked| mentioned| told| did)\b/i.test(reason.reason))
+      return { ok: false, problem: "Don't put their reply in your own words; note_reply it, and code words it." };
     const s = this.parseLocal(start);
     if (typeof s === "string") return { ok: false, problem: s };
     const full = this.length(i);
@@ -335,23 +403,8 @@ export class Draft {
       return { ok: false, problem: "That's where it already is." };
     const rule = this.ruleProblem({ s, e });
     if (rule) return { ok: false, problem: rule };
-    if (inventsReply(reason.reason, this.req.missed.reply))
-      return {
-        ok: false,
-        problem: this.req.missed.reply
-          ? `Their reply was only ${JSON.stringify(this.req.missed.reply)}; the reason can't say more than that. Give a reason about the plan instead.`
-          : "They didn't reply, so the reason can't say what they said. Give a reason about the plan instead.",
-      };
-    // A claim about the plan has to be true: code checks it.
-    if (SUPERLATIVE.test(reason.reason) && this.free(id).some((x) => x.s <= s && e <= x.e)) {
-      const truths = this.truths(id, s, e);
-      const said = reason.reason.toLowerCase();
-      if (!truths.some((t) => said.includes(t.toLowerCase().split(" before ")[0])))
-        return {
-          ok: false,
-          problem: `That reason isn't true here. True of this time: ${truths.length ? truths.map((t) => `"${t}"`).join(", ") : "none of soonest, last, only, longest, lightest"}. Or use what they said, or the deadline ("the quiz is tomorrow morning").`,
-        };
-    }
+    if (missed && this.replyBlock().some((b) => b.s < e && s < b.e))
+      return { ok: false, problem: `Their reply rules that out (${JSON.stringify(this.note!.quote)}).` };
     if (!this.free(id).some((x) => x.s <= s && e <= x.e)) {
       const day = this.freeOn(this.local(s).startOf("day").toMillis(), id);
       return {
@@ -369,8 +422,23 @@ export class Draft {
         problem: `From ${this.hhmm(s)} it can run ${Math.min(room, full)} min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for ${mins} again.`, // prettier-ignore
       };
     }
-    this.changes.set(id, { action: "move", start: s, end: e, reason: reason.reason });
-    return { ok: true, moved: i.title, to: this.at({ s, e }), minutes: mins };
+    let words = reason.reason;
+    if (missed) {
+      // Code words the reason, from what it checked true of this exact time.
+      const factors = this.factorsAt(id, s, mins);
+      const offered = [...factors, ...(this.note ? [{ key: "reply", text: this.note.phrase }] : [])];
+      const unknown = keys!.filter((k) => !offered.some((f) => f.key === k));
+      if (unknown.length)
+        return {
+          ok: false,
+          problem: `Not true of this time: ${unknown.join(", ")}. True of it: ${offered.length ? offered.map((f) => `${f.key} ("${f.text}")`).join(", ") : "nothing that ranks it; pick another time"}.`, // prettier-ignore
+        };
+      const chosen = [...offered].filter((f) => keys!.includes(f.key));
+      chosen.sort((a, b) => (a.key === "reply" ? -1 : b.key === "reply" ? 1 : FACTOR_ORDER.indexOf(a.key as Factor["key"]) - FACTOR_ORDER.indexOf(b.key as Factor["key"]))); // prettier-ignore
+      words = compose(chosen);
+    }
+    this.changes.set(id, { action: "move", start: s, end: e, reason: words });
+    return { ok: true, moved: i.title, to: this.at({ s, e }), minutes: mins, reason: words };
   }
 
   drop(id: string, rawReason: string): Outcome {
@@ -378,6 +446,8 @@ export class Draft {
     if (!i) return { ok: false, problem: `There's no item ${id}. Use an id from the list.` };
     const reason = checkReason(rawReason);
     if (!reason.ok) return reason;
+    if (/\byou(?:'re| are| said| asked| mentioned| told| did)\b/i.test(reason.reason))
+      return { ok: false, problem: "Don't put their reply in your own words; note_reply it, and code words it." };
     this.changes.set(id, { action: "drop", reason: reason.reason });
     return { ok: true, dropped: i.title };
   }
@@ -509,7 +579,13 @@ export class Draft {
             const old = span(this.item(id)!.start, this.item(id)!.end);
             return old.s < mc.end && mc.start < old.e;
           })();
-        return room ? `Moved ${list([id])} to make room.` : `Moved ${list([id])} because ${c.reason}.`;
+        if (room) return `Moved ${list([id])} to make room.`;
+        // The missed item's reason is code's own words from verified factors: "Moved X to Thu 2pm, a lighter afternoon".
+        if (id === m.id) {
+          const head = list([id]);
+          return `Moved ${head}${head.endsWith(",") ? "" : ","} ${c.reason}.`;
+        }
+        return `Moved ${list([id])} because ${c.reason}.`;
       });
       text = `${unwell ? "Feel better. " : ""}${lines.join(" ")}`;
     }
@@ -540,18 +616,16 @@ export function fallback(req: RebuildRequest): Draft {
   // Even without the model, a reply that rules out today is kept.
   const out = !!req.missed.reply && TODAY_OUT.test(req.missed.reply);
   const from = out ? d.local(d.now).plus({ days: 1 }).startOf("day").toMillis() : d.now;
-  // Set directly, not through move(): the slot is already known to fit, and a
-  // deadline title ("Quiz 3, 10:00") mustn't trip the checks on model reasons.
-  for (const mins of [d.length(m), d.shortest(m)]) {
-    const slot = d
-      .free(m.id)
-      .map((x) => ({ s: Math.max(x.s, from), e: x.e }))
-      .find((x) => x.e - x.s >= mins * MIN && (due === null || x.s + mins * MIN <= due));
-    if (slot) {
-      const reason = out ? "you said today is out" : due === null ? "it's the first open time" : `it's the first open time before ${what}`; // prettier-ignore
-      d.changes.set(m.id, { action: "move", start: slot.s, end: slot.s + mins * MIN, reason });
-      return d;
-    }
+  // Code's own best slot (the same ranking the agent uses), worded from its top two verified factors. Set directly, not
+  // through move(): the slot is already known to fit.
+  const best = rankSlots(d, m.id, { after: from })[0];
+  if (best) {
+    const top = [...best.factors].sort((a, b) => FACTOR_ORDER.indexOf(a.key) - FACTOR_ORDER.indexOf(b.key));
+    const chosen = [...top.filter((f) => f.key !== "buffer").slice(0, out ? 0 : 1), ...top.filter((f) => f.key === "buffer")]; // prettier-ignore
+    const texts = [...(out ? [{ key: "reply", text: d.local(d.now).hour >= 17 ? "so tonight can be off" : "so today can be off" }] : []), ...chosen]; // prettier-ignore
+    const reason = compose(texts) || (due === null ? "the first good time open" : `the first good time before ${what}`);
+    d.changes.set(m.id, { action: "move", start: best.start, end: best.start + best.minutes * MIN, reason });
+    return d;
   }
   const reason =
     due === null ? "there's no open time in the days Tomorrow shared" : `there's no open time before ${what}`;

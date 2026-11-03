@@ -1,28 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useState } from "react";
 import { buttonClass } from "./ui";
+import { useReducedMotion, useSeen } from "./useSeen";
 
 // The first screen: what Lens is, in one sentence, and the two ways in. Beside
 // it, a small week where a missed session turns into a ghost and glides to its
-// new slot, on a loop, only while it's on screen; under reduced motion it
-// shows the landed state, ghost and all.
+// new slot: once, when it's in view (useSeen), paused while it isn't, with a
+// Replay after. Under reduced motion it shows the landed state, ghost and all.
 
 function GlidePreview() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => el.classList.toggle("is-playing", e.isIntersecting), { threshold: 0.4 }); // prettier-ignore
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  const { attach, started, visible } = useSeen();
+  const reduced = useReducedMotion();
+  const [round, setRound] = useState(0);
+  const [done, setDone] = useState(false);
+  const state = reduced || done ? "done" : !started ? "idle" : visible ? "playing" : "paused";
   const block = "absolute rounded-lg border border-line px-2 py-1.5 text-[11px] leading-tight";
   return (
     <div
-      ref={ref}
-      className="glide relative w-full overflow-hidden rounded-2xl border border-line bg-card p-4 sm:p-5"
+      ref={attach}
+      data-anim={state}
+      onAnimationEnd={(e) => e.animationName === "glide-block" && setDone(true)}
+      className={`glide relative w-full overflow-hidden rounded-2xl border border-line bg-card p-4 sm:p-5 ${state === "playing" ? "is-playing" : ""}`}
       role="img"
       aria-label="A small week: Calc practice was missed on Wednesday at 4 PM, so it moves to Thursday at 7:30 AM, before the quiz at 10 AM."
     >
@@ -66,21 +66,31 @@ function GlidePreview() {
           <div className="h-px flex-1 bg-ink" />
           <span className="absolute -top-2.5 right-1 rounded border border-ink bg-paper px-1 text-[10px]">Now · 6:10 PM</span>
         </div>
-        <div className={`glide-ghost ${block} border-dashed border-line-strong text-ink-2`} style={{ left: "calc(0% + 4px)", width: "calc(33.33% - 8px)", top: 168, height: 40 }}>
+        <div key={`g${round}`} className={`glide-ghost ${block} border-dashed border-line-strong text-ink-2`} style={{ left: "calc(0% + 4px)", width: "calc(33.33% - 8px)", top: 168, height: 40 }}>
           Calc practice
           <br />
           missed
         </div>
-        <svg className="glide-path absolute inset-0 h-full w-full" viewBox="0 0 300 248" preserveAspectRatio="none">
+        <svg key={`p${round}`} className="glide-path absolute inset-0 h-full w-full" viewBox="0 0 300 248" preserveAspectRatio="none">
           <path d="M 50 188 Q 90 40 150 30" pathLength={1} fill="none" stroke="var(--tm-text-2)" strokeWidth={1.5} vectorEffect="non-scaling-stroke" strokeDasharray="1 1" />
         </svg>
-        <div className={`glide-block ${block} bg-blush text-ink`} style={{ left: "calc(33.33% + 4px)", width: "calc(33.33% - 8px)", top: 12, height: 40 }}>
+        <div key={`b${round}`} className={`glide-block ${block} bg-blush text-ink`} style={{ left: "calc(33.33% + 4px)", width: "calc(33.33% - 8px)", top: 12, height: 40 }}>
           Calc practice
           <br />
           MATH141
           <span className="glide-badge absolute -top-2.5 right-1 rounded border border-line-strong bg-card px-1 text-[10px]">Moved</span>
         </div>
       </div>
+      {/* Over the card's corner, so showing it moves nothing. */}
+      <button
+        type="button"
+        onClick={() => (setDone(false), setRound((r) => r + 1))}
+        className={`absolute bottom-3 right-3 min-h-9 rounded-md border border-line-strong bg-paper px-3 text-xs text-ink-2 hover:text-ink ${done && !reduced ? "" : "invisible"}`}
+        aria-hidden={!done || reduced}
+        tabIndex={done && !reduced ? 0 : -1}
+      >
+        Replay
+      </button>
     </div>
   ); // prettier-ignore
 }
@@ -106,7 +116,7 @@ export function Hero() {
           </a>
         </div>
         <p className="text-sm text-ink-2">
-          0 invented dates in 181 · 11 of 11 rebuilds right ·{" "}
+          0 invented dates in 197 · every rebuild rule kept in 204 runs ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
             how it&apos;s measured
           </Link>

@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "a351b34e3442a2f8dd8c887ddb384d1abb1679f7a67e8cb22e1a713bd1e5c196",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "f290f1b58d2d23c2b402d2bd113ce0f1714687a19f127740242d68ca607655e9",
   "effort": "low",
   "response": {
     "version": 1,
@@ -9,12 +9,12 @@
       {
         "item_id": "s_essay",
         "action": "move",
-        "start": "2026-11-14T07:30:00-05:00",
-        "end": "2026-11-14T09:00:00-05:00",
-        "reason": "it's the soonest time it fits in full before Essay 3"
+        "start": "2026-11-14T09:00:00-05:00",
+        "end": "2026-11-14T10:30:00-05:00",
+        "reason": "a fresh morning, with no quiz that day with two days to spare"
       }
     ],
-    "message": "Moved Essay draft to 7:30am tomorrow because it's the soonest time it fits in full before Essay 3. Nothing else changed.",
+    "message": "Moved Essay draft to 9am tomorrow, a fresh morning, with no quiz that day with two days to spare. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -36,43 +36,50 @@
         "free": [
           {
             "rank": 1,
-            "suggested_start": "2026-11-14T07:30",
-            "when": "7:30am tomorrow",
+            "suggested_start": "2026-11-14T09:00",
+            "when": "9am tomorrow",
             "holds_minutes": 90,
-            "free_from": "2026-11-14T07:30",
-            "free_until": "2026-11-14T22:30",
-            "why_ranked": "0h already planned that day",
-            "true_reasons": [
-              "it's the soonest time it fits in full",
-              "it's the soonest time it fits in full before Essay 3",
-              "it's the lightest day",
-              "it's the lightest day before Essay 3"
+            "urgency": "comfortable",
+            "free_from": "2026-11-14T09:00",
+            "free_until": "2026-11-14T23:00",
+            "why_ranked": "0h planned that day",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free morning"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "buffer",
+                "text": "with two days to spare"
+              }
             ]
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-15T07:30",
-            "when": "Sun 7:30am",
+            "suggested_start": "2026-11-15T09:00",
+            "when": "Sun 9am",
             "holds_minutes": 90,
-            "free_from": "2026-11-15T07:30",
-            "free_until": "2026-11-15T22:30",
-            "why_ranked": "0h already planned that day",
-            "true_reasons": [
-              "it's the lightest day",
-              "it's the lightest day before Essay 3"
-            ]
-          },
-          {
-            "rank": 3,
-            "suggested_start": "2026-11-16T07:30",
-            "when": "Mon 7:30am",
-            "holds_minutes": 90,
-            "free_from": "2026-11-16T07:30",
-            "free_until": "2026-11-16T09:00",
-            "why_ranked": "1.7h already planned that day, right before the deadline",
-            "true_reasons": [
-              "it's the last open time",
-              "it's the last open time before Essay 3"
+            "urgency": "comfortable",
+            "free_from": "2026-11-15T09:00",
+            "free_until": "2026-11-15T23:00",
+            "why_ranked": "0h planned that day, under a day before it's due",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free morning"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
             ]
           }
         ]
@@ -81,17 +88,22 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "fresh_morning",
+          "buffer"
+        ],
         "duration_min": "null",
         "item_id": "s_essay",
-        "reason": "it's the soonest time it fits in full before Essay 3",
-        "start": "2026-11-14T07:30"
+        "reason": "null",
+        "start": "2026-11-14T09:00"
       },
       "ok": true,
       "result": {
         "ok": true,
         "moved": "Essay draft",
-        "to": "Sat Nov 14 07:30-09:00",
-        "minutes": 90
+        "to": "Sat Nov 14 09:00-10:30",
+        "minutes": 90,
+        "reason": "a fresh morning, with no quiz that day with two days to spare"
       }
     },
     {
@@ -107,49 +119,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2213,
-        "output_tokens": 269,
+        "input_tokens": 2241,
+        "output_tokens": 240,
         "cached_tokens": 2033,
-        "reasoning_tokens": 141
+        "reasoning_tokens": 112
       },
-      "costUsd": 0.0016732000000000001,
-      "latencyMs": 2385
+      "costUsd": 0.0015849500000000001,
+      "latencyMs": 2210
     },
     {
       "usage": {
-        "input_tokens": 2817,
-        "output_tokens": 230,
+        "input_tokens": 2759,
+        "output_tokens": 194,
         "cached_tokens": 2161,
-        "reasoning_tokens": 92
+        "reasoning_tokens": 47
       },
-      "costUsd": 0.00212165,
-      "latencyMs": 1728
+      "costUsd": 0.00189615,
+      "latencyMs": 3107
     },
     {
       "usage": {
-        "input_tokens": 3099,
-        "output_tokens": 41,
-        "cached_tokens": 2801,
-        "reasoning_tokens": 3
+        "input_tokens": 3022,
+        "output_tokens": 43,
+        "cached_tokens": 2673,
+        "reasoning_tokens": 5
       },
-      "costUsd": 0.0009669,
-      "latencyMs": 1295
+      "costUsd": 0.0010199500000000002,
+      "latencyMs": 1166
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 954,
-        "output_tokens": 1153,
-        "cached_tokens": 625,
-        "reasoning_tokens": 1134
+        "input_tokens": 1186,
+        "output_tokens": 1187,
+        "cached_tokens": 753,
+        "reasoning_tokens": 1166
       },
-      "costUsd": 0.00540525,
-      "latencyMs": 8955
+      "costUsd": 0.0056989499999999995,
+      "latencyMs": 9341
     }
   ],
   "runs": [
@@ -160,12 +173,12 @@
           {
             "item_id": "s_essay",
             "action": "move",
-            "start": "2026-11-14T07:30:00-05:00",
-            "end": "2026-11-14T09:00:00-05:00",
-            "reason": "it's the soonest time it fits in full before Essay 3"
+            "start": "2026-11-14T09:00:00-05:00",
+            "end": "2026-11-14T10:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
           }
         ],
-        "message": "Moved Essay draft to 7:30am tomorrow because it's the soonest time it fits in full before Essay 3. Nothing else changed.",
+        "message": "Moved Essay draft to 9am tomorrow, a fresh morning, with no quiz that day with two days to spare. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -187,43 +200,50 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-14T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-14T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 90,
-                "free_from": "2026-11-14T07:30",
-                "free_until": "2026-11-14T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the soonest time it fits in full",
-                  "it's the soonest time it fits in full before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T09:00",
+                "free_until": "2026-11-14T23:00",
+                "why_ranked": "0h planned that day",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-15T07:30",
-                "when": "Sun 7:30am",
+                "suggested_start": "2026-11-15T09:00",
+                "when": "Sun 9am",
                 "holds_minutes": 90,
-                "free_from": "2026-11-15T07:30",
-                "free_until": "2026-11-15T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-16T07:30",
-                "when": "Mon 7:30am",
-                "holds_minutes": 90,
-                "free_from": "2026-11-16T07:30",
-                "free_until": "2026-11-16T09:00",
-                "why_ranked": "1.7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-15T09:00",
+                "free_until": "2026-11-15T23:00",
+                "why_ranked": "0h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               }
             ]
@@ -232,17 +252,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_essay",
-            "reason": "it's the soonest time it fits in full before Essay 3",
-            "start": "2026-11-14T07:30"
+            "reason": "null",
+            "start": "2026-11-14T09:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Essay draft",
-            "to": "Sat Nov 14 07:30-09:00",
-            "minutes": 90
+            "to": "Sat Nov 14 09:00-10:30",
+            "minutes": 90,
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
           }
         },
         {
@@ -258,200 +283,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2213,
-            "output_tokens": 269,
+            "input_tokens": 2241,
+            "output_tokens": 240,
             "cached_tokens": 2033,
-            "reasoning_tokens": 141
+            "reasoning_tokens": 112
           },
-          "costUsd": 0.0016732000000000001,
-          "latencyMs": 2385
+          "costUsd": 0.0015849500000000001,
+          "latencyMs": 2210
         },
         {
           "usage": {
-            "input_tokens": 2817,
-            "output_tokens": 230,
+            "input_tokens": 2759,
+            "output_tokens": 194,
             "cached_tokens": 2161,
-            "reasoning_tokens": 92
+            "reasoning_tokens": 47
           },
-          "costUsd": 0.00212165,
-          "latencyMs": 1728
+          "costUsd": 0.00189615,
+          "latencyMs": 3107
         },
         {
           "usage": {
-            "input_tokens": 3099,
-            "output_tokens": 41,
-            "cached_tokens": 2801,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.0009669,
-          "latencyMs": 1295
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 954,
-            "output_tokens": 1153,
-            "cached_tokens": 625,
-            "reasoning_tokens": 1134
-          },
-          "costUsd": 0.00540525,
-          "latencyMs": 8955
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_essay",
-            "action": "move",
-            "start": "2026-11-14T07:30:00-05:00",
-            "end": "2026-11-14T09:00:00-05:00",
-            "reason": "it's the soonest time it fits in full before Essay 3"
-          }
-        ],
-        "message": "Moved Essay draft to 7:30am tomorrow because it's the soonest time it fits in full before Essay 3. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "null",
-            "minutes": 90
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-14T07:30",
-                "when": "7:30am tomorrow",
-                "holds_minutes": 90,
-                "free_from": "2026-11-14T07:30",
-                "free_until": "2026-11-14T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the soonest time it fits in full",
-                  "it's the soonest time it fits in full before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-15T07:30",
-                "when": "Sun 7:30am",
-                "holds_minutes": 90,
-                "free_from": "2026-11-15T07:30",
-                "free_until": "2026-11-15T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-16T07:30",
-                "when": "Mon 7:30am",
-                "holds_minutes": 90,
-                "free_from": "2026-11-16T07:30",
-                "free_until": "2026-11-16T09:00",
-                "why_ranked": "1.7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3"
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "duration_min": "null",
-            "item_id": "s_essay",
-            "reason": "it's the soonest time it fits in full before Essay 3",
-            "start": "2026-11-14T07:30"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Essay draft",
-            "to": "Sat Nov 14 07:30-09:00",
-            "minutes": 90
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2213,
-            "output_tokens": 248,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 120
-          },
-          "costUsd": 0.00144315,
-          "latencyMs": 2181
-        },
-        {
-          "usage": {
-            "input_tokens": 2796,
-            "output_tokens": 226,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 108
-          },
-          "costUsd": 0.0020784,
-          "latencyMs": 1499
-        },
-        {
-          "usage": {
-            "input_tokens": 3074,
-            "output_tokens": 41,
+            "input_tokens": 3022,
+            "output_tokens": 43,
             "cached_tokens": 2673,
-            "reasoning_tokens": 3
+            "reasoning_tokens": 5
           },
-          "costUsd": 0.00107645,
-          "latencyMs": 747
+          "costUsd": 0.0010199500000000002,
+          "latencyMs": 1166
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 954,
-            "output_tokens": 1699,
-            "cached_tokens": 881,
-            "reasoning_tokens": 1683
+            "input_tokens": 1186,
+            "output_tokens": 1187,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1166
           },
-          "costUsd": 0.007444149999999999,
-          "latencyMs": 12597
+          "costUsd": 0.0056989499999999995,
+          "latencyMs": 9341
         }
       ]
     },
@@ -462,12 +337,12 @@
           {
             "item_id": "s_essay",
             "action": "move",
-            "start": "2026-11-14T07:30:00-05:00",
-            "end": "2026-11-14T09:00:00-05:00",
-            "reason": "it's the soonest time it fits in full before Essay 3"
+            "start": "2026-11-14T09:00:00-05:00",
+            "end": "2026-11-14T10:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
           }
         ],
-        "message": "Moved Essay draft to 7:30am tomorrow because it's the soonest time it fits in full before Essay 3. Nothing else changed.",
+        "message": "Moved Essay draft to 9am tomorrow, a fresh morning, with no quiz that day with two days to spare. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -489,43 +364,50 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-14T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-14T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 90,
-                "free_from": "2026-11-14T07:30",
-                "free_until": "2026-11-14T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the soonest time it fits in full",
-                  "it's the soonest time it fits in full before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T09:00",
+                "free_until": "2026-11-14T23:00",
+                "why_ranked": "0h planned that day",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-15T07:30",
-                "when": "Sun 7:30am",
+                "suggested_start": "2026-11-15T09:00",
+                "when": "Sun 9am",
                 "holds_minutes": 90,
-                "free_from": "2026-11-15T07:30",
-                "free_until": "2026-11-15T22:30",
-                "why_ranked": "0h already planned that day",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-16T07:30",
-                "when": "Mon 7:30am",
-                "holds_minutes": 90,
-                "free_from": "2026-11-16T07:30",
-                "free_until": "2026-11-16T09:00",
-                "why_ranked": "1.7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-15T09:00",
+                "free_until": "2026-11-15T23:00",
+                "why_ranked": "0h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               }
             ]
@@ -534,17 +416,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_essay",
-            "reason": "it's the soonest time it fits in full before Essay 3",
-            "start": "2026-11-14T07:30"
+            "reason": "null",
+            "start": "2026-11-14T09:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Essay draft",
-            "to": "Sat Nov 14 07:30-09:00",
-            "minutes": 90
+            "to": "Sat Nov 14 09:00-10:30",
+            "minutes": 90,
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
           }
         },
         {
@@ -560,49 +447,214 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2213,
-            "output_tokens": 183,
+            "input_tokens": 2241,
+            "output_tokens": 212,
             "cached_tokens": 2161,
-            "reasoning_tokens": 51
+            "reasoning_tokens": 83
           },
-          "costUsd": 0.0011669,
-          "latencyMs": 1525
+          "costUsd": 0.0013251500000000002,
+          "latencyMs": 1895
         },
         {
           "usage": {
             "input_tokens": 2731,
-            "output_tokens": 187,
+            "output_tokens": 232,
             "cached_tokens": 2161,
-            "reasoning_tokens": 69
+            "reasoning_tokens": 85
           },
-          "costUsd": 0.0018314000000000002,
-          "latencyMs": 1653
+          "costUsd": 0.00202265,
+          "latencyMs": 5049
         },
         {
           "usage": {
-            "input_tokens": 2970,
+            "input_tokens": 3032,
             "output_tokens": 42,
             "cached_tokens": 2673,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0009507000000000001,
-          "latencyMs": 1181
+          "costUsd": 0.0010282,
+          "latencyMs": 832
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 954,
-            "output_tokens": 1016,
-            "cached_tokens": 881,
-            "reasoning_tokens": 1000
+            "input_tokens": 1186,
+            "output_tokens": 1264,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1238
           },
-          "costUsd": 0.004541399999999999,
-          "latencyMs": 8040
+          "costUsd": 0.0056038,
+          "latencyMs": 9513
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_essay",
+            "action": "move",
+            "start": "2026-11-14T09:00:00-05:00",
+            "end": "2026-11-14T10:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
+          }
+        ],
+        "message": "Moved Essay draft to 9am tomorrow, a fresh morning, with no quiz that day with two days to spare. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 3,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 90
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-14T09:00",
+                "when": "9am tomorrow",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T09:00",
+                "free_until": "2026-11-14T23:00",
+                "why_ranked": "0h planned that day",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-15T09:00",
+                "when": "Sun 9am",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-15T09:00",
+                "free_until": "2026-11-15T23:00",
+                "why_ranked": "0h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
+            "duration_min": "null",
+            "item_id": "s_essay",
+            "reason": "null",
+            "start": "2026-11-14T09:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Essay draft",
+            "to": "Sat Nov 14 09:00-10:30",
+            "minutes": 90,
+            "reason": "a fresh morning, with no quiz that day with two days to spare"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2241,
+            "output_tokens": 219,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 91
+          },
+          "costUsd": 0.0013549,
+          "latencyMs": 3146
+        },
+        {
+          "usage": {
+            "input_tokens": 2738,
+            "output_tokens": 214,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 67
+          },
+          "costUsd": 0.0019549000000000003,
+          "latencyMs": 1502
+        },
+        {
+          "usage": {
+            "input_tokens": 3021,
+            "output_tokens": 42,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 4
+          },
+          "costUsd": 0.00101445,
+          "latencyMs": 712
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1186,
+            "output_tokens": 1117,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1096
+          },
+          "costUsd": 0.0049790500000000005,
+          "latencyMs": 9294
         }
       ]
     }

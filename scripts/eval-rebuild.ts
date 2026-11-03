@@ -41,7 +41,7 @@ const effort = (flag("--effort") ?? "low") as ReasoningEffort;
 const RUNS = Number(flag("--runs") ?? 3);
 const CONCURRENCY = Number(flag("--concurrency") ?? 6);
 
-export const GATES = { hardRules: 1, top1: 0.85, top3: 0.98, judge: 4.8 } as const;
+export const GATES = { hardRules: 1, top1: 0.85, top3: 0.98, judge: 4.8, timeJudge: 4.8 } as const;
 
 type CallLine = Pick<CallResult, "usage" | "costUsd" | "latencyMs">;
 type Run = {
@@ -83,7 +83,10 @@ function changesText(req: RebuildRequest, res: RebuildResponse): string {
 async function judge(req: RebuildRequest, res: RebuildResponse) {
   const d = new Draft(req);
   const free = d.free().map((x) => d.at(x));
-  const text = `Facts:\n${brief(d)}\nAll free time from now on, before any change: ${free.join(", ") || "none"}.\n\nChanges:\n${changesText(req, res)}\n\nMessage:\n${res.message}`;
+  // Busy time too (classes, events), so "a lighter day" or "right after the lab" can be checked against it.
+  const horizon = Math.max(...(free.length ? d.free().map((x) => x.e) : [d.now]));
+  const busy = req.fixed.filter((f) => Date.parse(f.end) > d.now && Date.parse(f.start) < horizon).map((f) => `${f.title} ${d.at({ s: Date.parse(f.start), e: Date.parse(f.end) })}`); // prettier-ignore
+  const text = `Facts:\n${brief(d)}\nBusy (classes, events): ${busy.join("; ") || "none"}.\nAll free time from now on, before any change: ${free.join(", ") || "none"}.\n\nChanges:\n${changesText(req, res)}\n\nMessage:\n${res.message}`;
   return runTask(judgeTask, [{ type: "input_text", text }], { env: readEnv(), log: () => {} });
 }
 
@@ -98,6 +101,7 @@ export function oracle(c: RebuildCase): Ranked[] {
     after: c.expect.not_before ? at(req, c.expect.not_before) : undefined,
     exclude: (c.expect.rule_out ?? []).map(([a, b]) => ({ s: at(req, a), e: at(req, b) })),
     free: d.free(req.missed.item_id),
+    offered: c.expect.offered ? { s: at(req, c.expect.offered[0]), e: at(req, c.expect.offered[1]) } : undefined,
   });
 }
 
@@ -220,6 +224,7 @@ const all = rows.flatMap((r) => r.runs);
 const pct = (k: number, n: number) => (n ? k / n : 0);
 const moveRuns = rows.filter((r) => r.c.expect.missed === "move").flatMap((r) => r.runs);
 const judged = all.flatMap((r) => (r.run.judge ? [r.run.judge.score] : []));
+const timeJudged = all.flatMap((r) => (r.run.judge?.time_score ? [r.run.judge.time_score] : []));
 const calls = all.flatMap((r) => r.run.calls);
 const sum = (xs: number[]) => xs.reduce((a, x) => a + x, 0);
 const tokensIn = sum(calls.map((x) => x.usage.input_tokens));
@@ -236,6 +241,8 @@ const headline = {
   top3: pct(moveRuns.filter((r) => r.score.top3).length, moveRuns.length),
   judge_score: judged.length ? Number((sum(judged) / judged.length).toFixed(2)) : null,
   judge_min: judged.length ? Math.min(...judged) : null,
+  time_judge: timeJudged.length ? Number((sum(timeJudged) / timeJudged.length).toFixed(2)) : null,
+  time_judge_min: timeJudged.length ? Math.min(...timeJudged) : null,
   unkind_messages: all.filter((r) => unkind(r.run.response.message)).length,
   flaky: rows.filter((r) => r.flaky).map((r) => r.c.name),
   regressions,
@@ -254,6 +261,7 @@ const gates = {
   "top-1 >= 85%": headline.top1 >= GATES.top1,
   "top-3 >= 98%": headline.top3 >= GATES.top3,
   "judge >= 4.8": (headline.judge_score ?? 0) >= GATES.judge,
+  "best-time judge >= 4.8": (headline.time_judge ?? 0) >= GATES.timeJudge,
   "0 regressions": !regressions.length,
   "0 flaky": !headline.flaky.length,
   "every case recorded": !headline.unrecorded.length,
@@ -297,6 +305,7 @@ console.log(`Cases passed            ${headline.cases_passed}`);
 console.log(`Hard rules              ${(headline.hard_rules * 100).toFixed(1)}% of runs   (code's fallback: ${(headline.fallback_hard_rules * 100).toFixed(0)}% of cases, ${headline.fallback_cases_passed} pass)`); // prettier-ignore
 console.log(`Placement top-1 / top-3 ${(headline.top1 * 100).toFixed(1)}% / ${(headline.top3 * 100).toFixed(1)}%`);
 console.log(`Judge (1-5)             ${headline.judge_score ?? "-"}   (lowest ${headline.judge_min ?? "-"}, ${judged.length} judged)`); // prettier-ignore
+console.log(`Best-time judge (1-5)   ${headline.time_judge ?? "-"}   (lowest ${headline.time_judge_min ?? "-"}): would a thoughtful friend pick this time?`); // prettier-ignore
 console.log(`Flaky cases             ${headline.flaky.length ? headline.flaky.join(", ") : "none"}`);
 console.log(`Regressions             ${regressions.length ? regressions.join(", ") : "none"}`);
 console.log(`Cost per rebuild        $${headline.cost_per_rebuild.toFixed(4)}   (${headline.turns_per_rebuild} turns, ${headline.latency_per_rebuild_s}s); tokens per call ${headline.tokens_per_call}; cache ${headline.cache_hit_rate}`); // prettier-ignore
@@ -331,6 +340,7 @@ if (!only)
             : null,
           ranks: r.runs.map((x) => x.score.rank),
           judge: r.runs.map((x) => x.run.judge?.score ?? null),
+          time_judge: r.runs.map((x) => x.run.judge?.time_score ?? null),
           problems: [...new Set(r.runs.flatMap((x) => [...x.score.hard, ...x.score.misses]))],
         })),
       },

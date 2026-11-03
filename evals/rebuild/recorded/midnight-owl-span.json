@@ -1,6 +1,6 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
+  "agent_version": 21,
+  "judge_version": 7,
   "request_sha": "2ca60bf448a0bcb134b0535198e927cf9b334a9991281792ed5968b483b8d9be",
   "effort": "low",
   "response": {
@@ -9,12 +9,12 @@
       {
         "item_id": "s_essay",
         "action": "move",
-        "start": "2026-11-11T17:00:00-05:00",
-        "end": "2026-11-11T18:30:00-05:00",
-        "reason": "it fits in your evening study time"
+        "start": "2026-11-12T17:00:00-05:00",
+        "end": "2026-11-12T18:30:00-05:00",
+        "reason": "in your evening study time with four days to spare"
       }
     ],
-    "message": "Moved Essay draft to 5pm today because it fits in your evening study time. Nothing else changed.",
+    "message": "Moved Essay draft to 5pm tomorrow, in your evening study time with four days to spare. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -36,35 +36,82 @@
         "free": [
           {
             "rank": 1,
-            "suggested_start": "2026-11-11T17:00",
-            "when": "5pm today",
-            "holds_minutes": 90,
-            "free_from": "2026-11-11T16:50",
-            "free_until": "2026-11-12T01:00",
-            "why_ranked": "4.5h already planned that day, in their nights",
-            "true_reasons": []
-          },
-          {
-            "rank": 2,
             "suggested_start": "2026-11-12T17:00",
             "when": "5pm tomorrow",
             "holds_minutes": 90,
+            "urgency": "comfortable",
             "free_from": "2026-11-12T16:45",
-            "free_until": "2026-11-13T01:00",
-            "why_ranked": "2.5h already planned that day, in their nights",
-            "true_reasons": []
+            "free_until": "2026-11-13T00:30",
+            "why_ranked": "2.5h planned that day, in their nights",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "study_time",
+                "text": "in your evening study time"
+              },
+              {
+                "key": "after_event",
+                "text": "right after HIST200 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "with four days to spare"
+              }
+            ]
+          },
+          {
+            "rank": 2,
+            "suggested_start": "2026-11-13T17:00",
+            "when": "Fri 5pm",
+            "holds_minutes": 90,
+            "urgency": "comfortable",
+            "free_from": "2026-11-13T13:50",
+            "free_until": "2026-11-14T00:30",
+            "why_ranked": "1.7h planned that day, in their nights",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "study_time",
+                "text": "in your evening study time"
+              },
+              {
+                "key": "buffer",
+                "text": "with three days to spare"
+              }
+            ]
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-11T10:50",
-            "when": "10:50am today",
+            "suggested_start": "2026-11-14T17:00",
+            "when": "Sat 5pm",
             "holds_minutes": 90,
-            "free_from": "2026-11-11T10:50",
-            "free_until": "2026-11-11T13:00",
-            "why_ranked": "4.5h already planned that day, outside their nights",
-            "true_reasons": [
-              "it's the soonest open time",
-              "it's the soonest open time before Essay 3"
+            "urgency": "comfortable",
+            "free_from": "2026-11-14T10:00",
+            "free_until": "2026-11-15T00:30",
+            "why_ranked": "0h planned that day, in their nights",
+            "factors": [
+              {
+                "key": "lighter",
+                "text": "a lighter evening"
+              },
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "study_time",
+                "text": "in your evening study time"
+              },
+              {
+                "key": "buffer",
+                "text": "with two days to spare"
+              }
             ]
           },
           {
@@ -72,57 +119,123 @@
             "suggested_start": "2026-11-12T12:15",
             "when": "12:15pm tomorrow",
             "holds_minutes": 90,
+            "urgency": "comfortable",
             "free_from": "2026-11-12T12:15",
             "free_until": "2026-11-12T15:30",
-            "why_ranked": "2.5h already planned that day, outside their nights",
-            "true_reasons": []
+            "why_ranked": "2.5h planned that day, outside their nights",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after ENGL101 seminar"
+              },
+              {
+                "key": "buffer",
+                "text": "with four days to spare"
+              }
+            ]
           },
           {
             "rank": 5,
-            "suggested_start": "2026-11-13T17:00",
-            "when": "Fri 5pm",
+            "suggested_start": "2026-11-11T17:00",
+            "when": "5pm today",
             "holds_minutes": 90,
-            "free_from": "2026-11-13T13:50",
-            "free_until": "2026-11-14T01:00",
-            "why_ranked": "1.7h already planned that day, in their nights",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T16:50",
+            "free_until": "2026-11-12T00:30",
+            "why_ranked": "4.5h planned that day, in their nights, right after the miss",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "study_time",
+                "text": "in your evening study time"
+              },
+              {
+                "key": "after_event",
+                "text": "right after CHEM135 lab"
+              },
+              {
+                "key": "buffer",
+                "text": "with five days to spare"
+              }
+            ]
           },
           {
             "rank": 6,
-            "suggested_start": "2026-11-14T17:00",
-            "when": "Sat 5pm",
+            "suggested_start": "2026-11-13T10:50",
+            "when": "Fri 10:50am",
             "holds_minutes": 90,
-            "free_from": "2026-11-14T10:00",
-            "free_until": "2026-11-15T01:00",
-            "why_ranked": "0h already planned that day, in their nights",
-            "true_reasons": [
-              "it's the lightest day",
-              "it's the lightest day before Essay 3"
+            "urgency": "comfortable",
+            "free_from": "2026-11-13T10:50",
+            "free_until": "2026-11-13T13:00",
+            "why_ranked": "1.7h planned that day, outside their nights",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after MATH141 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "with three days to spare"
+              }
             ]
           },
           {
             "rank": 7,
-            "suggested_start": "2026-11-13T10:50",
-            "when": "Fri 10:50am",
+            "suggested_start": "2026-11-11T10:50",
+            "when": "10:50am today",
             "holds_minutes": 90,
-            "free_from": "2026-11-13T10:50",
-            "free_until": "2026-11-13T13:00",
-            "why_ranked": "1.7h already planned that day, outside their nights",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T10:50",
+            "free_until": "2026-11-11T13:00",
+            "why_ranked": "4.5h planned that day, outside their nights, right after the miss",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after MATH141 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "with five days to spare"
+              }
+            ]
           },
           {
             "rank": 8,
             "suggested_start": "2026-11-15T17:00",
             "when": "Sun 5pm",
             "holds_minutes": 90,
+            "urgency": "comfortable",
             "free_from": "2026-11-15T10:00",
-            "free_until": "2026-11-16T01:00",
-            "why_ranked": "0h already planned that day, in their nights",
-            "true_reasons": [
-              "it's the last open time",
-              "it's the last open time before Essay 3",
-              "it's the lightest day",
-              "it's the lightest day before Essay 3"
+            "free_until": "2026-11-16T00:30",
+            "why_ranked": "0h planned that day, in their nights, under a day before it's due",
+            "factors": [
+              {
+                "key": "lighter",
+                "text": "a lighter evening"
+              },
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "study_time",
+                "text": "in your evening study time"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
             ]
           }
         ]
@@ -131,17 +244,22 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "study_time",
+          "buffer"
+        ],
         "duration_min": "null",
         "item_id": "s_essay",
-        "reason": "it fits in your evening study time",
-        "start": "2026-11-11T17:00"
+        "reason": "null",
+        "start": "2026-11-12T17:00"
       },
       "ok": true,
       "result": {
         "ok": true,
         "moved": "Essay draft",
-        "to": "Wed Nov 11 17:00-18:30",
-        "minutes": 90
+        "to": "Thu Nov 12 17:00-18:30",
+        "minutes": 90,
+        "reason": "in your evening study time with four days to spare"
       }
     },
     {
@@ -157,49 +275,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2234,
-        "output_tokens": 160,
+        "input_tokens": 2259,
+        "output_tokens": 424,
         "cached_tokens": 2033,
-        "reasoning_tokens": 34
+        "reasoning_tokens": 299
       },
-      "costUsd": 0.0012362,
-      "latencyMs": 1312
+      "costUsd": 0.00238945,
+      "latencyMs": 3021
     },
     {
       "usage": {
-        "input_tokens": 3132,
-        "output_tokens": 954,
+        "input_tokens": 3742,
+        "output_tokens": 273,
         "cached_tokens": 2161,
-        "reasoning_tokens": 823
+        "reasoning_tokens": 125
       },
-      "costUsd": 0.0055924,
-      "latencyMs": 6883
+      "costUsd": 0.00346065,
+      "latencyMs": 2384
     },
     {
       "usage": {
-        "input_tokens": 4138,
-        "output_tokens": 41,
-        "cached_tokens": 3057,
-        "reasoning_tokens": 3
+        "input_tokens": 4080,
+        "output_tokens": 42,
+        "cached_tokens": 3697,
+        "reasoning_tokens": 4
       },
-      "costUsd": 0.00198405,
-      "latencyMs": 659
+      "costUsd": 0.0012117999999999999,
+      "latencyMs": 795
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 967,
-        "output_tokens": 916,
-        "cached_tokens": 881,
-        "reasoning_tokens": 897
+        "input_tokens": 1248,
+        "output_tokens": 1564,
+        "cached_tokens": 753,
+        "reasoning_tokens": 1538
       },
-      "costUsd": 0.00413265,
-      "latencyMs": 6374
+      "costUsd": 0.0073787,
+      "latencyMs": 12984
     }
   ],
   "runs": [
@@ -210,12 +329,12 @@
           {
             "item_id": "s_essay",
             "action": "move",
-            "start": "2026-11-11T17:00:00-05:00",
-            "end": "2026-11-11T18:30:00-05:00",
-            "reason": "it fits in your evening study time"
+            "start": "2026-11-12T17:00:00-05:00",
+            "end": "2026-11-12T18:30:00-05:00",
+            "reason": "in your evening study time with four days to spare"
           }
         ],
-        "message": "Moved Essay draft to 5pm today because it fits in your evening study time. Nothing else changed.",
+        "message": "Moved Essay draft to 5pm tomorrow, in your evening study time with four days to spare. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -237,35 +356,82 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-11T17:00",
-                "when": "5pm today",
-                "holds_minutes": 90,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-12T01:00",
-                "why_ranked": "4.5h already planned that day, in their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 2,
                 "suggested_start": "2026-11-12T17:00",
                 "when": "5pm tomorrow",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-13T01:00",
-                "why_ranked": "2.5h already planned that day, in their nights",
-                "true_reasons": []
+                "free_until": "2026-11-13T00:30",
+                "why_ranked": "2.5h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-13T17:00",
+                "when": "Fri 5pm",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T13:50",
+                "free_until": "2026-11-14T00:30",
+                "why_ranked": "1.7h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am today",
+                "suggested_start": "2026-11-14T17:00",
+                "when": "Sat 5pm",
                 "holds_minutes": 90,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day, outside their nights",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T10:00",
+                "free_until": "2026-11-15T00:30",
+                "why_ranked": "0h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
@@ -273,57 +439,123 @@
                 "suggested_start": "2026-11-12T12:15",
                 "when": "12:15pm tomorrow",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T12:15",
                 "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day, outside their nights",
-                "true_reasons": []
+                "why_ranked": "2.5h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-13T17:00",
-                "when": "Fri 5pm",
+                "suggested_start": "2026-11-11T17:00",
+                "when": "5pm today",
                 "holds_minutes": 90,
-                "free_from": "2026-11-13T13:50",
-                "free_until": "2026-11-14T01:00",
-                "why_ranked": "1.7h already planned that day, in their nights",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-12T00:30",
+                "why_ranked": "4.5h planned that day, in their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
               },
               {
                 "rank": 6,
-                "suggested_start": "2026-11-14T17:00",
-                "when": "Sat 5pm",
+                "suggested_start": "2026-11-13T10:50",
+                "when": "Fri 10:50am",
                 "holds_minutes": 90,
-                "free_from": "2026-11-14T10:00",
-                "free_until": "2026-11-15T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T10:50",
+                "free_until": "2026-11-13T13:00",
+                "why_ranked": "1.7h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
                 ]
               },
               {
                 "rank": 7,
-                "suggested_start": "2026-11-13T10:50",
-                "when": "Fri 10:50am",
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am today",
                 "holds_minutes": 90,
-                "free_from": "2026-11-13T10:50",
-                "free_until": "2026-11-13T13:00",
-                "why_ranked": "1.7h already planned that day, outside their nights",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day, outside their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
               },
               {
                 "rank": 8,
                 "suggested_start": "2026-11-15T17:00",
                 "when": "Sun 5pm",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-15T10:00",
-                "free_until": "2026-11-16T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "free_until": "2026-11-16T00:30",
+                "why_ranked": "0h planned that day, in their nights, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               }
             ]
@@ -332,17 +564,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "study_time",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_essay",
-            "reason": "it fits in your evening study time",
-            "start": "2026-11-11T17:00"
+            "reason": "null",
+            "start": "2026-11-12T17:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Essay draft",
-            "to": "Wed Nov 11 17:00-18:30",
-            "minutes": 90
+            "to": "Thu Nov 12 17:00-18:30",
+            "minutes": 90,
+            "reason": "in your evening study time with four days to spare"
           }
         },
         {
@@ -358,250 +595,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2234,
-            "output_tokens": 160,
+            "input_tokens": 2259,
+            "output_tokens": 424,
             "cached_tokens": 2033,
-            "reasoning_tokens": 34
+            "reasoning_tokens": 299
           },
-          "costUsd": 0.0012362,
-          "latencyMs": 1312
+          "costUsd": 0.00238945,
+          "latencyMs": 3021
         },
         {
           "usage": {
-            "input_tokens": 3132,
-            "output_tokens": 954,
+            "input_tokens": 3742,
+            "output_tokens": 273,
             "cached_tokens": 2161,
-            "reasoning_tokens": 823
+            "reasoning_tokens": 125
           },
-          "costUsd": 0.0055924,
-          "latencyMs": 6883
+          "costUsd": 0.00346065,
+          "latencyMs": 2384
         },
         {
           "usage": {
-            "input_tokens": 4138,
-            "output_tokens": 41,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.00198405,
-          "latencyMs": 659
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 967,
-            "output_tokens": 916,
-            "cached_tokens": 881,
-            "reasoning_tokens": 897
-          },
-          "costUsd": 0.00413265,
-          "latencyMs": 6374
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_essay",
-            "action": "move",
-            "start": "2026-11-11T17:00:00-05:00",
-            "end": "2026-11-11T18:30:00-05:00",
-            "reason": "it fits tonight in your preferred night study time"
-          }
-        ],
-        "message": "Moved Essay draft to 5pm today because it fits tonight in your preferred night study time. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "s_essay",
-            "minutes": 90
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-11T17:00",
-                "when": "5pm today",
-                "holds_minutes": 90,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-12T01:00",
-                "why_ranked": "4.5h already planned that day, in their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-12T17:00",
-                "when": "5pm tomorrow",
-                "holds_minutes": 90,
-                "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-13T01:00",
-                "why_ranked": "2.5h already planned that day, in their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am today",
-                "holds_minutes": 90,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day, outside their nights",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Essay 3"
-                ]
-              },
-              {
-                "rank": 4,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "12:15pm tomorrow",
-                "holds_minutes": 90,
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day, outside their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 5,
-                "suggested_start": "2026-11-13T17:00",
-                "when": "Fri 5pm",
-                "holds_minutes": 90,
-                "free_from": "2026-11-13T13:50",
-                "free_until": "2026-11-14T01:00",
-                "why_ranked": "1.7h already planned that day, in their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 6,
-                "suggested_start": "2026-11-14T17:00",
-                "when": "Sat 5pm",
-                "holds_minutes": 90,
-                "free_from": "2026-11-14T10:00",
-                "free_until": "2026-11-15T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              },
-              {
-                "rank": 7,
-                "suggested_start": "2026-11-13T10:50",
-                "when": "Fri 10:50am",
-                "holds_minutes": 90,
-                "free_from": "2026-11-13T10:50",
-                "free_until": "2026-11-13T13:00",
-                "why_ranked": "1.7h already planned that day, outside their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 8,
-                "suggested_start": "2026-11-15T17:00",
-                "when": "Sun 5pm",
-                "holds_minutes": 90,
-                "free_from": "2026-11-15T10:00",
-                "free_until": "2026-11-16T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "duration_min": "null",
-            "item_id": "s_essay",
-            "reason": "it fits tonight in your preferred night study time",
-            "start": "2026-11-11T17:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Essay draft",
-            "to": "Wed Nov 11 17:00-18:30",
-            "minutes": 90
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2234,
-            "output_tokens": 154,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 23
-          },
-          "costUsd": 0.0010699000000000001,
-          "latencyMs": 1182
-        },
-        {
-          "usage": {
-            "input_tokens": 3126,
-            "output_tokens": 676,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 562
-          },
-          "costUsd": 0.0044034,
-          "latencyMs": 4666
-        },
-        {
-          "usage": {
-            "input_tokens": 3854,
+            "input_tokens": 4080,
             "output_tokens": 42,
-            "cached_tokens": 3057,
+            "cached_tokens": 3697,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0016332999999999999,
-          "latencyMs": 976
+          "costUsd": 0.0012117999999999999,
+          "latencyMs": 795
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 969,
-            "output_tokens": 797,
-            "cached_tokens": 625,
-            "reasoning_tokens": 778
+            "input_tokens": 1248,
+            "output_tokens": 1564,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1538
           },
-          "costUsd": 0.003911,
-          "latencyMs": 5499
+          "costUsd": 0.0073787,
+          "latencyMs": 12984
         }
       ]
     },
@@ -612,12 +649,12 @@
           {
             "item_id": "s_essay",
             "action": "move",
-            "start": "2026-11-11T17:00:00-05:00",
-            "end": "2026-11-11T18:30:00-05:00",
-            "reason": "the essay isn't due until next week"
+            "start": "2026-11-12T17:00:00-05:00",
+            "end": "2026-11-12T18:30:00-05:00",
+            "reason": "in your evening study time with four days to spare"
           }
         ],
-        "message": "Moved Essay draft to 5pm today because the essay isn't due until next week. Nothing else changed.",
+        "message": "Moved Essay draft to 5pm tomorrow, in your evening study time with four days to spare. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -630,7 +667,7 @@
           "args": {
             "after": "null",
             "before": "2026-11-16T09:00",
-            "item_id": "s_essay",
+            "item_id": "null",
             "minutes": 90
           },
           "ok": true,
@@ -639,35 +676,82 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-11T17:00",
-                "when": "5pm today",
-                "holds_minutes": 90,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-12T01:00",
-                "why_ranked": "4.5h already planned that day, in their nights",
-                "true_reasons": []
-              },
-              {
-                "rank": 2,
                 "suggested_start": "2026-11-12T17:00",
                 "when": "5pm tomorrow",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-13T01:00",
-                "why_ranked": "2.5h already planned that day, in their nights",
-                "true_reasons": []
+                "free_until": "2026-11-13T00:30",
+                "why_ranked": "2.5h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-13T17:00",
+                "when": "Fri 5pm",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T13:50",
+                "free_until": "2026-11-14T00:30",
+                "why_ranked": "1.7h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am today",
+                "suggested_start": "2026-11-14T17:00",
+                "when": "Sat 5pm",
                 "holds_minutes": 90,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day, outside their nights",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T10:00",
+                "free_until": "2026-11-15T00:30",
+                "why_ranked": "0h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
@@ -675,57 +759,123 @@
                 "suggested_start": "2026-11-12T12:15",
                 "when": "12:15pm tomorrow",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T12:15",
                 "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day, outside their nights",
-                "true_reasons": []
+                "why_ranked": "2.5h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-13T17:00",
-                "when": "Fri 5pm",
+                "suggested_start": "2026-11-11T17:00",
+                "when": "5pm today",
                 "holds_minutes": 90,
-                "free_from": "2026-11-13T13:50",
-                "free_until": "2026-11-14T01:00",
-                "why_ranked": "1.7h already planned that day, in their nights",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-12T00:30",
+                "why_ranked": "4.5h planned that day, in their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
               },
               {
                 "rank": 6,
-                "suggested_start": "2026-11-14T17:00",
-                "when": "Sat 5pm",
+                "suggested_start": "2026-11-13T10:50",
+                "when": "Fri 10:50am",
                 "holds_minutes": 90,
-                "free_from": "2026-11-14T10:00",
-                "free_until": "2026-11-15T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T10:50",
+                "free_until": "2026-11-13T13:00",
+                "why_ranked": "1.7h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
                 ]
               },
               {
                 "rank": 7,
-                "suggested_start": "2026-11-13T10:50",
-                "when": "Fri 10:50am",
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am today",
                 "holds_minutes": 90,
-                "free_from": "2026-11-13T10:50",
-                "free_until": "2026-11-13T13:00",
-                "why_ranked": "1.7h already planned that day, outside their nights",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day, outside their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
               },
               {
                 "rank": 8,
                 "suggested_start": "2026-11-15T17:00",
                 "when": "Sun 5pm",
                 "holds_minutes": 90,
+                "urgency": "comfortable",
                 "free_from": "2026-11-15T10:00",
-                "free_until": "2026-11-16T01:00",
-                "why_ranked": "0h already planned that day, in their nights",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Essay 3",
-                  "it's the lightest day",
-                  "it's the lightest day before Essay 3"
+                "free_until": "2026-11-16T00:30",
+                "why_ranked": "0h planned that day, in their nights, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               }
             ]
@@ -734,17 +884,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "study_time",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_essay",
-            "reason": "the essay isn't due until next week",
-            "start": "2026-11-11T17:00"
+            "reason": "null",
+            "start": "2026-11-12T17:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Essay draft",
-            "to": "Wed Nov 11 17:00-18:30",
-            "minutes": 90
+            "to": "Thu Nov 12 17:00-18:30",
+            "minutes": 90,
+            "reason": "in your evening study time with four days to spare"
           }
         },
         {
@@ -760,51 +915,370 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2234,
-            "output_tokens": 193,
+            "input_tokens": 2259,
+            "output_tokens": 248,
             "cached_tokens": 2161,
-            "reasoning_tokens": 66
+            "reasoning_tokens": 122
           },
-          "costUsd": 0.00123565,
-          "latencyMs": 1462
+          "costUsd": 0.00150065,
+          "latencyMs": 2405
         },
         {
           "usage": {
-            "input_tokens": 3165,
-            "output_tokens": 1004,
+            "input_tokens": 3566,
+            "output_tokens": 272,
             "cached_tokens": 2161,
-            "reasoning_tokens": 892
+            "reasoning_tokens": 125
           },
-          "costUsd": 0.00584615,
-          "latencyMs": 7630
+          "costUsd": 0.0032364,
+          "latencyMs": 2207
         },
         {
           "usage": {
-            "input_tokens": 4221,
-            "output_tokens": 41,
-            "cached_tokens": 3057,
-            "reasoning_tokens": 3
+            "input_tokens": 3903,
+            "output_tokens": 42,
+            "cached_tokens": 3441,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0020878000000000003,
-          "latencyMs": 688
+          "costUsd": 0.00127215,
+          "latencyMs": 886
         }
       ],
       "judge": {
-        "score": 4,
-        "problems": [
-          "Reason 'isn't due until next week' is vague - gives no due date and doesn't explain why 5pm today fits (free time / night preference)."
-        ]
+        "score": 5,
+        "time_score": 5,
+        "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 967,
-            "output_tokens": 1455,
-            "cached_tokens": 881,
-            "reasoning_tokens": 1406
+            "input_tokens": 1248,
+            "output_tokens": 1763,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1742
           },
-          "costUsd": 0.006423399999999999,
-          "latencyMs": 9685
+          "costUsd": 0.0078020500000000005,
+          "latencyMs": 14308
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_essay",
+            "action": "move",
+            "start": "2026-11-12T17:00:00-05:00",
+            "end": "2026-11-12T18:30:00-05:00",
+            "reason": "in your evening study time with four days to spare"
+          }
+        ],
+        "message": "Moved Essay draft to 5pm tomorrow, in your evening study time with four days to spare. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 3,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "2026-11-11T00:40",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 90
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-12T17:00",
+                "when": "5pm tomorrow",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-13T00:30",
+                "why_ranked": "2.5h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-13T17:00",
+                "when": "Fri 5pm",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T13:50",
+                "free_until": "2026-11-14T00:30",
+                "why_ranked": "1.7h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-14T17:00",
+                "when": "Sat 5pm",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-14T10:00",
+                "free_until": "2026-11-15T00:30",
+                "why_ranked": "0h planned that day, in their nights",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-12T12:15",
+                "when": "12:15pm tomorrow",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with four days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-11T17:00",
+                "when": "5pm today",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-12T00:30",
+                "why_ranked": "4.5h planned that day, in their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 6,
+                "suggested_start": "2026-11-13T10:50",
+                "when": "Fri 10:50am",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T10:50",
+                "free_until": "2026-11-13T13:00",
+                "why_ranked": "1.7h planned that day, outside their nights",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with three days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am today",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day, outside their nights, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with five days to spare"
+                  }
+                ]
+              },
+              {
+                "rank": 8,
+                "suggested_start": "2026-11-15T17:00",
+                "when": "Sun 5pm",
+                "holds_minutes": 90,
+                "urgency": "comfortable",
+                "free_from": "2026-11-15T10:00",
+                "free_until": "2026-11-16T00:30",
+                "why_ranked": "0h planned that day, in their nights, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter evening"
+                  },
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "study_time",
+                    "text": "in your evening study time"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "study_time",
+              "buffer"
+            ],
+            "duration_min": "null",
+            "item_id": "s_essay",
+            "reason": "null",
+            "start": "2026-11-12T17:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Essay draft",
+            "to": "Thu Nov 12 17:00-18:30",
+            "minutes": 90,
+            "reason": "in your evening study time with four days to spare"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2259,
+            "output_tokens": 306,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 168
+          },
+          "costUsd": 0.00174715,
+          "latencyMs": 3101
+        },
+        {
+          "usage": {
+            "input_tokens": 3624,
+            "output_tokens": 308,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 154
+          },
+          "costUsd": 0.0034619,
+          "latencyMs": 2231
+        },
+        {
+          "usage": {
+            "input_tokens": 3997,
+            "output_tokens": 41,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 3
+          },
+          "costUsd": 0.0012446,
+          "latencyMs": 656
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1248,
+            "output_tokens": 1970,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 1949
+          },
+          "costUsd": 0.0086818,
+          "latencyMs": 14404
         }
       ]
     }

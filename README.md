@@ -44,15 +44,15 @@ The model reads; code computes and checks. Nothing reaches the plan on the model
 
 Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in CI from recorded model readings:
 
-| What                                  | Result                                                 |
-| ------------------------------------- | ------------------------------------------------------ |
-| Invented dates                        | **0** of 197 (extraction), **0** of 13 (text-a-photo)  |
-| Items found / classes right           | 93 of 93 / 36 of 36                                    |
-| Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                |
-| Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)           |
-| Rebuilds: placement (code's oracle)   | top-1 **98.9%**, top-3 **100%**; 68 of 68 cases pass   |
-| Rebuild message quality (judge, 1-5)  | **4.90**, and the demo's messages human-reviewed       |
-| Cost per photo read / per rebuild     | $0.023 with SAM / $0.0068 (3.5 model calls, about 7 s) |
+| What                                  | Result                                                                     |
+| ------------------------------------- | -------------------------------------------------------------------------- |
+| Invented dates                        | **0** of 197 (extraction), **0** of 13 (text-a-photo)                      |
+| Items found / classes right           | 93 of 93 / 36 of 36                                                        |
+| Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                                    |
+| Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)                               |
+| Rebuilds: placement (code's oracle)   | top-1 **100%**, top-3 **100%**; 68 of 68 cases pass                        |
+| Rebuild message quality (judge, 1-5)  | **4.95**; best time **4.94** ("would a thoughtful friend pick this time?") |
+| Cost per photo read / per rebuild     | $0.023 with SAM / $0.0076 (3.8 model calls, about 9 s)                     |
 
 Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
 
@@ -192,8 +192,11 @@ of the miss unless it's due within a day; never within an hour of bedtime; the m
 (read back from its words); "Nothing else changed" true. The rebuild can't break them (code refuses the move), and the
 finished rebuild is checked against them again. **Placement**, by an oracle in code
 ([src/lib/rebuild/rank.ts](src/lib/rebuild/rank.ts)): every slot is ranked by explicit weights (sooner, a lighter day,
-their study time, not late, not cramming); a run passes only if its slot is in the top 3. Every reason that claims
-"soonest", "last", "only", "longest", or "lightest" is checked true by code.
+urgency decides how much sooner matters: when the deadline is close, the soonest good time; when it isn't, quality (their
+study time, a lighter day, a day's buffer, not right after the miss, never the morning of another quiz)); a run passes
+only if its slot is in the top 3. **Reasons are code's words**: the agent picks one or two facts code checked true of the
+time ("a lighter afternoon", "with a week to spare"), and anything about the reply comes from a structured note whose
+exact words code finds in it ("so tonight can be off", "since you said only mornings work this week").
 
 68 cases (`evals/rebuild/`), built the way Tomorrow builds a request: late-night skips, due in 4/6/12/24 hours, "too
 tired", "busy until 9", sick, did half, no reply, a heavy day against a light one, weekends, both clock changes, a
@@ -205,11 +208,12 @@ case 1. Each case runs 3 times; a flaky case fails. The gates, all passing
 |                                       | agent (reasoning effort low)   | code alone (fallback) |
 | ------------------------------------- | ------------------------------ | --------------------- |
 | Hard rules kept (gate: 100%)          | **100%** of 204 runs           | 100% of 68            |
-| Placement top-1 / top-3 (gates 85/98) | **98.9% / 100%**               | –                     |
-| Cases passed, all 3 runs              | **68 of 68**, 0 flaky          | 51 of 68              |
-| Judge, tone and clarity (gate: 4.8)   | **4.90**                       |                       |
+| Placement top-1 / top-3 (gates 85/98) | **100% / 100%**                | –                     |
+| Cases passed, all 3 runs              | **68 of 68**, 0 flaky          | 58 of 68              |
+| Judge, tone and clarity (gate: 4.8)   | **4.95**                       |                       |
+| Best time: would a friend pick it?    | **4.94** (gate: 4.8)           |                       |
 | Every text one plain SMS              | yes, enforced by a test        | yes                   |
-| Model cost per rebuild                | $0.0068 (3.5 turns, about 7 s) | free                  |
+| Model cost per rebuild                | $0.0076 (3.8 turns, about 9 s) | free                  |
 | Tokens per call, cache hit rate       | 3038 in, 219 out; 84% cached   |                       |
 
 ### Text a photo

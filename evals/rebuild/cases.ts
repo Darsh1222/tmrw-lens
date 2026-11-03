@@ -48,6 +48,8 @@ export type RebuildExpect = {
   rule_out?: [string, string][];
   /** The length left to place, when the reply says (a partial session): the oracle ranks slots for exactly this. */
   minutes?: number;
+  /** A time the reply offers (local "YYYY-MM-DD HH:mm" pair): the oracle prefers it, as code does once it's noted. */
+  offered?: [string, string];
 };
 
 /** `label` is the short name the demo panel shows for the case. */
@@ -82,9 +84,16 @@ const outline = planned("s_outline", "Essay outline", "2026-11-05 14:00", "2026-
 });
 const hist = planned("s_hist", "Read HIST ch. 4", "2026-11-05 16:00", "2026-11-05 17:00", { course: "HIST200" });
 
+/**
+ * The first eleven were written for a student who's up at 7 and studies until 11: they say so, as Tomorrow would, so
+ * Lens's student defaults (up at 8:30, study from 9) don't apply to them.
+ */
+const EARLY = { sleep: { start: "23:00", end: "07:00" }, quiet: null, study_time: null, study_hours: { start: "07:00", end: "23:00" } }; // prettier-ignore
+
 const base = (over: Partial<RebuildRequest>): RebuildRequest => ({
   version: 1,
   zone: ZONE,
+  prefs: EARLY,
   now: L("2026-11-04 18:10"),
   missed: { item_id: "s_calc", reply: "skipped" },
   items: [calc(), outline, hist],
@@ -256,6 +265,7 @@ const ORIGINAL: RebuildCase[] = [
       ],
       fixed: [],
       deadlines: [{ ...quiz, due: L("2026-11-02 10:00") }],
+      prefs: EARLY,
       open_windows: [
         win("2026-10-31 20:30", "2026-10-31 22:30"),
         win("2026-11-01 10:00", "2026-11-01 12:00"),

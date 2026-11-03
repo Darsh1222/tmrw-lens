@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "3c7121036246b1eddcecb36c74000db8b3bd2461789b119e7c8ac8706bda72c0",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "4894b14bed197bf23d6aec5154ae33adcc14a583439ab386098dc606ef218328",
   "effort": "low",
   "response": {
     "version": 1,
@@ -11,21 +11,37 @@
         "action": "move",
         "start": "2026-11-10T18:00:00-05:00",
         "end": "2026-11-10T19:00:00-05:00",
-        "reason": "you're free after 6"
+        "reason": "once you're free, your free evening"
       }
     ],
-    "message": "Moved Read HIST ch. 7 to 6pm today because you're free after 6. Nothing else changed.",
+    "message": "Moved Read HIST ch. 7 to 6pm today, once you're free, your free evening. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
-  "turns": 3,
+  "turns": 4,
   "refused": 0,
   "refusals": [],
   "steps": [
     {
+      "tool": "note_reply",
+      "args": {
+        "from_date": "null",
+        "kind": "not_before",
+        "part": "null",
+        "quote": "can do it later today after 6",
+        "until": "2026-11-10T18:00"
+      },
+      "ok": true,
+      "result": {
+        "ok": true,
+        "noted": "not_before",
+        "words": "once you're free"
+      }
+    },
+    {
       "tool": "find_open_time",
       "args": {
-        "after": "2026-11-10T18:00",
+        "after": "null",
         "before": "null",
         "item_id": "null",
         "minutes": 60
@@ -39,80 +55,164 @@
             "suggested_start": "2026-11-10T18:00",
             "when": "6pm today",
             "holds_minutes": 60,
+            "urgency": "comfortable",
             "free_from": "2026-11-10T18:00",
-            "free_until": "2026-11-10T22:30",
-            "why_ranked": "2.5h already planned that day",
-            "true_reasons": []
+            "free_until": "2026-11-10T23:00",
+            "why_ranked": "2.5h planned that day, right after the miss, when they said they're free",
+            "factors": [
+              {
+                "key": "free_part",
+                "text": "your free evening"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-11T07:30",
-            "when": "7:30am tomorrow",
+            "suggested_start": "2026-11-11T09:00",
+            "when": "9am tomorrow",
             "holds_minutes": 60,
-            "free_from": "2026-11-11T07:30",
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T09:00",
             "free_until": "2026-11-11T10:00",
-            "why_ranked": "4.5h already planned that day",
-            "true_reasons": []
+            "why_ranked": "4.5h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-11T10:50",
-            "when": "10:50am tomorrow",
+            "suggested_start": "2026-11-12T09:00",
+            "when": "Thu 9am",
             "holds_minutes": 60,
-            "free_from": "2026-11-11T10:50",
-            "free_until": "2026-11-11T13:00",
-            "why_ranked": "4.5h already planned that day",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-12T09:00",
+            "free_until": "2026-11-12T11:00",
+            "why_ranked": "2.5h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
             "rank": 4,
-            "suggested_start": "2026-11-11T16:50",
-            "when": "4:50pm tomorrow",
+            "suggested_start": "2026-11-11T10:50",
+            "when": "10:50am tomorrow",
             "holds_minutes": 60,
-            "free_from": "2026-11-11T16:50",
-            "free_until": "2026-11-11T22:30",
-            "why_ranked": "4.5h already planned that day",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T10:50",
+            "free_until": "2026-11-11T13:00",
+            "why_ranked": "4.5h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after MATH141 lecture"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
             "rank": 5,
-            "suggested_start": "2026-11-12T07:30",
-            "when": "Thu 7:30am",
-            "holds_minutes": 60,
-            "free_from": "2026-11-12T07:30",
-            "free_until": "2026-11-12T11:00",
-            "why_ranked": "2.5h already planned that day",
-            "true_reasons": []
-          },
-          {
-            "rank": 6,
             "suggested_start": "2026-11-12T12:15",
             "when": "Thu 12:15pm",
             "holds_minutes": 60,
+            "urgency": "comfortable",
             "free_from": "2026-11-12T12:15",
             "free_until": "2026-11-12T15:30",
-            "why_ranked": "2.5h already planned that day",
-            "true_reasons": []
+            "why_ranked": "2.5h planned that day",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after ENGL101 seminar"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
-            "rank": 7,
+            "rank": 6,
             "suggested_start": "2026-11-12T16:45",
             "when": "Thu 4:45pm",
             "holds_minutes": 60,
+            "urgency": "comfortable",
             "free_from": "2026-11-12T16:45",
-            "free_until": "2026-11-12T22:30",
-            "why_ranked": "2.5h already planned that day",
-            "true_reasons": []
+            "free_until": "2026-11-12T23:00",
+            "why_ranked": "2.5h planned that day",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after HIST200 lecture"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
+          },
+          {
+            "rank": 7,
+            "suggested_start": "2026-11-11T16:50",
+            "when": "4:50pm tomorrow",
+            "holds_minutes": 60,
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T16:50",
+            "free_until": "2026-11-11T23:00",
+            "why_ranked": "4.5h planned that day",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after CHEM135 lab"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           },
           {
             "rank": 8,
-            "suggested_start": "2026-11-13T07:30",
-            "when": "Fri 7:30am",
+            "suggested_start": "2026-11-13T09:00",
+            "when": "Fri 9am",
             "holds_minutes": 60,
-            "free_from": "2026-11-13T07:30",
+            "urgency": "comfortable",
+            "free_from": "2026-11-13T09:00",
             "free_until": "2026-11-13T10:00",
-            "why_ranked": "1.7h already planned that day",
-            "true_reasons": []
+            "why_ranked": "1.7h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "reply",
+                "text": "once you're free"
+              }
+            ]
           }
         ]
       }
@@ -120,9 +220,13 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "free_part",
+          "reply"
+        ],
         "duration_min": "null",
         "item_id": "s_hist",
-        "reason": "you're free after 6",
+        "reason": "null",
         "start": "2026-11-10T18:00"
       },
       "ok": true,
@@ -130,7 +234,8 @@
         "ok": true,
         "moved": "Read HIST ch. 7",
         "to": "Tue Nov 10 18:00-19:00",
-        "minutes": 60
+        "minutes": 60,
+        "reason": "once you're free, your free evening"
       }
     },
     {
@@ -146,49 +251,60 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2204,
-        "output_tokens": 326,
+        "input_tokens": 2232,
+        "output_tokens": 297,
         "cached_tokens": 2033,
-        "reasoning_tokens": 197
+        "reasoning_tokens": 149
       },
-      "costUsd": 0.0019042,
-      "latencyMs": 2746
+      "costUsd": 0.00181595,
+      "latencyMs": 2644
     },
     {
       "usage": {
-        "input_tokens": 3189,
-        "output_tokens": 252,
+        "input_tokens": 2569,
+        "output_tokens": 103,
         "cached_tokens": 2161,
-        "reasoning_tokens": 122
+        "reasoning_tokens": 8
       },
-      "costUsd": 0.00268015,
-      "latencyMs": 1877
+      "costUsd": 0.0012719,
+      "latencyMs": 947
     },
     {
       "usage": {
-        "input_tokens": 3497,
-        "output_tokens": 42,
-        "cached_tokens": 3185,
-        "reasoning_tokens": 4
+        "input_tokens": 3579,
+        "output_tokens": 197,
+        "cached_tokens": 2545,
+        "reasoning_tokens": 73
       },
-      "costUsd": 0.00104625,
-      "latencyMs": 659
+      "costUsd": 0.0025115,
+      "latencyMs": 1471
+    },
+    {
+      "usage": {
+        "input_tokens": 3842,
+        "output_tokens": 41,
+        "cached_tokens": 3569,
+        "reasoning_tokens": 3
+      },
+      "costUsd": 0.0010508499999999999,
+      "latencyMs": 1705
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 982,
-        "output_tokens": 907,
-        "cached_tokens": 625,
-        "reasoning_tokens": 891
+        "input_tokens": 1281,
+        "output_tokens": 641,
+        "cached_tokens": 753,
+        "reasoning_tokens": 620
       },
-      "costUsd": 0.00439475,
-      "latencyMs": 6885
+      "costUsd": 0.0034972,
+      "latencyMs": 5491
     }
   ],
   "runs": [
@@ -201,21 +317,37 @@
             "action": "move",
             "start": "2026-11-10T18:00:00-05:00",
             "end": "2026-11-10T19:00:00-05:00",
-            "reason": "you're free after 6"
+            "reason": "once you're free, your free evening"
           }
         ],
-        "message": "Moved Read HIST ch. 7 to 6pm today because you're free after 6. Nothing else changed.",
+        "message": "Moved Read HIST ch. 7 to 6pm today, once you're free, your free evening. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
-      "turns": 3,
+      "turns": 4,
       "refused": 0,
       "refusals": [],
       "steps": [
         {
+          "tool": "note_reply",
+          "args": {
+            "from_date": "null",
+            "kind": "not_before",
+            "part": "null",
+            "quote": "can do it later today after 6",
+            "until": "2026-11-10T18:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "noted": "not_before",
+            "words": "once you're free"
+          }
+        },
+        {
           "tool": "find_open_time",
           "args": {
-            "after": "2026-11-10T18:00",
+            "after": "null",
             "before": "null",
             "item_id": "null",
             "minutes": 60
@@ -229,80 +361,164 @@
                 "suggested_start": "2026-11-10T18:00",
                 "when": "6pm today",
                 "holds_minutes": 60,
+                "urgency": "comfortable",
                 "free_from": "2026-11-10T18:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "2.5h planned that day, right after the miss, when they said they're free",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 60,
-                "free_from": "2026-11-11T07:30",
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
                 "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
                 "holds_minutes": 60,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
                 "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am tomorrow",
                 "holds_minutes": 60,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 6,
                 "suggested_start": "2026-11-12T12:15",
                 "when": "Thu 12:15pm",
                 "holds_minutes": 60,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T12:15",
                 "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
-                "rank": 7,
+                "rank": 6,
                 "suggested_start": "2026-11-12T16:45",
                 "when": "Thu 4:45pm",
                 "holds_minutes": 60,
+                "urgency": "comfortable",
                 "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-12T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
+                "free_until": "2026-11-12T23:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-11T16:50",
+                "when": "4:50pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               },
               {
                 "rank": 8,
-                "suggested_start": "2026-11-13T07:30",
-                "when": "Fri 7:30am",
+                "suggested_start": "2026-11-13T09:00",
+                "when": "Fri 9am",
                 "holds_minutes": 60,
-                "free_from": "2026-11-13T07:30",
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T09:00",
                 "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h already planned that day",
-                "true_reasons": []
+                "why_ranked": "1.7h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
               }
             ]
           }
@@ -310,9 +526,13 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "free_part",
+              "reply"
+            ],
             "duration_min": "null",
             "item_id": "s_hist",
-            "reason": "you're free after 6",
+            "reason": "null",
             "start": "2026-11-10T18:00"
           },
           "ok": true,
@@ -320,7 +540,8 @@
             "ok": true,
             "moved": "Read HIST ch. 7",
             "to": "Tue Nov 10 18:00-19:00",
-            "minutes": 60
+            "minutes": 60,
+            "reason": "once you're free, your free evening"
           }
         },
         {
@@ -336,429 +557,672 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2204,
-            "output_tokens": 326,
+            "input_tokens": 2232,
+            "output_tokens": 297,
             "cached_tokens": 2033,
-            "reasoning_tokens": 197
+            "reasoning_tokens": 149
           },
-          "costUsd": 0.0019042,
-          "latencyMs": 2746
+          "costUsd": 0.00181595,
+          "latencyMs": 2644
         },
         {
           "usage": {
-            "input_tokens": 3189,
-            "output_tokens": 252,
+            "input_tokens": 2569,
+            "output_tokens": 103,
             "cached_tokens": 2161,
-            "reasoning_tokens": 122
+            "reasoning_tokens": 8
           },
-          "costUsd": 0.00268015,
-          "latencyMs": 1877
+          "costUsd": 0.0012719,
+          "latencyMs": 947
         },
         {
           "usage": {
-            "input_tokens": 3497,
+            "input_tokens": 3579,
+            "output_tokens": 197,
+            "cached_tokens": 2545,
+            "reasoning_tokens": 73
+          },
+          "costUsd": 0.0025115,
+          "latencyMs": 1471
+        },
+        {
+          "usage": {
+            "input_tokens": 3842,
+            "output_tokens": 41,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 3
+          },
+          "costUsd": 0.0010508499999999999,
+          "latencyMs": 1705
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1281,
+            "output_tokens": 641,
+            "cached_tokens": 753,
+            "reasoning_tokens": 620
+          },
+          "costUsd": 0.0034972,
+          "latencyMs": 5491
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_hist",
+            "action": "move",
+            "start": "2026-11-10T18:00:00-05:00",
+            "end": "2026-11-10T19:00:00-05:00",
+            "reason": "once you're free, your free evening"
+          }
+        ],
+        "message": "Moved Read HIST ch. 7 to 6pm today, once you're free, your free evening. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 4,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "note_reply",
+          "args": {
+            "from_date": "null",
+            "kind": "not_before",
+            "part": "null",
+            "quote": "can do it later today after 6",
+            "until": "2026-11-10T18:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "noted": "not_before",
+            "words": "once you're free"
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "null",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-10T18:00",
+                "when": "6pm today",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T18:00",
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "2.5h planned that day, right after the miss, when they said they're free",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-12T12:15",
+                "when": "Thu 12:15pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 6,
+                "suggested_start": "2026-11-12T16:45",
+                "when": "Thu 4:45pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T23:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-11T16:50",
+                "when": "4:50pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 8,
+                "suggested_start": "2026-11-13T09:00",
+                "when": "Fri 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T09:00",
+                "free_until": "2026-11-13T10:00",
+                "why_ranked": "1.7h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "reply",
+              "free_part"
+            ],
+            "duration_min": "null",
+            "item_id": "s_hist",
+            "reason": "null",
+            "start": "2026-11-10T18:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Read HIST ch. 7",
+            "to": "Tue Nov 10 18:00-19:00",
+            "minutes": 60,
+            "reason": "once you're free, your free evening"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2232,
+            "output_tokens": 310,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 159
+          },
+          "costUsd": 0.0017304,
+          "latencyMs": 2456
+        },
+        {
+          "usage": {
+            "input_tokens": 2582,
+            "output_tokens": 104,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 9
+          },
+          "costUsd": 0.0012924000000000002,
+          "latencyMs": 1534
+        },
+        {
+          "usage": {
+            "input_tokens": 3593,
+            "output_tokens": 232,
+            "cached_tokens": 2545,
+            "reasoning_tokens": 108
+          },
+          "costUsd": 0.00267775,
+          "latencyMs": 2504
+        },
+        {
+          "usage": {
+            "input_tokens": 3891,
+            "output_tokens": 44,
+            "cached_tokens": 3569,
+            "reasoning_tokens": 6
+          },
+          "costUsd": 0.00112485,
+          "latencyMs": 884
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1281,
+            "output_tokens": 911,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 885
+          },
+          "costUsd": 0.0040815,
+          "latencyMs": 7581
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_hist",
+            "action": "move",
+            "start": "2026-11-10T18:00:00-05:00",
+            "end": "2026-11-10T19:00:00-05:00",
+            "reason": "once you're free, your free evening"
+          }
+        ],
+        "message": "Moved Read HIST ch. 7 to 6pm today, once you're free, your free evening. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 4,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "note_reply",
+          "args": {
+            "from_date": "null",
+            "kind": "not_before",
+            "part": "null",
+            "quote": "can do it later today after 6",
+            "until": "2026-11-10T18:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "noted": "not_before",
+            "words": "once you're free"
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "null",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-10T18:00",
+                "when": "6pm today",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T18:00",
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "2.5h planned that day, right after the miss, when they said they're free",
+                "factors": [
+                  {
+                    "key": "free_part",
+                    "text": "your free evening"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 4,
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 5,
+                "suggested_start": "2026-11-12T12:15",
+                "when": "Thu 12:15pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T12:15",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 6,
+                "suggested_start": "2026-11-12T16:45",
+                "when": "Thu 4:45pm",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T23:00",
+                "why_ranked": "2.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 7,
+                "suggested_start": "2026-11-11T16:50",
+                "when": "4:50pm tomorrow",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "4.5h planned that day",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              },
+              {
+                "rank": 8,
+                "suggested_start": "2026-11-13T09:00",
+                "when": "Fri 9am",
+                "holds_minutes": 60,
+                "urgency": "comfortable",
+                "free_from": "2026-11-13T09:00",
+                "free_until": "2026-11-13T10:00",
+                "why_ranked": "1.7h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "reply",
+                    "text": "once you're free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "free_part",
+              "reply"
+            ],
+            "duration_min": "null",
+            "item_id": "s_hist",
+            "reason": "null",
+            "start": "2026-11-10T18:00"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Read HIST ch. 7",
+            "to": "Tue Nov 10 18:00-19:00",
+            "minutes": 60,
+            "reason": "once you're free, your free evening"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2232,
+            "output_tokens": 382,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 229
+          },
+          "costUsd": 0.0020364000000000003,
+          "latencyMs": 3602
+        },
+        {
+          "usage": {
+            "input_tokens": 2654,
+            "output_tokens": 104,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 9
+          },
+          "costUsd": 0.0013824,
+          "latencyMs": 925
+        },
+        {
+          "usage": {
+            "input_tokens": 3665,
+            "output_tokens": 225,
+            "cached_tokens": 2545,
+            "reasoning_tokens": 101
+          },
+          "costUsd": 0.002738,
+          "latencyMs": 2267
+        },
+        {
+          "usage": {
+            "input_tokens": 3956,
             "output_tokens": 42,
-            "cached_tokens": 3185,
+            "cached_tokens": 3569,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.00104625,
-          "latencyMs": 659
+          "costUsd": 0.0011975999999999998,
+          "latencyMs": 795
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 982,
-            "output_tokens": 907,
-            "cached_tokens": 625,
-            "reasoning_tokens": 891
+            "input_tokens": 1281,
+            "output_tokens": 931,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 910
           },
-          "costUsd": 0.00439475,
-          "latencyMs": 6885
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_hist",
-            "action": "move",
-            "start": "2026-11-10T18:00:00-05:00",
-            "end": "2026-11-10T19:00:00-05:00",
-            "reason": "you're free later today"
-          }
-        ],
-        "message": "Moved Read HIST ch. 7 to 6pm today because you're free later today. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "2026-11-10T18:00",
-            "before": "null",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-10T18:00",
-                "when": "6pm today",
-                "holds_minutes": 60,
-                "free_from": "2026-11-10T18:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T07:30",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 5,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 6,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "Thu 12:15pm",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 7,
-                "suggested_start": "2026-11-12T16:45",
-                "when": "Thu 4:45pm",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-12T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 8,
-                "suggested_start": "2026-11-13T07:30",
-                "when": "Fri 7:30am",
-                "holds_minutes": 60,
-                "free_from": "2026-11-13T07:30",
-                "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h already planned that day",
-                "true_reasons": []
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "duration_min": "null",
-            "item_id": "s_hist",
-            "reason": "you're free later today",
-            "start": "2026-11-10T18:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Read HIST ch. 7",
-            "to": "Tue Nov 10 18:00-19:00",
-            "minutes": 60
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2204,
-            "output_tokens": 328,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 204
-          },
-          "costUsd": 0.0017719,
-          "latencyMs": 2927
-        },
-        {
-          "usage": {
-            "input_tokens": 3191,
-            "output_tokens": 459,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 332
-          },
-          "costUsd": 0.0035624000000000003,
-          "latencyMs": 3483
-        },
-        {
-          "usage": {
-            "input_tokens": 3706,
-            "output_tokens": 41,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.00130325,
-          "latencyMs": 890
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 981,
-            "output_tokens": 1048,
-            "cached_tokens": 881,
-            "reasoning_tokens": 1029
-          },
-          "costUsd": 0.00471115,
-          "latencyMs": 7952
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_hist",
-            "action": "move",
-            "start": "2026-11-10T18:00:00-05:00",
-            "end": "2026-11-10T19:00:00-05:00",
-            "reason": "you said later today works"
-          }
-        ],
-        "message": "Moved Read HIST ch. 7 to 6pm today because you said later today works. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "2026-11-10T18:00",
-            "before": "null",
-            "item_id": "null",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-10T18:00",
-                "when": "6pm today",
-                "holds_minutes": 60,
-                "free_from": "2026-11-10T18:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T07:30",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 4,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 5,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 6,
-                "suggested_start": "2026-11-12T12:15",
-                "when": "Thu 12:15pm",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T12:15",
-                "free_until": "2026-11-12T15:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 7,
-                "suggested_start": "2026-11-12T16:45",
-                "when": "Thu 4:45pm",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-12T22:30",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 8,
-                "suggested_start": "2026-11-13T07:30",
-                "when": "Fri 7:30am",
-                "holds_minutes": 60,
-                "free_from": "2026-11-13T07:30",
-                "free_until": "2026-11-13T10:00",
-                "why_ranked": "1.7h already planned that day",
-                "true_reasons": []
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "duration_min": "null",
-            "item_id": "s_hist",
-            "reason": "you said later today works",
-            "start": "2026-11-10T18:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Read HIST ch. 7",
-            "to": "Tue Nov 10 18:00-19:00",
-            "minutes": 60
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2204,
-            "output_tokens": 337,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 209
-          },
-          "costUsd": 0.0018101500000000002,
-          "latencyMs": 2791
-        },
-        {
-          "usage": {
-            "input_tokens": 3200,
-            "output_tokens": 419,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 311
-          },
-          "costUsd": 0.0034036500000000003,
-          "latencyMs": 3121
-        },
-        {
-          "usage": {
-            "input_tokens": 3675,
-            "output_tokens": 41,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.0012645,
-          "latencyMs": 1147
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 982,
-            "output_tokens": 642,
-            "cached_tokens": 881,
-            "reasoning_tokens": 626
-          },
-          "costUsd": 0.0029869000000000002,
-          "latencyMs": 4743
+          "costUsd": 0.0041665,
+          "latencyMs": 7695
         }
       ]
     }

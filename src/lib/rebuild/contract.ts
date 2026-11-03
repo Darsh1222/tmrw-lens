@@ -16,8 +16,9 @@ const Clock = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'a local time, "HH:m
 const Daily = z.object({ start: Clock, end: Clock });
 
 /**
- * How the person lives, for the rules no move may break (src/lib/rebuild/rules.ts). Optional; without it Lens assumes
- * sleep from 23:00 to 07:00, no quiet hours, and no study-time preference.
+ * How the person lives, for the rules no move may break (src/lib/rebuild/rules.ts). Optional; without it Lens assumes a
+ * student's week: sleep 00:30-08:30, study 09:00-23:00 (from 07:30 for a morning person, to 00:30 for a night person),
+ * no quiet hours.
  */
 export const RebuildPrefs = z.object({
   /** When they go to sleep and wake up. No session ends within an hour of bedtime. */
@@ -26,6 +27,8 @@ export const RebuildPrefs = z.object({
   quiet: z.array(Daily).max(10).nullable(),
   /** When they'd rather study: a tie-breaker in placement, never a rule. */
   study_time: z.enum(["mornings", "afternoons", "nights"]).nullable(),
+  /** The earliest a session may start and the latest it may end each day. Optional; see above for the defaults. */
+  study_hours: Daily.nullable().optional(),
 });
 export type RebuildPrefs = z.infer<typeof RebuildPrefs>;
 

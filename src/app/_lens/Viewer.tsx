@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useReducedMotion, useSeen } from "./useSeen";
 import type { Status } from "@/lib/plan/types";
 import type { Evidence } from "@/lib/schemas/evidence";
 import type { Input } from "./types";
@@ -8,28 +9,13 @@ import type { Input } from "./types";
 // The source with what Lens read from it drawn on top: SAM 3.1's outline of
 // each sticky note, sheet, or board in gilt, and a box around each quote.
 // When results arrive the outlines draw on one by one (80ms apart), then the
-// line boxes, and then the plan's cards arrive; only once this is on screen,
-// and not at all under reduced motion. The selected item is drawn strongest.
+// line boxes, and then the plan's cards arrive: only once the photo is in view
+// (useSeen), paused while it isn't, with a Replay after; not at all under
+// reduced motion. The selected item is drawn strongest.
 
 export type Mark = { id: string; evidence: Evidence; status: Status };
 
 const STAGGER = 80;
-const DRAW = 520;
-
-function useInView<T extends Element>(ref: React.RefObject<T | null>) {
-  const [seen, setSeen] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || seen) return;
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && setSeen(true), { threshold: 0.35 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [ref, seen]);
-  return seen;
-}
-
-const reducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function Viewer({
   inputs,
@@ -51,8 +37,11 @@ export function Viewer({
   reveal: number;
   onRevealed: () => void;
 }) {
-  const frame = useRef<HTMLDivElement>(null);
-  const inView = useInView(frame);
+  const { attach, started, visible } = useSeen();
+  const reduced = useReducedMotion();
+  const [round, setRound] = useState(0);
+  // Shapes that finished drawing in this round of this reveal; all of them means the outlines are done.
+  const [drawn, setDrawn] = useState({ key: "", n: 0 });
   const input = inputs.find((i) => i.id === at.input) ?? inputs[0];
   const page = input ? input.pages[Math.min(at.page, input.pages.length - 1)] : null;
   const here = page
@@ -65,18 +54,20 @@ export function Viewer({
     ).values(),
   ];
   const boxes = here.filter((m) => m.evidence.bbox);
-  const shapes = regions.length + boxes.length;
 
+  const key = `${reveal}:${round}`;
+  // Each region is drawn twice (a dark line under the gilt); each box once.
+  const total = regions.length * 2 + boxes.length;
+  const finished = reduced || !reveal || total === 0 || (drawn.key === key && drawn.n >= total);
   useEffect(() => {
-    if (!inView || !reveal) return;
-    const t = setTimeout(onRevealed, reducedMotion() ? 0 : Math.min(shapes, 24) * STAGGER + DRAW);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per new set of readings, once on screen
-  }, [reveal, inView]);
+    if (reveal && started && finished) onRevealed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per new set of readings, once seen and drawn
+  }, [reveal, started, finished]);
 
   if (!input || !page) return null;
-  // Shapes are keyed by `reveal`, so new readings remount them and they draw again; nothing redraws on a re-render.
-  const animate = inView && reveal > 0;
+  // Shapes are keyed by `reveal` and the replay round, so new readings (or Replay) remount them and they draw again.
+  const animate = started && reveal > 0 && !reduced;
+  const state = !reveal || reduced || finished ? "done" : !started ? "idle" : visible ? "playing" : "paused";
   const delay = (n: number) => (animate ? { animationDelay: `${Math.min(n, 24) * STAGGER}ms` } : undefined);
   const ordered = [...boxes.filter((m) => m.id !== selected), ...boxes.filter((m) => m.id === selected)];
 
@@ -110,7 +101,7 @@ export function Viewer({
           ))}
         </div>
       )}
-      <div ref={frame}>
+      <div ref={attach} data-anim={state}>
         {page.url ? (
           <figure className="flex flex-col gap-2">
             <div className="relative overflow-hidden rounded-xl border border-line bg-well">
@@ -122,12 +113,20 @@ export function Viewer({
                 alt={`Your ${input.label}${page.page ? `, page ${page.page}` : ""}, with what Lens read outlined`}
                 className="block h-auto w-full"
               />
-              <svg viewBox="0 0 1 1" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+              <svg
+                viewBox="0 0 1 1"
+                preserveAspectRatio="none"
+                className={`absolute inset-0 h-full w-full ${state === "paused" ? "anim-paused" : ""}`}
+                onAnimationEnd={(e) =>
+                  e.animationName === "forum-draw" &&
+                  setDrawn((x) => (x.key === key ? { key, n: x.n + 1 } : { key, n: 1 }))
+                }
+              >
                 {/* Each outline is gilt over a thin dark line, so it reads on a pale wall or a dark desk alike. */}
                 {regions.map((m, n) =>
                   (["var(--tm-outline-under)", "var(--tm-gilt)"] as const).map((stroke, layer) => (
                     <polygon
-                      key={`r-${n}-${layer}-${reveal}`}
+                      key={`r-${n}-${layer}-${key}`}
                       points={m.evidence.region!.outline.map(([x, y]) => `${x},${y}`).join(" ")}
                       pathLength={1}
                       className={animate ? "forum-draw" : ""}
@@ -145,7 +144,7 @@ export function Viewer({
                   const on = m.id === selected;
                   return (
                     <rect
-                      key={`b-${m.id}-${m.evidence.quote}-${reveal}`}
+                      key={`b-${m.id}-${m.evidence.quote}-${key}`}
                       x={b.x0}
                       y={b.y0}
                       width={b.x1 - b.x0}
@@ -168,9 +167,21 @@ export function Viewer({
               </svg>
             </div>
             {regions.length > 0 && (
-              <figcaption className="text-xs text-ink-2">
-                Outlined by SAM 3.1: {regions.length} {regions.length === 1 ? "object" : "objects"}, each item tied to
-                the one it&apos;s written on.
+              <figcaption className="flex items-start justify-between gap-3 text-xs text-ink-2">
+                <span>
+                  Outlined by SAM 3.1: {regions.length} {regions.length === 1 ? "object" : "objects"}, each item tied to
+                  the one it&apos;s written on.
+                </span>
+                {/* Always laid out, shown once drawn, so it moves nothing when it appears. */}
+                <button
+                  type="button"
+                  onClick={() => setRound((r) => r + 1)}
+                  className={`shrink-0 underline decoration-line-strong underline-offset-4 hover:text-ink ${state === "done" && !reduced && reveal ? "" : "invisible"}`} // prettier-ignore
+                  tabIndex={state === "done" && !reduced && reveal ? 0 : -1}
+                  aria-hidden={!(state === "done" && !reduced && reveal)}
+                >
+                  Replay
+                </button>
               </figcaption>
             )}
           </figure>

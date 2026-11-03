@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "a1729b6019f16a59767f42737d28fb5a916f99ca61fd3dd4701dd224604b971c",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "229627ffc01dfa88968eaf9f6cfb1c689bfc4d791febef0bfccf49f41ad75d2d",
   "effort": "low",
   "response": {
     "version": 1,
@@ -9,12 +9,12 @@
       {
         "item_id": "s_calc",
         "action": "move",
-        "start": "2026-11-10T09:30:00-05:00",
-        "end": "2026-11-10T10:00:00-05:00",
-        "reason": "it's the soonest open time before Quiz 4"
+        "start": "2026-11-11T09:00:00-05:00",
+        "end": "2026-11-11T09:30:00-05:00",
+        "reason": "a fresh morning, with no quiz that day, a day before it's due"
       }
     ],
-    "message": "Moved Calc practice to 9:30am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+    "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -36,40 +36,62 @@
         "free": [
           {
             "rank": 1,
-            "suggested_start": "2026-11-10T09:30",
-            "when": "9:30am today",
+            "suggested_start": "2026-11-11T09:00",
+            "when": "9am tomorrow",
             "holds_minutes": 30,
-            "free_from": "2026-11-10T09:30",
-            "free_until": "2026-11-10T11:00",
-            "why_ranked": "6.5h already planned that day",
-            "true_reasons": [
-              "it's the soonest open time",
-              "it's the soonest open time before Quiz 4"
+            "urgency": "comfortable",
+            "free_from": "2026-11-11T09:00",
+            "free_until": "2026-11-11T10:00",
+            "why_ranked": "8h planned that day",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
             ]
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-10T12:15",
-            "when": "12:15pm today",
+            "suggested_start": "2026-11-10T09:30",
+            "when": "9:30am today",
             "holds_minutes": 30,
-            "free_from": "2026-11-10T12:15",
-            "free_until": "2026-11-10T15:30",
-            "why_ranked": "6.5h already planned that day",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-10T09:30",
+            "free_until": "2026-11-10T11:00",
+            "why_ranked": "6.5h planned that day, right after the miss",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "buffer",
+                "text": "with two days to spare"
+              }
+            ]
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-12T07:30",
-            "when": "Thu 7:30am",
+            "suggested_start": "2026-11-10T12:15",
+            "when": "12:15pm today",
             "holds_minutes": 30,
-            "free_from": "2026-11-12T07:30",
-            "free_until": "2026-11-12T10:00",
-            "why_ranked": "2.5h already planned that day",
-            "true_reasons": [
-              "it's the last open time",
-              "it's the last open time before Quiz 4",
-              "it's the lightest day",
-              "it's the lightest day before Quiz 4"
+            "urgency": "comfortable",
+            "free_from": "2026-11-10T12:15",
+            "free_until": "2026-11-10T15:30",
+            "why_ranked": "6.5h planned that day, right after the miss",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after ENGL101 seminar"
+              },
+              {
+                "key": "buffer",
+                "text": "with two days to spare"
+              }
             ]
           },
           {
@@ -77,50 +99,104 @@
             "suggested_start": "2026-11-10T21:00",
             "when": "9pm today",
             "holds_minutes": 30,
+            "urgency": "comfortable",
             "free_from": "2026-11-10T21:00",
-            "free_until": "2026-11-10T22:30",
-            "why_ranked": "6.5h already planned that day, late in the evening",
-            "true_reasons": []
+            "free_until": "2026-11-10T23:00",
+            "why_ranked": "6.5h planned that day, right after the miss, late in the evening",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after Work shift"
+              },
+              {
+                "key": "buffer",
+                "text": "with two days to spare"
+              }
+            ]
           },
           {
             "rank": 5,
-            "suggested_start": "2026-11-11T07:30",
-            "when": "7:30am tomorrow",
+            "suggested_start": "2026-11-12T09:00",
+            "when": "Thu 9am",
             "holds_minutes": 30,
-            "free_from": "2026-11-11T07:30",
-            "free_until": "2026-11-11T10:00",
-            "why_ranked": "8h already planned that day",
-            "true_reasons": []
+            "urgency": "comfortable",
+            "free_from": "2026-11-12T09:00",
+            "free_until": "2026-11-12T10:00",
+            "why_ranked": "2.5h planned that day, under a day before it's due",
+            "factors": [
+              {
+                "key": "lighter",
+                "text": "a lighter morning"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              }
+            ]
           },
           {
             "rank": 6,
             "suggested_start": "2026-11-11T10:50",
             "when": "10:50am tomorrow",
             "holds_minutes": 30,
+            "urgency": "comfortable",
             "free_from": "2026-11-11T10:50",
             "free_until": "2026-11-11T13:00",
-            "why_ranked": "8h already planned that day",
-            "true_reasons": []
+            "why_ranked": "8h planned that day, under a day before it's due",
+            "factors": [
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after MATH141 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
+            ]
           },
           {
             "rank": 7,
             "suggested_start": "2026-11-11T16:50",
             "when": "4:50pm tomorrow",
             "holds_minutes": 30,
+            "urgency": "comfortable",
             "free_from": "2026-11-11T16:50",
             "free_until": "2026-11-11T18:00",
-            "why_ranked": "8h already planned that day",
-            "true_reasons": []
+            "why_ranked": "8h planned that day, under a day before it's due",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after CHEM135 lab"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
+            ]
           },
           {
             "rank": 8,
             "suggested_start": "2026-11-11T21:30",
             "when": "9:30pm tomorrow",
             "holds_minutes": 30,
+            "urgency": "comfortable",
             "free_from": "2026-11-11T21:30",
-            "free_until": "2026-11-11T22:30",
-            "why_ranked": "8h already planned that day, late in the evening",
-            "true_reasons": []
+            "free_until": "2026-11-11T23:00",
+            "why_ranked": "8h planned that day, under a day before it's due, late in the evening",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after Work shift"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
+            ]
           }
         ]
       }
@@ -128,17 +204,22 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "fresh_morning",
+          "buffer"
+        ],
         "duration_min": "null",
         "item_id": "s_calc",
-        "reason": "it's the soonest open time before Quiz 4",
-        "start": "2026-11-10T09:30"
+        "reason": "null",
+        "start": "2026-11-11T09:00"
       },
       "ok": true,
       "result": {
         "ok": true,
         "moved": "Calc practice",
-        "to": "Tue Nov 10 09:30-10:00",
-        "minutes": 30
+        "to": "Wed Nov 11 09:00-09:30",
+        "minutes": 30,
+        "reason": "a fresh morning, with no quiz that day, a day before it's due"
       }
     },
     {
@@ -154,49 +235,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2231,
-        "output_tokens": 275,
+        "input_tokens": 2259,
+        "output_tokens": 185,
         "cached_tokens": 2033,
-        "reasoning_tokens": 149
+        "reasoning_tokens": 58
       },
-      "costUsd": 0.0017212,
-      "latencyMs": 2492
+      "costUsd": 0.0013737,
+      "latencyMs": 3374
     },
     {
       "usage": {
-        "input_tokens": 3210,
-        "output_tokens": 239,
+        "input_tokens": 3398,
+        "output_tokens": 184,
         "cached_tokens": 2161,
-        "reasoning_tokens": 106
+        "reasoning_tokens": 58
       },
-      "costUsd": 0.00265115,
-      "latencyMs": 2161
+      "costUsd": 0.0026524,
+      "latencyMs": 2951
     },
     {
       "usage": {
-        "input_tokens": 3501,
-        "output_tokens": 41,
-        "cached_tokens": 3185,
-        "reasoning_tokens": 3
+        "input_tokens": 3652,
+        "output_tokens": 43,
+        "cached_tokens": 3313,
+        "reasoning_tokens": 5
       },
-      "costUsd": 0.001047,
-      "latencyMs": 629
+      "costUsd": 0.00110345,
+      "latencyMs": 936
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1047,
-        "output_tokens": 586,
-        "cached_tokens": 625,
-        "reasoning_tokens": 567
+        "input_tokens": 1394,
+        "output_tokens": 1381,
+        "cached_tokens": 1393,
+        "reasoning_tokens": 1360
       },
-      "costUsd": 0.00311175,
-      "latencyMs": 4296
+      "costUsd": 0.00607945,
+      "latencyMs": 11625
     }
   ],
   "runs": [
@@ -207,12 +289,12 @@
           {
             "item_id": "s_calc",
             "action": "move",
-            "start": "2026-11-10T09:30:00-05:00",
-            "end": "2026-11-10T10:00:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
+            "start": "2026-11-11T09:00:00-05:00",
+            "end": "2026-11-11T09:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         ],
-        "message": "Moved Calc practice to 9:30am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -234,40 +316,62 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-10T09:30",
-                "when": "9:30am today",
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T09:30",
-                "free_until": "2026-11-10T11:00",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "8h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm today",
+                "suggested_start": "2026-11-10T09:30",
+                "when": "9:30am today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T12:15",
-                "free_until": "2026-11-10T15:30",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T09:30",
+                "free_until": "2026-11-10T11:00",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
+                "suggested_start": "2026-11-10T12:15",
+                "when": "12:15pm today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T12:15",
+                "free_until": "2026-11-10T15:30",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
@@ -275,50 +379,104 @@
                 "suggested_start": "2026-11-10T21:00",
                 "when": "9pm today",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-10T21:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "6.5h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "6.5h planned that day, right after the miss, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
                 "holds_minutes": 30,
-                "free_from": "2026-11-11T07:30",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T10:00",
+                "why_ranked": "2.5h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
+                ]
               },
               {
                 "rank": 6,
                 "suggested_start": "2026-11-11T10:50",
                 "when": "10:50am tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T13:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 7,
                 "suggested_start": "2026-11-11T16:50",
                 "when": "4:50pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
                 "free_until": "2026-11-11T18:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 8,
                 "suggested_start": "2026-11-11T21:30",
                 "when": "9:30pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T21:30",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "8h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "8h planned that day, under a day before it's due, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               }
             ]
           }
@@ -326,17 +484,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
-            "start": "2026-11-10T09:30"
+            "reason": "null",
+            "start": "2026-11-11T09:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Calc practice",
-            "to": "Tue Nov 10 09:30-10:00",
-            "minutes": 30
+            "to": "Wed Nov 11 09:00-09:30",
+            "minutes": 30,
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         },
         {
@@ -352,49 +515,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2231,
-            "output_tokens": 275,
+            "input_tokens": 2259,
+            "output_tokens": 185,
             "cached_tokens": 2033,
-            "reasoning_tokens": 149
+            "reasoning_tokens": 58
           },
-          "costUsd": 0.0017212,
-          "latencyMs": 2492
+          "costUsd": 0.0013737,
+          "latencyMs": 3374
         },
         {
           "usage": {
-            "input_tokens": 3210,
-            "output_tokens": 239,
+            "input_tokens": 3398,
+            "output_tokens": 184,
             "cached_tokens": 2161,
-            "reasoning_tokens": 106
+            "reasoning_tokens": 58
           },
-          "costUsd": 0.00265115,
-          "latencyMs": 2161
+          "costUsd": 0.0026524,
+          "latencyMs": 2951
         },
         {
           "usage": {
-            "input_tokens": 3501,
-            "output_tokens": 41,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 3
+            "input_tokens": 3652,
+            "output_tokens": 43,
+            "cached_tokens": 3313,
+            "reasoning_tokens": 5
           },
-          "costUsd": 0.001047,
-          "latencyMs": 629
+          "costUsd": 0.00110345,
+          "latencyMs": 936
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1047,
-            "output_tokens": 586,
-            "cached_tokens": 625,
-            "reasoning_tokens": 567
+            "input_tokens": 1394,
+            "output_tokens": 1381,
+            "cached_tokens": 1393,
+            "reasoning_tokens": 1360
           },
-          "costUsd": 0.00311175,
-          "latencyMs": 4296
+          "costUsd": 0.00607945,
+          "latencyMs": 11625
         }
       ]
     },
@@ -405,12 +569,12 @@
           {
             "item_id": "s_calc",
             "action": "move",
-            "start": "2026-11-10T09:30:00-05:00",
-            "end": "2026-11-10T10:00:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
+            "start": "2026-11-11T09:00:00-05:00",
+            "end": "2026-11-11T09:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         ],
-        "message": "Moved Calc practice to 9:30am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -432,40 +596,62 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-10T09:30",
-                "when": "9:30am today",
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T09:30",
-                "free_until": "2026-11-10T11:00",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "8h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm today",
+                "suggested_start": "2026-11-10T09:30",
+                "when": "9:30am today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T12:15",
-                "free_until": "2026-11-10T15:30",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T09:30",
+                "free_until": "2026-11-10T11:00",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
+                "suggested_start": "2026-11-10T12:15",
+                "when": "12:15pm today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T12:15",
+                "free_until": "2026-11-10T15:30",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
@@ -473,50 +659,104 @@
                 "suggested_start": "2026-11-10T21:00",
                 "when": "9pm today",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-10T21:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "6.5h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "6.5h planned that day, right after the miss, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
                 "holds_minutes": 30,
-                "free_from": "2026-11-11T07:30",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T10:00",
+                "why_ranked": "2.5h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
+                ]
               },
               {
                 "rank": 6,
                 "suggested_start": "2026-11-11T10:50",
                 "when": "10:50am tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T13:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 7,
                 "suggested_start": "2026-11-11T16:50",
                 "when": "4:50pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
                 "free_until": "2026-11-11T18:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 8,
                 "suggested_start": "2026-11-11T21:30",
                 "when": "9:30pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T21:30",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "8h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "8h planned that day, under a day before it's due, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               }
             ]
           }
@@ -524,17 +764,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
-            "start": "2026-11-10T09:30"
+            "reason": "null",
+            "start": "2026-11-11T09:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Calc practice",
-            "to": "Tue Nov 10 09:30-10:00",
-            "minutes": 30
+            "to": "Wed Nov 11 09:00-09:30",
+            "minutes": 30,
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         },
         {
@@ -550,49 +795,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2231,
-            "output_tokens": 258,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 131
+            "input_tokens": 2259,
+            "output_tokens": 251,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 125
           },
-          "costUsd": 0.00150815,
-          "latencyMs": 2321
+          "costUsd": 0.0016542,
+          "latencyMs": 2083
         },
         {
           "usage": {
-            "input_tokens": 3193,
-            "output_tokens": 254,
+            "input_tokens": 3464,
+            "output_tokens": 203,
             "cached_tokens": 2161,
-            "reasoning_tokens": 124
+            "reasoning_tokens": 57
           },
-          "costUsd": 0.00269365,
-          "latencyMs": 2116
+          "costUsd": 0.0028156500000000003,
+          "latencyMs": 1892
         },
         {
           "usage": {
-            "input_tokens": 3499,
-            "output_tokens": 42,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 4
+            "input_tokens": 3737,
+            "output_tokens": 43,
+            "cached_tokens": 3441,
+            "reasoning_tokens": 5
           },
-          "costUsd": 0.00104875,
-          "latencyMs": 1168
+          "costUsd": 0.0010689,
+          "latencyMs": 1022
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1047,
-            "output_tokens": 436,
-            "cached_tokens": 1009,
-            "reasoning_tokens": 420
+            "input_tokens": 1394,
+            "output_tokens": 1248,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1227
           },
-          "costUsd": 0.00205185,
-          "latencyMs": 3531
+          "costUsd": 0.0062182,
+          "latencyMs": 10326
         }
       ]
     },
@@ -603,12 +849,12 @@
           {
             "item_id": "s_calc",
             "action": "move",
-            "start": "2026-11-10T09:30:00-05:00",
-            "end": "2026-11-10T10:00:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
+            "start": "2026-11-11T09:00:00-05:00",
+            "end": "2026-11-11T09:30:00-05:00",
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         ],
-        "message": "Moved Calc practice to 9:30am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+        "message": "Moved Calc practice to 9am tomorrow, a fresh morning, with no quiz that day, a day before it's due. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -630,40 +876,62 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-10T09:30",
-                "when": "9:30am today",
+                "suggested_start": "2026-11-11T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T09:30",
-                "free_until": "2026-11-10T11:00",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-11T09:00",
+                "free_until": "2026-11-11T10:00",
+                "why_ranked": "8h planned that day",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-10T12:15",
-                "when": "12:15pm today",
+                "suggested_start": "2026-11-10T09:30",
+                "when": "9:30am today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-10T12:15",
-                "free_until": "2026-11-10T15:30",
-                "why_ranked": "6.5h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T09:30",
+                "free_until": "2026-11-10T11:00",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "Thu 7:30am",
+                "suggested_start": "2026-11-10T12:15",
+                "when": "12:15pm today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
+                "urgency": "comfortable",
+                "free_from": "2026-11-10T12:15",
+                "free_until": "2026-11-10T15:30",
+                "why_ranked": "6.5h planned that day, right after the miss",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after ENGL101 seminar"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
                 ]
               },
               {
@@ -671,50 +939,104 @@
                 "suggested_start": "2026-11-10T21:00",
                 "when": "9pm today",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-10T21:00",
-                "free_until": "2026-11-10T22:30",
-                "why_ranked": "6.5h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-10T23:00",
+                "why_ranked": "6.5h planned that day, right after the miss, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "with two days to spare"
+                  }
+                ]
               },
               {
                 "rank": 5,
-                "suggested_start": "2026-11-11T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "Thu 9am",
                 "holds_minutes": 30,
-                "free_from": "2026-11-11T07:30",
-                "free_until": "2026-11-11T10:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "urgency": "comfortable",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T10:00",
+                "why_ranked": "2.5h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
+                ]
               },
               {
                 "rank": 6,
                 "suggested_start": "2026-11-11T10:50",
                 "when": "10:50am tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T13:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 7,
                 "suggested_start": "2026-11-11T16:50",
                 "when": "4:50pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T16:50",
                 "free_until": "2026-11-11T18:00",
-                "why_ranked": "8h already planned that day",
-                "true_reasons": []
+                "why_ranked": "8h planned that day, under a day before it's due",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 8,
                 "suggested_start": "2026-11-11T21:30",
                 "when": "9:30pm tomorrow",
                 "holds_minutes": 30,
+                "urgency": "comfortable",
                 "free_from": "2026-11-11T21:30",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "8h already planned that day, late in the evening",
-                "true_reasons": []
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "8h planned that day, under a day before it's due, late in the evening",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Work shift"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               }
             ]
           }
@@ -722,17 +1044,22 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "fresh_morning",
+              "buffer"
+            ],
             "duration_min": "null",
             "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
-            "start": "2026-11-10T09:30"
+            "reason": "null",
+            "start": "2026-11-11T09:00"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "Calc practice",
-            "to": "Tue Nov 10 09:30-10:00",
-            "minutes": 30
+            "to": "Wed Nov 11 09:00-09:30",
+            "minutes": 30,
+            "reason": "a fresh morning, with no quiz that day, a day before it's due"
           }
         },
         {
@@ -748,49 +1075,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2231,
-            "output_tokens": 197,
+            "input_tokens": 2259,
+            "output_tokens": 185,
             "cached_tokens": 2161,
-            "reasoning_tokens": 69
+            "reasoning_tokens": 57
           },
-          "costUsd": 0.0012489,
-          "latencyMs": 2117
+          "costUsd": 0.0012329,
+          "latencyMs": 1653
         },
         {
           "usage": {
-            "input_tokens": 3132,
-            "output_tokens": 236,
+            "input_tokens": 3398,
+            "output_tokens": 200,
             "cached_tokens": 2161,
-            "reasoning_tokens": 104
+            "reasoning_tokens": 52
           },
-          "costUsd": 0.0025409,
-          "latencyMs": 1750
+          "costUsd": 0.0027204,
+          "latencyMs": 1571
         },
         {
           "usage": {
-            "input_tokens": 3420,
+            "input_tokens": 3668,
             "output_tokens": 41,
-            "cached_tokens": 3057,
+            "cached_tokens": 3313,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.00108655,
-          "latencyMs": 649
+          "costUsd": 0.00111495,
+          "latencyMs": 1139
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1047,
-            "output_tokens": 411,
-            "cached_tokens": 1009,
-            "reasoning_tokens": 392
+            "input_tokens": 1394,
+            "output_tokens": 1455,
+            "cached_tokens": 1393,
+            "reasoning_tokens": 1429
           },
-          "costUsd": 0.0019455999999999998,
-          "latencyMs": 2959
+          "costUsd": 0.00639395,
+          "latencyMs": 12499
         }
       ]
     }

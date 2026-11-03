@@ -5,11 +5,13 @@ import { bucketsFor, callsKey, counterStoreFor, MemoryCounterStore, SpendGuard }
 import { tomorrowPayer } from "@/lib/server/identity";
 import { rebuild, TOOLS, ORDERS } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
-import { checkReason, checkResponse, Draft, fallback, plain, inventsReply } from "@/lib/rebuild/draft";
+import { checkReason, checkResponse, Draft, fallback, plain } from "@/lib/rebuild/draft";
 import { REBUILD_CASES } from "../../evals/rebuild/cases";
 
 const env = readEnv({ META_API_KEY: "test-key" });
 const req = (name: string) => RebuildRequest.parse(REBUILD_CASES.find((c) => c.name === name)!.request);
+/** A factor code finds true of that time for the missed item, as the agent would pick one ("x" if none). */
+const key = (d: Draft, start: string, minutes?: number) => [d.factorsAt(d.missed.id, d.parseLocal(start) as number, minutes ?? d.length(d.missed))[0]?.key ?? "x"]; // prettier-ignore
 
 describe("contract", () => {
   it("every eval case is a valid request", () => {
@@ -46,7 +48,7 @@ describe("free time", () => {
     expect(d.free("s_calc").some((x) => d.at(x) === "Wed Nov 4 21:00-22:00")).toBe(false);
     expect(d.move("s_laundry", "2026-11-05T17:00", null, "it has no deadline, so it made room").ok).toBe(true);
     expect(d.free("s_calc").some((x) => d.at(x) === "Wed Nov 4 21:00-22:00")).toBe(true);
-    expect(d.move("s_calc", "2026-11-04T21:00", null, "the quiz is tomorrow morning").ok).toBe(true);
+    expect(d.move("s_calc", "2026-11-04T21:00", null, key(d, "2026-11-04T21:00")).ok).toBe(true);
     // Laundry can't go back: calc practice is there now.
     expect(d.undo("s_laundry").ok).toBe(false);
   });
@@ -57,22 +59,24 @@ describe("moves", () => {
   const problem = (o: { ok: boolean; problem?: string }) => (o.ok ? null : o.problem);
 
   it("refuses the past, after the deadline, busy time, and lengths outside the item's", () => {
-    expect(problem(d().move("s_calc", "2026-11-04T17:00", null, "ok reason"))).toMatch(/past/);
-    expect(problem(d().move("s_calc", "2026-11-05T13:00", null, "ok reason"))).toMatch(/finish by Thu Nov 5 10:00 \(Quiz 3\)/); // prettier-ignore
-    expect(problem(d().move("s_calc", "2026-11-05T09:00", null, "ok reason"))).toMatch(/isn't free. Free that day: 07:30-09:30/); // prettier-ignore
-    expect(problem(d().move("s_calc", "2026-11-04T19:00", 90, "ok reason"))).toMatch(/longer/);
-    expect(problem(d().move("s_calc", "2026-11-04T19:00", 20, "ok reason"))).toMatch(/shortest version is 30/);
-    expect(problem(d().move("s_calc", "2026-11-04T19:03", null, "ok reason"))).toMatch(/5-minute/);
+    expect(problem(d().move("s_calc", "2026-11-04T17:00", null, ["x"]))).toMatch(/past/);
+    expect(problem(d().move("s_calc", "2026-11-05T13:00", null, ["x"]))).toMatch(/finish by Thu Nov 5 10:00 \(Quiz 3\)/); // prettier-ignore
+    expect(problem(d().move("s_calc", "2026-11-05T09:00", null, ["x"]))).toMatch(/isn't free. Free that day: 07:30-09:30/); // prettier-ignore
+    expect(problem(d().move("s_calc", "2026-11-04T19:00", 90, ["x"]))).toMatch(/longer/);
+    expect(problem(d().move("s_calc", "2026-11-04T19:00", 20, ["x"]))).toMatch(/shortest version is 30/);
+    expect(problem(d().move("s_calc", "2026-11-04T19:03", null, ["x"]))).toMatch(/5-minute/);
     expect(problem(d().move("s_nope", "2026-11-04T19:00", null, "ok reason"))).toMatch(/no item/);
   });
 
   it("accepts a move that fits, and takes seconds or an offset in the time", () => {
-    expect(d().move("s_calc", "2026-11-04T19:00", null, "the quiz is tomorrow").ok).toBe(true);
+    const ok = d();
+    expect(ok.move("s_calc", "2026-11-04T19:00", null, key(ok, "2026-11-04T19:00")).ok).toBe(true);
     const short = d();
     // 45 min where an hour fits: told once that there's room; asking again (a partial session) stands.
-    expect(short.move("s_calc", "2026-11-04T19:00:00", 45, "the quiz is tomorrow")).toMatchObject({ ok: false, problem: expect.stringMatching(/can run 60 min.*Shorten only as much/) }); // prettier-ignore
-    expect(short.move("s_calc", "2026-11-04T19:00:00", 45, "the quiz is tomorrow").ok).toBe(true);
-    expect(d().move("s_calc", "2026-11-05T00:00:00Z", null, "the quiz is tomorrow").ok).toBe(true); // 19:00 in New York
+    expect(short.move("s_calc", "2026-11-04T19:00:00", 45, key(short, "2026-11-04T19:00:00", 45))).toMatchObject({ ok: false, problem: expect.stringMatching(/can run 60 min.*Shorten only as much/) }); // prettier-ignore
+    expect(short.move("s_calc", "2026-11-04T19:00:00", 45, key(short, "2026-11-04T19:00:00", 45)).ok).toBe(true);
+    const utc = d();
+    expect(utc.move("s_calc", "2026-11-05T00:00:00Z", null, key(utc, "2026-11-04T19:00")).ok).toBe(true); // 19:00 in New York
   });
 
   it("refuses a wall-clock time that doesn't exist when clocks spring forward", () => {
@@ -99,40 +103,44 @@ describe("moves", () => {
 describe("message", () => {
   it("says what moved, when, and why, then that nothing else changed", () => {
     const d = new Draft(req("simple-move"));
-    expect(d.move("s_calc", "2026-11-04T19:00", null, "it's the soonest open time before Quiz 3").ok).toBe(true);
-    expect(d.message()).toBe("Moved Calc practice to 7pm today because it's the soonest open time before Quiz 3. Nothing else changed."); // prettier-ignore
+    expect(d.move("s_calc", "2026-11-04T19:00", null, key(d, "2026-11-04T19:00")).ok).toBe(true);
+    expect(d.message()).toBe("Moved Calc practice to 7pm today, the soonest it fits before Quiz 3. Nothing else changed."); // prettier-ignore
   });
 
   it("writes the same text whatever order the moves were made in (so code's final check agrees)", () => {
     const r = req("sick-today");
     const a = new Draft(r);
     const b = new Draft(r);
-    a.move("s_calc", "2026-11-05T08:00", null, "you said today is out");
-    a.move("s_hist", "2026-11-05T09:00", null, "you said today is out");
-    a.move("s_outline", "2026-11-05T14:00", null, "you said today is out");
-    b.move("s_calc", "2026-11-05T08:00", null, "you said today is out");
-    b.move("s_outline", "2026-11-05T14:00", null, "you said today is out");
-    b.move("s_hist", "2026-11-05T09:00", null, "you said today is out");
+    a.move("s_calc", "2026-11-05T08:00", null, key(a, "2026-11-05T08:00"));
+    a.move("s_hist", "2026-11-05T09:00", null, "it clears today");
+    a.move("s_outline", "2026-11-05T14:00", null, "it clears today");
+    b.move("s_calc", "2026-11-05T08:00", null, key(b, "2026-11-05T08:00"));
+    b.move("s_outline", "2026-11-05T14:00", null, "it clears today");
+    b.move("s_hist", "2026-11-05T09:00", null, "it clears today");
     expect(a.message()).toBe(b.message());
     expect(checkResponse(r, a.response("agent"))).toEqual([]);
   });
 
-  it("refuses a reason that claims something untrue about the plan, and says what is true", () => {
+  it("words the missed item's reason itself, from factors it checked true, and refuses one that isn't", () => {
     const d = new Draft(req("simple-move"));
     // 7pm tonight is the soonest time before the quiz, not the last (Thursday morning is later).
-    const no = d.move("s_calc", "2026-11-04T19:00", null, "it's the last free evening before the quiz");
-    expect(no).toMatchObject({ ok: false, problem: expect.stringMatching(/isn't true here.*soonest open time/) });
-    expect(d.truths("s_calc", Date.parse("2026-11-05T07:30:00-05:00"), Date.parse("2026-11-05T08:30:00-05:00"))).toContain("it's the last open time before Quiz 3"); // prettier-ignore
-    expect(d.move("s_calc", "2026-11-04T19:00", null, "the quiz is first thing tomorrow").ok).toBe(true);
+    const no = d.move("s_calc", "2026-11-04T19:00", null, ["last"]);
+    expect(no).toMatchObject({ ok: false, problem: expect.stringMatching(/Not true of this time: last\. True of it: .*soonest/) }); // prettier-ignore
+    expect(d.factorsAt("s_calc", Date.parse("2026-11-05T07:30:00-05:00"), 60).map((f) => f.key)).toContain("last");
+    expect(d.move("s_calc", "2026-11-04T19:00", null, "it's the last free evening")).toMatchObject({ ok: false });
+    expect(d.move("s_calc", "2026-11-04T19:00", null, ["soonest"]).ok).toBe(true);
+    expect(d.message()).toBe(
+      "Moved Calc practice to 7pm today, the soonest it fits before Quiz 3. Nothing else changed.",
+    );
   });
 
   it("names a shorter session, and days as tomorrow or a weekday", () => {
     const d = new Draft(req("make-room"));
     expect(d.move("s_laundry", "2026-11-05T17:30", null, "it has no deadline, so it made room for Calc practice").ok).toBe(true); // prettier-ignore
-    d.move("s_calc", "2026-11-04T21:00", 45, "the quiz is tomorrow morning"); // told there's room for 60 once
-    expect(d.move("s_calc", "2026-11-04T21:00", 45, "the quiz is tomorrow morning").ok).toBe(true);
+    d.move("s_calc", "2026-11-04T21:00", 45, key(d, "2026-11-04T21:00", 45)); // told there's room for 60 once
+    expect(d.move("s_calc", "2026-11-04T21:00", 45, key(d, "2026-11-04T21:00", 45)).ok).toBe(true);
     expect(d.message()).toBe(
-      "Moved Calc practice to 9pm today, 45 min instead of 60, because the quiz is tomorrow morning. Moved Laundry to 5:30pm tomorrow to make room. Nothing else changed.",
+      "Moved Calc practice to 9pm today, 45 min instead of 60, the only time it fits before Quiz 3. Moved Laundry to 5:30pm tomorrow to make room. Nothing else changed.",
     );
     expect(d.when(Date.parse("2026-11-06T17:30:00-05:00"))).toBe("Fri 5:30pm");
     expect(d.when(Date.parse("2026-11-12T09:00:00-05:00"))).toBe("Thu Nov 12, 9am");
@@ -140,10 +148,10 @@ describe("message", () => {
 
   it("across the clock change, times are in the zone's new offset", () => {
     const d = new Draft(req("dst-weekend"));
-    expect(d.move("s_calc", "2026-11-01T10:00", null, "you said tonight is out").ok).toBe(true);
+    expect(d.move("s_calc", "2026-11-01T10:00", null, key(d, "2026-11-01T10:00")).ok).toBe(true);
     const res = d.response("agent");
     expect(res.diff[0]).toMatchObject({ start: "2026-11-01T10:00:00-05:00", end: "2026-11-01T11:00:00-05:00" });
-    expect(res.message).toMatch(/^Moved Calc practice to 10am tomorrow because/);
+    expect(res.message).toMatch(/^Moved Calc practice to 10am tomorrow, /);
   });
 });
 
@@ -157,22 +165,17 @@ describe("the text", () => {
   it("puts care first and shares the day when they're unwell", () => {
     const r = req("sick-today");
     const d = new Draft(r);
-    d.move("s_calc", "2026-11-05T08:00", null, "the quiz is Friday morning");
-    d.move("s_outline", "2026-11-05T14:00", null, "you said today is out");
-    d.move("s_hist", "2026-11-05T15:00", null, "you said today is out");
+    d.move("s_calc", "2026-11-05T08:00", null, key(d, "2026-11-05T08:00"));
+    d.move("s_outline", "2026-11-05T14:00", null, "it clears today");
+    d.move("s_hist", "2026-11-05T15:00", null, "it clears today");
     expect(d.message()).toBe(
       "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read HIST ch. 4 to 3pm tomorrow. Nothing else changed.",
     );
   });
 
   it("refuses to finish a text longer than one SMS segment", () => {
-    const d = new Draft({ ...req("simple-move"), items: req("simple-move").items.map((i) => (i.id === "s_calc" ? { ...i, title: "Calc practice for the quiz on improper integrals, series, and sequences" } : i)) }); // prettier-ignore
-    d.move(
-      "s_calc",
-      "2026-11-04T19:00",
-      null,
-      "the quiz on improper integrals is tomorrow morning, right after the lecture",
-    );
+    const d = new Draft({ ...req("simple-move"), items: req("simple-move").items.map((i) => (i.id === "s_calc" ? { ...i, title: "Calc practice for the quiz on improper integrals, power series, Taylor polynomials, and the ratio and root tests" } : i)) }); // prettier-ignore
+    expect(d.move("s_calc", "2026-11-04T19:00", null, ["soonest", "free_part"]).ok).toBe(true);
     expect(d.finish()).toMatchObject({ ok: false, problem: expect.stringMatching(/160/) });
   });
 });
@@ -187,7 +190,7 @@ describe("fallback", () => {
 
   it("shortens to fit, or drops when nothing fits before the deadline", () => {
     const short = fallback(req("shorten")).response("fallback");
-    expect(short.message).toMatch(/45 min instead of 90/);
+    expect(short.message).toMatch(/60 min instead of 90/);
     const none = fallback(req("no-time")).response("fallback");
     expect(none.diff[0].action).toBe("drop");
     // Honest about the overload, never just "dropped": the best option, offered as a question.
@@ -203,7 +206,7 @@ describe("checkResponse", () => {
   const r = req("simple-move");
   const good = () => {
     const d = new Draft(r);
-    d.move("s_calc", "2026-11-04T19:00", null, "the quiz is tomorrow");
+    d.move("s_calc", "2026-11-04T19:00", null, key(d, "2026-11-04T19:00"));
     return d.response("agent");
   };
 
@@ -259,16 +262,14 @@ describe("rebuild agent", () => {
     const { sent, opts } = scripted(
       reply(call("find_open_time", { minutes: 60, after: null, before: "2026-11-05T10:00" })),
       // Spark sometimes leaves out a null field or sends a number as a string.
-      reply(
-        call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", reason: "the quiz is tomorrow morning" }),
-      ),
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", because: ["soonest"], reason: null })),
       reply(call("propose_diff", {})),
     );
     const run = await rebuild(req("simple-move"), opts);
     expect(run.fellBack).toBeNull();
     expect(run.refused).toBe(0);
     expect(run.response.decided_by).toBe("agent");
-    expect(run.response.message).toBe("Moved Calc practice to 7pm today because the quiz is tomorrow morning. Nothing else changed."); // prettier-ignore
+    expect(run.response.message).toBe("Moved Calc practice to 7pm today, the soonest it fits before Quiz 3. Nothing else changed."); // prettier-ignore
     const last = sent.at(-1)!;
     expect(last).toMatchObject({ store: false, include: ["reasoning.encrypted_content"], prompt_cache_key: "rebuild" });
     const input = last.input as Item[];
@@ -278,8 +279,8 @@ describe("rebuild agent", () => {
 
   it("tells the model why a move was refused, and lets it try again", async () => {
     const { sent, opts } = scripted(
-      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T13:00", duration_min: null, reason: "later is fine" }, "a")), // prettier-ignore
-      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, reason: "the quiz is at ten" }, "b")), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T13:00", duration_min: null, because: ["soonest"], reason: null }, "a")), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, because: ["last"], reason: null }, "b")), // prettier-ignore
       reply(call("propose_diff", {})),
     );
     const run = await rebuild(req("simple-move"), opts);
@@ -314,7 +315,7 @@ describe("rebuild agent", () => {
   });
 
   it("keeps a finished plan when the turns run out before propose_diff, if it passes code's check", async () => {
-    const { opts } = scripted(reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", duration_min: null, reason: "the quiz is tomorrow morning" }))); // prettier-ignore
+    const { opts } = scripted(reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", duration_min: null, because: ["soonest"], reason: null }))); // prettier-ignore
     const run = await rebuild(req("simple-move"), { ...opts, maxTurns: 1 });
     expect(run.fellBack).toBeNull();
     expect(run.response.decided_by).toBe("agent");
@@ -360,7 +361,7 @@ describe("POST /api/rebuild", () => {
     vi.stubEnv("LENS_REBUILD_SECRET", SECRET);
     vi.stubEnv("META_API_KEY", "test-key");
     const { opts } = scripted(
-      reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", duration_min: null, reason: "the quiz is tomorrow morning" })), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T19:00", duration_min: null, because: ["soonest"], reason: null })), // prettier-ignore
       reply(call("propose_diff", {})),
     );
     vi.stubGlobal("fetch", opts.fetchImpl);
@@ -400,7 +401,8 @@ describe("POST /api/rebuild/demo", () => {
   it("runs the recorded case's week with the visitor's reply, and caches it", async () => {
     vi.stubEnv("META_API_KEY", "test-key");
     const { sent, opts } = scripted(
-      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, reason: "you said tonight is out" })), // prettier-ignore
+      reply(call("note_reply", { kind: "not_before", quote: "band practice until 10 tonight", until: "2026-11-04T22:00", from_date: null, part: null })), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, because: ["reply"], reason: null })), // prettier-ignore
       reply(call("propose_diff", {})),
     );
     vi.stubGlobal("fetch", opts.fetchImpl);
@@ -408,8 +410,8 @@ describe("POST /api/rebuild/demo", () => {
     const first = await post(body, "203.0.113.8");
     expect(first.status).toBe(200);
     const json = await first.json();
-    expect(json).toMatchObject({ cached: false, fell_back: null, turns: 2 });
-    expect(json.response.message).toMatch(/^Moved Calc practice to 7:30am tomorrow because you said tonight is out/);
+    expect(json).toMatchObject({ cached: false, fell_back: null, turns: 3 });
+    expect(json.response.message).toMatch(/^Moved Calc practice to 7:30am tomorrow, after practice\./);
     expect(JSON.stringify(sent[0].input)).toContain("band practice until 10 tonight");
     expect(await (await post(body, "203.0.113.8")).json()).toMatchObject({ cached: true });
   });
@@ -442,15 +444,19 @@ describe("every recorded rebuild text", () => {
 });
 
 describe("reasons about the reply", () => {
-  it("can't put words in their mouth: no reply, or a one-word reply that doesn't say it", () => {
-    expect(inventsReply("you said tonight is out", "no")).toBe(true);
-    expect(inventsReply("you said tonight is out", null)).toBe(true);
-    expect(inventsReply("you said tonight is out", "too tired tonight")).toBe(false);
-    expect(inventsReply("you said to wait until tomorrow", "tomorrow")).toBe(false);
-    expect(inventsReply("you said tonight is out", "muy cansada esta noche")).toBe(false); // longer: the judge reads it
-    expect(inventsReply("it's the soonest open time", null)).toBe(false);
+  it("only code words the reply, from a note whose quote is in it and says so", () => {
     const d = new Draft(req("no-deadline")); // their reply: "no"
-    expect(d.move("s_hist", "2026-11-05T07:30", null, "you said tonight is out")).toMatchObject({ ok: false, problem: expect.stringMatching(/only "no"/) }); // prettier-ignore
+    expect(d.noteReply("not_today", "too tired tonight", null, null, null)).toMatchObject({ ok: false, problem: expect.stringMatching(/isn't in their reply/) }); // prettier-ignore
+    expect(d.noteReply("not_today", "no", null, null, null)).toMatchObject({ ok: false, problem: expect.stringMatching(/doesn't say that/) }); // prettier-ignore
+    expect(d.drop("s_hist", "you said tonight is out")).toMatchObject({ ok: false, problem: expect.stringMatching(/note_reply/) }); // prettier-ignore
+    const t = new Draft(req("tired-tonight")); // "too tired tonight", 6:10pm
+    expect(t.noteReply("not_today", "too tired tonight", null, null, null)).toMatchObject({ ok: true, words: "so tonight can be off" }); // prettier-ignore
+    expect(t.move("s_calc", "2026-11-04T19:00", null, ["reply"])).toMatchObject({ ok: false, problem: expect.stringMatching(/reply rules that out/) }); // prettier-ignore
+    expect(t.move("s_calc", "2026-11-05T07:30", null, ["reply"]).ok).toBe(true);
+    expect(t.message()).toBe("Moved Calc practice to 7:30am tomorrow, so tonight can be off. Nothing else changed.");
+    const m = new Draft(req("only-mornings-reply")); // "only mornings work for me this week"
+    expect(m.noteReply("only_part", "only mornings work for me this week", null, null, "morning")).toMatchObject({ ok: true, words: "since you said only mornings work this week" }); // prettier-ignore
+    expect(m.free(m.missed.id).every((x) => m.local(x.s).hour < 12)).toBe(true);
   });
 });
 

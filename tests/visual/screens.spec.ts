@@ -32,7 +32,13 @@ async function sample(page: Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Try the sample week" }).click();
   await page.getByRole("heading", { name: "What Lens found." }).waitFor();
-  await page.waitForTimeout(2500); // the outlines draw, the cards arrive
+  await page.waitForTimeout(2000); // the outlines draw
+  // The plan's cards only arrive once the plan is in view, as for a person scrolling down.
+  await page.getByRole("heading", { name: "Your plan" }).scrollIntoViewIfNeeded();
+  await page.mouse.wheel(0, 300);
+  await expect(page.locator('section[aria-labelledby="plan-title"] [data-anim]')).toHaveAttribute("data-anim", /playing|done/, { timeout: 5000 }); // prettier-ignore
+  await page.waitForTimeout(1500);
+  await page.evaluate(() => window.scrollTo(0, 0));
 }
 
 test("home and hero", async ({ page }) => {

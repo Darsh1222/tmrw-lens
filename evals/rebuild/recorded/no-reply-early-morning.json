@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "08a3f752fd96c73ba0781240db06f8a9156e6c6f52194531eb8c9ce85fa7b364",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "d5a7d0370941103d2781308ae18a7b3145a4258e822664bad7b3779e5ae63ccd",
   "effort": "low",
   "response": {
     "version": 1,
@@ -11,10 +11,10 @@
         "action": "move",
         "start": "2026-11-11T10:50:00-05:00",
         "end": "2026-11-11T11:50:00-05:00",
-        "reason": "it's the soonest open time before Quiz 4"
+        "reason": "the soonest it fits before Quiz 4"
       }
     ],
-    "message": "Moved Calc practice to 10:50am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+    "message": "Moved Calc practice to 10:50am today, the soonest it fits before Quiz 4. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -39,12 +39,27 @@
             "suggested_start": "2026-11-11T10:50",
             "when": "10:50am today",
             "holds_minutes": 60,
+            "urgency": "tight",
             "free_from": "2026-11-11T10:50",
             "free_until": "2026-11-11T13:00",
-            "why_ranked": "4.5h already planned that day",
-            "true_reasons": [
-              "it's the soonest open time",
-              "it's the soonest open time before Quiz 4"
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "soonest",
+                "text": "the soonest it fits before Quiz 4"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after MATH141 lecture"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
             ]
           },
           {
@@ -52,24 +67,43 @@
             "suggested_start": "2026-11-11T16:50",
             "when": "4:50pm today",
             "holds_minutes": 60,
+            "urgency": "tight",
             "free_from": "2026-11-11T16:50",
-            "free_until": "2026-11-11T22:30",
-            "why_ranked": "4.5h already planned that day",
-            "true_reasons": []
+            "free_until": "2026-11-11T23:00",
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after CHEM135 lab"
+              },
+              {
+                "key": "buffer",
+                "text": "a day before it's due"
+              }
+            ]
           },
           {
             "rank": 3,
-            "suggested_start": "2026-11-12T07:30",
-            "when": "7:30am tomorrow",
+            "suggested_start": "2026-11-12T09:00",
+            "when": "9am tomorrow",
             "holds_minutes": 60,
-            "free_from": "2026-11-12T07:30",
+            "urgency": "tight",
+            "free_from": "2026-11-12T09:00",
             "free_until": "2026-11-12T10:00",
-            "why_ranked": "2.5h already planned that day, right before the deadline",
-            "true_reasons": [
-              "it's the last open time",
-              "it's the last open time before Quiz 4",
-              "it's the lightest day",
-              "it's the lightest day before Quiz 4"
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "last",
+                "text": "the last time it fits before Quiz 4"
+              },
+              {
+                "key": "lighter",
+                "text": "a lighter morning"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              }
             ]
           }
         ]
@@ -78,9 +112,12 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "soonest"
+        ],
         "duration_min": "null",
         "item_id": "s_calc",
-        "reason": "it's the soonest open time before Quiz 4",
+        "reason": "null",
         "start": "2026-11-11T10:50"
       },
       "ok": true,
@@ -88,7 +125,8 @@
         "ok": true,
         "moved": "Calc practice",
         "to": "Wed Nov 11 10:50-11:50",
-        "minutes": 60
+        "minutes": 60,
+        "reason": "the soonest it fits before Quiz 4"
       }
     },
     {
@@ -104,49 +142,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2218,
-        "output_tokens": 376,
-        "cached_tokens": 2033,
-        "reasoning_tokens": 245
-      },
-      "costUsd": 0.0021341999999999997,
-      "latencyMs": 2687
-    },
-    {
-      "usage": {
-        "input_tokens": 2912,
-        "output_tokens": 271,
+        "input_tokens": 2246,
+        "output_tokens": 235,
         "cached_tokens": 2161,
-        "reasoning_tokens": 138
+        "reasoning_tokens": 111
       },
-      "costUsd": 0.00241465,
-      "latencyMs": 2211
+      "costUsd": 0.0014291500000000001,
+      "latencyMs": 1739
     },
     {
       "usage": {
-        "input_tokens": 3235,
-        "output_tokens": 42,
-        "cached_tokens": 2801,
-        "reasoning_tokens": 4
+        "input_tokens": 2888,
+        "output_tokens": 287,
+        "cached_tokens": 2161,
+        "reasoning_tokens": 147
       },
-      "costUsd": 0.00114115,
-      "latencyMs": 1084
+      "costUsd": 0.0024526500000000002,
+      "latencyMs": 2120
+    },
+    {
+      "usage": {
+        "input_tokens": 3239,
+        "output_tokens": 43,
+        "cached_tokens": 2801,
+        "reasoning_tokens": 5
+      },
+      "costUsd": 0.0011504,
+      "latencyMs": 3779
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 969,
-        "output_tokens": 657,
-        "cached_tokens": 625,
-        "reasoning_tokens": 641
+        "input_tokens": 1249,
+        "output_tokens": 764,
+        "cached_tokens": 753,
+        "reasoning_tokens": 743
       },
-      "costUsd": 0.003316,
-      "latencyMs": 4892
+      "costUsd": 0.0039799499999999995,
+      "latencyMs": 5251
     }
   ],
   "runs": [
@@ -159,10 +198,10 @@
             "action": "move",
             "start": "2026-11-11T10:50:00-05:00",
             "end": "2026-11-11T11:50:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
+            "reason": "the soonest it fits before Quiz 4"
           }
         ],
-        "message": "Moved Calc practice to 10:50am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+        "message": "Moved Calc practice to 10:50am today, the soonest it fits before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -187,12 +226,27 @@
                 "suggested_start": "2026-11-11T10:50",
                 "when": "10:50am today",
                 "holds_minutes": 60,
+                "urgency": "tight",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before Quiz 4"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               },
               {
@@ -200,24 +254,43 @@
                 "suggested_start": "2026-11-11T16:50",
                 "when": "4:50pm today",
                 "holds_minutes": 60,
+                "urgency": "tight",
                 "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
+                "urgency": "tight",
+                "free_from": "2026-11-12T09:00",
                 "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before Quiz 4"
+                  },
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
                 ]
               }
             ]
@@ -226,9 +299,12 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "soonest"
+            ],
             "duration_min": "null",
             "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
+            "reason": "null",
             "start": "2026-11-11T10:50"
           },
           "ok": true,
@@ -236,7 +312,8 @@
             "ok": true,
             "moved": "Calc practice",
             "to": "Wed Nov 11 10:50-11:50",
-            "minutes": 60
+            "minutes": 60,
+            "reason": "the soonest it fits before Quiz 4"
           }
         },
         {
@@ -252,49 +329,237 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2218,
-            "output_tokens": 376,
-            "cached_tokens": 2033,
-            "reasoning_tokens": 245
-          },
-          "costUsd": 0.0021341999999999997,
-          "latencyMs": 2687
-        },
-        {
-          "usage": {
-            "input_tokens": 2912,
-            "output_tokens": 271,
+            "input_tokens": 2246,
+            "output_tokens": 235,
             "cached_tokens": 2161,
-            "reasoning_tokens": 138
+            "reasoning_tokens": 111
           },
-          "costUsd": 0.00241465,
-          "latencyMs": 2211
+          "costUsd": 0.0014291500000000001,
+          "latencyMs": 1739
         },
         {
           "usage": {
-            "input_tokens": 3235,
+            "input_tokens": 2888,
+            "output_tokens": 287,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 147
+          },
+          "costUsd": 0.0024526500000000002,
+          "latencyMs": 2120
+        },
+        {
+          "usage": {
+            "input_tokens": 3239,
+            "output_tokens": 43,
+            "cached_tokens": 2801,
+            "reasoning_tokens": 5
+          },
+          "costUsd": 0.0011504,
+          "latencyMs": 3779
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1249,
+            "output_tokens": 764,
+            "cached_tokens": 753,
+            "reasoning_tokens": 743
+          },
+          "costUsd": 0.0039799499999999995,
+          "latencyMs": 5251
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_calc",
+            "action": "move",
+            "start": "2026-11-11T10:50:00-05:00",
+            "end": "2026-11-11T11:50:00-05:00",
+            "reason": "the soonest it fits before Quiz 4"
+          }
+        ],
+        "message": "Moved Calc practice to 10:50am today, the soonest it fits before Quiz 4. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 3,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-12T10:00",
+            "item_id": "null",
+            "minutes": 60
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-11T10:50",
+                "when": "10:50am today",
+                "holds_minutes": 60,
+                "urgency": "tight",
+                "free_from": "2026-11-11T10:50",
+                "free_until": "2026-11-11T13:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before Quiz 4"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-11T16:50",
+                "when": "4:50pm today",
+                "holds_minutes": 60,
+                "urgency": "tight",
+                "free_from": "2026-11-11T16:50",
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-12T09:00",
+                "when": "9am tomorrow",
+                "holds_minutes": 60,
+                "urgency": "tight",
+                "free_from": "2026-11-12T09:00",
+                "free_until": "2026-11-12T10:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before Quiz 4"
+                  },
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "soonest"
+            ],
+            "duration_min": "null",
+            "item_id": "s_calc",
+            "reason": "null",
+            "start": "2026-11-11T10:50"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "Calc practice",
+            "to": "Wed Nov 11 10:50-11:50",
+            "minutes": 60,
+            "reason": "the soonest it fits before Quiz 4"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2246,
+            "output_tokens": 213,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 87
+          },
+          "costUsd": 0.00133565,
+          "latencyMs": 4271
+        },
+        {
+          "usage": {
+            "input_tokens": 2866,
+            "output_tokens": 299,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 158
+          },
+          "costUsd": 0.00247615,
+          "latencyMs": 2049
+        },
+        {
+          "usage": {
+            "input_tokens": 3229,
             "output_tokens": 42,
             "cached_tokens": 2801,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.00114115,
-          "latencyMs": 1084
+          "costUsd": 0.0011336500000000002,
+          "latencyMs": 633
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 969,
-            "output_tokens": 657,
-            "cached_tokens": 625,
-            "reasoning_tokens": 641
+            "input_tokens": 1249,
+            "output_tokens": 579,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 553
           },
-          "costUsd": 0.003316,
-          "latencyMs": 4892
+          "costUsd": 0.0027713,
+          "latencyMs": 4631
         }
       ]
     },
@@ -307,158 +572,10 @@
             "action": "move",
             "start": "2026-11-11T10:50:00-05:00",
             "end": "2026-11-11T11:50:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
+            "reason": "the soonest it fits before Quiz 4"
           }
         ],
-        "message": "Moved Calc practice to 10:50am today because it's the soonest open time before Quiz 4. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-12T10:00",
-            "item_id": "s_calc",
-            "minutes": 60
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-11T10:50",
-                "when": "10:50am today",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T10:50",
-                "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-11T16:50",
-                "when": "4:50pm today",
-                "holds_minutes": 60,
-                "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "7:30am tomorrow",
-                "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
-                "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "duration_min": "null",
-            "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
-            "start": "2026-11-11T10:50"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "Calc practice",
-            "to": "Wed Nov 11 10:50-11:50",
-            "minutes": 60
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2218,
-            "output_tokens": 225,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 97
-          },
-          "costUsd": 0.00135165,
-          "latencyMs": 1667
-        },
-        {
-          "usage": {
-            "input_tokens": 2761,
-            "output_tokens": 267,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 154
-          },
-          "costUsd": 0.0022089,
-          "latencyMs": 2664
-        },
-        {
-          "usage": {
-            "input_tokens": 3080,
-            "output_tokens": 42,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 4
-          },
-          "costUsd": 0.0010882,
-          "latencyMs": 1095
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 969,
-            "output_tokens": 601,
-            "cached_tokens": 881,
-            "reasoning_tokens": 585
-          },
-          "costUsd": 0.0027964,
-          "latencyMs": 4337
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_calc",
-            "action": "move",
-            "start": "2026-11-11T10:50:00-05:00",
-            "end": "2026-11-11T11:50:00-05:00",
-            "reason": "it's the soonest open time before Quiz 4"
-          }
-        ],
-        "message": "Moved Calc practice to 10:50am today because it's the soonest open time before Quiz 4. Nothing else changed.",
+        "message": "Moved Calc practice to 10:50am today, the soonest it fits before Quiz 4. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -483,12 +600,27 @@
                 "suggested_start": "2026-11-11T10:50",
                 "when": "10:50am today",
                 "holds_minutes": 60,
+                "urgency": "tight",
                 "free_from": "2026-11-11T10:50",
                 "free_until": "2026-11-11T13:00",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before Quiz 4"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before Quiz 4"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after MATH141 lecture"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
                 ]
               },
               {
@@ -496,24 +628,43 @@
                 "suggested_start": "2026-11-11T16:50",
                 "when": "4:50pm today",
                 "holds_minutes": 60,
+                "urgency": "tight",
                 "free_from": "2026-11-11T16:50",
-                "free_until": "2026-11-11T22:30",
-                "why_ranked": "4.5h already planned that day",
-                "true_reasons": []
+                "free_until": "2026-11-11T23:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after CHEM135 lab"
+                  },
+                  {
+                    "key": "buffer",
+                    "text": "a day before it's due"
+                  }
+                ]
               },
               {
                 "rank": 3,
-                "suggested_start": "2026-11-12T07:30",
-                "when": "7:30am tomorrow",
+                "suggested_start": "2026-11-12T09:00",
+                "when": "9am tomorrow",
                 "holds_minutes": 60,
-                "free_from": "2026-11-12T07:30",
+                "urgency": "tight",
+                "free_from": "2026-11-12T09:00",
                 "free_until": "2026-11-12T10:00",
-                "why_ranked": "2.5h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before Quiz 4",
-                  "it's the lightest day",
-                  "it's the lightest day before Quiz 4"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before Quiz 4"
+                  },
+                  {
+                    "key": "lighter",
+                    "text": "a lighter morning"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  }
                 ]
               }
             ]
@@ -522,9 +673,12 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "soonest"
+            ],
             "duration_min": "null",
             "item_id": "s_calc",
-            "reason": "it's the soonest open time before Quiz 4",
+            "reason": "null",
             "start": "2026-11-11T10:50"
           },
           "ok": true,
@@ -532,7 +686,8 @@
             "ok": true,
             "moved": "Calc practice",
             "to": "Wed Nov 11 10:50-11:50",
-            "minutes": 60
+            "minutes": 60,
+            "reason": "the soonest it fits before Quiz 4"
           }
         },
         {
@@ -548,49 +703,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2218,
-            "output_tokens": 210,
+            "input_tokens": 2246,
+            "output_tokens": 218,
             "cached_tokens": 2161,
-            "reasoning_tokens": 83
+            "reasoning_tokens": 92
           },
-          "costUsd": 0.0012879,
-          "latencyMs": 1561
+          "costUsd": 0.0013569,
+          "latencyMs": 2043
         },
         {
           "usage": {
-            "input_tokens": 2746,
-            "output_tokens": 206,
+            "input_tokens": 2871,
+            "output_tokens": 347,
             "cached_tokens": 2161,
-            "reasoning_tokens": 93
+            "reasoning_tokens": 204
           },
-          "costUsd": 0.0019309000000000002,
-          "latencyMs": 1434
+          "costUsd": 0.0026864000000000002,
+          "latencyMs": 2614
         },
         {
           "usage": {
-            "input_tokens": 3004,
-            "output_tokens": 41,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 3
+            "input_tokens": 3282,
+            "output_tokens": 42,
+            "cached_tokens": 2801,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.00098895,
-          "latencyMs": 830
+          "costUsd": 0.0011999,
+          "latencyMs": 701
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 969,
-            "output_tokens": 480,
-            "cached_tokens": 881,
-            "reasoning_tokens": 461
+            "input_tokens": 1249,
+            "output_tokens": 921,
+            "cached_tokens": 1137,
+            "reasoning_tokens": 900
           },
-          "costUsd": 0.00228215,
-          "latencyMs": 3962
+          "costUsd": 0.0042248,
+          "latencyMs": 7651
         }
       ]
     }

@@ -397,3 +397,30 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   turns with a finished plan keeps it if it passes code's check (it fell back to moving only the missed session). The
   turn limit is 10. "Soonest", "last", and "only" say "in full" when a shorter version fits elsewhere, and "only" is
   about the free stretch, not the time. Ten full live runs in all, about $23.
+- 2026-11-03: Animation triggers (owner's rule): per animated element, never per section, in one hook
+  (src/app/_lens/useSeen.ts): start at 60% visible with the bottom tenth of the screen not counted; an element taller
+  than the screen starts at half the screen's height; pause below 20%; resume from the same step (CSS animations are
+  paused in place; the demo's timed steps only count time while seen). The hero preview now plays once and offers
+  Replay instead of looping. Playwright asserts each state (data-anim: idle, playing, paused, done) at 390x844 and
+  1440x900, after a short settle per programmatic scroll (headless Chrome renders lazily, so the observer reports a
+  frame later than in a person's browser). Layout shift is asserted under 0.001 (measured 0.00001 to 0.0001: 0 to the
+  three decimals Lighthouse reports), and for the plan's cards, the shift during their arrival only.
+- 2026-11-03: Weights and reasons pass (owner's spec). Urgency-adaptive ranking (src/lib/rebuild/rank.ts): tight when
+  due within 30 hours (inside the owner's 24-36) or free time before the deadline is under twice the work; then the
+  soonest good time wins. Otherwise quality: +4 a day later, +2 an hour planned that day, +3 another session that day,
+  +8 outside their study time, +15 under a day before the deadline, +8 the same day as the miss or within 4 hours of
+  it (#63 doesn't land tonight), +4 from 9pm; +30 the morning of another exam or quiz (#36); -15 on a day the reply
+  offers ("can do it later today after 6"; "practice until 9" says when they're busy, not that they want 9pm).
+- 2026-11-03: Student defaults when Tomorrow sends no prefs: sleep 00:30-08:30, study 09:00-23:00 (a morning person
+  up at 7 and studying from 7:30, a night person asleep at 1:30 and studying to 00:30, never within an hour of
+  sleep); `study_hours` joins the contract's optional prefs. Case changes: the original eleven say they're up at 7
+  (their stories assume it), live bug #1 keeps its 11:30 bedtime, make-room-no-deadline keeps an 11pm bedtime (with
+  the new default 10-11pm is free and nothing needs to move); everything else uses the defaults, so 7:30am picks are
+  now 9am, and 40 of 68 chosen times changed (table in the report).
+- 2026-11-03: Reasons for the missed session are built by code from 1-2 factor keys the agent picks among those code
+  checked true of that exact time (factorsAt); "buffer" counts calendar days. The reply is paraphrased only through
+  note_reply: the quote must be in the reply and say what's claimed; code applies the constraint to the missed item's
+  free time and writes the words. Free-text reasons (other items, drops) can't paraphrase the reply at all.
+- 2026-11-03: The judge (v7) sees busy time too, so "a lighter morning" and "right after the lab" can be checked, and
+  answers a second question, time_score: would a thoughtful friend who knows this week pick this time (gate 4.8).
+  Two live runs, $5.48; stopped at the owner's $5 checkpoint.

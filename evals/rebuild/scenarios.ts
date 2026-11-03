@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import type { RebuildPrefs, RebuildRequest } from "@/lib/rebuild/contract";
+import { sleepOf } from "@/lib/rebuild/rules";
 import type { RebuildCase, RebuildExpect } from "./cases";
 
 // Rebuild cases from everyday student life, built the way Tomorrow builds a
@@ -61,7 +62,9 @@ type Scenario = {
 const clock = (s: string) => s.split(":").map(Number) as [number, number];
 
 export function scenario(o: Scenario): RebuildCase {
-  const prefs: RebuildPrefs = { sleep: { start: "23:30", end: "07:30" }, quiet: null, study_time: null, ...o.prefs };
+  // Like Tomorrow before it sends prefs: none, so Lens's student defaults apply (sleep 00:30-08:30, study 9am-11pm),
+  // unless the case says how this person lives.
+  const prefs: RebuildPrefs = { sleep: null, quiet: null, study_time: null, ...o.prefs };
   const now = L(o.now);
   const days = o.days ?? 4;
   const first = now.startOf("day");
@@ -83,8 +86,9 @@ export function scenario(o: Scenario): RebuildCase {
       b <= s || a >= e ? [[s, e]] : [...(a > s ? [[s, a] as [number, number]] : []), ...(b < e ? [[b, e] as [number, number]] : [])],
     ); // prettier-ignore
   let open: [number, number][] = [];
-  const [bh, bm] = clock(prefs.sleep!.start);
-  const [wh, wm] = clock(prefs.sleep!.end);
+  const sleep = sleepOf({ prefs } as RebuildRequest);
+  const [bh, bm] = clock(sleep.start);
+  const [wh, wm] = clock(sleep.end);
   for (let k = 0; k <= days; k++) {
     const day = first.plus({ days: k });
     const wake = day.set({ hour: wh, minute: wm });
@@ -149,6 +153,7 @@ export const SCENARIOS: RebuildCase[] = [
     reply: "skipped",
     items: [calc("2026-11-10 20:30", "2026-11-10 21:30"), P("s_outline", "Essay outline", "2026-11-11 19:00", "2026-11-11 20:00", { for: "d_essay" })], // prettier-ignore
     deadlines: [QUIZ, ESSAY],
+    prefs: { sleep: { start: "23:30", end: "07:30" } }, // the night it happened: bed at 11:30
     expect: { missed: "move", ends_by: "2026-11-12 10:00", max_changes: 1, keep: ["s_outline"], not_before: "2026-11-11 00:00" }, // prettier-ignore
   }),
 
@@ -275,7 +280,12 @@ export const SCENARIOS: RebuildCase[] = [
     reply: "practice until 9",
     items: [phys("2026-11-09 16:00", "2026-11-09 17:00")],
     deadlines: [HW],
-    expect: { missed: "move", not_before: "2026-11-09 21:00", ends_by: "2026-11-13 23:59", max_changes: 1 },
+    expect: {
+      missed: "move",
+      not_before: "2026-11-09 21:00",
+      ends_by: "2026-11-13 23:59",
+      max_changes: 1,
+    },
   }),
   scenario({
     name: "busy-until-4-tomorrow",
@@ -286,7 +296,12 @@ export const SCENARIOS: RebuildCase[] = [
     reply: "busy all day tomorrow until 4",
     items: [essay("2026-11-10 20:00", "2026-11-10 21:00")],
     deadlines: [ESSAY],
-    expect: { missed: "move", not_before: "2026-11-11 16:00", ends_by: "2026-11-16 09:00", max_changes: 1 },
+    expect: {
+      missed: "move",
+      not_before: "2026-11-11 16:00",
+      ends_by: "2026-11-16 09:00",
+      max_changes: 1,
+    },
   }),
   scenario({
     name: "sick-thursday",
@@ -366,7 +381,12 @@ export const SCENARIOS: RebuildCase[] = [
     missed: "s_hist",
     reply: "can do it later today after 6",
     items: [hist("2026-11-10 12:30", "2026-11-10 13:30")],
-    expect: { missed: "move", not_before: "2026-11-10 18:00", max_changes: 1 },
+    expect: {
+      offered: ["2026-11-10 18:00", "2026-11-10 23:59"],
+      missed: "move",
+      not_before: "2026-11-10 18:00",
+      max_changes: 1,
+    },
   }),
   scenario({
     name: "reply-tomorrow",
@@ -732,6 +752,7 @@ export const SCENARIOS: RebuildCase[] = [
       ["Robotics club", "2026-11-11 19:00", "2026-11-11 21:00"],
       ["Gym", "2026-11-12 07:30", "2026-11-12 09:45"],
     ],
+    prefs: { sleep: { start: "23:00", end: "07:30" } }, // bed at 11: tonight is full after laundry
     expect: { missed: "move", ends_by: "2026-11-12 10:00", max_changes: 2, changed: ["s_laundry"] },
   }),
   scenario({

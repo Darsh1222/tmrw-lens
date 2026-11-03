@@ -48,7 +48,7 @@ export function Thread({ messages, states, hint }: { messages: Msg[]; states: Ms
           const shown = state === "shown";
           const you = m.from === "you";
           return (
-            <li key={n} className="flex flex-col gap-2" aria-hidden={!shown}>
+            <li key={n} className="flex flex-col gap-2" aria-hidden={!shown} data-step={shown ? "" : undefined}>
               {m.stamp && (
                 <span
                   className={`forum-in text-center text-xs ${state === "hidden" ? "forum-hidden" : ""}`}

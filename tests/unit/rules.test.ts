@@ -22,16 +22,16 @@ describe("hard rules", () => {
 
   it("catches tonight's 10:30pm move: the hour before bed, and within 90 minutes of the miss", () => {
     const bad = hardRuleViolations(live, moved(live, "2026-11-10T22:30"));
-    expect(bad).toContain("s_calc: in sleep, the hour before bed, or quiet hours");
+    expect(bad).toContain("s_calc: in sleep, the hour before bed, quiet hours, or outside study hours");
     expect(bad).toContain("s_calc: within 90 min of the missed session");
-    expect(hardRuleViolations(live, moved(live, "2026-11-11T07:30"))).toEqual([]);
+    expect(hardRuleViolations(live, moved(live, "2026-11-11T09:00"))).toEqual([]);
   });
 
   it("and the Draft refuses it, saying why", () => {
     const d = new Draft(live);
-    expect(d.move("s_calc", "2026-11-10T22:30", null, "it's free then")).toMatchObject({ ok: false, problem: expect.stringMatching(/90 minutes/) }); // prettier-ignore
-    expect(d.move("s_calc", "2026-11-10T23:00", null, "it's free then")).toMatchObject({ ok: false, problem: expect.stringMatching(/bedtime/) }); // prettier-ignore
-    expect(d.move("s_calc", "2026-11-11T07:30", null, "it's free then")).toMatchObject({ ok: true });
+    expect(d.move("s_calc", "2026-11-10T22:30", null, ["buffer"])).toMatchObject({ ok: false, problem: expect.stringMatching(/90 minutes/) }); // prettier-ignore
+    expect(d.move("s_calc", "2026-11-10T23:00", null, ["buffer"])).toMatchObject({ ok: false, problem: expect.stringMatching(/bedtime/) }); // prettier-ignore
+    expect(d.move("s_calc", "2026-11-11T09:00", null, ["buffer"])).toMatchObject({ ok: true });
   });
 
   it("allows right after the miss when it's due within 24 hours", () => {
@@ -78,10 +78,10 @@ describe("hard rules", () => {
 });
 
 describe("placement ranking (the oracle)", () => {
-  it("puts tonight's live-bug session in the morning, never in the hour before bed", () => {
+  it("puts tonight's live-bug session in the morning (from 9, their study hours), never in the hour before bed", () => {
     const r = req("live-1030pm-same-night");
     const top = rankSlots(new Draft(r), "s_calc")[0];
-    expect(new Draft(r).stamp(top.start)).toBe("2026-11-11T07:30");
+    expect(new Draft(r).stamp(top.start)).toBe("2026-11-11T09:00");
   });
 
   it("prefers their study time, a lighter day, and the full length", () => {
@@ -93,6 +93,23 @@ describe("placement ranking (the oracle)", () => {
     expect(heavy.local(rankSlots(heavy, "s_phys")[0].start).weekday).not.toBe(3); // not packed Wednesday
     const short = rankSlots(new Draft(req("shorten")), "s_review");
     expect(short[0].minutes).toBe(60);
+  });
+
+  it("lets urgency decide how much sooner matters", () => {
+    const top = (name: string, offered?: [string, string]) => {
+      const r = req(name);
+      const d = new Draft(r);
+      return d.local(rankSlots(d, r.missed.item_id, offered ? { offered: { s: at(r, offered[0]), e: at(r, offered[1]) } } : {})[0].start); // prettier-ignore
+    };
+    // #63: the lab report is a week away, so it doesn't land tonight, right after the miss.
+    expect(top("far-deadline-two-weeks").hasSame(new Draft(req("far-deadline-two-weeks")).local(Date.parse(req("far-deadline-two-weeks").now)), "day")).toBe(false); // prettier-ignore
+    // #36: never the morning of another quiz when other time is free.
+    const essay = top("light-day-next-week");
+    expect(essay.toISODate() === "2026-11-12" && essay.hour < 10).toBe(false);
+    // A reply offering time ("later today after 6") is taken.
+    expect(top("reply-after-6", ["2026-11-10T18:00", "2026-11-10T23:59"]).toFormat("ccc HH:mm")).toBe("Tue 18:00");
+    // Due in 4 hours: tight, so the soonest good time, right after the miss.
+    expect(top("due-in-4h-right-after-miss").toFormat("HH:mm")).toBe("18:05");
   });
 
   it("never offers a stretch shorter than the session", () => {

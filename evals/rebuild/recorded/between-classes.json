@@ -1,7 +1,7 @@
 {
-  "agent_version": 19,
-  "judge_version": 5,
-  "request_sha": "6021f305d33ba028e5c16cb329143e55e70eb0bbbafb125622e45e9c435c35ce",
+  "agent_version": 21,
+  "judge_version": 7,
+  "request_sha": "b8a34f0a672f82e4f7c1036e1f858d2d4d9a2b157fc07f3fe9527e4d99a1ee70",
   "effort": "low",
   "response": {
     "version": 1,
@@ -9,12 +9,12 @@
       {
         "item_id": "s_phys",
         "action": "move",
-        "start": "2026-11-12T08:00:00-05:00",
-        "end": "2026-11-12T08:30:00-05:00",
-        "reason": "it's the soonest open time before PHYS HW 9"
+        "start": "2026-11-12T10:30:00-05:00",
+        "end": "2026-11-12T11:00:00-05:00",
+        "reason": "the soonest it fits before PHYS HW 9"
       }
     ],
-    "message": "Moved PHYS problem set to 8am today because it's the soonest open time before PHYS HW 9. Nothing else changed.",
+    "message": "Moved PHYS problem set to 10:30am today, the soonest it fits before PHYS HW 9. Nothing else changed.",
     "offer": null,
     "decided_by": "agent"
   },
@@ -36,48 +36,62 @@
         "free": [
           {
             "rank": 1,
-            "suggested_start": "2026-11-12T08:00",
-            "when": "8am today",
+            "suggested_start": "2026-11-12T10:30",
+            "when": "10:30am today",
             "holds_minutes": 30,
-            "free_from": "2026-11-12T08:00",
-            "free_until": "2026-11-12T08:30",
-            "why_ranked": "7h already planned that day",
-            "true_reasons": [
-              "it's the soonest open time",
-              "it's the soonest open time before PHYS HW 9"
+            "urgency": "tight",
+            "free_from": "2026-11-12T10:30",
+            "free_until": "2026-11-12T11:00",
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "soonest",
+                "text": "the soonest it fits before PHYS HW 9"
+              },
+              {
+                "key": "fresh_morning",
+                "text": "a fresh morning, with no quiz that day"
+              },
+              {
+                "key": "after_event",
+                "text": "right after Office hours"
+              }
             ]
           },
           {
             "rank": 2,
-            "suggested_start": "2026-11-12T10:30",
-            "when": "10:30am today",
-            "holds_minutes": 30,
-            "free_from": "2026-11-12T10:30",
-            "free_until": "2026-11-12T11:00",
-            "why_ranked": "7h already planned that day",
-            "true_reasons": []
-          },
-          {
-            "rank": 3,
             "suggested_start": "2026-11-12T15:00",
             "when": "3pm today",
             "holds_minutes": 30,
+            "urgency": "tight",
             "free_from": "2026-11-12T15:00",
             "free_until": "2026-11-12T15:30",
-            "why_ranked": "7h already planned that day",
-            "true_reasons": []
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "after_event",
+                "text": "right after Lab makeup"
+              }
+            ]
           },
           {
-            "rank": 4,
+            "rank": 3,
             "suggested_start": "2026-11-12T16:45",
             "when": "4:45pm today",
             "holds_minutes": 30,
+            "urgency": "tight",
             "free_from": "2026-11-12T16:45",
             "free_until": "2026-11-12T18:00",
-            "why_ranked": "7h already planned that day, right before the deadline",
-            "true_reasons": [
-              "it's the last open time",
-              "it's the last open time before PHYS HW 9"
+            "why_ranked": "tight: the soonest good time wins",
+            "factors": [
+              {
+                "key": "last",
+                "text": "the last time it fits before PHYS HW 9"
+              },
+              {
+                "key": "after_event",
+                "text": "right after HIST200 lecture"
+              }
             ]
           }
         ]
@@ -86,17 +100,21 @@
     {
       "tool": "move_item",
       "args": {
+        "because": [
+          "soonest"
+        ],
         "duration_min": "null",
         "item_id": "s_phys",
-        "reason": "it's the soonest open time before PHYS HW 9",
-        "start": "2026-11-12T08:00"
+        "reason": "null",
+        "start": "2026-11-12T10:30"
       },
       "ok": true,
       "result": {
         "ok": true,
         "moved": "PHYS problem set",
-        "to": "Thu Nov 12 08:00-08:30",
-        "minutes": 30
+        "to": "Thu Nov 12 10:30-11:00",
+        "minutes": 30,
+        "reason": "the soonest it fits before PHYS HW 9"
       }
     },
     {
@@ -112,49 +130,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2244,
-        "output_tokens": 167,
+        "input_tokens": 2263,
+        "output_tokens": 270,
         "cached_tokens": 2033,
-        "reasoning_tokens": 41
+        "reasoning_tokens": 142
       },
-      "costUsd": 0.00127845,
-      "latencyMs": 1433
+      "costUsd": 0.00173995,
+      "latencyMs": 2331
     },
     {
       "usage": {
-        "input_tokens": 2783,
-        "output_tokens": 252,
+        "input_tokens": 2900,
+        "output_tokens": 156,
         "cached_tokens": 2161,
-        "reasoning_tokens": 119
+        "reasoning_tokens": 34
       },
-      "costUsd": 0.00217265,
-      "latencyMs": 2081
+      "costUsd": 0.0019109,
+      "latencyMs": 1775
     },
     {
       "usage": {
-        "input_tokens": 3088,
+        "input_tokens": 3122,
         "output_tokens": 41,
-        "cached_tokens": 2673,
+        "cached_tokens": 2801,
         "reasoning_tokens": 3
       },
-      "costUsd": 0.00109395,
-      "latencyMs": 805
+      "costUsd": 0.00099565,
+      "latencyMs": 836
     }
   ],
   "judge": {
     "score": 5,
+    "time_score": 5,
     "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1035,
-        "output_tokens": 422,
-        "cached_tokens": 1009,
-        "reasoning_tokens": 406
+        "input_tokens": 1309,
+        "output_tokens": 656,
+        "cached_tokens": 753,
+        "reasoning_tokens": 630
       },
-      "costUsd": 0.00197735,
-      "latencyMs": 3925
+      "costUsd": 0.0035959499999999997,
+      "latencyMs": 4260
     }
   ],
   "runs": [
@@ -165,12 +184,12 @@
           {
             "item_id": "s_phys",
             "action": "move",
-            "start": "2026-11-12T08:00:00-05:00",
-            "end": "2026-11-12T08:30:00-05:00",
-            "reason": "it's the soonest open time before PHYS HW 9"
+            "start": "2026-11-12T10:30:00-05:00",
+            "end": "2026-11-12T11:00:00-05:00",
+            "reason": "the soonest it fits before PHYS HW 9"
           }
         ],
-        "message": "Moved PHYS problem set to 8am today because it's the soonest open time before PHYS HW 9. Nothing else changed.",
+        "message": "Moved PHYS problem set to 10:30am today, the soonest it fits before PHYS HW 9. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -192,48 +211,62 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-12T08:00",
-                "when": "8am today",
+                "suggested_start": "2026-11-12T10:30",
+                "when": "10:30am today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-12T08:00",
-                "free_until": "2026-11-12T08:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before PHYS HW 9"
+                "urgency": "tight",
+                "free_from": "2026-11-12T10:30",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after Office hours"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-12T10:30",
-                "when": "10:30am today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T10:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
                 "suggested_start": "2026-11-12T15:00",
                 "when": "3pm today",
                 "holds_minutes": 30,
+                "urgency": "tight",
                 "free_from": "2026-11-12T15:00",
                 "free_until": "2026-11-12T15:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Lab makeup"
+                  }
+                ]
               },
               {
-                "rank": 4,
+                "rank": 3,
                 "suggested_start": "2026-11-12T16:45",
                 "when": "4:45pm today",
                 "holds_minutes": 30,
+                "urgency": "tight",
                 "free_from": "2026-11-12T16:45",
                 "free_until": "2026-11-12T18:00",
-                "why_ranked": "7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before PHYS HW 9"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  }
                 ]
               }
             ]
@@ -242,17 +275,21 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "soonest"
+            ],
             "duration_min": "null",
             "item_id": "s_phys",
-            "reason": "it's the soonest open time before PHYS HW 9",
-            "start": "2026-11-12T08:00"
+            "reason": "null",
+            "start": "2026-11-12T10:30"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "PHYS problem set",
-            "to": "Thu Nov 12 08:00-08:30",
-            "minutes": 30
+            "to": "Thu Nov 12 10:30-11:00",
+            "minutes": 30,
+            "reason": "the soonest it fits before PHYS HW 9"
           }
         },
         {
@@ -268,49 +305,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2244,
-            "output_tokens": 167,
+            "input_tokens": 2263,
+            "output_tokens": 270,
             "cached_tokens": 2033,
-            "reasoning_tokens": 41
+            "reasoning_tokens": 142
           },
-          "costUsd": 0.00127845,
-          "latencyMs": 1433
+          "costUsd": 0.00173995,
+          "latencyMs": 2331
         },
         {
           "usage": {
-            "input_tokens": 2783,
-            "output_tokens": 252,
+            "input_tokens": 2900,
+            "output_tokens": 156,
             "cached_tokens": 2161,
-            "reasoning_tokens": 119
+            "reasoning_tokens": 34
           },
-          "costUsd": 0.00217265,
-          "latencyMs": 2081
+          "costUsd": 0.0019109,
+          "latencyMs": 1775
         },
         {
           "usage": {
-            "input_tokens": 3088,
+            "input_tokens": 3122,
             "output_tokens": 41,
-            "cached_tokens": 2673,
+            "cached_tokens": 2801,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.00109395,
-          "latencyMs": 805
+          "costUsd": 0.00099565,
+          "latencyMs": 836
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1035,
-            "output_tokens": 422,
-            "cached_tokens": 1009,
-            "reasoning_tokens": 406
+            "input_tokens": 1309,
+            "output_tokens": 656,
+            "cached_tokens": 753,
+            "reasoning_tokens": 630
           },
-          "costUsd": 0.00197735,
-          "latencyMs": 3925
+          "costUsd": 0.0035959499999999997,
+          "latencyMs": 4260
         }
       ]
     },
@@ -321,167 +359,12 @@
           {
             "item_id": "s_phys",
             "action": "move",
-            "start": "2026-11-12T08:00:00-05:00",
-            "end": "2026-11-12T08:30:00-05:00",
-            "reason": "it's the soonest open time before PHYS HW 9"
+            "start": "2026-11-12T10:30:00-05:00",
+            "end": "2026-11-12T11:00:00-05:00",
+            "reason": "the soonest it fits before PHYS HW 9"
           }
         ],
-        "message": "Moved PHYS problem set to 8am today because it's the soonest open time before PHYS HW 9. Nothing else changed.",
-        "offer": null,
-        "decided_by": "agent"
-      },
-      "turns": 3,
-      "refused": 0,
-      "refusals": [],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-12T18:00",
-            "item_id": "s_phys",
-            "minutes": 30
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [
-              {
-                "rank": 1,
-                "suggested_start": "2026-11-12T08:00",
-                "when": "8am today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T08:00",
-                "free_until": "2026-11-12T08:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before PHYS HW 9"
-                ]
-              },
-              {
-                "rank": 2,
-                "suggested_start": "2026-11-12T10:30",
-                "when": "10:30am today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T10:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
-                "suggested_start": "2026-11-12T15:00",
-                "when": "3pm today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T15:00",
-                "free_until": "2026-11-12T15:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 4,
-                "suggested_start": "2026-11-12T16:45",
-                "when": "4:45pm today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T16:45",
-                "free_until": "2026-11-12T18:00",
-                "why_ranked": "7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before PHYS HW 9"
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "tool": "move_item",
-          "args": {
-            "item_id": "s_phys",
-            "reason": "it's the soonest open time before PHYS HW 9",
-            "start": "2026-11-12T08:00"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "moved": "PHYS problem set",
-            "to": "Thu Nov 12 08:00-08:30",
-            "minutes": 30
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2244,
-            "output_tokens": 169,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 41
-          },
-          "costUsd": 0.00114615,
-          "latencyMs": 1330
-        },
-        {
-          "usage": {
-            "input_tokens": 2785,
-            "output_tokens": 199,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 81
-          },
-          "costUsd": 0.0019499,
-          "latencyMs": 1670
-        },
-        {
-          "usage": {
-            "input_tokens": 3037,
-            "output_tokens": 41,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.0010302,
-          "latencyMs": 688
-        }
-      ],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1035,
-            "output_tokens": 506,
-            "cached_tokens": 625,
-            "reasoning_tokens": 490
-          },
-          "costUsd": 0.00275675,
-          "latencyMs": 3764
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_phys",
-            "action": "move",
-            "start": "2026-11-12T08:00:00-05:00",
-            "end": "2026-11-12T08:30:00-05:00",
-            "reason": "it's the soonest open time before PHYS HW 9"
-          }
-        ],
-        "message": "Moved PHYS problem set to 8am today because it's the soonest open time before PHYS HW 9. Nothing else changed.",
+        "message": "Moved PHYS problem set to 10:30am today, the soonest it fits before PHYS HW 9. Nothing else changed.",
         "offer": null,
         "decided_by": "agent"
       },
@@ -503,48 +386,62 @@
             "free": [
               {
                 "rank": 1,
-                "suggested_start": "2026-11-12T08:00",
-                "when": "8am today",
+                "suggested_start": "2026-11-12T10:30",
+                "when": "10:30am today",
                 "holds_minutes": 30,
-                "free_from": "2026-11-12T08:00",
-                "free_until": "2026-11-12T08:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": [
-                  "it's the soonest open time",
-                  "it's the soonest open time before PHYS HW 9"
+                "urgency": "tight",
+                "free_from": "2026-11-12T10:30",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after Office hours"
+                  }
                 ]
               },
               {
                 "rank": 2,
-                "suggested_start": "2026-11-12T10:30",
-                "when": "10:30am today",
-                "holds_minutes": 30,
-                "free_from": "2026-11-12T10:30",
-                "free_until": "2026-11-12T11:00",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
-              },
-              {
-                "rank": 3,
                 "suggested_start": "2026-11-12T15:00",
                 "when": "3pm today",
                 "holds_minutes": 30,
+                "urgency": "tight",
                 "free_from": "2026-11-12T15:00",
                 "free_until": "2026-11-12T15:30",
-                "why_ranked": "7h already planned that day",
-                "true_reasons": []
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Lab makeup"
+                  }
+                ]
               },
               {
-                "rank": 4,
+                "rank": 3,
                 "suggested_start": "2026-11-12T16:45",
                 "when": "4:45pm today",
                 "holds_minutes": 30,
+                "urgency": "tight",
                 "free_from": "2026-11-12T16:45",
                 "free_until": "2026-11-12T18:00",
-                "why_ranked": "7h already planned that day, right before the deadline",
-                "true_reasons": [
-                  "it's the last open time",
-                  "it's the last open time before PHYS HW 9"
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  }
                 ]
               }
             ]
@@ -553,17 +450,21 @@
         {
           "tool": "move_item",
           "args": {
+            "because": [
+              "soonest"
+            ],
             "duration_min": "null",
             "item_id": "s_phys",
-            "reason": "it's the soonest open time before PHYS HW 9",
-            "start": "2026-11-12T08:00"
+            "reason": "null",
+            "start": "2026-11-12T10:30"
           },
           "ok": true,
           "result": {
             "ok": true,
             "moved": "PHYS problem set",
-            "to": "Thu Nov 12 08:00-08:30",
-            "minutes": 30
+            "to": "Thu Nov 12 10:30-11:00",
+            "minutes": 30,
+            "reason": "the soonest it fits before PHYS HW 9"
           }
         },
         {
@@ -579,49 +480,225 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2244,
-            "output_tokens": 221,
+            "input_tokens": 2263,
+            "output_tokens": 189,
             "cached_tokens": 2161,
-            "reasoning_tokens": 93
+            "reasoning_tokens": 62
           },
-          "costUsd": 0.0013671500000000001,
-          "latencyMs": 1738
+          "costUsd": 0.0012549000000000002,
+          "latencyMs": 1524
         },
         {
           "usage": {
-            "input_tokens": 2837,
-            "output_tokens": 185,
+            "input_tokens": 2819,
+            "output_tokens": 308,
             "cached_tokens": 2161,
-            "reasoning_tokens": 70
+            "reasoning_tokens": 186
           },
-          "costUsd": 0.0019554,
-          "latencyMs": 1542
+          "costUsd": 0.00245565,
+          "latencyMs": 2313
         },
         {
           "usage": {
-            "input_tokens": 3075,
-            "output_tokens": 45,
+            "input_tokens": 3193,
+            "output_tokens": 41,
             "cached_tokens": 2801,
-            "reasoning_tokens": 7
+            "reasoning_tokens": 3
           },
-          "costUsd": 0.0009538999999999999,
-          "latencyMs": 671
+          "costUsd": 0.0010844000000000001,
+          "latencyMs": 819
         }
       ],
       "judge": {
         "score": 5,
+        "time_score": 5,
         "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1035,
-            "output_tokens": 544,
-            "cached_tokens": 1009,
-            "reasoning_tokens": 528
+            "input_tokens": 1309,
+            "output_tokens": 444,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 418
           },
-          "costUsd": 0.00249585,
-          "latencyMs": 3468
+          "costUsd": 0.00213175,
+          "latencyMs": 3364
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_phys",
+            "action": "move",
+            "start": "2026-11-12T10:30:00-05:00",
+            "end": "2026-11-12T11:00:00-05:00",
+            "reason": "the soonest it fits before PHYS HW 9"
+          }
+        ],
+        "message": "Moved PHYS problem set to 10:30am today, the soonest it fits before PHYS HW 9. Nothing else changed.",
+        "offer": null,
+        "decided_by": "agent"
+      },
+      "turns": 3,
+      "refused": 0,
+      "refusals": [],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-12T18:00",
+            "item_id": "null",
+            "minutes": 30
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [
+              {
+                "rank": 1,
+                "suggested_start": "2026-11-12T10:30",
+                "when": "10:30am today",
+                "holds_minutes": 30,
+                "urgency": "tight",
+                "free_from": "2026-11-12T10:30",
+                "free_until": "2026-11-12T11:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "soonest",
+                    "text": "the soonest it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "fresh_morning",
+                    "text": "a fresh morning, with no quiz that day"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after Office hours"
+                  }
+                ]
+              },
+              {
+                "rank": 2,
+                "suggested_start": "2026-11-12T15:00",
+                "when": "3pm today",
+                "holds_minutes": 30,
+                "urgency": "tight",
+                "free_from": "2026-11-12T15:00",
+                "free_until": "2026-11-12T15:30",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "after_event",
+                    "text": "right after Lab makeup"
+                  }
+                ]
+              },
+              {
+                "rank": 3,
+                "suggested_start": "2026-11-12T16:45",
+                "when": "4:45pm today",
+                "holds_minutes": 30,
+                "urgency": "tight",
+                "free_from": "2026-11-12T16:45",
+                "free_until": "2026-11-12T18:00",
+                "why_ranked": "tight: the soonest good time wins",
+                "factors": [
+                  {
+                    "key": "last",
+                    "text": "the last time it fits before PHYS HW 9"
+                  },
+                  {
+                    "key": "after_event",
+                    "text": "right after HIST200 lecture"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "tool": "move_item",
+          "args": {
+            "because": [
+              "soonest"
+            ],
+            "duration_min": "null",
+            "item_id": "s_phys",
+            "reason": "null",
+            "start": "2026-11-12T10:30"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "moved": "PHYS problem set",
+            "to": "Thu Nov 12 10:30-11:00",
+            "minutes": 30,
+            "reason": "the soonest it fits before PHYS HW 9"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2263,
+            "output_tokens": 258,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 127
+          },
+          "costUsd": 0.00154815,
+          "latencyMs": 3210
+        },
+        {
+          "usage": {
+            "input_tokens": 2888,
+            "output_tokens": 223,
+            "cached_tokens": 2161,
+            "reasoning_tokens": 101
+          },
+          "costUsd": 0.00218065,
+          "latencyMs": 1689
+        },
+        {
+          "usage": {
+            "input_tokens": 3177,
+            "output_tokens": 42,
+            "cached_tokens": 2801,
+            "reasoning_tokens": 4
+          },
+          "costUsd": 0.0010686500000000002,
+          "latencyMs": 2896
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1309,
+            "output_tokens": 621,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 600
+          },
+          "costUsd": 0.002884,
+          "latencyMs": 4559
         }
       ]
     }

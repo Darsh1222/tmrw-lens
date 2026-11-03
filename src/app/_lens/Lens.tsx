@@ -14,6 +14,7 @@ import { QuestionCard } from "./QuestionCard";
 import { SendPanel } from "./SendPanel";
 import { metaOf, type Input } from "./types";
 import { Upload } from "./Upload";
+import { seenWait, useReducedMotion, useSeen } from "./useSeen";
 import { buttonClass, Chip, money, palette, Swatch } from "./ui";
 import { Viewer, type Mark } from "./Viewer";
 
@@ -239,19 +240,29 @@ export function Lens() {
     }
     lastCount.current = readCount;
   }, [readCount]);
+  // The cards arrive when the plan itself is in view (useSeen), not before: after the outlines finish, or as soon as
+  // the plan is reached if that's first. They pause with it, and finish on time it was actually seen.
+  const { attach: planAttach, started: planStarted, visible: planVisible, whenVisible: planWhenVisible, isVisible: planIsVisible } = useSeen(); // prettier-ignore
+  const reducedMotion = useReducedMotion();
+  // Reaching the plan before the outlines finish counts as their signal.
+  const cards = arrival === "waiting" && planStarted ? "arriving" : arrival;
   useEffect(() => {
-    if (arrival !== "waiting") return;
-    const t = setTimeout(() => setArrival("done"), 4000);
-    return () => clearTimeout(t);
-  }, [arrival]);
-  useEffect(() => {
-    if (arrival !== "arriving") return;
-    const t = setTimeout(() => setArrival("done"), 1200);
-    return () => clearTimeout(t);
-  }, [arrival]);
+    if (cards !== "arriving" || !planStarted) return;
+    let gone = false;
+    void seenWait({ whenVisible: planWhenVisible, isVisible: planIsVisible })(reducedMotion ? 0 : 1200).then(
+      () => !gone && setArrival("done"),
+    );
+    return () => void (gone = true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the hook's functions are stable
+  }, [cards, planStarted, reducedMotion]);
   const revealed = useCallback(() => setArrival((a) => (a === "waiting" ? "arriving" : a)), []);
   const arrive = (n: number) =>
-    arrival === "waiting" ? "opacity-0" : arrival === "arriving" ? `forum-arrive forum-d${Math.min(n, 12)}` : undefined;
+    cards === "done" || reducedMotion
+      ? undefined
+      : cards === "arriving" && planStarted
+        ? `forum-arrive forum-d${Math.min(n, 12)}`
+        : "opacity-0";
+  const planAnim = cards === "done" || reducedMotion ? "done" : !planStarted ? "idle" : planVisible ? "playing" : "paused"; // prettier-ignore
   const closeDrawer = useCallback(() => setDrawer(null), []);
 
   const marks: Mark[] = plan
@@ -379,11 +390,13 @@ export function Lens() {
                 ))}
               </div>
             </div>
-            {view === "week" ? (
-              <WeekView plan={plan} today={today} onOpen={select} arrive={arrive} />
-            ) : (
-              <SemesterView plan={plan} onOpen={select} />
-            )}
+            <div ref={planAttach} data-anim={planAnim} className={planAnim === "paused" ? "anim-paused" : undefined}>
+              {view === "week" ? (
+                <WeekView plan={plan} today={today} onOpen={select} arrive={arrive} />
+              ) : (
+                <SemesterView plan={plan} onOpen={select} />
+              )}
+            </div>
             {plan.classes.length > 0 && tone && (
               <div className="flex flex-col gap-2">
                 <h4 className="text-sm text-ink-2">Classes, weekly</h4>

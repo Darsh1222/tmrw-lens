@@ -11,6 +11,7 @@ import { Thread, type Msg, type MsgState } from "./rebuild/Thread";
 import { Checks, Trace } from "./rebuild/Trace";
 import { buildWeek, span, type Pastel } from "./rebuild/week";
 import { WeekGrid, type Phase } from "./rebuild/WeekGrid";
+import { seenWait, useSeen } from "./useSeen";
 
 // The flagship, in one click: a made-up week, a session that passes undone,
 // Tomorrow's check-in and the reply, Lens's agent finding time (its tool calls
@@ -39,7 +40,6 @@ const WHY: Record<string, string> = {
 };
 
 const noop = () => () => {};
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const HIDDEN: MsgState[] = ["hidden", "hidden", "hidden"];
 
 function useReducedMotion() {
@@ -78,6 +78,10 @@ export function MissDemo() {
   const [counter, setCounter] = useState<{ changed: number; unchanged: number } | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const playing = useRef(0);
+  // The sequence runs only while the panel is in view: it starts once seen, waits while scrolled away, and goes on
+  // from the same step when it's back.
+  const { attach, node, started, visible, whenStarted, whenVisible, isVisible } = useSeen();
+  const pace = seenWait({ whenVisible, isVisible });
   const landed = useRef<(() => void) | null>(null);
   useEffect(() => () => void (playing.current += 1), []);
 
@@ -142,6 +146,10 @@ export function MissDemo() {
     const typed = reply.trim() || null;
     setStatus("running");
     setView("after");
+    // Pressed while the panel is barely on screen: bring it into view, and begin once it's seen.
+    if (!started) node?.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" });
+    await whenStarted();
+    if (!still()) return;
     const pending = fetchRun(typed);
     const settle = async (): Promise<Run | null> => {
       const r = await pending;
@@ -171,16 +179,16 @@ export function MissDemo() {
       return;
     }
 
-    await wait(250);
+    await pace(250);
     if (!still()) return;
     setPhase("missed");
-    await wait(700);
+    await pace(700);
     if (!still()) return;
     setMsgs(["typing", "hidden", "hidden"]);
-    await wait(900);
+    await pace(900);
     if (!still()) return;
     setMsgs(["shown", "hidden", "hidden"]);
-    await wait(800);
+    await pace(800);
     if (!still()) return;
     setMsgs(["shown", "shown", "hidden"]);
     const r = await settle();
@@ -189,11 +197,11 @@ export function MissDemo() {
     setRun(r);
     setBands(true);
     for (let n = 1; n <= r.steps.length; n++) {
-      await wait(420);
+      await pace(420);
       if (!still()) return;
       setStepsShown(n);
     }
-    await wait(300);
+    await pace(300);
     if (!still()) return;
     setBands(false);
     setPhase("moving");
@@ -206,16 +214,17 @@ export function MissDemo() {
     setBadge(true);
     tick({ changed: m.counts.changed, unchanged: m.counts.unchanged });
     setTimeout(() => still() && setBadge(false), 2600);
-    await wait(500);
+    await pace(500);
     if (!still()) return;
     setMsgs(["shown", "shown", "typing"]);
-    await wait(1000);
+    await pace(1000);
     if (!still()) return;
     setMsgs(["shown", "shown", "shown"]);
     setStatus("done");
   }
 
   if (!inBrowser) return <Frame placeholder>{null}</Frame>;
+  const anim = status === "idle" ? "idle" : status === "done" ? "done" : visible ? "playing" : "paused";
 
   const shown = run ?? recorded(reply.trim() || null);
   const req: RebuildRequest = { ...request, missed: { ...request.missed, reply: shown.reply } };
@@ -238,7 +247,7 @@ export function MissDemo() {
     `${d.local(Date.parse(start)).toFormat("ccc")} ${span(Date.parse(start), Date.parse(end), d.zone)}`;
 
   return (
-    <Frame>
+    <Frame frameRef={attach} anim={anim}>
       <div className="flex flex-wrap items-center gap-4">
         <button
           onClick={play}
@@ -411,12 +420,25 @@ export function MissDemo() {
   );
 }
 
-function Frame({ children, placeholder = false }: { children: React.ReactNode; placeholder?: boolean }) {
+function Frame({
+  children,
+  placeholder = false,
+  frameRef,
+  anim,
+}: {
+  children: React.ReactNode;
+  placeholder?: boolean;
+  frameRef?: React.Ref<HTMLDivElement>;
+  /** idle, playing, paused (scrolled away: it waits, and everything animating stops where it is), done. */
+  anim?: string;
+}) {
   return (
     <section id="missed-session" aria-label="Try a missed session" className="scroll-mt-6">
       <div
+        ref={frameRef}
+        data-anim={anim}
         // Before the week renders (client only), hold its height so the page below doesn't jump when it appears.
-        className={`forum flex flex-col gap-6 rounded-2xl p-4 sm:p-8 ${placeholder ? "min-h-[2160px] md:min-h-[1648px] lg:min-h-[1524px]" : ""}`}
+        className={`forum flex flex-col gap-6 rounded-2xl p-4 sm:p-8 ${placeholder ? "min-h-[2160px] md:min-h-[1648px] lg:min-h-[1524px]" : ""} ${anim === "paused" ? "anim-paused" : ""}`}
         style={{ border: "1px solid var(--tm-border)" }}
       >
         <header className="flex flex-col gap-2">

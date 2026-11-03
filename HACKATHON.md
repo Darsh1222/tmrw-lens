@@ -146,8 +146,24 @@ Per-person spend limits and two global brakes keep the public demo from using To
   replies now rule out only the time before; that case moves the session to 9pm, and reasons must say what the person
   actually said. Rebuild evals: 11 of 11 right, 0 invalid moves, 0 unkind messages, judge 4.73.
 
+### Nov 3
+
+- Rebuilds pick times like a thoughtful friend would. How much "sooner" matters depends on urgency: due within 30
+  hours (or little time left), the soonest good time; otherwise quality wins (their study time, a lighter day, a day's
+  buffer, spread out, not right after the miss, never the morning of another quiz). Realistic student defaults when
+  Tomorrow sends no preferences: asleep 12:30 to 8:30, study 9am to 11pm (7:30am for a morning person, 12:30am for a
+  night person). Reasons are code's words from facts it checked: "Moved Lab report to Thu 12:15pm, right after ENGL101
+  seminar with four days to spare." Anything about the reply comes from a note whose exact words code found in it.
+  68 cases, 3 runs each: hard rules 100%, best slot 100%, judge 4.95, and a new "would a thoughtful friend pick this
+  time?" judge at 4.94.
+
 ### Nov 2
 
+- Animations only run while you can see them. Each animated element (the hero's preview, SAM's outlines, the plan's
+  cards, the missed-session demo) starts once 60% of it is in view, or, if it's taller than the screen, once it fills
+  half of it; it pauses when you scroll away and resumes from the same step, and offers Replay when done. Nothing
+  autoplays unless it's already in view at load; reduced motion shows the final state. Playwright checks this at
+  phone and desktop width, with layout shift under 0.001.
 - Rebuilds held to a safety bar. Hard rules in code that the agent can't break and a finished rebuild is checked
   against again: no overlaps with classes, sleep, quiet hours, or other sessions; after now, before the deadline;
   never within 90 minutes of the miss (unless due within a day); never within an hour of bedtime; the text's times are
