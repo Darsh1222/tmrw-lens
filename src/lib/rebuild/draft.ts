@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { compose, FACTOR_ORDER, rankSlots, type Factor } from "@/lib/rebuild/rank";
+import { compose, FACTOR_ORDER, rankSlots, unverifiedSuperlatives, type Factor } from "@/lib/rebuild/rank";
 import type { DiffEntry, RebuildPlanned, RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import {
   blocked,
@@ -310,6 +310,12 @@ export class Draft {
     return { s: n.at, e: this.local(n.at).endOf("day").toMillis() };
   }
 
+  /** Names the person wrote (items, deadlines, classes) and their noted reply: text a reason quotes, not claims. */
+  names(): string[] {
+    const r = this.req;
+    return [...r.items.map((i) => i.title), ...r.deadlines.map((x) => x.title), ...r.fixed.map((f) => f.title), this.note?.phrase ?? ""]; // prettier-ignore
+  }
+
   /** The factors code checked true of placing `id` at [s, s + minutes): what its reason may say. */
   factorsAt(id: string, s: number, minutes: number): Factor[] {
     const offered = id === this.missed.id ? this.offered() : undefined;
@@ -442,6 +448,15 @@ export class Draft {
       chosen.sort((a, b) => (a.key === "reply" ? -1 : b.key === "reply" ? 1 : FACTOR_ORDER.indexOf(a.key as Factor["key"]) - FACTOR_ORDER.indexOf(b.key as Factor["key"]))); // prettier-ignore
       words = compose(chosen);
       short = compose(chosen.slice(0, 1));
+    } else {
+      // "The only time", "the soonest", "a lighter day": only when code checked it of this exact time.
+      const factors = this.factorsAt(id, s, mins);
+      const bad = unverifiedSuperlatives(words, factors, this.names());
+      if (bad.length)
+        return {
+          ok: false,
+          problem: `Not true of this time: ${bad.join(", ")}. Say why in plain facts${factors.length ? `; true of it: ${factors.map((f) => `"${f.text}"`).join(", ")}` : ""}.`, // prettier-ignore
+        };
     }
     this.changes.set(id, { action: "move", start: s, end: e, reason: words, ...(short !== words && { short }) });
     return { ok: true, moved: i.title, to: this.at({ s, e }), minutes: mins, reason: words };
@@ -515,12 +530,6 @@ export class Draft {
     });
   }
 
-  /**
-   * When the missed item can't fit before its deadline, the best a person could
-   * still do: a 15-minute version ending 90 minutes before it (time to get
-   * there), in awake time (study hours don't bind: they decide), not overlapping anything. Outside the free time
-   * Tomorrow sent, so it's only offered, never placed: the text asks.
-   */
   /** Whether the missed item's shortest version still fits in free time before it's due. */
   fitsBeforeDue(): boolean {
     const m = this.missed;
@@ -528,6 +537,13 @@ export class Draft {
     return this.free(m.id).some((x) => Math.min(x.e, due) - x.s >= this.shortest(m) * MIN);
   }
 
+  /**
+   * When the missed item can't fit before its deadline, the best a person could
+   * still do: a 15-minute version ending 90 minutes before it (time to get
+   * there), not overlapping anything, never in sleep or the hour before bed or quiet hours. The latest such time in
+   * their study hours first; only if none, other awake time (they decide, so study hours needn't bind). Outside the
+   * free time Tomorrow sent, so it's only offered, never placed: the text asks.
+   */
   offer(): { item_id: string; start: number; end: number } | null {
     const m = this.missed;
     if (this.changes.get(m.id)?.action !== "drop") return null;
@@ -538,12 +554,12 @@ export class Draft {
       ...this.req.fixed.map((f) => span(f.start, f.end)),
       ...this.req.items.filter((i) => i.id !== m.id).flatMap((i) => this.placement(i) ?? []),
     ];
-    for (let s = due - 105 * MIN; s >= this.now; s -= 15 * MIN) {
-      const e = s + 15 * MIN;
-      if (busy.some((b) => b.s < e && s < b.e)) continue;
-      // Awake time, outside sleep, the hour before bed, and quiet hours; study hours don't bind, since they decide.
-      if (this.awakeOff.some((b) => b.s < e && s < b.e)) continue;
-      return { item_id: m.id, start: s, end: e };
+    for (const off of [this.off, this.awakeOff]) {
+      for (let s = due - 105 * MIN; s >= this.now; s -= 15 * MIN) {
+        const e = s + 15 * MIN;
+        if (busy.some((b) => b.s < e && s < b.e) || off.some((b) => b.s < e && s < b.e)) continue;
+        return { item_id: m.id, start: s, end: e };
+      }
     }
     return null;
   }
@@ -649,7 +665,7 @@ export function fallback(req: RebuildRequest): Draft {
     const top = [...best.factors].sort((a, b) => FACTOR_ORDER.indexOf(a.key) - FACTOR_ORDER.indexOf(b.key));
     const chosen = [...top.filter((f) => f.key !== "buffer").slice(0, out ? 0 : 1), ...top.filter((f) => f.key === "buffer")]; // prettier-ignore
     const texts = [...(out ? [{ key: "reply", text: d.local(d.now).hour >= 17 ? "so tonight can be off" : "so today can be off" }] : []), ...chosen]; // prettier-ignore
-    const reason = compose(texts) || (due === null ? "the first good time open" : `the first good time before ${what}`);
+    const reason = compose(texts) || (due === null ? "a good open time" : `a good open time before ${what}`);
     d.changes.set(m.id, { action: "move", start: best.start, end: best.start + best.minutes * MIN, reason });
     d.clearToday();
     return d;
@@ -690,6 +706,11 @@ export function checkResponse(req: RebuildRequest, res: RebuildResponse): string
     if (due !== null && c.end > due) problems.push(`${id}: ends after it's due`);
     if (mins > d.length(i) || mins < d.shortest(i)) problems.push(`${id}: ${mins} min is outside its length`);
     if (!d.free(id).some((x) => x.s <= c.start && c.end <= x.e)) problems.push(`${id}: not free time`);
+    // The model's own words for the other items. The missed item's reason is code's, from factors checked at that
+    // exact time within what their reply leaves (which a fresh Draft can't know): "the soonest" after practice ends.
+    if (id === d.missed.id) continue;
+    const bad = unverifiedSuperlatives(c.reason, d.factorsAt(id, c.start, mins), d.names());
+    if (bad.length) problems.push(`${id}: claims ${bad.join(", ")}, not true of that time`);
   }
   if (!problems.length && res.message !== d.message()) problems.push("the message doesn't match the diff");
   if (res.message.length > MAX_TEXT || plain(res.message) !== res.message)

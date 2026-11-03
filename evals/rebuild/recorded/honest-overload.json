@@ -1,5 +1,5 @@
 {
-  "agent_version": 22,
+  "agent_version": 23,
   "judge_version": 8,
   "request_sha": "0fc1a49f923adc7693dfc0de805e09b6a170f520c458b1578c2a5c4432b79ea6",
   "effort": "low",
@@ -11,18 +11,18 @@
         "action": "drop",
         "start": null,
         "end": null,
-        "reason": "nothing that long fits before its deadline"
+        "reason": "no slot long enough is free before its deadline"
       }
     ],
-    "message": "Not enough free time before Essay 3. Want a 15-min version at 11:15pm today, or skip it? Nothing else changed.",
+    "message": "Not enough free time before Essay 3. Want a 15-min version at 10:45pm today, or skip it? Nothing else changed.",
     "offer": {
       "item_id": "s_essay",
-      "start": "2026-11-15T23:15:00-05:00",
-      "end": "2026-11-15T23:30:00-05:00"
+      "start": "2026-11-15T22:45:00-05:00",
+      "end": "2026-11-15T23:00:00-05:00"
     },
     "decided_by": "agent"
   },
-  "turns": 6,
+  "turns": 7,
   "refused": 1,
   "refusals": [
     "drop_item: Leave clock times out of the reason; Lens adds the time."
@@ -125,7 +125,7 @@
       "tool": "drop_item",
       "args": {
         "item_id": "s_essay",
-        "reason": "nothing that long fits before its 09:00 deadline"
+        "reason": "no 90-minute slot is free before its 09:00 deadline"
       },
       "ok": false,
       "result": {
@@ -137,7 +137,7 @@
       "tool": "drop_item",
       "args": {
         "item_id": "s_essay",
-        "reason": "nothing that long fits before its deadline"
+        "reason": "no slot long enough is free before its deadline"
       },
       "ok": true,
       "result": {
@@ -158,82 +158,90 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2280,
-        "output_tokens": 317,
+        "input_tokens": 2294,
+        "output_tokens": 383,
         "cached_tokens": 2033,
-        "reasoning_tokens": 186
+        "reasoning_tokens": 255
       },
-      "costUsd": 0.00196095,
-      "latencyMs": 2151
+      "costUsd": 0.00225895,
+      "latencyMs": 2975
     },
     {
       "usage": {
-        "input_tokens": 2641,
-        "output_tokens": 196,
-        "cached_tokens": 2161,
-        "reasoning_tokens": 92
+        "input_tokens": 2721,
+        "output_tokens": 126,
+        "cached_tokens": 2289,
+        "reasoning_tokens": 22
       },
-      "costUsd": 0.00175715,
-      "latencyMs": 1321
+      "costUsd": 0.00141885,
+      "latencyMs": 1153
     },
     {
       "usage": {
-        "input_tokens": 2881,
-        "output_tokens": 178,
-        "cached_tokens": 2545,
-        "reasoning_tokens": 71
+        "input_tokens": 2891,
+        "output_tokens": 99,
+        "cached_tokens": 0,
+        "reasoning_tokens": 44
       },
-      "costUsd": 0.00155825,
-      "latencyMs": 1524
+      "costUsd": 0.0040345,
+      "latencyMs": 1216
     },
     {
       "usage": {
-        "input_tokens": 3256,
-        "output_tokens": 293,
+        "input_tokens": 3122,
+        "output_tokens": 203,
         "cached_tokens": 2801,
-        "reasoning_tokens": 187
+        "reasoning_tokens": 148
       },
-      "costUsd": 0.0022341500000000003,
-      "latencyMs": 2638
+      "costUsd": 0.0016841500000000001,
+      "latencyMs": 1668
     },
     {
       "usage": {
-        "input_tokens": 3593,
-        "output_tokens": 80,
-        "cached_tokens": 3185,
+        "input_tokens": 3393,
+        "output_tokens": 187,
+        "cached_tokens": 3057,
+        "reasoning_tokens": 82
+      },
+      "costUsd": 0.0016733,
+      "latencyMs": 1813
+    },
+    {
+      "usage": {
+        "input_tokens": 3624,
+        "output_tokens": 82,
+        "cached_tokens": 3313,
         "reasoning_tokens": 6
       },
-      "costUsd": 0.00132775,
-      "latencyMs": 1274
+      "costUsd": 0.0012342,
+      "latencyMs": 7193
     },
     {
       "usage": {
-        "input_tokens": 3707,
+        "input_tokens": 3740,
         "output_tokens": 41,
-        "cached_tokens": 3569,
+        "cached_tokens": 2033,
         "reasoning_tokens": 3
       },
-      "costUsd": 0.0008821,
-      "latencyMs": 910
+      "costUsd": 0.0026129499999999997,
+      "latencyMs": 2854
     }
   ],
   "judge": {
-    "score": 1,
-    "time_score": 1,
-    "problems": [
-      "Offers the 15-min version at 11:15pm, which is during sleep 23:00-07:00 and past bedtime, instead of using the free 22:00-23:00 window before the Mon 09:00 deadline"
-    ]
+    "score": 5,
+    "time_score": 5,
+    "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1358,
-        "output_tokens": 2101,
+        "input_tokens": 1372,
+        "output_tokens": 1296,
         "cached_tokens": 753,
-        "reasoning_tokens": 2027
+        "reasoning_tokens": 1275
       },
-      "costUsd": 0.00979845,
-      "latencyMs": 13666
+      "costUsd": 0.0063947,
+      "latencyMs": 8611
     }
   ],
   "runs": [
@@ -246,249 +254,14 @@
             "action": "drop",
             "start": null,
             "end": null,
-            "reason": "nothing that long fits before its deadline"
+            "reason": "no slot long enough is free before its deadline"
           }
         ],
-        "message": "Not enough free time before Essay 3. Want a 15-min version at 11:15pm today, or skip it? Nothing else changed.",
+        "message": "Not enough free time before Essay 3. Want a 15-min version at 10:45pm today, or skip it? Nothing else changed.",
         "offer": {
           "item_id": "s_essay",
-          "start": "2026-11-15T23:15:00-05:00",
-          "end": "2026-11-15T23:30:00-05:00"
-        },
-        "decided_by": "agent"
-      },
-      "turns": 6,
-      "refused": 1,
-      "refusals": [
-        "drop_item: Leave clock times out of the reason; Lens adds the time."
-      ],
-      "steps": [
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "null",
-            "minutes": 120
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [],
-            "note": "Nothing that long is free in that range."
-          }
-        },
-        {
-          "tool": "find_open_time",
-          "args": {
-            "after": "null",
-            "before": "2026-11-16T09:00",
-            "item_id": "null",
-            "minutes": 90
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "free": [],
-            "note": "Nothing that long is free in that range."
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-16"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Mon Nov 16",
-            "busy": [
-              {
-                "what": "MATH141 lecture",
-                "start": "10:00",
-                "end": "10:50"
-              },
-              {
-                "what": "PHYS161 lecture",
-                "start": "13:00",
-                "end": "13:50"
-              },
-              {
-                "what": "Gym",
-                "start": "07:30",
-                "end": "08:30"
-              }
-            ],
-            "planned": [],
-            "due": [
-              {
-                "title": "Essay 3",
-                "at": "09:00"
-              }
-            ],
-            "free": [
-              "09:00-10:00",
-              "10:50-13:00",
-              "13:50-23:00"
-            ]
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-15"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Sun Nov 15",
-            "busy": [
-              {
-                "what": "Family dinner",
-                "start": "20:00",
-                "end": "22:00"
-              }
-            ],
-            "planned": [],
-            "due": [],
-            "free": [
-              "22:00-23:00"
-            ]
-          }
-        },
-        {
-          "tool": "drop_item",
-          "args": {
-            "item_id": "s_essay",
-            "reason": "nothing that long fits before its 09:00 deadline"
-          },
-          "ok": false,
-          "result": {
-            "ok": false,
-            "problem": "Leave clock times out of the reason; Lens adds the time."
-          }
-        },
-        {
-          "tool": "drop_item",
-          "args": {
-            "item_id": "s_essay",
-            "reason": "nothing that long fits before its deadline"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "dropped": "Essay draft"
-          }
-        },
-        {
-          "tool": "propose_diff",
-          "args": {},
-          "ok": true,
-          "result": {
-            "ok": true
-          }
-        }
-      ],
-      "fell_back": null,
-      "calls": [
-        {
-          "usage": {
-            "input_tokens": 2280,
-            "output_tokens": 317,
-            "cached_tokens": 2033,
-            "reasoning_tokens": 186
-          },
-          "costUsd": 0.00196095,
-          "latencyMs": 2151
-        },
-        {
-          "usage": {
-            "input_tokens": 2641,
-            "output_tokens": 196,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 92
-          },
-          "costUsd": 0.00175715,
-          "latencyMs": 1321
-        },
-        {
-          "usage": {
-            "input_tokens": 2881,
-            "output_tokens": 178,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 71
-          },
-          "costUsd": 0.00155825,
-          "latencyMs": 1524
-        },
-        {
-          "usage": {
-            "input_tokens": 3256,
-            "output_tokens": 293,
-            "cached_tokens": 2801,
-            "reasoning_tokens": 187
-          },
-          "costUsd": 0.0022341500000000003,
-          "latencyMs": 2638
-        },
-        {
-          "usage": {
-            "input_tokens": 3593,
-            "output_tokens": 80,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 6
-          },
-          "costUsd": 0.00132775,
-          "latencyMs": 1274
-        },
-        {
-          "usage": {
-            "input_tokens": 3707,
-            "output_tokens": 41,
-            "cached_tokens": 3569,
-            "reasoning_tokens": 3
-          },
-          "costUsd": 0.0008821,
-          "latencyMs": 910
-        }
-      ],
-      "judge": {
-        "score": 1,
-        "time_score": 1,
-        "problems": [
-          "Offers the 15-min version at 11:15pm, which is during sleep 23:00-07:00 and past bedtime, instead of using the free 22:00-23:00 window before the Mon 09:00 deadline"
-        ]
-      },
-      "judge_calls": [
-        {
-          "usage": {
-            "input_tokens": 1358,
-            "output_tokens": 2101,
-            "cached_tokens": 753,
-            "reasoning_tokens": 2027
-          },
-          "costUsd": 0.00979845,
-          "latencyMs": 13666
-        }
-      ]
-    },
-    {
-      "response": {
-        "version": 1,
-        "diff": [
-          {
-            "item_id": "s_essay",
-            "action": "drop",
-            "start": null,
-            "end": null,
-            "reason": "nothing fits before its deadline"
-          }
-        ],
-        "message": "Not enough free time before Essay 3. Want a 15-min version at 11:15pm today, or skip it? Nothing else changed.",
-        "offer": {
-          "item_id": "s_essay",
-          "start": "2026-11-15T23:15:00-05:00",
-          "end": "2026-11-15T23:30:00-05:00"
+          "start": "2026-11-15T22:45:00-05:00",
+          "end": "2026-11-15T23:00:00-05:00"
         },
         "decided_by": "agent"
       },
@@ -595,7 +368,7 @@
           "tool": "drop_item",
           "args": {
             "item_id": "s_essay",
-            "reason": "nothing fits before its 9 AM deadline"
+            "reason": "no 90-minute slot is free before its 09:00 deadline"
           },
           "ok": false,
           "result": {
@@ -607,7 +380,7 @@
           "tool": "drop_item",
           "args": {
             "item_id": "s_essay",
-            "reason": "nothing fits before its deadline"
+            "reason": "no slot long enough is free before its deadline"
           },
           "ok": true,
           "result": {
@@ -628,77 +401,92 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2280,
-            "output_tokens": 363,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 235
+            "input_tokens": 2294,
+            "output_tokens": 383,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 255
           },
-          "costUsd": 0.00201565,
-          "latencyMs": 2234
+          "costUsd": 0.00225895,
+          "latencyMs": 2975
         },
         {
           "usage": {
-            "input_tokens": 2687,
-            "output_tokens": 137,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 33
+            "input_tokens": 2721,
+            "output_tokens": 126,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 22
           },
-          "costUsd": 0.0015639,
-          "latencyMs": 1229
+          "costUsd": 0.00141885,
+          "latencyMs": 1153
         },
         {
           "usage": {
-            "input_tokens": 2868,
-            "output_tokens": 197,
-            "cached_tokens": 2673,
-            "reasoning_tokens": 142
+            "input_tokens": 2891,
+            "output_tokens": 99,
+            "cached_tokens": 0,
+            "reasoning_tokens": 44
           },
-          "costUsd": 0.00148195,
-          "latencyMs": 1609
+          "costUsd": 0.0040345,
+          "latencyMs": 1216
         },
         {
           "usage": {
-            "input_tokens": 3197,
-            "output_tokens": 183,
+            "input_tokens": 3122,
+            "output_tokens": 203,
             "cached_tokens": 2801,
-            "reasoning_tokens": 128
+            "reasoning_tokens": 148
           },
-          "costUsd": 0.0016929,
-          "latencyMs": 1420
+          "costUsd": 0.0016841500000000001,
+          "latencyMs": 1668
         },
         {
           "usage": {
-            "input_tokens": 3448,
-            "output_tokens": 161,
-            "cached_tokens": 3185,
-            "reasoning_tokens": 63
+            "input_tokens": 3393,
+            "output_tokens": 187,
+            "cached_tokens": 3057,
+            "reasoning_tokens": 82
           },
-          "costUsd": 0.00149075,
-          "latencyMs": 1760
+          "costUsd": 0.0016733,
+          "latencyMs": 1813
         },
         {
           "usage": {
-            "input_tokens": 3653,
-            "output_tokens": 89,
-            "cached_tokens": 3441,
-            "reasoning_tokens": 17
+            "input_tokens": 3624,
+            "output_tokens": 82,
+            "cached_tokens": 3313,
+            "reasoning_tokens": 6
           },
-          "costUsd": 0.0011594,
-          "latencyMs": 785
+          "costUsd": 0.0012342,
+          "latencyMs": 7193
         },
         {
           "usage": {
-            "input_tokens": 3776,
+            "input_tokens": 3740,
             "output_tokens": 41,
-            "cached_tokens": 3569,
+            "cached_tokens": 2033,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.00096835,
-          "latencyMs": 846
+          "costUsd": 0.0026129499999999997,
+          "latencyMs": 2854
         }
       ],
-      "judge": null,
-      "judge_calls": []
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1372,
+            "output_tokens": 1296,
+            "cached_tokens": 753,
+            "reasoning_tokens": 1275
+          },
+          "costUsd": 0.0063947,
+          "latencyMs": 8611
+        }
+      ]
     },
     {
       "response": {
@@ -709,18 +497,18 @@
             "action": "drop",
             "start": null,
             "end": null,
-            "reason": "it no longer fits before its deadline"
+            "reason": "nothing fits before its deadline"
           }
         ],
-        "message": "Not enough free time before Essay 3. Want a 15-min version at 11:15pm today, or skip it? Nothing else changed.",
+        "message": "Not enough free time before Essay 3. Want a 15-min version at 10:45pm today, or skip it? Nothing else changed.",
         "offer": {
           "item_id": "s_essay",
-          "start": "2026-11-15T23:15:00-05:00",
-          "end": "2026-11-15T23:30:00-05:00"
+          "start": "2026-11-15T22:45:00-05:00",
+          "end": "2026-11-15T23:00:00-05:00"
         },
         "decided_by": "agent"
       },
-      "turns": 5,
+      "turns": 4,
       "refused": 0,
       "refusals": [],
       "steps": [
@@ -755,73 +543,10 @@
           }
         },
         {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-15"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Sun Nov 15",
-            "busy": [
-              {
-                "what": "Family dinner",
-                "start": "20:00",
-                "end": "22:00"
-              }
-            ],
-            "planned": [],
-            "due": [],
-            "free": [
-              "22:00-23:00"
-            ]
-          }
-        },
-        {
-          "tool": "get_day",
-          "args": {
-            "date": "2026-11-16"
-          },
-          "ok": true,
-          "result": {
-            "ok": true,
-            "date": "Mon Nov 16",
-            "busy": [
-              {
-                "what": "MATH141 lecture",
-                "start": "10:00",
-                "end": "10:50"
-              },
-              {
-                "what": "PHYS161 lecture",
-                "start": "13:00",
-                "end": "13:50"
-              },
-              {
-                "what": "Gym",
-                "start": "07:30",
-                "end": "08:30"
-              }
-            ],
-            "planned": [],
-            "due": [
-              {
-                "title": "Essay 3",
-                "at": "09:00"
-              }
-            ],
-            "free": [
-              "09:00-10:00",
-              "10:50-13:00",
-              "13:50-23:00"
-            ]
-          }
-        },
-        {
           "tool": "drop_item",
           "args": {
             "item_id": "s_essay",
-            "reason": "it no longer fits before its deadline"
+            "reason": "nothing fits before its deadline"
           },
           "ok": true,
           "result": {
@@ -842,73 +567,220 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2280,
-            "output_tokens": 270,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 137
+            "input_tokens": 2294,
+            "output_tokens": 463,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 332
           },
-          "costUsd": 0.0016204000000000001,
-          "latencyMs": 1816
+          "costUsd": 0.0023173499999999997,
+          "latencyMs": 12514
         },
         {
           "usage": {
-            "input_tokens": 2594,
-            "output_tokens": 251,
-            "cached_tokens": 2161,
-            "reasoning_tokens": 147
+            "input_tokens": 2801,
+            "output_tokens": 166,
+            "cached_tokens": 2033,
+            "reasoning_tokens": 62
           },
-          "costUsd": 0.00193215,
-          "latencyMs": 1720
+          "costUsd": 0.00197045,
+          "latencyMs": 3500
         },
         {
           "usage": {
-            "input_tokens": 2889,
-            "output_tokens": 119,
-            "cached_tokens": 2545,
-            "reasoning_tokens": 12
+            "input_tokens": 3011,
+            "output_tokens": 395,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 298
           },
-          "costUsd": 0.0013175,
-          "latencyMs": 1179
+          "costUsd": 0.0029246,
+          "latencyMs": 3124
         },
         {
           "usage": {
-            "input_tokens": 3205,
-            "output_tokens": 296,
-            "cached_tokens": 2801,
-            "reasoning_tokens": 192
-          },
-          "costUsd": 0.00218315,
-          "latencyMs": 2389
-        },
-        {
-          "usage": {
-            "input_tokens": 3535,
+            "input_tokens": 3440,
             "output_tokens": 41,
-            "cached_tokens": 3185,
+            "cached_tokens": 2929,
             "reasoning_tokens": 3
           },
-          "costUsd": 0.0010895,
-          "latencyMs": 1014
+          "costUsd": 0.00125235,
+          "latencyMs": 855
         }
       ],
       "judge": {
-        "score": 1,
-        "time_score": 1,
-        "problems": [
-          "Offer at 11:15pm is during sleep (23:00-07:00) and within an hour of bedtime, not helpful.",
-          "A 15-min version could fit inside the actual free time 22:00-23:00 instead of outside it after bedtime."
-        ]
+        "score": 5,
+        "time_score": 5,
+        "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1358,
-            "output_tokens": 2347,
+            "input_tokens": 1372,
+            "output_tokens": 1164,
             "cached_tokens": 1265,
-            "reasoning_tokens": 2261
+            "reasoning_tokens": 1143
           },
-          "costUsd": 0.01028075,
-          "latencyMs": 14746
+          "costUsd": 0.0052705,
+          "latencyMs": 7758
+        }
+      ]
+    },
+    {
+      "response": {
+        "version": 1,
+        "diff": [
+          {
+            "item_id": "s_essay",
+            "action": "drop",
+            "start": null,
+            "end": null,
+            "reason": "no free time remains before its deadline"
+          }
+        ],
+        "message": "Not enough free time before Essay 3. Want a 15-min version at 10:45pm today, or skip it? Nothing else changed.",
+        "offer": {
+          "item_id": "s_essay",
+          "start": "2026-11-15T22:45:00-05:00",
+          "end": "2026-11-15T23:00:00-05:00"
+        },
+        "decided_by": "agent"
+      },
+      "turns": 5,
+      "refused": 1,
+      "refusals": [
+        "drop_item: Leave clock times out of the reason; Lens adds the time."
+      ],
+      "steps": [
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 120
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [],
+            "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "find_open_time",
+          "args": {
+            "after": "null",
+            "before": "2026-11-16T09:00",
+            "item_id": "null",
+            "minutes": 90
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "free": [],
+            "note": "Nothing that long is free in that range."
+          }
+        },
+        {
+          "tool": "drop_item",
+          "args": {
+            "item_id": "s_essay",
+            "reason": "no free time remains before its 9am deadline"
+          },
+          "ok": false,
+          "result": {
+            "ok": false,
+            "problem": "Leave clock times out of the reason; Lens adds the time."
+          }
+        },
+        {
+          "tool": "drop_item",
+          "args": {
+            "item_id": "s_essay",
+            "reason": "no free time remains before its deadline"
+          },
+          "ok": true,
+          "result": {
+            "ok": true,
+            "dropped": "Essay draft"
+          }
+        },
+        {
+          "tool": "propose_diff",
+          "args": {},
+          "ok": true,
+          "result": {
+            "ok": true
+          }
+        }
+      ],
+      "fell_back": null,
+      "calls": [
+        {
+          "usage": {
+            "input_tokens": 2294,
+            "output_tokens": 373,
+            "cached_tokens": 0,
+            "reasoning_tokens": 239
+          },
+          "costUsd": 0.00445275,
+          "latencyMs": 2760
+        },
+        {
+          "usage": {
+            "input_tokens": 2711,
+            "output_tokens": 123,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 19
+          },
+          "costUsd": 0.0013935999999999998,
+          "latencyMs": 979
+        },
+        {
+          "usage": {
+            "input_tokens": 2878,
+            "output_tokens": 392,
+            "cached_tokens": 2673,
+            "reasoning_tokens": 315
+          },
+          "costUsd": 0.0023231999999999997,
+          "latencyMs": 9516
+        },
+        {
+          "usage": {
+            "input_tokens": 3314,
+            "output_tokens": 78,
+            "cached_tokens": 2289,
+            "reasoning_tokens": 4
+          },
+          "costUsd": 0.0019561,
+          "latencyMs": 764
+        },
+        {
+          "usage": {
+            "input_tokens": 3426,
+            "output_tokens": 41,
+            "cached_tokens": 3313,
+            "reasoning_tokens": 3
+          },
+          "costUsd": 0.00081245,
+          "latencyMs": 591
+        }
+      ],
+      "judge": {
+        "score": 5,
+        "time_score": 5,
+        "problems": []
+      },
+      "judge_calls": [
+        {
+          "usage": {
+            "input_tokens": 1372,
+            "output_tokens": 1179,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 1153
+          },
+          "costUsd": 0.00533425,
+          "latencyMs": 7511
         }
       ]
     }

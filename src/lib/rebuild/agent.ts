@@ -14,6 +14,7 @@ import { toStrictJsonSchema } from "@/lib/meta/task";
 import type { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkResponse, Draft, fallback, MAX_CHANGES, TODAY_OUT, type Outcome } from "@/lib/rebuild/draft";
 import { rankSlots } from "@/lib/rebuild/rank";
+import { sleepOf, studyHours } from "@/lib/rebuild/rules";
 
 // The rebuild agent: Muse Spark with tools over the plan Tomorrow sent. It looks
 // at the free time, moves or drops what the miss affects, and says why; every
@@ -23,7 +24,7 @@ import { rankSlots } from "@/lib/rebuild/rank";
 // gets an answer.
 
 /** Bump when the instructions or tools change; recorded rebuild evals go stale. */
-export const REBUILD_VERSION = 22;
+export const REBUILD_VERSION = 23;
 const TASK = "rebuild";
 
 const INSTRUCTIONS = `You rebuild a student's plan after they missed a planned study session or task. Tomorrow, their planner, sent the plan from now on: the items it placed, busy time, deadlines, and free time. You decide what moves or drops and why. Code checks every move and writes the message the student gets.
@@ -271,6 +272,22 @@ function dayView(d: Draft, dayStart: number) {
   };
 }
 
+/** Their sleep and study hours as the rules use them: what Tomorrow sent, or the student defaults, marked assumed. */
+export function prefsLine(r: RebuildRequest): string {
+  const sleep = sleepOf(r);
+  const study = studyHours(r);
+  const p = r.prefs;
+  return [
+    `They sleep ${sleep.start}-${sleep.end}${p?.sleep ? "" : " (assumed)"}`,
+    `study hours ${study.start}-${study.end}${p?.study_hours ? "" : " (assumed)"}`,
+    p?.study_time ? `they'd rather study ${p.study_time}` : null,
+    p?.quiet?.length ? `quiet hours ${p.quiet.map((q) => `${q.start}-${q.end}`).join(", ")}` : null,
+  ]
+    .filter(Boolean)
+    .join("; ")
+    .concat(".");
+}
+
 /** The opening message: only what this rebuild needs (the miss, what's planned, deadlines, today's free time). */
 export function brief(d: Draft): string {
   const r = d.req;
@@ -304,7 +321,7 @@ export function brief(d: Draft): string {
       ? `Deadlines: ${r.deadlines.map((x) => `${x.title}${x.course ? ` (${x.course})` : ""} ${d.day(Date.parse(x.due))} ${d.hhmm(Date.parse(x.due))}`).join("; ")}.` // prettier-ignore
       : "No deadlines.",
     `Free time left today: ${today.length ? today.join(", ") : "none"}.`,
-    `They sleep ${r.prefs?.sleep ? `${r.prefs.sleep.start}-${r.prefs.sleep.end}` : "23:00-07:00 (assumed)"}${r.prefs?.study_time ? `; they'd rather study ${r.prefs.study_time}` : ""}${r.prefs?.quiet?.length ? `; quiet hours ${r.prefs.quiet.map((q) => `${q.start}-${q.end}`).join(", ")}` : ""}.`, // prettier-ignore
+    prefsLine(r),
   ].join("\n");
 }
 

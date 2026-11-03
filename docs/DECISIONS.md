@@ -437,3 +437,10 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   ("23:00-07:00"), so the judge reads 11:15pm offers as during sleep (they're awake time under the 00:30 default);
   "the last time it fits" can be said of a session 15 minutes into a long evening stretch. Both are small code fixes
   but change what the model sees, so re-measuring needs a full run, past the cap.
+- 2026-11-03: Fixed the two items left for the freeze, plus superlatives (owner). The brief states sleep and study hours
+  from sleepOf/studyHours ("(assumed)" when Tomorrow sent none). Offers: the latest 15 minutes in study hours first,
+  then any awake time; sleep, the hour before bed, and quiet hours always bind. "Soonest" means the first start there
+  is, "last" the latest, "longest" strictly the longest stretch; a model reason with an unchecked superlative is
+  refused in move_item and fails the final check. The final check skips the missed item's reason: code composed it
+  from factors checked within what the reply leaves, which a fresh Draft can't see (it sent busy-until, tired-tonight,
+  and sick-fever-quiz-tomorrow to code's fallback; those three re-run after the fix). One full run ($2.75) + $0.11.

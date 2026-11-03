@@ -6,6 +6,7 @@ import { tomorrowPayer } from "@/lib/server/identity";
 import { rebuild, TOOLS, ORDERS } from "@/lib/rebuild/agent";
 import { RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
 import { checkReason, checkResponse, Draft, fallback, plain } from "@/lib/rebuild/draft";
+import { unverifiedSuperlatives } from "@/lib/rebuild/rank";
 import { REBUILD_CASES } from "../../evals/rebuild/cases";
 
 const env = readEnv({ META_API_KEY: "test-key" });
@@ -126,12 +127,53 @@ describe("message", () => {
     // 7pm tonight is the soonest time before the quiz, not the last (Thursday morning is later).
     const no = d.move("s_calc", "2026-11-04T19:00", null, ["last"]);
     expect(no).toMatchObject({ ok: false, problem: expect.stringMatching(/Not true of this time: last\. True of it: .*soonest/) }); // prettier-ignore
-    expect(d.factorsAt("s_calc", Date.parse("2026-11-05T07:30:00-05:00"), 60).map((f) => f.key)).toContain("last");
+    // Thursday's stretch runs 7:30-9:30: only 8:30 is the last time; 7:30 is just in the last stretch.
+    expect(d.factorsAt("s_calc", Date.parse("2026-11-05T08:30:00-05:00"), 60).map((f) => f.key)).toContain("last");
+    expect(d.factorsAt("s_calc", Date.parse("2026-11-05T07:30:00-05:00"), 60).map((f) => f.key)).not.toContain("last");
+    expect(d.factorsAt("s_calc", Date.parse("2026-11-04T19:15:00-05:00"), 60).map((f) => f.key)).not.toContain("soonest"); // prettier-ignore
     expect(d.move("s_calc", "2026-11-04T19:00", null, "it's the last free evening")).toMatchObject({ ok: false });
     expect(d.move("s_calc", "2026-11-04T19:00", null, ["soonest"]).ok).toBe(true);
     expect(d.message()).toBe(
       "Moved Calc practice to 7pm today, the soonest it fits before Quiz 3. Nothing else changed.",
     );
+  });
+
+  it("refuses a superlative that isn't true of that exact time, in words or in the finished plan", () => {
+    const d = new Draft(req("make-room"));
+    // Laundry has a whole free week: 5:30pm tomorrow isn't its only or soonest time.
+    for (const words of ["the only time it fits", "the soonest slot open", "the lightest day this week"])
+      expect(d.move("s_laundry", "2026-11-05T17:30", null, words)).toMatchObject({ ok: false, problem: expect.stringMatching(/^Not true of this time/) }); // prettier-ignore
+    expect(d.move("s_laundry", "2026-11-05T17:30", null, "it has no deadline, so it made room").ok).toBe(true);
+    // Titles and what they said aren't claims.
+    expect(unverifiedSuperlatives("after The Last Lecture", [], ["The Last Lecture"])).toEqual([]);
+    expect(unverifiedSuperlatives("the last time it fits before it's due", [])).toEqual(["last"]);
+    // A finished plan whose other move says it anyway fails the check.
+    const ok = new Draft(req("make-room"));
+    expect(ok.move("s_laundry", "2026-11-05T17:30", null, "it has no deadline, so it made room for Calc practice").ok).toBe(true); // prettier-ignore
+    expect(ok.move("s_calc", "2026-11-04T21:00", 45, key(ok, "2026-11-04T21:00", 45)).ok).toBe(false); // room for 60
+    expect(ok.move("s_calc", "2026-11-04T21:00", 45, key(ok, "2026-11-04T21:00", 45)).ok).toBe(true);
+    const res = ok.response("agent");
+    expect(checkResponse(req("make-room"), res).join(" ")).not.toMatch(/claims/);
+    const lie = { ...res, diff: res.diff.map((x) => (x.item_id === "s_laundry" ? { ...x, reason: "the only time it fits" } : x)) }; // prettier-ignore
+    expect(checkResponse(req("make-room"), lie).join(" ")).toMatch(/s_laundry: claims only, not true/);
+  });
+
+  it("keeps a reason that's true within what their reply leaves: the soonest after practice", async () => {
+    const { opts } = scripted(
+      reply(call("note_reply", { kind: "not_before", quote: "I have practice until 9 tonight", until: "2026-11-04T21:00", from_date: null, part: null })), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-04T21:00", duration_min: null, because: ["soonest", "reply"], reason: null })), // prettier-ignore
+      reply(call("propose_diff", {})),
+    );
+    const run = await rebuild(req("busy-until"), opts);
+    expect(run.response.decided_by).toBe("agent");
+    expect(run.response.diff[0].start).toBe("2026-11-04T21:00:00-05:00");
+  });
+
+  it("offers a 15-minute version in study hours first, never in the hour before bed", () => {
+    const o = fallback(req("impossible-offer")).offer();
+    expect(o).not.toBeNull();
+    const d = new Draft(req("impossible-offer"));
+    expect(d.hhmm(o!.end) <= "23:00" && d.hhmm(o!.end) >= "09:00").toBe(true);
   });
 
   it("names a shorter session, and days as tomorrow or a weekday", () => {
@@ -280,12 +322,12 @@ describe("rebuild agent", () => {
   it("tells the model why a move was refused, and lets it try again", async () => {
     const { sent, opts } = scripted(
       reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T13:00", duration_min: null, because: ["soonest"], reason: null }, "a")), // prettier-ignore
-      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T07:30", duration_min: null, because: ["last"], reason: null }, "b")), // prettier-ignore
+      reply(call("move_item", { item_id: "s_calc", start: "2026-11-05T08:30", duration_min: null, because: ["last"], reason: null }, "b")), // prettier-ignore
       reply(call("propose_diff", {})),
     );
     const run = await rebuild(req("simple-move"), opts);
     expect(run.refused).toBe(1);
-    expect(run.response.diff[0].start).toBe("2026-11-05T07:30:00-05:00");
+    expect(run.response.diff[0].start).toBe("2026-11-05T08:30:00-05:00");
     expect(outputOf(sent[1].input, "call_a").problem).toMatch(/finish by/);
   });
 

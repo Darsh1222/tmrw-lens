@@ -159,7 +159,12 @@ Per-person spend limits and two global brakes keep the public demo from using To
 - Sessions spread out instead of stacking (30 minutes apart at least), with room to breathe around classes (15
   minutes either side); reasons read like a person, at most two facts ("a clear morning, six days before it's due"),
   and "no quiz that day" only when a quiz is near. When nothing fits, the 15-minute offer can use any awake time, since
-  the person decides; Lens's own moves stay in study hours. Rebuild logic is now frozen for the submission.
+  the person decides; Lens's own moves stay in study hours.
+- Last rebuild fixes before the freeze. The agent is told the sleep and study hours the rules actually use (Tomorrow's,
+  or the student defaults, marked assumed), not an old 11pm guess. Offers try study hours first ("a 15-min version at
+  10:45pm", not 11:15pm). "The only", "the soonest", "the last", "the longest", and "a lighter" are said only when code
+  checked them true of that exact time; anything else is refused. 68 cases, 3 runs each: hard rules 100%, best slot
+  100%, judge 4.95, best time 4.98. Rebuild logic is now frozen until after the submission.
 
 ### Nov 2
 

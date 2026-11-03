@@ -7,19 +7,19 @@
     "hard_rules": 1,
     "top1": 1,
     "top3": 1,
-    "judge_score": 4.84,
-    "judge_min": 1,
-    "time_judge": 4.89,
-    "time_judge_min": 1,
+    "judge_score": 4.95,
+    "judge_min": 2,
+    "time_judge": 4.98,
+    "time_judge_min": 3,
     "unkind_messages": 0,
     "flaky": [],
     "regressions": [],
     "unrecorded": [],
     "fell_back": "0/204",
-    "cost_per_rebuild": 0.00813,
-    "turns_per_rebuild": 3.8,
-    "latency_per_rebuild_s": 8,
-    "tokens_per_call": "3274 in, 246 out",
+    "cost_per_rebuild": 0.008,
+    "turns_per_rebuild": 3.7,
+    "latency_per_rebuild_s": 7.7,
+    "tokens_per_call": "3259 in, 243 out",
     "cache_hit_rate": "83%",
     "fallback_hard_rules": 1,
     "fallback_cases_passed": "61/68"
@@ -209,13 +209,13 @@
         1
       ],
       "judge": [
-        null,
-        3,
+        5,
+        5,
         5
       ],
       "time_judge": [
-        null,
-        3,
+        5,
+        5,
         5
       ],
       "problems": []
@@ -462,14 +462,14 @@
         null
       ],
       "judge": [
-        null,
-        null,
-        null
+        5,
+        5,
+        5
       ],
       "time_judge": [
-        null,
-        null,
-        null
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -509,12 +509,12 @@
       ],
       "judge": [
         5,
-        4,
+        5,
         5
       ],
       "time_judge": [
         5,
-        4,
+        5,
         5
       ],
       "problems": []
@@ -531,14 +531,14 @@
         1
       ],
       "judge": [
-        4,
         5,
-        null
+        5,
+        5
       ],
       "time_judge": [
-        4,
         5,
-        null
+        5,
+        5
       ],
       "problems": []
     },
@@ -854,12 +854,12 @@
       ],
       "judge": [
         5,
-        5,
+        4,
         5
       ],
       "time_judge": [
         5,
-        5,
+        4,
         5
       ],
       "problems": []
@@ -968,12 +968,12 @@
         1
       ],
       "judge": [
-        4,
+        5,
         5,
         5
       ],
       "time_judge": [
-        4,
+        5,
         5,
         5
       ],
@@ -1083,13 +1083,13 @@
         1
       ],
       "judge": [
-        4,
-        4,
+        3,
+        5,
         5
       ],
       "time_judge": [
-        4,
-        4,
+        3,
+        5,
         5
       ],
       "problems": []
@@ -1106,14 +1106,14 @@
         null
       ],
       "judge": [
-        null,
-        2,
-        null
+        5,
+        5,
+        5
       ],
       "time_judge": [
-        null,
-        1,
-        null
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1129,14 +1129,14 @@
         null
       ],
       "judge": [
-        1,
-        null,
-        1
+        5,
+        5,
+        5
       ],
       "time_judge": [
-        1,
-        null,
-        1
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1175,14 +1175,14 @@
         null
       ],
       "judge": [
-        null,
-        null,
-        null
+        5,
+        5,
+        5
       ],
       "time_judge": [
-        null,
-        null,
-        null
+        5,
+        5,
+        5
       ],
       "problems": []
     },
@@ -1221,14 +1221,14 @@
         1
       ],
       "judge": [
-        4,
         5,
-        4
+        5,
+        5
       ],
       "time_judge": [
-        4,
         5,
-        4
+        5,
+        5
       ],
       "problems": []
     },
@@ -1244,7 +1244,7 @@
         1
       ],
       "judge": [
-        2,
+        5,
         2,
         2
       ],
@@ -1452,7 +1452,7 @@
       ],
       "judge": [
         5,
-        4,
+        5,
         5
       ],
       "time_judge": [
@@ -1568,12 +1568,12 @@
       "judge": [
         5,
         5,
-        5
+        4
       ],
       "time_judge": [
         5,
         5,
-        5
+        4
       ],
       "problems": []
     },

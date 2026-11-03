@@ -273,14 +273,17 @@ export function rankSlots(
     if (mode === "tight" && due !== null) {
       // Against every stretch that would hold even its shortest version, so a shorter fit elsewhere isn't hidden.
       const any = spans.filter((y) => y.e - y.s >= Math.min(x.minutes, d.shortest(item)) * MIN).sort((p, q) => p.s - q.s); // prettier-ignore
-      // "Only" when this stretch is the only one and holds just one session: a long free evening is many times.
+      // Each claim true of this exact start, not just its stretch. "Only": the only stretch, holding one session (a
+      // long free evening is many times). "Soonest": the first start there is. "Last": the latest start there is.
       if (any.length === 1 && x.e - x.s < 2 * x.minutes * MIN)
         factors.push({ key: "only", text: `the only time it fits before ${what}` }); // prettier-ignore
-      else if (any[0]?.s === x.s && x.start === x.s)
+      else if (any[0]?.s === x.s && x.start - x.s < 5 * MIN)
         factors.push({ key: "soonest", text: `the soonest it fits before ${what}` }); // prettier-ignore
-      else if (any.at(-1)?.s === x.s) factors.push({ key: "last", text: `the last time it fits before ${what}` });
+      else if (any.at(-1)?.s === x.s && x.e - end < 5 * MIN)
+        factors.push({ key: "last", text: `the last time it fits before ${what}` });
     }
-    if (x.minutes < full && out.every((y) => y.e - y.s <= x.e - x.s))
+    // The longest stretch of all, strictly: a tie isn't "the longest".
+    if (x.minutes < full && spans.every((y) => y.s === x.s || y.e - y.s < x.e - x.s))
       factors.push({ key: "longest", text: `the longest free stretch before ${what}` });
     const load = loads.get(day.toISODate()!)!;
     if (loads.size > 1 && load === minLoad && maxLoad > minLoad) factors.push({ key: "lighter", text: `a lighter ${part}` }); // prettier-ignore
@@ -313,6 +316,26 @@ export function rankSlots(
   const at = opts.at;
   const c = out.find((x) => x.s <= at && at + x.minutes * MIN <= x.e);
   return c ? [withFactors({ ...c, start: at })] : [];
+}
+
+/** Words that claim a slot beats every other, and the factor that must be true of that exact slot to say them. */
+const SUPERLATIVES: [RegExp, FactorKey][] = [
+  [/\bonly (?:time|slot|window|stretch|chance|opening)\b|\bthe only\b/i, "only"],
+  [/\b(?:last|latest|final) (?:time|slot|window|stretch|chance|opening)\b/i, "last"],
+  [/\b(?:soonest|earliest|first (?:good |free |open )?(?:time|slot|window|stretch|opening))\b/i, "soonest"],
+  [/\blongest\b/i, "longest"],
+  [/\b(?:lightest|lighter|least busy|quietest|emptiest)\b/i, "lighter"],
+];
+
+/**
+ * The superlatives a reason claims that code didn't verify for that exact slot ("the last time it fits" of a time 15
+ * minutes into a long evening). `ignore` is text that isn't the reason's own claim: titles, and what they said.
+ */
+export function unverifiedSuperlatives(reason: string, factors: Factor[], ignore: string[] = []): FactorKey[] {
+  let text = reason;
+  for (const x of ignore) if (x) text = text.split(x).join(" ");
+  // "Not the only..." or "one of the lighter..." claim nothing.
+  return SUPERLATIVES.filter(([re, key]) => re.test(text) && !factors.some((f) => f.key === key)).map(([, k]) => k);
 }
 
 /** Which factors combine into a reason, strongest first: urgency, then quality, and the buffer last. */

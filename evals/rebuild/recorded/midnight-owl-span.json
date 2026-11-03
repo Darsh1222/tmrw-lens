@@ -1,5 +1,5 @@
 {
-  "agent_version": 22,
+  "agent_version": 23,
   "judge_version": 8,
   "request_sha": "2ca60bf448a0bcb134b0535198e927cf9b334a9991281792ed5968b483b8d9be",
   "effort": "low",
@@ -275,52 +275,50 @@
   "calls": [
     {
       "usage": {
-        "input_tokens": 2291,
-        "output_tokens": 293,
+        "input_tokens": 2305,
+        "output_tokens": 340,
         "cached_tokens": 2033,
-        "reasoning_tokens": 166
+        "reasoning_tokens": 212
       },
-      "costUsd": 0.0018727000000000001,
-      "latencyMs": 1921
+      "costUsd": 0.0020899499999999997,
+      "latencyMs": 2608
     },
     {
       "usage": {
-        "input_tokens": 3633,
-        "output_tokens": 233,
+        "input_tokens": 3694,
+        "output_tokens": 290,
         "cached_tokens": 2289,
-        "reasoning_tokens": 87
+        "reasoning_tokens": 144
       },
-      "costUsd": 0.0030136,
-      "latencyMs": 1610
+      "costUsd": 0.0033320999999999997,
+      "latencyMs": 1825
     },
     {
       "usage": {
-        "input_tokens": 3932,
+        "input_tokens": 4050,
         "output_tokens": 42,
         "cached_tokens": 3569,
         "reasoning_tokens": 4
       },
-      "costUsd": 0.0011676,
-      "latencyMs": 1113
+      "costUsd": 0.0013150999999999998,
+      "latencyMs": 596
     }
   ],
   "judge": {
-    "score": 4,
-    "time_score": 4,
-    "problems": [
-      "5pm is only 15 minutes after HIST200 ends and early for a night preference; later the same Thursday evening would give breathing room and better match night study time."
-    ]
+    "score": 5,
+    "time_score": 5,
+    "problems": []
   },
   "judge_calls": [
     {
       "usage": {
-        "input_tokens": 1263,
-        "output_tokens": 2371,
+        "input_tokens": 1277,
+        "output_tokens": 1169,
         "cached_tokens": 753,
-        "reasoning_tokens": 2310
+        "reasoning_tokens": 1143
       },
-      "costUsd": 0.0108272,
-      "latencyMs": 17006
+      "costUsd": 0.0057361999999999995,
+      "latencyMs": 7748
     }
   ],
   "runs": [
@@ -597,52 +595,50 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2291,
-            "output_tokens": 293,
+            "input_tokens": 2305,
+            "output_tokens": 340,
             "cached_tokens": 2033,
-            "reasoning_tokens": 166
+            "reasoning_tokens": 212
           },
-          "costUsd": 0.0018727000000000001,
-          "latencyMs": 1921
+          "costUsd": 0.0020899499999999997,
+          "latencyMs": 2608
         },
         {
           "usage": {
-            "input_tokens": 3633,
-            "output_tokens": 233,
+            "input_tokens": 3694,
+            "output_tokens": 290,
             "cached_tokens": 2289,
-            "reasoning_tokens": 87
+            "reasoning_tokens": 144
           },
-          "costUsd": 0.0030136,
-          "latencyMs": 1610
+          "costUsd": 0.0033320999999999997,
+          "latencyMs": 1825
         },
         {
           "usage": {
-            "input_tokens": 3932,
+            "input_tokens": 4050,
             "output_tokens": 42,
             "cached_tokens": 3569,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0011676,
-          "latencyMs": 1113
+          "costUsd": 0.0013150999999999998,
+          "latencyMs": 596
         }
       ],
       "judge": {
-        "score": 4,
-        "time_score": 4,
-        "problems": [
-          "5pm is only 15 minutes after HIST200 ends and early for a night preference; later the same Thursday evening would give breathing room and better match night study time."
-        ]
+        "score": 5,
+        "time_score": 5,
+        "problems": []
       },
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1263,
-            "output_tokens": 2371,
+            "input_tokens": 1277,
+            "output_tokens": 1169,
             "cached_tokens": 753,
-            "reasoning_tokens": 2310
+            "reasoning_tokens": 1143
           },
-          "costUsd": 0.0108272,
-          "latencyMs": 17006
+          "costUsd": 0.0057361999999999995,
+          "latencyMs": 7748
         }
       ]
     },
@@ -919,33 +915,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2291,
-            "output_tokens": 281,
+            "input_tokens": 2305,
+            "output_tokens": 365,
             "cached_tokens": 2289,
-            "reasoning_tokens": 151
+            "reasoning_tokens": 238
           },
-          "costUsd": 0.0015401,
-          "latencyMs": 1988
+          "costUsd": 0.0019145999999999998,
+          "latencyMs": 2481
         },
         {
           "usage": {
-            "input_tokens": 3621,
-            "output_tokens": 262,
+            "input_tokens": 3719,
+            "output_tokens": 327,
             "cached_tokens": 2289,
-            "reasoning_tokens": 115
+            "reasoning_tokens": 179
           },
-          "costUsd": 0.00312185,
-          "latencyMs": 1829
+          "costUsd": 0.0035206,
+          "latencyMs": 2009
         },
         {
           "usage": {
-            "input_tokens": 3949,
-            "output_tokens": 45,
-            "cached_tokens": 3569,
-            "reasoning_tokens": 7
+            "input_tokens": 4112,
+            "output_tokens": 42,
+            "cached_tokens": 3697,
+            "reasoning_tokens": 4
           },
-          "costUsd": 0.0012016,
-          "latencyMs": 823
+          "costUsd": 0.0012518,
+          "latencyMs": 1135
         }
       ],
       "judge": {
@@ -956,13 +952,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1263,
-            "output_tokens": 2870,
-            "cached_tokens": 1137,
-            "reasoning_tokens": 2844
+            "input_tokens": 1277,
+            "output_tokens": 2130,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 2109
           },
-          "costUsd": 0.01252555,
-          "latencyMs": 19357
+          "costUsd": 0.00925725,
+          "latencyMs": 15134
         }
       ]
     },
@@ -1239,33 +1235,33 @@
       "calls": [
         {
           "usage": {
-            "input_tokens": 2291,
-            "output_tokens": 265,
+            "input_tokens": 2305,
+            "output_tokens": 272,
             "cached_tokens": 2289,
-            "reasoning_tokens": 136
+            "reasoning_tokens": 144
           },
-          "costUsd": 0.0014720999999999998,
-          "latencyMs": 1681
+          "costUsd": 0.0015193499999999998,
+          "latencyMs": 1736
         },
         {
           "usage": {
-            "input_tokens": 3605,
-            "output_tokens": 267,
+            "input_tokens": 3626,
+            "output_tokens": 299,
             "cached_tokens": 2289,
-            "reasoning_tokens": 120
+            "reasoning_tokens": 153
           },
-          "costUsd": 0.0031230999999999997,
-          "latencyMs": 1981
+          "costUsd": 0.00328535,
+          "latencyMs": 1802
         },
         {
           "usage": {
-            "input_tokens": 3938,
+            "input_tokens": 3991,
             "output_tokens": 42,
             "cached_tokens": 3569,
             "reasoning_tokens": 4
           },
-          "costUsd": 0.0011750999999999999,
-          "latencyMs": 580
+          "costUsd": 0.00124135,
+          "latencyMs": 841
         }
       ],
       "judge": {
@@ -1276,13 +1272,13 @@
       "judge_calls": [
         {
           "usage": {
-            "input_tokens": 1263,
-            "output_tokens": 1213,
-            "cached_tokens": 1137,
-            "reasoning_tokens": 1192
+            "input_tokens": 1277,
+            "output_tokens": 2022,
+            "cached_tokens": 1265,
+            "reasoning_tokens": 1996
           },
-          "costUsd": 0.0054833,
-          "latencyMs": 8431
+          "costUsd": 0.00879825,
+          "latencyMs": 14525
         }
       ]
     }
