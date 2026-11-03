@@ -1,6 +1,8 @@
 # Tomorrow Lens
 
-**Photograph your week. Get a plan where every date is proven, and that rebuilds itself when you miss something.**
+**Tomorrow Lens turns the messy paper of student life into a verified plan, and rebuilds it the moment life gets in the way.**
+
+**Video:** _[demo video link to be added]_ · **The real SMS loop:** _[SMS clip link to be added]_
 
 **Live:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app) · Built for the Meta Global AI Developer Hackathon
 (track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
@@ -10,12 +12,12 @@ the hackathon window ([HACKATHON.md](HACKATHON.md)).
 
 Open the live site and press **Try a missed session**. A made-up week plays: a study session passes undone, the
 student replies "too tired tonight", Muse Spark works out what to move (you see each tool call), the session glides to
-its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am tomorrow because you said tonight is
-out and the quiz is tomorrow morning. Nothing else changed."_ Recorded runs are free; type your own reply to run it
-live.
+its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am tomorrow, so tonight can be off, the
+soonest it fits before Quiz 3. Nothing else changed."_ The recorded runs are free and never count against a limit; type
+your own reply to run it live.
 
-Then press **Try the sample week** (free, instant) or upload your own syllabus, Testudo schedule, whiteboard photo, or
-notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact words, and the date math.
+Then press **Try the sample week** (free, instant, no limits) or upload your own syllabus, Testudo schedule, whiteboard
+photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact words, and the date math.
 
 ## How Meta's models are used
 
@@ -46,8 +48,8 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 
 | What                                  | Result                                                                     |
 | ------------------------------------- | -------------------------------------------------------------------------- |
-| Invented dates                        | **0** of 197 (extraction), **0** of 13 (text-a-photo)                      |
-| Items found / classes right           | 93 of 93 / 36 of 36                                                        |
+| Invented dates                        | **0** of 201 (extraction), **0** of 13 (text-a-photo)                      |
+| Items found / classes right           | 99 of 99 / 43 of 43; 71% of items and classes fully verified               |
 | Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                                    |
 | Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)                               |
 | Rebuilds: placement (code's oracle)   | top-1 **100%**, top-3 **100%**; 68 of 68 cases pass                        |
@@ -156,17 +158,17 @@ lists every one, with its default.
 
 ## Evals
 
-Fifteen cases over fourteen synthetic fixtures (`evals/cases/`, `fixtures/synthetic/`), two with deliberate conflicts
+Sixteen cases (`evals/cases/`) over the made-up fixtures in `fixtures/synthetic/`, two with deliberate conflicts
 between sources. Each photo is read once, then second-read two ways: on SAM 3.1 object crops, and on plain box
 crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM 3.1 (`evals/results.json`):
 
 |                                       | with SAM                                   | without SAM  |
 | ------------------------------------- | ------------------------------------------ | ------------ |
-| Invented dates                        | **0** of 197                               | **0** of 197 |
-| Fully verified                        | **75%** (97 of 129)                        | **75%**      |
-| Items found                           | 93 of 93                                   | 93 of 93     |
-| Classes right                         | 36 of 36                                   | 36 of 36     |
-| Dates right                           | 65 of 65, after answers 4 of 4             | same         |
+| Invented dates                        | **0** of 201                               | **0** of 201 |
+| Fully verified                        | **71%** (101 of 142)                       | **71%**      |
+| Items found                           | 99 of 99                                   | 99 of 99     |
+| Classes right                         | 43 of 43                                   | 43 of 43     |
+| Dates right                           | 85 of 85, after answers 4 of 4             | same         |
 | Conflicts caught                      | 4 of 4, pre-selected right 4 of 4, false 0 | same         |
 | Photo quotes in an object (highlight) | 41 of 41                                   | none         |
 | Model cost per photo                  | $0.0225                                    | $0.0162      |
@@ -174,7 +176,8 @@ crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM
 Every date traces to a quote and a code computation, including dates relative to another item ("the day after Quiz
 3" moves when the Quiz 3 conflict is answered), the end of every class recurrence, and every class meeting skipped for a
 break. The rest of "fully verified" are real questions (conflicts, "in class" with no schedule, a course a note doesn't
-name, and class times worked out from where a block sits on a grid, which the person confirms in one question).
+name, class times worked out from where a block sits on a grid, which the person confirms in one question, a TBA
+final, and a syllabus's quiz section and office hours, which are asked rather than guessed).
 
 ### Rebuild
 
@@ -214,7 +217,7 @@ case 1. Each case runs 3 times; a flaky case fails. The gates, all passing
 | Best time: would a friend pick it?    | **4.98** (gate: 4.8)           |                       |
 | Every text one plain SMS              | yes, enforced by a test        | yes                   |
 | Model cost per rebuild                | $0.0080 (3.7 turns, about 8 s) | free                  |
-| Tokens per call, cache hit rate       | 3038 in, 219 out; 84% cached   |                       |
+| Tokens per call, cache hit rate       | 3259 in, 243 out; 83% cached   |                       |
 
 ### Text a photo
 

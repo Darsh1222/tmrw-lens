@@ -210,6 +210,25 @@ export function Lens() {
     }
   }
 
+  // "Try the sample week" at the top of the page links to #sample-week: open it straight away.
+  const sampleLatest = useRef<() => void>(() => {});
+  useEffect(() => {
+    sampleLatest.current = () => void trySample();
+  });
+  useEffect(() => {
+    const go = () => {
+      if (location.hash !== "#sample-week") return;
+      history.replaceState(null, "", location.pathname + location.search);
+      sampleLatest.current();
+    };
+    const t = setTimeout(go, 0);
+    window.addEventListener("hashchange", go);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("hashchange", go);
+    };
+  }, []);
+
   function answer(a: Answer) {
     if (!session) return;
     const trial = planFrom(readings, { zone, answers: [...answers, a] });

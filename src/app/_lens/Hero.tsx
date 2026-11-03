@@ -111,12 +111,20 @@ export function Hero() {
           <a href="#missed-session" className={buttonClass("primary", "px-5")}>
             Try a missed session
           </a>
-          <a href="#upload" className={buttonClass("quiet", "px-5")}>
-            Upload your syllabus
+          <a href="#sample-week" className={buttonClass("quiet", "px-5")}>
+            Try the sample week
           </a>
         </div>
         <p className="text-sm text-ink-2">
-          0 invented dates in 197 · every rebuild rule kept in 204 runs ·{" "}
+          About 10 seconds each, free, no sign-up: watch a week rebuild after a missed session, or open a sample week
+          and tap any date to see the words it came from. Or{" "}
+          <a href="#upload" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
+            upload your own
+          </a>
+          .
+        </p>
+        <p className="text-sm text-ink-2">
+          0 invented dates in 201 · every rebuild rule kept in 204 runs ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
             how it&apos;s measured
           </Link>

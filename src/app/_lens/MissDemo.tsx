@@ -150,7 +150,9 @@ export function MissDemo() {
     if (!started) node?.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" });
     await whenStarted();
     if (!still()) return;
-    const pending = fetchRun(typed);
+    // The case's own reply plays its recorded run: free, instant, never against a limit. A reply typed here runs live.
+    const own = typed === (demo.request.missed.reply ?? null);
+    const pending: Promise<Run | string> = own ? Promise.resolve(recorded(typed)) : fetchRun(typed);
     const settle = async (): Promise<Run | null> => {
       const r = await pending;
       if (typeof r !== "string") return r;
@@ -222,6 +224,25 @@ export function MissDemo() {
     setMsgs(["shown", "shown", "shown"]);
     setStatus("done");
   }
+
+  // "Try a missed session" at the top of the page links here (#missed-session) and starts the recorded run.
+  const playLatest = useRef<() => void>(() => {});
+  useEffect(() => {
+    playLatest.current = () => void play();
+  });
+  useEffect(() => {
+    const go = () => {
+      if (location.hash !== "#missed-session") return;
+      history.replaceState(null, "", location.pathname + location.search);
+      playLatest.current();
+    };
+    const t = setTimeout(go, 0);
+    window.addEventListener("hashchange", go);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("hashchange", go);
+    };
+  }, []);
 
   if (!inBrowser) return <Frame placeholder>{null}</Frame>;
   const anim = status === "idle" ? "idle" : status === "done" ? "done" : visible ? "playing" : "paused";

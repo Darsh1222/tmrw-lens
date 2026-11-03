@@ -1,5 +1,10 @@
 # Hackathon log
 
+**Tomorrow Lens turns the messy paper of student life into a verified plan, and rebuilds it the moment life gets in the
+way.**
+
+**Video:** _[demo video link to be added]_ · **The real SMS loop:** _[SMS clip link to be added]_
+
 **Tomorrow Lens**, for the Meta Global AI Developer Hackathon. **Track: Build for Your World.** Build window Oct 27 to
 Nov 4, 2026. Everything in this repository was written during the hackathon, solo with AI coding assistance (Claude
 Code). Live: [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app).
@@ -23,7 +28,7 @@ talks to it only through them:
   to Tomorrow (a whiteboard saying "quiz moved to Mon") is read by Lens; new items and changes come back with a review
   link, and nothing changes until the person answers.
 
-**The real SMS loop, end to end:** _clip link to be added_.
+**The real SMS loop, end to end:** _[SMS clip link to be added]_.
 
 Per-person spend limits and two global brakes keep the public demo from using Tomorrow's budget (README, Limits).
 
@@ -180,6 +185,11 @@ Per-person spend limits and two global brakes keep the public demo from using To
   yes), and grade weights and topics (kept as course info for study plans). On a real MATH141 syllabus: both exams at
   3:00-4:15 PM, tentative; final TBA; notices Sep 23 and Nov 4; 0 invented dates. New synthetic fixture with the same
   patterns: 6 of 6 items, 0 invented. Extraction evals: no regressions (71% fully verified, 0 of 201 dates invented).
+- A judge's path at the top of the page: **Try a missed session** plays the recorded rebuild right away, and **Try the
+  sample week** opens the recorded week and its plan. Both take about 10 seconds, call no model, and never count
+  against a limit (a Playwright test checks that neither makes a model call); typing your own reply runs it live.
+- Send to Tomorrow remembers the token in your browser after the first send Tomorrow accepts ("Connected to Tomorrow",
+  with "Forget token"); if Tomorrow refuses it, it's forgotten and the box comes back.
 
 ### Nov 2
 

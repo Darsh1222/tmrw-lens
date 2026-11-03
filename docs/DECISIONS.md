@@ -457,3 +457,8 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   and office hours are facts (rebuilds from answers). Topics are kept only if the page's text has them word for word.
 - 2026-11-03: Known gap: Tomorrow's import skips a lens_id it already has, so a tentative exam that later moves
   reaches Tomorrow only through the extract API's change detection (moved/contradiction), not a second Send.
+- 2026-11-03: "Try a missed session" with the case's own reply plays its recorded run without calling the API (free,
+  instant, no limits; the recordings are the current rebuild version's eval runs). Only a typed reply runs live. The
+  hero's buttons are links (#missed-session, #sample-week) that start the demos, so they work as plain anchors.
+- 2026-11-03: The Tomorrow token is kept in localStorage (key lens_tomorrow_token) after a send Tomorrow accepts; it's
+  removed on "Forget token" or a 401. Storage errors only mean it isn't remembered.
