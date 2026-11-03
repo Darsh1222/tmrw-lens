@@ -117,3 +117,14 @@ test("keyboard only: skip link, then the bar's links and the primary action, eac
   await page.keyboard.press("Enter");
   await expect(page.locator("#missed-session [data-anim]").first()).not.toHaveAttribute("data-anim", "idle", { timeout: 8000 }); // prettier-ignore
 });
+
+test("Add to calendar downloads the verified plan as an .ics file", async ({ page }) => {
+  lightOnly();
+  await page.goto("/#sample-week");
+  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Add to calendar (.ics)" }).click()]); // prettier-ignore
+  expect(file.suggestedFilename()).toBe("lens-plan.ics");
+  const text = await (await file.createReadStream()).toArray().then((c) => Buffer.concat(c).toString("utf8"));
+  expect(text).toMatch(/^BEGIN:VCALENDAR\r\n/);
+  expect(text).toContain("RRULE:FREQ=WEEKLY");
+});

@@ -467,3 +467,7 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   I-IV in order, II · Prove always shown (an empty state before a plan); IV · Results reads evals/*.json at build time.
   The hero preview now loops (3 s hold) while in view instead of offering Replay. The page passes `home` to the header
   (usePathname in the bar broke prerendering of /review/[token]). One 1120px column everywhere.
+- 2026-11-03: Add to calendar (.ics, RFC 5545): sendable() after auditPlan, like Send. Classes: DTSTART/DTEND with TZID
+  (IANA zone, no VTIMEZONE block; X-WR-TIMEZONE set), the class's RRULE with UNTIL in UTC, an EXDATE per skipped break
+  meeting. Items: TZID times, or VALUE=DATE all-day; STATUS:TENTATIVE and "(tentative)" when their syllabus says so;
+  undated tasks are left out. Lines folded at 75 octets, CRLF. Download only; nothing is sent.

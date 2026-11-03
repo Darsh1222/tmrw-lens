@@ -35,7 +35,9 @@ export function SiteFooter() {
         <div className="grid gap-6 py-10 text-sm text-ink-2 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-12">
           <div className="flex flex-col gap-2">
             <p className="forum-display text-lg text-ink">{PITCH}</p>
-            <p>Built with Muse Spark 1.3 and SAM 3.1 on Meta Model API · Meta Global AI Developer Hackathon 2026</p>
+            <p>
+              Built during the Meta Global AI Developer Hackathon (Oct 27–Nov 4, 2026) with Muse Spark 1.3 + SAM 3.1.
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <p>

@@ -12,6 +12,14 @@ Code). Live: [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app).
 Meta models used: Muse Spark (`muse-spark-1.3`, Standard mode) for reading, re-reading, classifying photos, and the
 rebuild agent; SAM 3.1 (`sam-3.1`) for outlining notes, sheets, and boards. Both through Meta Model API.
 
+## What existed before, and what was built during the hackathon
+
+|                                             | What                                                                                                                                                                                                                                                                | When, and where to see it                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Existed before the hackathon**            | **Tomorrow**: an SMS planning assistant (private, not in this repo) with basic chat, reminders, and sign-up.                                                                                                                                                        | Before Oct 27, 2026. Not shown as hackathon work.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Built during the hackathon**              | **All of Tomorrow Lens** (this repository): reading syllabi, schedules, and photos with Muse Spark and SAM 3.1; proof for every date; the rebuild agent; text-a-photo; evals; the site.                                                                             | Oct 28 to Nov 4, 2026: every commit in this repo, from `08ff8c7` (Oct 28, initial commit) on. Highlights: `68eeec6` model client (Oct 29), `8476773` plan builder (Oct 29), `2041e8f` SAM 3.1 (Oct 31), `51c37ff` UI and import contract (Oct 31), `7909962` rebuild agent (Nov 1), `d1e5624` text-a-photo (Nov 1), `336332f` per-person limits (Nov 2), `591fe84` rebuild safety bar (Nov 3), `55e50f6` syllabus policies and grid (Nov 3). Full log: [HACKATHON.md](HACKATHON.md). |
+| **Built during the hackathon, in Tomorrow** | Lens import and Connect (Send to Tomorrow); check-ins after planned sessions; a missed session → Lens rebuild → one recovery text, with UNDO; text-a-photo via Lens's `/api/extract`; the Best-Time Engine; `user_ref` and the fallback when Lens can't be reached. | Oct 27 to Nov 4, 2026. A read-only snapshot of exactly this Tomorrow-side code is in [`tomorrow-integration/`](tomorrow-integration/), with its commit references. Lens's side of each: [IMPORT](docs/IMPORT_CONTRACT.md), [REBUILD](docs/REBUILD_CONTRACT.md), [EXTRACT](docs/EXTRACT_CONTRACT.md) contracts.                                                                                                                                                                       |
+
 ## The Tomorrow integration
 
 Lens connects to Tomorrow, a separate planning app I built before the hackathon. Tomorrow is not part of this
@@ -197,6 +205,12 @@ Per-person spend limits and two global brakes keep the public demo from using To
   files and limits, what happens next, a one-time "Tap any item" hint, what Tomorrow is); and a footer with the pitch,
   the models, and the privacy line. Lighthouse accessibility 100 and layout shift 0 on home and evals, phone and
   desktop; no WCAG AA violations in either theme (axe); no sideways scroll at 390px; keyboard-only works.
+- What's new is labelled everywhere: the footer says the site was built during the hackathon, and README and this log
+  open with a table of what existed before (Tomorrow's basic SMS assistant) and what was built during it (all of Lens,
+  and Tomorrow's side of the integration, shown read-only in `tomorrow-integration/`).
+- Add to calendar: the verified plan as an .ics file for any calendar app, the same items Send would send after the same
+  audit. Weekly classes repeat until the last day of classes and skip break days; exams and deadlines are timed in your
+  zone, or all-day without a time; tentative dates are marked tentative; a TBA final isn't on it.
 
 ### Nov 2
 

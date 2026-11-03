@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import type { Plan, SourceMeta } from "@/lib/plan/types";
+import { toIcs } from "@/lib/calendar/ics";
 import { NotSendable, sendable, toImport, type ImportResponse } from "@/lib/tomorrow/contract";
 import { buttonClass } from "./ui";
 
@@ -74,13 +75,23 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
     }
   };
 
-  const download = () => {
-    const payload = build();
-    if (!payload) return;
-    const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "lens-import.json" });
+  const save = (body: string, type: string, name: string) => {
+    const url = URL.createObjectURL(new Blob([body], { type }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: name });
     a.click();
     URL.revokeObjectURL(url);
+  };
+  const download = () => {
+    const payload = build();
+    if (payload) save(JSON.stringify(payload, null, 2), "application/json", "lens-import.json");
+  };
+  // The same verified items, for any calendar app: a file, nothing sent anywhere.
+  const calendar = () => {
+    try {
+      save(toIcs(plan, sources, new Date()), "text/calendar", "lens-plan.ics");
+    } catch (e) {
+      setState({ s: "error", message: e instanceof NotSendable ? `Not saved: ${e.message}.` : "Nothing to add yet." });
+    }
   };
 
   return (
@@ -144,6 +155,12 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
           {state.message}
         </p>
       )}
+      <div className="flex flex-col items-start gap-1">
+        <button onClick={calendar} disabled={!count} className={buttonClass("quiet")}>
+          Add to calendar (.ics)
+        </button>
+        <p className="text-xs text-ink-2">Or skip Tomorrow: the same verified items, as a file for any calendar app.</p>
+      </div>
       <details className="text-sm text-ink-2">
         <summary className="cursor-pointer hover:text-ink">Details</summary>
         <div className="mt-2 flex flex-col items-start gap-1">

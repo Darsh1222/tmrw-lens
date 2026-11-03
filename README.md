@@ -8,6 +8,16 @@
 (track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
 the hackathon window ([HACKATHON.md](HACKATHON.md)).
 
+## What's new: built during the hackathon
+
+Only work built during the hackathon is shown as the submission. What existed before, and what was built during it:
+
+|                                             | What                                                                                                                                                                                                                                                                | When, and where to see it                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Existed before the hackathon**            | **Tomorrow**: an SMS planning assistant (private, not in this repo) with basic chat, reminders, and sign-up.                                                                                                                                                        | Before Oct 27, 2026. Not shown as hackathon work.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Built during the hackathon**              | **All of Tomorrow Lens** (this repository): reading syllabi, schedules, and photos with Muse Spark and SAM 3.1; proof for every date; the rebuild agent; text-a-photo; evals; the site.                                                                             | Oct 28 to Nov 4, 2026: every commit in this repo, from `08ff8c7` (Oct 28, initial commit) on. Highlights: `68eeec6` model client (Oct 29), `8476773` plan builder (Oct 29), `2041e8f` SAM 3.1 (Oct 31), `51c37ff` UI and import contract (Oct 31), `7909962` rebuild agent (Nov 1), `d1e5624` text-a-photo (Nov 1), `336332f` per-person limits (Nov 2), `591fe84` rebuild safety bar (Nov 3), `55e50f6` syllabus policies and grid (Nov 3). Full log: [HACKATHON.md](HACKATHON.md). |
+| **Built during the hackathon, in Tomorrow** | Lens import and Connect (Send to Tomorrow); check-ins after planned sessions; a missed session → Lens rebuild → one recovery text, with UNDO; text-a-photo via Lens's `/api/extract`; the Best-Time Engine; `user_ref` and the fallback when Lens can't be reached. | Oct 27 to Nov 4, 2026. A read-only snapshot of exactly this Tomorrow-side code is in [`tomorrow-integration/`](tomorrow-integration/), with its commit references. Lens's side of each: [IMPORT](docs/IMPORT_CONTRACT.md), [REBUILD](docs/REBUILD_CONTRACT.md), [EXTRACT](docs/EXTRACT_CONTRACT.md) contracts.                                                                                                                                                                       |
+
 ## Try it in 10 seconds
 
 Open the live site and press **Try a missed session**. A made-up week plays: a study session passes undone, the
@@ -18,7 +28,7 @@ your own reply to run it live.
 
 Then step 2, **See the proof**, opens the sample week (free, instant, no limits); or **Upload your own** syllabus,
 Testudo schedule, whiteboard photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact
-words, and the date math.
+words, and the date math. When it's right, **Send to Tomorrow**, or **Add to calendar (.ics)** for any calendar app.
 
 ## How Meta's models are used
 
