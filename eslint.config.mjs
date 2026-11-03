@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Copied from pdfjs-dist by scripts/copy-pdfjs.mjs.
     "public/pdfjs/**",
+    // A read-only snapshot of Tomorrow's hackathon code, shown as it is; it isn't built here.
+    "tomorrow-integration/**",
   ]),
 ]);
 
