@@ -43,7 +43,8 @@ function plain(s: Step, d: Draft): { icon: Icon; label: string } {
       return { icon: CalendarBlank, label: `Looked at ${typeof ms === "number" ? d.local(ms).toFormat("cccc") : String(a.date)}` }; // prettier-ignore
     }
     case "find_open_time": {
-      const free = (r.free as { start: string; end: string }[]) ?? [];
+      // Ranked suggestions (agent v9+: free_from/free_until), or plain spans from older recordings (start/end).
+      const free = ((r.free as { start?: string; end?: string; free_from?: string; free_until?: string }[]) ?? []).map((f) => ({ start: (f.free_from ?? f.start)!, end: (f.free_until ?? f.end)! })); // prettier-ignore
       if (!free.length) {
         const there = (r.planned_in_range as { title: string }[] | undefined)?.map((p) => p.title);
         return { icon: MagnifyingGlass, label: `No ${String(a.minutes)}-minute opening${there?.length ? `; ${there.join(", ")} could move` : ""}` }; // prettier-ignore
@@ -53,7 +54,7 @@ function plain(s: Step, d: Draft): { icon: Icon; label: string } {
         const s1 = local(f.end) as number;
         return `${d.local(s0).toFormat("ccc")} ${span(s0, s1, d.zone)}`;
       });
-      return { icon: MagnifyingGlass, label: `Found open time: ${spans.join(", ")}${free.length > 3 ? ", …" : ""}` };
+      return { icon: MagnifyingGlass, label: `Best open time: ${spans.join(", ")}${free.length > 3 ? ", …" : ""}` };
     }
     case "move_item": {
       const ms = local(a.start) as number;

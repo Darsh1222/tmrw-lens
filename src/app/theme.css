@@ -29,6 +29,8 @@
   --tm-butter: #f4e9c1;
   --tm-band: rgb(11 27 51 / 0.05);
   --tm-scrim: rgb(11 27 51 / 0.32);
+  /* Under SAM's gilt outlines on a photo: photos look the same in either theme, so this does too. */
+  --tm-outline-under: rgb(11 27 51 / 0.55);
   color-scheme: light;
 }
 

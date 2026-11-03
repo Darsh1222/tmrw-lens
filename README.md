@@ -49,9 +49,10 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 | Invented dates                        | **0** of 197 (extraction), **0** of 13 (text-a-photo)  |
 | Items found / classes right           | 93 of 93 / 36 of 36                                    |
 | Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                |
-| Rebuilds right                        | **11 of 11** (code alone: 5 of 11), 0 invalid moves    |
-| Rebuild message quality (judge, 1-5)  | **5.0**, and every message human-reviewed              |
-| Cost per photo read / per rebuild     | $0.023 with SAM / $0.0072 (3.7 model calls, about 5 s) |
+| Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)           |
+| Rebuilds: placement (code's oracle)   | top-1 **98.9%**, top-3 **100%**; 68 of 68 cases pass   |
+| Rebuild message quality (judge, 1-5)  | **4.90**, and the demo's messages human-reviewed       |
+| Cost per photo read / per rebuild     | $0.023 with SAM / $0.0068 (3.5 model calls, about 7 s) |
 
 Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
 
@@ -106,7 +107,7 @@ pnpm eval:live        # re-read fixtures whose recording is stale, then score (-
 pnpm eval:real        # the same on your own photos in local-inputs/ (git-ignored); prints numbers only
 pnpm sample           # rebuild the app's sample week from the eval recordings (after eval:live)
 pnpm eval:rebuild     # score the rebuild agent on recorded runs (free, offline)
-pnpm eval:rebuild:live  # re-run stale rebuild cases with the model and the judge (--force: all, about 12 cents)
+pnpm eval:rebuild:live  # re-run stale rebuild cases, 3 runs each, with the judge (--force: all, about $2.30)
 pnpm eval:extract     # score text-a-photo on recorded photo readings (free, offline)
 pnpm eval:extract:live  # re-read photos whose recording is stale (about 5 cents)
 ```
@@ -185,20 +186,31 @@ still free after practice and before the quiz tomorrow morning. Nothing else cha
 **Try a missed session**: eleven recorded cases replay for free, and "Rebuild it live" runs Muse Spark on your own
 reply.
 
-Every recorded message was read and approved by the owner (human-reviewed, Nov 2), not only scored by the judge,
-which is the same model as the agent. Every text fits one SMS segment (160 characters, plain ASCII), enforced by a
-test. Eleven synthetic cases (`evals/rebuild/cases.ts`): making room, "too tired tonight", "practice until 9", sick today,
-shortening to fit, no time left, a reply that tries to give orders, the clock change, partial. Latest run
-(`evals/rebuild/results.json`):
+Rebuilds are held to a safety bar. **Hard rules, in code** ([src/lib/rebuild/rules.ts](src/lib/rebuild/rules.ts)): no
+overlap with classes, sleep, quiet hours, or another item; after now and before the deadline; never within 90 minutes
+of the miss unless it's due within a day; never within an hour of bedtime; the message's times exactly the moves'
+(read back from its words); "Nothing else changed" true. The rebuild can't break them (code refuses the move), and the
+finished rebuild is checked against them again. **Placement**, by an oracle in code
+([src/lib/rebuild/rank.ts](src/lib/rebuild/rank.ts)): every slot is ranked by explicit weights (sooner, a lighter day,
+their study time, not late, not cramming); a run passes only if its slot is in the top 3. Every reason that claims
+"soonest", "last", "only", "longest", or "lightest" is checked true by code.
 
-|                                  | agent (reasoning effort low)   | code alone (fallback) |
-| -------------------------------- | ------------------------------ | --------------------- |
-| Rebuilds right                   | **11 of 11**                   | 5 of 11               |
-| Invalid moves                    | **0**                          | 0                     |
-| Unkind messages                  | **0**                          | 0                     |
-| Judge score (Muse Spark, 1 to 5) | 5.0                            |                       |
-| Model cost per rebuild           | $0.0072 (3.7 turns, about 5 s) | free                  |
-| Tokens per call, cache hit rate  | 2692 in, 254 out; 83% cached   |                       |
+68 cases (`evals/rebuild/`), built the way Tomorrow builds a request: late-night skips, due in 4/6/12/24 hours, "too
+tired", "busy until 9", sick, did half, no reply, a heavy day against a light one, weekends, both clock changes, a
+session across midnight, two misses in a day, a deadline the professor moved, honest overload, morning and night
+people, quiet hours, and replies that try to give orders. Live bug #1 (a 9:30pm miss moved to 10:30pm that night) is
+case 1. Each case runs 3 times; a flaky case fails. The gates, all passing
+([REVIEW.md](evals/rebuild/REVIEW.md) has every case):
+
+|                                       | agent (reasoning effort low)   | code alone (fallback) |
+| ------------------------------------- | ------------------------------ | --------------------- |
+| Hard rules kept (gate: 100%)          | **100%** of 204 runs           | 100% of 68            |
+| Placement top-1 / top-3 (gates 85/98) | **98.9% / 100%**               | –                     |
+| Cases passed, all 3 runs              | **68 of 68**, 0 flaky          | 51 of 68              |
+| Judge, tone and clarity (gate: 4.8)   | **4.90**                       |                       |
+| Every text one plain SMS              | yes, enforced by a test        | yes                   |
+| Model cost per rebuild                | $0.0068 (3.5 turns, about 7 s) | free                  |
+| Tokens per call, cache hit rate       | 3038 in, 219 out; 84% cached   |                       |
 
 ### Text a photo
 

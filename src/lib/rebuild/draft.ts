@@ -1,5 +1,15 @@
 import { DateTime } from "luxon";
+import { loadHours } from "@/lib/rebuild/rank";
 import type { DiffEntry, RebuildPlanned, RebuildRequest, RebuildResponse } from "@/lib/rebuild/contract";
+import {
+  blocked,
+  hardRuleViolations,
+  MISS_GAP_MIN,
+  missGap,
+  nights,
+  SLEEP_BUFFER_MIN,
+  type Span as RuleSpan,
+} from "@/lib/rebuild/rules";
 
 // The rebuild's working copy of the plan. Code owns every fact here: what's
 // free, whether a move fits, the times in the message. The model only chooses
@@ -50,6 +60,33 @@ const CLOCK = /\b\d{1,2}(:\d{2})?\s?(am|pm)\b|\b\d{1,2}:\d{2}\b/i;
 
 export const unkind = (text: string) => UNKIND.test(text);
 
+/** A reason that says what the student said or is: "you said tonight is out", "you're free after practice". */
+const YOU_SAID = /\byou(?:'re| are| said| asked| mentioned| told| did| have| can't| cannot)\b/i;
+const words = (s: string) => new Set(s.toLowerCase().match(/[a-z]{3,}/g) ?? []);
+
+/**
+ * Whether a reason puts words in their mouth: it says what they said, but there was no reply, or the reply is a word or
+ * two that shares nothing with it ("no", "ok", "skipped"). Longer replies (and other languages) are the judge's to read.
+ */
+export function inventsReply(reason: string, reply: string | null): boolean {
+  if (!YOU_SAID.test(reason)) return false;
+  if (!reply) return true;
+  const said = words(reply);
+  if (said.size > 2) return false;
+  const claim = words(reason.slice(reason.search(YOU_SAID)));
+  return ![...claim].some((w) => said.has(w));
+}
+
+/** Replies that say part was done: what's left is shorter on purpose, so "there's room for more" doesn't apply. */
+const PARTIAL = /\b(half|partial(ly)?|part of|some of|got through|did \d+|\d+ ?%|most of)\b/i;
+
+/**
+ * Claims a reason can make that code can check: soonest, last, only, longest, lightest. "First thing" and "next week"
+ * aren't claims about the plan. A reason with one must be one code found true for that slot (Draft.truths).
+ */
+const SUPERLATIVE =
+  /\b(soonest|earliest|latest|last|only|longest|lightest|first(?! thing)|next(?! (week|month|mon|tue|wed|thu|fri|sat|sun)\w*))\b/i;
+
 /** One SMS segment: the recovery text never runs longer. */
 export const MAX_TEXT = 160;
 
@@ -92,12 +129,22 @@ export function checkReason(raw: string): { ok: true; reason: string } | { ok: f
 
 export class Draft {
   readonly changes = new Map<string, Change>();
+  /** Items already told once that their stretch holds more: a second, identical ask stands (a partial session). */
+  private toldRoom = new Set<string>();
   readonly now: number;
   readonly zone: string;
+
+  /** What the rules keep everything out of (src/lib/rebuild/rules.ts): sleep, the hour before bed, quiet hours. */
+  readonly off: RuleSpan[];
+  /** The 90 minutes after the missed session, when its deadline isn't within 24 hours. */
+  readonly gap: RuleSpan | null;
 
   constructor(readonly req: RebuildRequest) {
     this.now = Date.parse(req.now);
     this.zone = req.zone;
+    const horizon = Math.max(this.now, ...req.open_windows.map((w) => Date.parse(w.end)), ...req.items.map((i) => Date.parse(i.end)), ...req.deadlines.map((d) => Date.parse(d.due))); // prettier-ignore
+    this.off = blocked(req, this.now, horizon);
+    this.gap = missGap(req);
   }
 
   get missed(): RebuildPlanned {
@@ -149,9 +196,26 @@ export class Draft {
       ...this.req.fixed.map((f) => span(f.start, f.end)),
       ...this.req.items.filter((i) => i.id !== except).flatMap((i) => this.placement(i) ?? []),
     ];
-    return minus(merged(open), busy)
+    // The rules' time is never free, whatever Tomorrow's windows say.
+    return minus(merged(open), [...busy, ...this.off, ...(this.gap ? [this.gap] : [])])
       .map((x) => ({ s: Math.ceil(Math.max(x.s, this.now) / STEP) * STEP, e: x.e }))
       .filter((x) => x.e - x.s >= STEP);
+  }
+
+  /** Why a span breaks a rule, in words for the model; null when it breaks none. */
+  ruleProblem(x: Span): string | null {
+    const hit = (b: Span) => b.s < x.e && x.s < b.e;
+    if (this.gap && hit(this.gap))
+      return `That's within ${MISS_GAP_MIN} minutes of the missed session; it can start from ${this.day(this.gap.e)} ${this.hhmm(this.gap.e)}.`; // prettier-ignore
+    const night = nights(this.req, x.s, x.e).find((n) => x.s < n.wake && n.bed - SLEEP_BUFFER_MIN * MIN < x.e);
+    if (night)
+      return x.s >= night.bed - SLEEP_BUFFER_MIN * MIN && x.s < night.bed
+        ? `That's within an hour of bedtime (${this.hhmm(night.bed)}); it has to finish by ${this.hhmm(night.bed - SLEEP_BUFFER_MIN * MIN)}.`
+        : x.s >= night.bed
+          ? `That's while they sleep (${this.hhmm(night.bed)}-${this.hhmm(night.wake)}).`
+          : `It would run into the hour before bedtime (${this.hhmm(night.bed)}); it has to finish by ${this.hhmm(night.bed - SLEEP_BUFFER_MIN * MIN)}.`; // prettier-ignore
+    if (this.off.some(hit)) return "That's in their quiet hours.";
+    return null;
   }
 
   // Times as people read them, always in their zone.
@@ -200,6 +264,50 @@ export class Draft {
       .map((x) => `${this.hhmm(Math.max(x.s, dayStart))}-${this.hhmm(Math.min(x.e, end))}`);
   }
 
+  /** How many minutes `id` could run from `s` in free time, before its deadline (5-minute steps). */
+  room(id: string, s: number): number {
+    const due = this.dueBy(this.item(id)!) ?? Infinity;
+    const x = this.free(id).find((y) => y.s <= s && s < y.e);
+    return x ? Math.floor((Math.min(x.e, due) - s) / STEP) * 5 : 0;
+  }
+
+  /**
+   * The claims that are true of placing `id` at [s, e), with or without " before <deadline>": the soonest open time
+   * that fits, the last one before its deadline, the only one, the longest stretch (when shortened), the lightest day.
+   */
+  truths(id: string, s: number, e: number): string[] {
+    const i = this.item(id)!;
+    const mins = (e - s) / MIN;
+    const due = this.dueBy(i) ?? Infinity;
+    const dl = this.deadline(i)?.title;
+    const before = dl ? ` before ${plain(dl)}` : Number.isFinite(due) ? " before it's due" : "";
+    const spans = this.free(id)
+      .map((x) => ({ s: x.s, e: Math.min(x.e, due) }))
+      .filter((x) => x.e > x.s);
+    const fit = spans.filter((x) => x.e - x.s >= mins * MIN);
+    const mine = fit.find((x) => x.s <= s && e <= x.e);
+    const out: string[] = [];
+    if (!mine) return out;
+    // "Soonest" only if nothing earlier fits even its shortest version; else it's the soonest it fits in full.
+    const anyFirst = spans.find((x) => x.e - x.s >= Math.min(mins, this.shortest(i)) * MIN);
+    if (s === fit[0].s)
+      out.push(anyFirst && anyFirst.s < s ? "it's the soonest time it fits in full" : "it's the soonest open time");
+    // "Last" and "only" likewise: plain only when no shorter version fits elsewhere.
+    const any = spans.filter((x) => x.e - x.s >= Math.min(mins, this.shortest(i)) * MIN);
+    if (Number.isFinite(due) && mine === fit.at(-1))
+      out.push(any.at(-1)!.s > mine.s ? "it's the last time it fits in full" : "it's the last open time");
+    if (fit.length === 1)
+      // A stretch, not a time: a long stretch holds many starts, so "the only time" would read false.
+      out.push(any.length > 1 ? "it's the only free stretch it fits in full" : "it's the only free stretch that fits");
+    if (mins < this.length(i) && spans.every((x) => x.e - x.s <= mine.e - mine.s))
+      out.push("it's the longest free stretch");
+    const load = (ms: number) => loadHours(this, ms, id);
+    // Lightest only when another day it could go on is actually heavier.
+    if (fit.every((x) => load(x.s) >= load(s)) && fit.some((x) => load(x.s) > load(s)))
+      out.push("it's the lightest day");
+    return out.flatMap((t) => (before ? [t, `${t}${before}`] : [t]));
+  }
+
   move(id: string, start: string, durationMin: number | null, rawReason: string): Outcome {
     const i = this.item(id);
     if (!i) return { ok: false, problem: `There's no item ${id}. Use an id from the list.` };
@@ -225,11 +333,40 @@ export class Draft {
     }
     if (i.status === "planned" && s === Date.parse(i.start) && e === Date.parse(i.end))
       return { ok: false, problem: "That's where it already is." };
+    const rule = this.ruleProblem({ s, e });
+    if (rule) return { ok: false, problem: rule };
+    if (inventsReply(reason.reason, this.req.missed.reply))
+      return {
+        ok: false,
+        problem: this.req.missed.reply
+          ? `Their reply was only ${JSON.stringify(this.req.missed.reply)}; the reason can't say more than that. Give a reason about the plan instead.`
+          : "They didn't reply, so the reason can't say what they said. Give a reason about the plan instead.",
+      };
+    // A claim about the plan has to be true: code checks it.
+    if (SUPERLATIVE.test(reason.reason) && this.free(id).some((x) => x.s <= s && e <= x.e)) {
+      const truths = this.truths(id, s, e);
+      const said = reason.reason.toLowerCase();
+      if (!truths.some((t) => said.includes(t.toLowerCase().split(" before ")[0])))
+        return {
+          ok: false,
+          problem: `That reason isn't true here. True of this time: ${truths.length ? truths.map((t) => `"${t}"`).join(", ") : "none of soonest, last, only, longest, lightest"}. Or use what they said, or the deadline ("the quiz is tomorrow morning").`,
+        };
+    }
     if (!this.free(id).some((x) => x.s <= s && e <= x.e)) {
       const day = this.freeOn(this.local(s).startOf("day").toMillis(), id);
       return {
         ok: false,
         problem: `${this.at({ s, e })} isn't free. Free that day: ${day.length ? day.join(", ") : "nothing"}.`,
+      };
+    }
+    // Shorten only as much as the stretch needs: if it holds more, say so once.
+    const room = this.room(id, s);
+    const partial = id === this.missed.id && !!this.req.missed.reply && PARTIAL.test(this.req.missed.reply);
+    if (mins < full && room > mins && !partial && !this.toldRoom.has(`${id}@${s}:${mins}`)) {
+      this.toldRoom.add(`${id}@${s}:${mins}`);
+      return {
+        ok: false,
+        problem: `From ${this.hhmm(s)} it can run ${Math.min(room, full)} min before the next thing or its deadline. Shorten only as much as you must; if they said they did part of it, ask for ${mins} again.`, // prettier-ignore
       };
     }
     this.changes.set(id, { action: "move", start: s, end: e, reason: reason.reason });
@@ -287,11 +424,19 @@ export class Draft {
    * there), not before 7 AM, not overlapping anything. Outside the free time
    * Tomorrow sent, so it's only offered, never placed: the text asks.
    */
+  /** Whether the missed item's shortest version still fits in free time before it's due. */
+  fitsBeforeDue(): boolean {
+    const m = this.missed;
+    const due = this.dueBy(m) ?? Infinity;
+    return this.free(m.id).some((x) => Math.min(x.e, due) - x.s >= this.shortest(m) * MIN);
+  }
+
   offer(): { item_id: string; start: number; end: number } | null {
     const m = this.missed;
     if (this.changes.get(m.id)?.action !== "drop") return null;
     const due = this.dueBy(m);
-    if (due === null) return null;
+    // Only when nothing fits: a drop while time is free was their choice (their reply), not a lack of time.
+    if (due === null || this.fitsBeforeDue()) return null;
     const busy = [
       ...this.req.fixed.map((f) => span(f.start, f.end)),
       ...this.req.items.filter((i) => i.id !== m.id).flatMap((i) => this.placement(i) ?? []),
@@ -300,6 +445,8 @@ export class Draft {
       const e = s + 15 * MIN;
       if (this.local(s).hour < 7) break;
       if (busy.some((b) => b.s < e && s < b.e)) continue;
+      // An offer the person accepts becomes a move, so it keeps the same rules (not the 90 minutes: it's due soon).
+      if (this.off.some((b) => b.s < e && s < b.e)) continue;
       return { item_id: m.id, start: s, end: e };
     }
     return null;
@@ -313,7 +460,8 @@ export class Draft {
   message(): string {
     const m = this.missed;
     const title = (id: string) => plain(this.item(id)!.title);
-    const ids = [m.id, ...[...this.changes.keys()].filter((id) => id !== m.id)];
+    // The missed item first, then the rest in the plan's order: the same text however the moves were made.
+    const ids = [m.id, ...this.req.items.map((i) => i.id).filter((id) => id !== m.id && this.changes.has(id))];
     const moves = ids.filter((id) => this.changes.get(id)?.action === "move");
     const shorter = (id: string) => {
       const c = this.changes.get(id) as Extract<Change, { action: "move" }>;
@@ -343,12 +491,12 @@ export class Draft {
         const c = this.changes.get(id)!;
         const deadline = this.deadline(this.item(id)!);
         if (c.action === "drop") {
-          if (id === m.id && this.dueBy(m) !== null) {
+          if (id === m.id && this.dueBy(m) !== null && !this.fitsBeforeDue()) {
             const before = deadline ? plain(deadline.title) : "it's due";
             const o = this.offer();
             return o
-              ? `No free time before ${before}. Want a 15-min version at ${this.when(o.start)}, or skip it?`
-              : `No free time before ${before}, so ${title(id)} is off the plan.`;
+              ? `Not enough free time before ${before}. Want a 15-min version at ${this.when(o.start)}, or skip it?`
+              : `Not enough free time before ${before}, so ${title(id)} is off the plan.`;
           }
           return `Took ${title(id)} off the plan because ${c.reason}.`;
         }
@@ -380,17 +528,27 @@ export class Draft {
  * first free time that fits before it's due (full length, else its shortest
  * version), or is dropped when nothing fits. Nothing else changes.
  */
+/** Replies that rule out the rest of today: a cheap reading in code, for the agent's check and code's fallback. */
+export const TODAY_OUT =
+  /\b(not tonight|not today|too tired|too late|exhausted|tomorrow|sick|ill|fever|tonight is out|can'?t (do it )?(today|tonight)|cansad[oa]|mañana|demain)\b/i;
+
 export function fallback(req: RebuildRequest): Draft {
   const d = new Draft(req);
   const m = d.missed;
   const due = d.dueBy(m);
   const what = d.deadline(m)?.title ?? "it's due";
+  // Even without the model, a reply that rules out today is kept.
+  const out = !!req.missed.reply && TODAY_OUT.test(req.missed.reply);
+  const from = out ? d.local(d.now).plus({ days: 1 }).startOf("day").toMillis() : d.now;
   // Set directly, not through move(): the slot is already known to fit, and a
   // deadline title ("Quiz 3, 10:00") mustn't trip the checks on model reasons.
   for (const mins of [d.length(m), d.shortest(m)]) {
-    const slot = d.free(m.id).find((x) => x.e - x.s >= mins * MIN && (due === null || x.s + mins * MIN <= due));
+    const slot = d
+      .free(m.id)
+      .map((x) => ({ s: Math.max(x.s, from), e: x.e }))
+      .find((x) => x.e - x.s >= mins * MIN && (due === null || x.s + mins * MIN <= due));
     if (slot) {
-      const reason = due === null ? "it's the first open time" : `it's the first open time before ${what}`;
+      const reason = out ? "you said today is out" : due === null ? "it's the first open time" : `it's the first open time before ${what}`; // prettier-ignore
       d.changes.set(m.id, { action: "move", start: slot.s, end: slot.s + mins * MIN, reason });
       return d;
     }
@@ -435,6 +593,7 @@ export function checkResponse(req: RebuildRequest, res: RebuildResponse): string
   if (!problems.length && res.message !== d.message()) problems.push("the message doesn't match the diff");
   if (res.message.length > MAX_TEXT || plain(res.message) !== res.message)
     problems.push("the message isn't one plain SMS segment");
+  problems.push(...hardRuleViolations(req, res));
   const o = d.offer();
   if (JSON.stringify(res.offer ?? null) !== JSON.stringify(o ? { item_id: o.item_id, start: d.instant(o.start), end: d.instant(o.end) } : null)) problems.push("the offer doesn't match the plan"); // prettier-ignore
   return problems;

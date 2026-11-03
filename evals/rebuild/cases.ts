@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import type { RebuildRequest } from "@/lib/rebuild/contract";
+import { SCENARIOS } from "./scenarios";
 
 // Synthetic rebuild cases: a made-up student's week of Nov 2, 2026, as Tomorrow
 // would send it when a session passes undone. Each says what a good rebuild must
@@ -43,6 +44,10 @@ export type RebuildExpect = {
   changed?: string[];
   /** The missed item's new length, at most (a partial session, or what fits). */
   max_minutes?: number;
+  /** What the reply rules out (local "YYYY-MM-DD HH:mm" pairs): nothing may move into it, and the oracle skips it. */
+  rule_out?: [string, string][];
+  /** The length left to place, when the reply says (a partial session): the oracle ranks slots for exactly this. */
+  minutes?: number;
 };
 
 /** `label` is the short name the demo panel shows for the case. */
@@ -50,6 +55,8 @@ export type RebuildCase = {
   name: string;
   label: string;
   about: string;
+  /** What kind of day it is, for the review table. */
+  group?: string;
   request: RebuildRequest;
   expect: RebuildExpect;
 };
@@ -93,7 +100,7 @@ const base = (over: Partial<RebuildRequest>): RebuildRequest => ({
   ...over,
 });
 
-export const REBUILD_CASES: RebuildCase[] = [
+const ORIGINAL: RebuildCase[] = [
   {
     name: "simple-move",
     label: "Skipped, time tonight",
@@ -267,7 +274,11 @@ export const REBUILD_CASES: RebuildCase[] = [
       ends_by: "2026-11-05 10:00",
       max_changes: 1,
       max_minutes: 45,
+      minutes: 30,
       keep: ["s_outline", "s_hist"],
     },
   },
 ];
+
+/** The first eleven (the demo panel's), then everyday life (evals/rebuild/scenarios.ts). */
+export const REBUILD_CASES: RebuildCase[] = [...ORIGINAL.map((c) => ({ group: "original", ...c })), ...SCENARIOS];

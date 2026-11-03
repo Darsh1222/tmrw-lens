@@ -11,6 +11,23 @@ const Zone = z
   .string()
   .refine((z) => Intl.supportedValuesOf("timeZone").includes(z) || z === "UTC", "unknown time zone");
 const Id = z.string().min(1).max(64);
+/** A wall-clock time in the person's zone, "HH:mm". */
+const Clock = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'a local time, "HH:mm"');
+const Daily = z.object({ start: Clock, end: Clock });
+
+/**
+ * How the person lives, for the rules no move may break (src/lib/rebuild/rules.ts). Optional; without it Lens assumes
+ * sleep from 23:00 to 07:00, no quiet hours, and no study-time preference.
+ */
+export const RebuildPrefs = z.object({
+  /** When they go to sleep and wake up. No session ends within an hour of bedtime. */
+  sleep: Daily.nullable(),
+  /** Daily hours nothing is placed in (dinner with family, a shift): "start" to "end", may cross midnight. */
+  quiet: z.array(Daily).max(10).nullable(),
+  /** When they'd rather study: a tie-breaker in placement, never a rule. */
+  study_time: z.enum(["mornings", "afternoons", "nights"]).nullable(),
+});
+export type RebuildPrefs = z.infer<typeof RebuildPrefs>;
 
 export const RebuildPlanned = z.object({
   id: Id,
@@ -53,6 +70,7 @@ export const RebuildRequest = z
      * quiet hours already applied), not counting the time the items above use.
      */
     open_windows: z.array(z.object({ start: Instant, end: Instant })).max(200),
+    prefs: RebuildPrefs.nullable().optional(),
   })
   .superRefine((r, ctx) => {
     const missed = r.items.find((i) => i.id === r.missed.item_id);

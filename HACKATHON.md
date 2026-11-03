@@ -148,6 +148,13 @@ Per-person spend limits and two global brakes keep the public demo from using To
 
 ### Nov 2
 
+- Rebuilds held to a safety bar. Hard rules in code that the agent can't break and a finished rebuild is checked
+  against again: no overlaps with classes, sleep, quiet hours, or other sessions; after now, before the deadline;
+  never within 90 minutes of the miss (unless due within a day); never within an hour of bedtime; the text's times are
+  exactly the moves'; "Nothing else changed" is true. Placement is ranked by code (sooner, lighter day, their study
+  time, not late, not cramming), and every "soonest / last / only / lightest" in a reason is checked true. 68 cases
+  from everyday life, 3 runs each: hard rules 100%, best slot 98.9% (top 3: 100%), 68 of 68 pass, judge 4.90, $0.007 a
+  rebuild. Tonight's live bug (a 9:30pm miss moved to 10:30pm the same night) is case 1 and can't happen again.
 - An owner bypass for running the live demo and the SMS loop: with `OWNER_KEY` set, `/owner?key=…` sets a signed
   httpOnly cookie that skips the per-visitor and per-address limits. The owner's calls still count toward the $5
   public brake and are logged as `owner`.

@@ -82,6 +82,13 @@ deployments' environment variables. Send it from your server only.
     { "start": "2026-11-04T19:00:00-05:00", "end": "2026-11-04T22:00:00-05:00" },
     { "start": "2026-11-05T07:30:00-05:00", "end": "2026-11-05T09:30:00-05:00" },
   ],
+  // Optional, please send it: how the person lives, for the rules no move may break. Local "HH:mm" times.
+  // Without it Lens assumes sleep 23:00-07:00, no quiet hours, no study-time preference.
+  "prefs": {
+    "sleep": { "start": "23:30", "end": "07:30" }, // bedtime and waking; no session ends within an hour of bedtime
+    "quiet": [{ "start": "18:00", "end": "19:30" }], // daily hours nothing goes in; may cross midnight; or null
+    "study_time": "mornings", // "mornings" | "afternoons" | "nights" | null: a tie-breaker, never a rule
+  },
 }
 ```
 
@@ -126,10 +133,17 @@ offset. Item ids are unique, at most 64 characters.
   put the missed item in the first free time that fits before it's due, or dropped it if none does. It's still a valid
   rebuild; send it the same way.
 
-What Lens guarantees, checked from scratch before it answers: every move starts after `now`, sits inside
-`open_windows` (or a slot freed by another change), overlaps no `fixed` block and no other item, and ends before its
-`due` and its deadline. The same request again within 24 hours gets the same answer from Lens's cache, so retries are
-safe and free.
+What Lens guarantees, checked from scratch in code before it answers (the agent can't break these, and code's fallback
+keeps them too):
+
+- Every move starts after `now`, sits inside `open_windows` (or a slot freed by another change), and ends before its
+  `due` and its deadline.
+- Nothing overlaps a `fixed` block, another item, sleep, or quiet hours.
+- Nothing ends within an hour of bedtime.
+- Nothing starts within 90 minutes of the missed session's end, unless its deadline is within 24 hours.
+- The message's times are exactly the moves' times (and the offer's), read back from its words; it names every other
+  item that changed and none that didn't, and ends "Nothing else changed." The same request again within 24 hours gets the same answer from Lens's cache, so retries are
+  safe and free.
 
 Errors:
 

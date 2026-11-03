@@ -106,7 +106,7 @@ export default function Evals() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <Figure value={sam.invented_dates.split(" ")[0]} label="Invented dates" note={`of ${sam.invented_dates.split(" of ")[1]} audited`} />
           <Figure value={sam.fully_verified.match(/\((.+)\)/)?.[1] ?? sam.fully_verified} label="Fully verified on first read" note="The rest are real questions, asked once" /> {/* prettier-ignore */}
-          <Figure value={rebuild.headline.rebuilds_right.replace("/", " of ")} label="Rebuilds right" note={`Code alone: ${rebuild.headline.fallback_rebuilds_right.replace("/", " of ")}`} /> {/* prettier-ignore */}
+          <Figure value={`${Math.round(rebuild.headline.hard_rules * 100)}%`} label="Rebuilds that keep every rule" note={`${rebuild.headline.cases} cases, ${rebuild.headline.runs_per_case} runs each`} /> {/* prettier-ignore */}
           <Figure value={extract.headline.precision.replace(".0", "")} label="Text-a-photo precision" note={`Recall ${extract.headline.recall.replace(".0", "")}`} /> {/* prettier-ignore */}
         </div>
 
@@ -129,15 +129,16 @@ export default function Evals() {
           <p className="text-sm text-ink-2">Tokens per call {x.cost.tokens_per_call}; prompt cache hit rate {x.cost.cache_hit_rate}.</p>
         </Section>
 
-        <Section n="II · Rebuild" title="When a session is missed" intro={`${rebuild.headline.cases} weeks where a planned session passes undone: too tired tonight, sick, a reply that tries to give orders, the clock change, no time left. Every message was read and approved by a person; a judge model scores them too.`}> {/* prettier-ignore */}
+        <Section n="II · Rebuild" title="When a session is missed" intro={`${rebuild.headline.cases} weeks where a planned session passes undone, each run ${rebuild.headline.runs_per_case} times: too tired tonight, sick, did half, a heavy day, the clock change, a deadline moved, no time left, a reply that tries to give orders. Code checks every rule in every run, and ranks every slot to say where the session should have gone.`}> {/* prettier-ignore */}
           <Table
             caption="Rebuild agent against code alone"
             head={["", "Muse Spark agent", "Code alone"]}
             rows={[
-              ["Rebuilds right", rebuild.headline.rebuilds_right, rebuild.headline.fallback_rebuilds_right],
-              ["Moves Tomorrow would refuse", rebuild.headline.invalid_moves, 0],
+              ["Cases passed (all runs)", rebuild.headline.cases_passed, rebuild.headline.fallback_cases_passed],
+              ["Runs that keep every hard rule", `${(rebuild.headline.hard_rules * 100).toFixed(0)}%`, `${(rebuild.headline.fallback_hard_rules * 100).toFixed(0)}%`], // prettier-ignore
+              ["Placed in code's best slot (top 1 / top 3)", `${(rebuild.headline.top1 * 100).toFixed(0)}% / ${(rebuild.headline.top3 * 100).toFixed(0)}%`, "–"], // prettier-ignore
               ["Unkind messages", rebuild.headline.unkind_messages, 0],
-              ["Judge score (1 to 5)", rebuild.headline.judge_score.toFixed(1), "–"],
+              ["Judge score (1 to 5)", (rebuild.headline.judge_score ?? 0).toFixed(1), "–"],
               ["Model cost per rebuild", money(rebuild.headline.cost_per_rebuild), "free"],
               ["Turns per rebuild", rebuild.headline.turns_per_rebuild, "–"],
             ]}

@@ -123,19 +123,23 @@ export function Viewer({
                 className="block h-auto w-full"
               />
               <svg viewBox="0 0 1 1" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-                {regions.map((m, n) => (
-                  <polygon
-                    key={`r-${n}-${reveal}`}
-                    points={m.evidence.region!.outline.map(([x, y]) => `${x},${y}`).join(" ")}
-                    pathLength={1}
-                    className={animate ? "forum-draw" : ""}
-                    style={delay(n)}
-                    fill="none"
-                    stroke="var(--tm-gilt)"
-                    strokeWidth={2}
-                    vectorEffect="non-scaling-stroke"
-                  />
-                ))}
+                {/* Each outline is gilt over a thin dark line, so it reads on a pale wall or a dark desk alike. */}
+                {regions.map((m, n) =>
+                  (["var(--tm-outline-under)", "var(--tm-gilt)"] as const).map((stroke, layer) => (
+                    <polygon
+                      key={`r-${n}-${layer}-${reveal}`}
+                      points={m.evidence.region!.outline.map(([x, y]) => `${x},${y}`).join(" ")}
+                      pathLength={1}
+                      className={animate ? "forum-draw" : ""}
+                      style={delay(n)}
+                      fill="none"
+                      stroke={stroke}
+                      strokeWidth={layer ? 2.5 : 5}
+                      strokeLinejoin="round"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  )),
+                )}
                 {ordered.map((m, n) => {
                   const b = m.evidence.bbox!;
                   const on = m.id === selected;

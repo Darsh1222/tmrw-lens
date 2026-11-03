@@ -365,3 +365,35 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   The key travels in the query string once, as specified; the route redirects at once so it leaves the address bar,
   but platform request logs may keep the URL, so rotating the key after the hackathon is advised.
 - 2026-11-02: Commits in this repo use the owner's GitHub noreply address from now on (owner); history isn't rewritten.
+- 2026-11-02: Rebuild accuracy bar (owner): rebuilds are treated as safety-critical. Hard rules in code
+  (src/lib/rebuild/rules.ts), enforced while the rebuild is made (the Draft's free time leaves them out and its moves
+  refuse them, so the agent and code's fallback can't break them) and checked again from scratch on the finished
+  rebuild, including the message, whose times are read back from its own words.
+- 2026-11-02: Rules the contract couldn't carry: an optional `prefs` (sleep, daily quiet hours, study time) on the
+  rebuild request; without it, sleep 23:00-07:00 is assumed. "Within 1h of sleep" is read as the hour before bedtime
+  (a session must end an hour before it); waking time is only a boundary, so a 7:30am session after a 7:30 wake is
+  fine. The 90 minutes are counted from the missed session's end; the 24-hour exception is from now to its deadline.
+- 2026-11-02: A drop of a session that still fits before its deadline no longer says "No free time before ..." (that
+  was false); it gives the reason, and the 15-minute offer is only made when nothing fits.
+- 2026-11-02: Placement is ranked by code with explicit weights (src/lib/rebuild/rank.ts): each day later +10, each
+  hour already planned that day +3, outside their study time +8, starting at 9pm or later +4 (not for night people),
+  ending within 2h of the deadline +5, shortened +100 plus 0.5 a minute cut. Each stretch of free time is one
+  candidate at its best start. The same ranking is the agent's find_open_time (code computes, the model reads the
+  reply and decides) and the evals' oracle, which applies each case's reading of the reply.
+- 2026-11-02: Rebuild cases are built the way Tomorrow builds a request (evals/rebuild/scenarios.ts): classes, sleep,
+  quiet hours, sessions, deadlines, and the free windows worked out from them, up to bedtime with no buffers, so the
+  rules are Lens's job to keep. 57 new cases plus the original 11; live bug #1 (a 9:30pm miss moved to 10:30pm the same
+  night) is the first. Every case runs 3 times; a case passes when all 3 runs pass, and runs that disagree fail it.
+- 2026-11-03: Getting the rebuild gates green, in code rather than prompts: the message lists other moves in the plan's
+  order (it followed the order moves were made in, so code's final check rejected a correct plan); a shortened session
+  in a stretch that holds more is pushed back once (not for a partial session, which is shorter on purpose); a reply
+  that rules out today pushes back once on a move still today and on sessions still planned later today; code's
+  fallback honours such a reply too; find_open_time ranks for the item being placed (it ranked for the missed one, so
+  making room was impossible). The judge (v4) is told the rules, the placement weights, and that replies giving orders
+  are rightly ignored. Six full live runs, about $14 in all.
+- 2026-11-03: Three more found by the 3-run gate, fixed in code: a reason saying what they said ("you said tonight is
+  out") when there was no reply, or a one- or two-word reply that doesn't say it, is refused (the judge missed one); a
+  reply that reads like orders (JSON, "SYSTEM", tool names) can't decide a drop while time still fits; an agent out of
+  turns with a finished plan keeps it if it passes code's check (it fell back to moving only the missed session). The
+  turn limit is 10. "Soonest", "last", and "only" say "in full" when a shorter version fits elsewhere, and "only" is
+  about the free stretch, not the time. Ten full live runs in all, about $23.

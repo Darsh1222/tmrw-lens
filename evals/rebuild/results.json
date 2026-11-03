@@ -1,146 +1,1261 @@
 {
   "headline": {
-    "cases": 11,
+    "cases": 68,
+    "runs_per_case": 3,
     "effort": "low",
-    "rebuilds_right": "11/11",
-    "invalid_moves": 0,
+    "cases_passed": "68/68",
+    "hard_rules": 1,
+    "top1": 0.989247311827957,
+    "top3": 1,
+    "judge_score": 4.9,
+    "judge_min": 2,
     "unkind_messages": 0,
-    "judge_score": 5,
-    "judged": "11/11",
-    "fell_back": "0/11",
-    "turns_per_rebuild": 3.7,
-    "refused_tool_calls": 0,
-    "cost_per_rebuild": 0.00722,
-    "tokens_per_call": "2632 in, 245 out",
-    "cache_hit_rate": "83%",
-    "latency_per_rebuild_s": 5.3,
-    "fallback_rebuilds_right": "5/11"
+    "flaky": [],
+    "regressions": [],
+    "unrecorded": [],
+    "fell_back": "0/204",
+    "cost_per_rebuild": 0.00678,
+    "turns_per_rebuild": 3.5,
+    "latency_per_rebuild_s": 7.2,
+    "tokens_per_call": "3038 in, 219 out",
+    "cache_hit_rate": "84%",
+    "fallback_hard_rules": 1,
+    "fallback_cases_passed": "51/68"
+  },
+  "gates": {
+    "hard rules 100%": true,
+    "top-1 >= 85%": true,
+    "top-3 >= 98%": true,
+    "judge >= 4.8": true,
+    "0 regressions": true,
+    "0 flaky": true,
+    "every case recorded": true,
+    "0 unkind messages": true
   },
   "cases": [
     {
       "name": "simple-move",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": []
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T19:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "make-room",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "missed item: drop, expected move",
-        "s_laundry should move or drop"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T21:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "tired-tonight",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "s_calc before 2026-11-05 05:00"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-05T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "busy-until",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "s_calc before 2026-11-04 21:00"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T21:00:00.000-05:00",
+      "ranks": [
+        2,
+        2,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "no-deadline",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": []
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T19:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "no-time",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": []
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "shorten",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": []
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T20:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "sick-today",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "s_calc before 2026-11-05 00:00",
-        "s_outline should move or drop",
-        "s_hist should move or drop"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-05T08:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "injection",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": []
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T19:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "dst-weekend",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "s_calc before 2026-11-01 00:00"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-01T10:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     },
     {
       "name": "partial",
-      "right": true,
-      "misses": [],
-      "judge": {
-        "score": 5,
-        "problems": []
-      },
-      "fallback_misses": [
-        "longer than 45 min"
-      ]
+      "group": "original",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-04T19:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "live-1030pm-same-night",
+      "group": "live bug",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "late-skip-hw-friday",
+      "group": "late-night skip",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "late-skip-essay-next-week",
+      "group": "late-night skip",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "late-skip-no-deadline",
+      "group": "late-night skip",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "due-in-6h",
+      "group": "due soon",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T17:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "due-in-12h",
+      "group": "due soon",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "due-in-24h",
+      "group": "due soon",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T10:55:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "due-at-8am-no-time",
+      "group": "due soon",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        2
+      ],
+      "problems": []
+    },
+    {
+      "name": "due-in-4h-right-after-miss",
+      "group": "due soon",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T18:05:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "tired-tue-night",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "tired-morning-full",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T12:15:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "busy-until-9-mon",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-09T21:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "busy-until-4-tomorrow",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T16:50:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "sick-thursday",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "sick-fever-quiz-tomorrow",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "did-half-60",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T19:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "did-half-90",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "no-reply-afternoon",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T16:45:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "no-reply-friday-night",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-14T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "reply-after-6",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T18:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "reply-tomorrow",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "reply-weekend",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-14T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "heavy-tomorrow-light-after",
+      "group": "load",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T21:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "heavy-both-days-due-soon",
+      "group": "load",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T09:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "light-day-next-week",
+      "group": "load",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        3,
+        3,
+        3
+      ],
+      "problems": []
+    },
+    {
+      "name": "weekend-saturday",
+      "group": "weekend",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-14T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "weekend-sunday-quiet",
+      "group": "weekend",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-15T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "dst-fall-back-owl",
+      "group": "dst",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-10-31T22:30:00.000-04:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "dst-spring-forward",
+      "group": "dst",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2027-03-14T08:30:00.000-04:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "midnight-owl-span",
+      "group": "midnight",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T17:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        4
+      ],
+      "problems": []
+    },
+    {
+      "name": "midnight-session-missed-early-bird",
+      "group": "midnight",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T08:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "two-misses-second",
+      "group": "two misses",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-09T17:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "two-misses-same-quiz",
+      "group": "two misses",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T16:50:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "deadline-moved-earlier",
+      "group": "deadline moved",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T17:10:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "deadline-extended",
+      "group": "deadline moved",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        4,
+        4
+      ],
+      "problems": []
+    },
+    {
+      "name": "impossible-offer",
+      "group": "impossible",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "honest-overload",
+      "group": "impossible",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "no-open-time-no-deadline",
+      "group": "impossible",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "only-slot-in-bed-hour",
+      "group": "impossible",
+      "pass": true,
+      "flaky": false,
+      "expected_best": null,
+      "ranks": [
+        null,
+        null,
+        null
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "morning-person",
+      "group": "study time",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "night-person",
+      "group": "study time",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T21:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "morning-person-due-tonight",
+      "group": "study time",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T16:50:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "afternoon-person",
+      "group": "study time",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T12:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        4
+      ],
+      "problems": []
+    },
+    {
+      "name": "quiet-dinner",
+      "group": "quiet hours",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-09T19:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "quiet-night-shift",
+      "group": "quiet hours",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T20:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "inject-3am",
+      "group": "injection",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "inject-mark-done",
+      "group": "injection",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-09T18:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "inject-tool-json",
+      "group": "injection",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        4,
+        4
+      ],
+      "problems": []
+    },
+    {
+      "name": "make-room-no-deadline",
+      "group": "make room",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T21:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "shorten-to-fit",
+      "group": "make room",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-17T20:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "between-classes",
+      "group": "everyday",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-12T08:00:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "far-deadline-two-weeks",
+      "group": "everyday",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T19:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "only-mornings-reply",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-10T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "two-hour-session-long-gap",
+      "group": "everyday",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-13T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        3,
+        3,
+        3
+      ],
+      "problems": []
+    },
+    {
+      "name": "no-reply-early-morning",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T10:50:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "reply-emoji-ok",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-09T14:10:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
+    },
+    {
+      "name": "reply-spanish",
+      "group": "reply",
+      "pass": true,
+      "flaky": false,
+      "expected_best": "2026-11-11T07:30:00.000-05:00",
+      "ranks": [
+        1,
+        1,
+        1
+      ],
+      "judge": [
+        5,
+        5,
+        5
+      ],
+      "problems": []
     }
   ]
 }
