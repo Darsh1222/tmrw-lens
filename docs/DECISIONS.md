@@ -471,3 +471,11 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   (IANA zone, no VTIMEZONE block; X-WR-TIMEZONE set), the class's RRULE with UNTIL in UTC, an EXDATE per skipped break
   meeting. Items: TZID times, or VALUE=DATE all-day; STATUS:TENTATIVE and "(tentative)" when their syllabus says so;
   undated tasks are left out. Lines folded at 75 octets, CRLF. Download only; nothing is sent.
+- 2026-11-03: Visual pass (owner's D1-D5). Kinetic type moves a cover, not the words, so text is painted at first
+  frame (LCP unchanged or better); the hero's covers are server HTML animated by CSS, others are armed in a ref
+  callback only if off screen at mount. Contours: marching squares on a 14px grid, about 20 fps, only while seen;
+  one still frame on phones and under reduced motion. Swarm: fired as the plan's cards arrive, from polygons marked
+  data-swarm to the cards of their items; end points re-measured every frame; halves its particles after two slow
+  frames. Grain: a tiled SVG noise overlay (multiply / screen) on frames and stat cards, and a mask in the ink of
+  labels (never under 88%). Paper: offset-layer shadows, hover lift by `translate` so it composes with arrivals. D6
+  (flow field) skipped for time.

@@ -1,6 +1,7 @@
 "use client";
 
 import { FileText, Trash, UploadSimple } from "@phosphor-icons/react";
+import { Reveal } from "./Reveal";
 import { useEffect, useRef, useState } from "react";
 import type { SourceKind } from "@/lib/schemas/evidence";
 import { KIND_LABEL } from "./prepare";
@@ -78,9 +79,7 @@ export function Upload({
     <section id="upload" aria-labelledby="upload-title" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <span className="forum-caps">I · Read</span>
-        <h2 id="upload-title" className="forum-display text-3xl sm:text-4xl">
-          Add your week.
-        </h2>
+        <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your week." />
         <p className="max-w-2xl text-ink-2">
           Add a syllabus, your Testudo schedule, a whiteboard or notes photo, or a course site&apos;s to-do list. Lens
           reads each page with Muse Spark, outlines photos with SAM 3.1, and keeps none of them.

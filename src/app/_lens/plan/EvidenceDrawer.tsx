@@ -101,7 +101,7 @@ export function EvidenceDrawer({
         role="dialog"
         aria-modal="true"
         aria-labelledby="evidence-title"
-        className={`absolute inset-x-0 bottom-0 flex max-h-[88vh] flex-col overflow-y-auto rounded-t-2xl border border-line bg-paper p-6 transition-[translate] duration-300 ease-out motion-reduce:transition-none md:inset-y-0 md:left-auto md:right-0 md:max-h-none md:w-[460px] md:rounded-none md:rounded-l-2xl ${open ? "translate-0" : "translate-y-full md:translate-x-full md:translate-y-0"}`}
+        className={`paper-sheet absolute inset-x-0 bottom-0 flex max-h-[88vh] flex-col overflow-y-auto rounded-t-2xl border border-line bg-paper p-6 transition-[translate] duration-300 ease-out motion-reduce:transition-none md:inset-y-0 md:left-auto md:right-0 md:max-h-none md:w-[460px] md:rounded-none md:rounded-l-2xl ${open ? "translate-0" : "translate-y-full md:translate-x-full md:translate-y-0"}`}
         data-drawer={open ? "open" : "closed"}
       >
         {(item || cls) && (

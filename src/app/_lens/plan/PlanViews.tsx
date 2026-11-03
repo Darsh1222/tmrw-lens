@@ -19,7 +19,7 @@ function Flag({ e, onOpen, arrive }: { e: Entry; onOpen: (id: string) => void; a
     <button
       onClick={() => onOpen(e.id)}
       data-item={e.id}
-      className={`flex min-h-8 w-full items-center gap-1.5 rounded-md px-2 text-left text-xs text-ink ${arrive ?? ""}`}
+      className={`paper flex min-h-8 w-full items-center gap-1.5 rounded-md px-2 text-left text-xs text-ink ${arrive ?? ""}`}
       style={{ background: `var(--tm-${e.tone})`, border: "1px solid var(--tm-border)" }}
       aria-label={`${e.title}, due, ${e.status === "verified" ? "verified" : "needs a look"}`}
     >
@@ -135,7 +135,7 @@ export function WeekView({
                 data-item={e.id}
                 onClick={() => onOpen(e.id)}
                 aria-label={`${e.title}, ${DateTime.fromISO(e.day).toFormat("cccc")} ${e.label}${cls ? ", class" : ""}`}
-                className={`absolute overflow-hidden rounded-lg px-1.5 py-1 text-left text-xs ${cls ? "text-ink-2" : "text-ink"} ${arrive(n++) ?? ""}`}
+                className={`absolute overflow-hidden rounded-lg px-1.5 py-1 text-left text-xs ${cls ? "text-ink-2" : "paper text-ink"} ${arrive(n++) ?? ""}`}
                 style={{
                   left: `calc(${AXIS}px + (100% - ${AXIS}px) * ${c} / 7 + 3px)`,
                   width: `calc((100% - ${AXIS}px) / 7 - 6px)`,

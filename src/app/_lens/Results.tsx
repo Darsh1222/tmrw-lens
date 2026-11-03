@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "./Reveal";
 import extraction from "../../../evals/results.json";
 import rebuild from "../../../evals/rebuild/results.json";
 
@@ -20,16 +21,14 @@ export function Results() {
     <section id="results" aria-labelledby="results-heading" className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <span className="forum-caps">IV · Results</span>
-        <h2 id="results-heading" className="forum-display text-3xl sm:text-4xl">
-          Measured, not promised.
-        </h2>
+        <Reveal id="results-heading" className="forum-display text-3xl sm:text-4xl" text="Measured, not promised." />
         <p className="max-w-2xl text-ink-2">
           Every number comes from made-up schedules and photos, replayed in CI on every change.
         </p>
       </div>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {STATS.map((s) => (
-          <li key={s.label} className="flex flex-col gap-2 rounded-2xl border border-line bg-card p-6">
+          <li key={s.label} className="grain paper-card flex flex-col gap-2 rounded-2xl border border-line bg-card p-6">
             <span className="forum-display text-5xl">{s.value}</span>
             <span className="font-medium">{s.label}</span>
             <span className="text-sm text-ink-2">{s.note}</span>

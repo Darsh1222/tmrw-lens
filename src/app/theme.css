@@ -385,3 +385,115 @@ body {
     opacity: 0.5;
   }
 }
+
+/* Kinetic type (Reveal.tsx): each word slides out from under a cover the colour of the page, once. Only the cover
+   moves (transform), so the words are painted, measured, and readable from the first frame. */
+.kt-w {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Room for descenders and an italic's overhang, taken back so lines don't move. */
+  padding: 0 0.06em 0.14em 0;
+  margin: 0 -0.06em -0.14em 0;
+}
+.kt-c {
+  position: absolute;
+  inset: 0;
+  background: var(--tm-bg);
+  transform: translateY(101%);
+  pointer-events: none;
+}
+@keyframes kt-uncover {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-101%);
+  }
+}
+[data-kt="armed"] .kt-c {
+  transform: translateY(0);
+}
+[data-kt="load"] .kt-c,
+[data-kt="on"] .kt-c,
+[data-kt="paused"] .kt-c {
+  animation: kt-uncover 720ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+[data-kt="paused"] .kt-c {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kt-c {
+    display: none;
+  }
+}
+
+/* Risograph grain: a fine printed-paper noise over section labels, image frames, and the stat cards. One small SVG,
+   tiled; it darkens a touch in light mode and lightens a touch in dark, never enough to change what you can read. */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -.45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 .88'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-blend: multiply;
+  --grain-alpha: 0.16;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --grain-blend: screen;
+    --grain-alpha: 0.05;
+  }
+}
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+/* On a label the grain is in the ink itself, like a riso print: the letters are speckled a little (never below 88%
+   of their colour), and nothing around them changes. */
+.forum-caps {
+  -webkit-mask-image: var(--grain-ink);
+  mask-image: var(--grain-ink);
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: var(--grain);
+  mix-blend-mode: var(--grain-blend);
+  opacity: var(--grain-alpha);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Paper cutouts: plan cards and the proof drawer as cut paper, a sheet with a second layer just behind it. On hover a
+   card lifts a pixel (translate, so it never fights an arrival's transform). */
+.paper,
+.paper-card {
+  box-shadow:
+    0 1px 0 var(--tm-border-strong),
+    2px 3px 0 -1px var(--tm-sunken),
+    2px 3px 0 0 var(--tm-border);
+  transition:
+    translate 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+.paper:hover,
+.paper:focus-visible {
+  translate: 0 -1px;
+  box-shadow:
+    0 1px 0 var(--tm-border-strong),
+    3px 5px 0 -1px var(--tm-sunken),
+    3px 5px 0 0 var(--tm-border-strong);
+}
+.paper-sheet {
+  box-shadow:
+    -1px 0 0 var(--tm-border-strong),
+    -6px 4px 0 -2px var(--tm-sunken),
+    -6px 4px 0 -1px var(--tm-border);
+}
+@media (prefers-reduced-motion: reduce) {
+  .paper,
+  .paper-card {
+    transition: none;
+  }
+}

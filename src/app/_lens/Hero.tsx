@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { Contours } from "./Contours";
+import { Reveal } from "./Reveal";
 import { useEffect, useState } from "react";
 import { buttonClass } from "./ui";
 import { useReducedMotion, useSeen } from "./useSeen";
@@ -94,12 +96,11 @@ function GlidePreview() {
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="grid items-center gap-10 pt-10 sm:pt-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+    <section aria-labelledby="hero-title" className="relative isolate grid items-center gap-10 pt-10 sm:pt-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+      <Contours />
       <div className="flex flex-col gap-6">
         <span className="forum-caps">Tomorrow Lens</span>
-        <h1 id="hero-title" className="forum-display text-[2.75rem] leading-[1.05] sm:text-6xl">
-          Your week, read, verified, and <em className="text-crimson">rebuilt</em> when life happens.
-        </h1>
+        <Reveal as="h1" atLoad id="hero-title" className="forum-display text-[2.75rem] leading-[1.05] sm:text-6xl" text="Your week, read, verified, and *rebuilt* when life happens." />
         <p className="max-w-xl text-lg text-ink-2">
           Drop in a syllabus, schedule or whiteboard photo. Lens builds a plan you can verify. Miss a session, and it
           rebuilds the week.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Reveal } from "./Reveal";
 import type { DemoReply } from "@/app/api/rebuild/demo/route";
 import REBUILDS from "@/lib/demo/rebuilds.json";
 import type { Step } from "@/lib/rebuild/agent";
@@ -464,7 +465,7 @@ function Frame({
       >
         <header className="flex flex-col gap-2">
           <span className="forum-caps">III · Rebuild</span>
-          <h2 className="forum-display text-3xl sm:text-4xl">Miss a session. Lens rebuilds the week.</h2>
+          <Reveal className="forum-display text-3xl sm:text-4xl" text="Miss a session. Lens rebuilds the week." />
           <p className="max-w-2xl text-base" style={{ color: "var(--tm-text-2)" }}>
             When a planned session passes undone, Tomorrow asks once. Lens decides what moves and why, code checks every
             move against the free time, and Tomorrow sends one text.

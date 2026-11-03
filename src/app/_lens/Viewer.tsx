@@ -104,7 +104,7 @@ export function Viewer({
       <div ref={attach} data-anim={state}>
         {page.url ? (
           <figure className="flex flex-col gap-2">
-            <div className="relative overflow-hidden rounded-xl border border-line bg-well">
+            <div className="grain relative overflow-hidden rounded-xl border border-line bg-well">
               {/* eslint-disable-next-line @next/next/no-img-element -- a local object URL, not an optimizable asset */}
               <img
                 src={page.url}
@@ -127,6 +127,8 @@ export function Viewer({
                   (["var(--tm-outline-under)", "var(--tm-gilt)"] as const).map((stroke, layer) => (
                     <polygon
                       key={`r-${n}-${layer}-${key}`}
+                      // The ids of every item on this object: where the swarm (swarm.ts) streams from, to their cards.
+                      data-swarm={layer ? here.filter((x) => x.evidence.region && JSON.stringify(x.evidence.region.outline) === JSON.stringify(m.evidence.region!.outline)).map((x) => x.id).join(" ") : undefined} // prettier-ignore
                       points={m.evidence.region!.outline.map(([x, y]) => `${x},${y}`).join(" ")}
                       pathLength={1}
                       className={animate ? "forum-draw" : ""}

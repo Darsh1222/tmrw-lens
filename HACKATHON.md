@@ -211,6 +211,13 @@ Per-person spend limits and two global brakes keep the public demo from using To
 - Add to calendar: the verified plan as an .ics file for any calendar app, the same items Send would send after the same
   audit. Weekly classes repeat until the last day of classes and skip break days; exams and deadlines are timed in your
   zone, or all-day without a time; tentative dates are marked tentative; a TBA final isn't on it.
+- A visual pass in the Forum look, each effect with a job: headings come out from under a paper cover word by word
+  when you reach them (the hero's text is painted from the first frame, so it never delays the page); faint
+  topographic lines drift behind the hero, bunched where the sample week is busiest; when the plan's cards land, ink
+  streams from each outline SAM drew on the photo into the cards of what was written there (canvas, at most 400
+  particles, 1.2 seconds); riso grain on labels, photo frames, and the stat cards; plan cards and the proof drawer as
+  cut paper. Everything waits until it's seen, pauses off screen, and is still under reduced motion. Home LCP 2.3-2.6 s
+  on a phone (was 2.9 s), layout shift 0, accessibility 100, about 6 KB of added JavaScript.
 
 ### Nov 2
 

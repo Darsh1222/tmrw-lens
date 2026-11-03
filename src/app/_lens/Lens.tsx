@@ -1,6 +1,8 @@
 "use client";
 
 import { DateTime } from "luxon";
+import { Reveal } from "./Reveal";
+import { swarm } from "./swarm";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import sample from "@/lib/demo/sample-week.json";
 import { useStored, writeStored } from "./stored";
@@ -278,6 +280,12 @@ export function Lens() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the hook's functions are stable
   }, [cards, planStarted, reducedMotion]);
   const revealed = useCallback(() => setArrival((a) => (a === "waiting" ? "arriving" : a)), []);
+  // As the cards land, ink streams from each SAM outline into its cards (swarm.ts).
+  useEffect(() => {
+    if (cards !== "arriving" || !planStarted || reducedMotion) return;
+    const t = setTimeout(swarm, 60);
+    return () => clearTimeout(t);
+  }, [cards, planStarted, reducedMotion]);
   const arrive = (n: number) =>
     cards === "done" || reducedMotion
       ? undefined
@@ -333,9 +341,7 @@ export function Lens() {
       <section id="prove" aria-labelledby="prove-title" className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <span className="forum-caps">II · Prove</span>
-        <h2 id="prove-title" className="forum-display text-3xl sm:text-4xl">
-          Every date, with its proof.
-        </h2>
+        <Reveal id="prove-title" className="forum-display text-3xl sm:text-4xl" text="Every date, with its proof." />
         <p className="max-w-2xl text-ink-2">
           Each item links to the exact words it came from and how its date was worked out. Tap one to see it.
         </p>
@@ -391,7 +397,7 @@ export function Lens() {
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
-            <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+            <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
               <Viewer
                 inputs={inputs.filter((i) => i.status === "read")}
                 at={at}
