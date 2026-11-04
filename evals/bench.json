@@ -1,0 +1,90 @@
+{
+  "before": {
+    "date": "2026-11-03",
+    "runs": 2,
+    "model": "muse-spark-1.3",
+    "table": {
+      "text PDF": {
+        "first_p50": 10991,
+        "first_p90": 13623,
+        "full_p50": 12484,
+        "full_p90": 16488,
+        "n": 6
+      },
+      "photo": {
+        "first_p50": 20275,
+        "first_p90": 28760,
+        "full_p50": 20275,
+        "full_p90": 28760,
+        "n": 4
+      },
+      "screenshot": {
+        "first_p50": 64241,
+        "first_p90": 71173,
+        "full_p50": 64241,
+        "full_p90": 71173,
+        "n": 2
+      },
+      "scanned PDF, 10 pages": {
+        "first_p50": 10852,
+        "first_p90": 16574,
+        "full_p50": 51736,
+        "full_p90": 54470,
+        "n": 2
+      },
+      "cached repeat": {
+        "first_p50": 0,
+        "first_p90": 0,
+        "full_p50": 0,
+        "full_p90": 0,
+        "n": 5
+      }
+    },
+    "failures": {},
+    "spend_usd": 0.5315
+  },
+  "after": {
+    "date": "2026-11-04",
+    "runs": 2,
+    "model": "muse-spark-1.3",
+    "table": {
+      "text PDF": {
+        "first_p50": 6724,
+        "first_p90": 8425,
+        "full_p50": 8425,
+        "full_p90": 10668,
+        "n": 6
+      },
+      "photo": {
+        "first_p50": 8395,
+        "first_p90": 9690,
+        "full_p50": 10547,
+        "full_p90": 11636,
+        "n": 4
+      },
+      "screenshot": {
+        "first_p50": 18682,
+        "first_p90": 20373,
+        "full_p50": 21284,
+        "full_p90": 23296,
+        "n": 2
+      },
+      "scanned PDF, 10 pages": {
+        "first_p50": 5483,
+        "first_p90": 6524,
+        "full_p50": 26525,
+        "full_p90": 29029,
+        "n": 2
+      },
+      "cached repeat": {
+        "first_p50": 0,
+        "first_p90": 0,
+        "full_p50": 0,
+        "full_p90": 0,
+        "n": 5
+      }
+    },
+    "failures": {},
+    "spend_usd": 0.3859
+  }
+}

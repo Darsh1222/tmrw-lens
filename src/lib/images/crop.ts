@@ -33,7 +33,7 @@ export async function cropBoxes(image: Uint8Array, boxes: BBox[], clips?: (Point
   const img = await loadImage(Buffer.from(image));
   return boxes.map((b, i) => {
     // Boxes from the model can be a character short at either end; a re-read that loses a digit fails.
-    const padX = 0.05;
+    const padX = 0.08;
     const padY = (b.y1 - b.y0) * 0.35;
     const x0 = Math.max(0, b.x0 - padX) * img.width;
     const y0 = Math.max(0, b.y0 - padY) * img.height;

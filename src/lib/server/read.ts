@@ -32,7 +32,7 @@ export async function readCached(
   await onMiss?.();
   const { page: reading, calls } = await readPage(
     kind,
-    { page, image, mime, text: kind === "testudo_text" ? text : image ? text : null },
+    { page, image, mime, text },
     { env, sam: SEGMENTED_KINDS.includes(kind) },
   );
   await cache.set(content, reading).catch(() => {});

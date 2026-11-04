@@ -74,9 +74,10 @@ export function blockEdges(p: Pixels, box: ModelBox, reach = 12): Edges | null {
   const y1 = px(box.y_max, p.height);
   const h = y1 - y0;
   if (x1 - x0 < 4 || h < 4) return null;
-  // Never further than half the model's height past its box: two same-coloured blocks back to back stay two.
-  const lo = clampY(p, y0 - h / 2);
-  const hi = clampY(p, y1 + h / 2);
+  // Up to one and a half of the model's heights past its box (its box can be short by half a block); blocks back to
+  // back still stay two, since the gap of page between them ends a run.
+  const lo = clampY(p, y0 - 1.5 * h);
+  const hi = clampY(p, y1 + 1.5 * h);
   let best: Edges | null = null;
   for (const fx of [0.75, 0.6, 0.85, 0.5, 0.4, 0.3, 0.95])
     for (const fy of [0.5, 0.35, 0.65, 0.2, 0.8]) {

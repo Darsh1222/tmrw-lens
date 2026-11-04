@@ -159,6 +159,19 @@ Per-person spend limits and two global brakes keep the public demo from using To
   replies now rule out only the time before; that case moves the session to 9pm, and reasons must say what the person
   actually said. Rebuild evals: 11 of 11 right, 0 invalid moves, 0 unkind messages, judge 4.73.
 
+### Nov 4
+
+- Faster, and it reads more kinds of files. A PDF with real text goes as text (no vision); every page is read at once
+  and shows the moment it's back; reading starts as soon as a file is added. A Testudo grid read used to fail its own
+  check every time and redo the whole read: fixed (64 s to 21 s). Measured on a fixed set with `pnpm bench`: text PDF
+  8.4 s (was 12.5 s), photo 10.5 s (20.3 s), 10-page scan 26.5 s (52 s). New: Word, PowerPoint, Excel, CSV, saved
+  course pages, and calendar files (.ics, exact dates, no model at all), with plain messages for password-protected
+  PDFs and old Office formats.
+- Dates the way real syllabi write them: week-by-week tables ("Week 3 Thu"), ranges ("Oct 26-30", asked as first or
+  last day), "every Friday" (repeats, so asked), "due next class" (asked), TBA, ISO dates, "11 December 2026", and
+  dates written day first ("25/11/2026"), which are asked and never read the US way. Three new synthetic syllabi,
+  including one scanned sideways: 0 invented dates in 210, every item found.
+
 ### Nov 3
 
 - Rebuilds pick times like a thoughtful friend would. How much "sooner" matters depends on urgency: due within 30

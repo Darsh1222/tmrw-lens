@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createCanvas, GlobalFonts, loadImage, type Canvas, type SKRSContext2D } from "@napi-rs/canvas";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { renderPdfPages } from "./lib/render-pdf";
 
 const OUT = join(import.meta.dirname, "..", "fixtures", "synthetic");
 const FONTS = join(import.meta.dirname, "..", "fixtures", "fonts");
@@ -364,6 +365,87 @@ async function policySyllabusPdf() {
     }
   }
   return doc.save();
+}
+
+/** Lines on a page, at a size; a long line wraps under itself. */
+async function textPages(pages: [string, boolean?, number?][][], size: [number, number] = [612, 792]) {
+  const doc = await newPdf();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  for (const lines of pages) {
+    const page = doc.addPage(size);
+    let y = size[1] - 52;
+    for (const [text, isBold, sz] of lines) {
+      if (text)
+        page.drawText(text, { x: 48, y, size: sz ?? 10, font: isBold ? bold : font, color: rgb(0.1, 0.1, 0.1) });
+      y -= (sz ?? 10) + 8;
+    }
+  }
+  return doc.save();
+}
+
+/**
+ * The styles real syllabi use for dates, landscape, as a week-by-week table: "Week 3 Thu", "due next class", a range
+ * of days, "every Friday", and TBA. Only "Week N" dates can be worked out; everything else is asked, never guessed.
+ */
+const weeklySyllabusPdf = () =>
+  textPages(
+    [
+      [
+        ["STAT400 Applied Probability and Statistics I, Fall 2026", true, 15],
+        ["Synthetic syllabus for testing (not a real course page)"],
+        ["Classes begin Monday, August 31, 2026. Week 1 is the week of August 31."],
+        [""],
+        ["Week | Dates          | Topic                              | Due", true],
+        ["1    | Aug 31 - Sep 4 | Probability, sample spaces        | -"],
+        ["3    | Sep 14 - Sep 18 | Conditional probability          | Homework 1 due Week 3 Thu"],
+        ["5    | Sep 28 - Oct 2 | Discrete random variables         | Lab report 1 due next class"],
+        ["7    | Oct 12 - Oct 16 | Review                            | Midterm 1: Week 7 Wed, in class"],
+        ["9    | Oct 26 - Oct 30 | Continuous distributions          | Project proposals: Oct 26-30"],
+        ["11   | Nov 9 - Nov 13 | Sampling distributions            | Homework 4 due Week 11 Mon"],
+        [""],
+        ["Reading quizzes every Friday in discussion."],
+        ["Final project presentations: TBA"],
+      ],
+    ],
+    [792, 612],
+  );
+
+/** A syllabus that writes dates day first, as much of the world does: those are asked, never read the US way. */
+const dayFirstSyllabusPdf = () =>
+  textPages([
+    [
+      ["ECON210 Intermediate Microeconomics, Autumn term 2026", true, 15],
+      ["Synthetic syllabus for testing (not a real course page)"],
+      [""],
+      ["Assessment", true, 12],
+      ["Problem set 2 due 25/11/2026"],
+      ["Class test: 03/11/2026"],
+      ["Final exam: 11 December 2026"],
+    ],
+  ]);
+
+/**
+ * A page scanned sideways: the syllabus rendered, turned a quarter turn, on greyish paper with grain, as a phone scan of
+ * a page fed in the wrong way round looks. No text layer: only vision can read it.
+ */
+async function rotatedScan(pdf: Uint8Array) {
+  const [page] = await renderPdfPages(pdf, { scale: 1.6 });
+  const img = await loadImage(page.png);
+  const c = createCanvas(img.height, img.width);
+  const g = c.getContext("2d");
+  g.translate(img.height, 0);
+  g.rotate(Math.PI / 2);
+  g.drawImage(img, 0, 0);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  const rand = rng(41);
+  const data = g.getImageData(0, 0, c.width, c.height);
+  for (let i = 0; i < data.data.length; i += 4) {
+    const n = (rand() - 0.5) * 26;
+    for (let k = 0; k < 3; k++) data.data[i + k] = Math.max(0, Math.min(255, data.data[i + k] * 0.93 + 6 + n));
+  }
+  g.putImageData(data, 0, 0);
+  return c.toBuffer("image/jpeg", 82);
 }
 
 // Photos. Seeded randomness, so `pnpm fixtures` gives the same pixels every time.
@@ -761,6 +843,9 @@ writeFileSync(
 );
 writeFileSync(join(OUT, "syllabus-cmsc131.pdf"), await cmscSyllabusPdf());
 writeFileSync(join(OUT, "syllabus-phys161-policies.pdf"), await policySyllabusPdf());
+writeFileSync(join(OUT, "syllabus-stat400-weekly.pdf"), await weeklySyllabusPdf());
+writeFileSync(join(OUT, "syllabus-econ210-dayfirst.pdf"), await dayFirstSyllabusPdf());
+writeFileSync(join(OUT, "syllabus-stat400-scan-rotated.jpg"), await rotatedScan(await weeklySyllabusPdf()));
 writeFileSync(
   join(OUT, "whiteboard-math141.jpg"),
   whiteboard(
@@ -900,6 +985,9 @@ const manifest = {
   "syllabus-math141.pdf": { kind: "syllabus_pdf", label: "MATH141 syllabus", captured_at: null },
   "syllabus-cmsc131.pdf": { kind: "syllabus_pdf", label: "CMSC131 syllabus", captured_at: null },
   "syllabus-phys161-policies.pdf": { kind: "syllabus_pdf", label: "PHYS161 syllabus", captured_at: null },
+  "syllabus-stat400-weekly.pdf": { kind: "syllabus_pdf", label: "STAT400 syllabus", captured_at: null },
+  "syllabus-econ210-dayfirst.pdf": { kind: "syllabus_pdf", label: "ECON210 syllabus", captured_at: null },
+  "syllabus-stat400-scan-rotated.jpg": { kind: "syllabus_pdf", label: "STAT400 syllabus (scan)", captured_at: null },
   "whiteboard-math141.jpg": {
     kind: "whiteboard_photo",
     label: "whiteboard photo",

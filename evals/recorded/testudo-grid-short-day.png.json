@@ -4,13 +4,13 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 4,
-    "extract_syllabus_page": 4,
-    "extract_whiteboard": 4,
-    "extract_notes": 4,
+    "extract_schedule": 6,
+    "extract_syllabus_page": 6,
+    "extract_whiteboard": 5,
+    "extract_notes": 5,
     "reread_crops": 1
   },
-  "crops": 3,
+  "crops": 4,
   "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
@@ -27,10 +27,10 @@
             "evidence": {
               "quote": "8am",
               "box": {
-                "x_min": 21,
-                "y_min": 74,
-                "x_max": 54,
-                "y_max": 90
+                "x_min": 22,
+                "y_min": 102,
+                "x_max": 53,
+                "y_max": 119
               }
             }
           },
@@ -39,10 +39,10 @@
             "evidence": {
               "quote": "9am",
               "box": {
-                "x_min": 21,
-                "y_min": 194,
-                "x_max": 54,
-                "y_max": 210
+                "x_min": 22,
+                "y_min": 189,
+                "x_max": 53,
+                "y_max": 206
               }
             }
           },
@@ -51,10 +51,10 @@
             "evidence": {
               "quote": "10am",
               "box": {
-                "x_min": 21,
-                "y_min": 285,
-                "x_max": 60,
-                "y_max": 301
+                "x_min": 22,
+                "y_min": 279,
+                "x_max": 58,
+                "y_max": 296
               }
             }
           },
@@ -63,10 +63,10 @@
             "evidence": {
               "quote": "11am",
               "box": {
-                "x_min": 21,
-                "y_min": 377,
-                "x_max": 57,
-                "y_max": 393
+                "x_min": 22,
+                "y_min": 372,
+                "x_max": 58,
+                "y_max": 389
               }
             }
           },
@@ -75,10 +75,10 @@
             "evidence": {
               "quote": "12pm",
               "box": {
-                "x_min": 21,
-                "y_min": 467,
+                "x_min": 22,
+                "y_min": 462,
                 "x_max": 58,
-                "y_max": 483
+                "y_max": 479
               }
             }
           },
@@ -88,9 +88,9 @@
               "quote": "1pm",
               "box": {
                 "x_min": 22,
-                "y_min": 558,
+                "y_min": 552,
                 "x_max": 51,
-                "y_max": 574
+                "y_max": 569
               }
             }
           },
@@ -100,9 +100,9 @@
               "quote": "2pm",
               "box": {
                 "x_min": 22,
-                "y_min": 650,
-                "x_max": 52,
-                "y_max": 666
+                "y_min": 642,
+                "x_max": 53,
+                "y_max": 659
               }
             }
           },
@@ -112,9 +112,9 @@
               "quote": "3pm",
               "box": {
                 "x_min": 22,
-                "y_min": 742,
-                "x_max": 52,
-                "y_max": 758
+                "y_min": 734,
+                "x_max": 53,
+                "y_max": 751
               }
             }
           },
@@ -124,9 +124,9 @@
               "quote": "4pm",
               "box": {
                 "x_min": 22,
-                "y_min": 834,
-                "x_max": 52,
-                "y_max": 850
+                "y_min": 824,
+                "x_max": 53,
+                "y_max": 841
               }
             }
           },
@@ -136,9 +136,9 @@
               "quote": "5pm",
               "box": {
                 "x_min": 22,
-                "y_min": 926,
+                "y_min": 914,
                 "x_max": 51,
-                "y_max": 942
+                "y_max": 931
               }
             }
           }
@@ -154,18 +154,18 @@
             "end_text": null,
             "location": "MTH 0101",
             "block": {
-              "x_min": 330,
-              "y_min": 203,
-              "x_max": 512,
-              "y_max": 279
+              "x_min": 192,
+              "y_min": 202,
+              "x_max": 400,
+              "y_max": 278
             },
             "evidence": {
-              "quote": "Tuesday\nMATH141 Dis\nMTH 0101",
+              "quote": "MATH141 Dis\nMTH 0101",
               "box": {
-                "x_min": 330,
-                "y_min": 80,
-                "x_max": 512,
-                "y_max": 279
+                "x_min": 200,
+                "y_min": 209,
+                "x_max": 295,
+                "y_max": 243
               }
             }
           },
@@ -179,18 +179,18 @@
             "end_text": null,
             "location": "MTH 0101",
             "block": {
-              "x_min": 734,
-              "y_min": 203,
-              "x_max": 915,
-              "y_max": 279
+              "x_min": 623,
+              "y_min": 202,
+              "x_max": 832,
+              "y_max": 278
             },
             "evidence": {
-              "quote": "Thursday\nMATH141 Dis\nMTH 0101",
+              "quote": "MATH141 Dis\nMTH 0101",
               "box": {
-                "x_min": 734,
-                "y_min": 80,
-                "x_max": 915,
-                "y_max": 279
+                "x_min": 631,
+                "y_min": 209,
+                "x_max": 761,
+                "y_max": 243
               }
             }
           },
@@ -204,18 +204,18 @@
             "end_text": null,
             "location": "IRB 0324",
             "block": {
-              "x_min": 330,
+              "x_min": 192,
               "y_min": 388,
-              "x_max": 512,
-              "y_max": 500
+              "x_max": 400,
+              "y_max": 502
             },
             "evidence": {
-              "quote": "Tuesday\nCMSC131 Lec\nIRB 0324",
+              "quote": "CMSC131 Lec\nIRB 0324",
               "box": {
-                "x_min": 330,
-                "y_min": 80,
-                "x_max": 512,
-                "y_max": 500
+                "x_min": 200,
+                "y_min": 394,
+                "x_max": 294,
+                "y_max": 429
               }
             }
           },
@@ -229,18 +229,18 @@
             "end_text": null,
             "location": "IRB 0324",
             "block": {
-              "x_min": 734,
+              "x_min": 623,
               "y_min": 388,
-              "x_max": 915,
-              "y_max": 500
+              "x_max": 832,
+              "y_max": 502
             },
             "evidence": {
-              "quote": "Thursday\nCMSC131 Lec\nIRB 0324",
+              "quote": "CMSC131 Lec\nIRB 0324",
               "box": {
-                "x_min": 734,
-                "y_min": 80,
-                "x_max": 915,
-                "y_max": 500
+                "x_min": 631,
+                "y_min": 394,
+                "x_max": 760,
+                "y_max": 429
               }
             }
           },
@@ -254,18 +254,18 @@
             "end_text": null,
             "location": "PHY 1412",
             "block": {
-              "x_min": 114,
-              "y_min": 568,
-              "x_max": 294,
-              "y_max": 646
+              "x_min": 86,
+              "y_min": 569,
+              "x_max": 295,
+              "y_max": 647
             },
             "evidence": {
-              "quote": "Monday\nPHYS161 Lec\nPHY 1412",
+              "quote": "PHYS161 Lec\nPHY 1412",
               "box": {
-                "x_min": 114,
-                "y_min": 80,
-                "x_max": 294,
-                "y_max": 646
+                "x_min": 94,
+                "y_min": 577,
+                "x_max": 192,
+                "y_max": 609
               }
             }
           },
@@ -279,18 +279,18 @@
             "end_text": null,
             "location": "PHY 1412",
             "block": {
-              "x_min": 548,
-              "y_min": 568,
-              "x_max": 727,
-              "y_max": 646
+              "x_min": 408,
+              "y_min": 569,
+              "x_max": 617,
+              "y_max": 647
             },
             "evidence": {
-              "quote": "Wednesday\nPHYS161 Lec\nPHY 1412",
+              "quote": "PHYS161 Lec\nPHY 1412",
               "box": {
-                "x_min": 548,
-                "y_min": 80,
-                "x_max": 727,
-                "y_max": 646
+                "x_min": 416,
+                "y_min": 577,
+                "x_max": 514,
+                "y_max": 609
               }
             }
           },
@@ -304,18 +304,18 @@
             "end_text": null,
             "location": "PHY 1412",
             "block": {
-              "x_min": 922,
-              "y_min": 568,
+              "x_min": 839,
+              "y_min": 569,
               "x_max": 1000,
-              "y_max": 646
+              "y_max": 647
             },
             "evidence": {
-              "quote": "Friday\nPHYS161 Lec\nPHY 1412",
+              "quote": "PHYS161 Lec\nPHY 1412",
               "box": {
-                "x_min": 922,
-                "y_min": 80,
-                "x_max": 1000,
-                "y_max": 646
+                "x_min": 847,
+                "y_min": 577,
+                "x_max": 946,
+                "y_max": 609
               }
             }
           },
@@ -329,18 +329,18 @@
             "end_text": null,
             "location": "CSI 2107",
             "block": {
-              "x_min": 114,
-              "y_min": 660,
-              "x_max": 294,
-              "y_max": 738
+              "x_min": 86,
+              "y_min": 663,
+              "x_max": 295,
+              "y_max": 739
             },
             "evidence": {
-              "quote": "Monday\nCMSC131 Lab\nCSI 2107",
+              "quote": "CMSC131 Lab\nCSI 2107",
               "box": {
-                "x_min": 114,
-                "y_min": 80,
-                "x_max": 294,
-                "y_max": 738
+                "x_min": 94,
+                "y_min": 669,
+                "x_max": 191,
+                "y_max": 703
               }
             }
           },
@@ -354,18 +354,18 @@
             "end_text": null,
             "location": "CSI 2107",
             "block": {
-              "x_min": 548,
-              "y_min": 660,
-              "x_max": 727,
-              "y_max": 738
+              "x_min": 408,
+              "y_min": 663,
+              "x_max": 617,
+              "y_max": 739
             },
             "evidence": {
-              "quote": "Wednesday\nCMSC131 Lab\nCSI 2107",
+              "quote": "CMSC131 Lab\nCSI 2107",
               "box": {
-                "x_min": 548,
-                "y_min": 80,
-                "x_max": 727,
-                "y_max": 738
+                "x_min": 416,
+                "y_min": 669,
+                "x_max": 513,
+                "y_max": 703
               }
             }
           },
@@ -379,18 +379,18 @@
             "end_text": null,
             "location": "SYM 0200",
             "block": {
-              "x_min": 114,
-              "y_min": 752,
-              "x_max": 294,
-              "y_max": 843
+              "x_min": 86,
+              "y_min": 754,
+              "x_max": 295,
+              "y_max": 868
             },
             "evidence": {
-              "quote": "Monday\nMATH141 Lec\nSYM 0200",
+              "quote": "MATH141 Lec\nSYM 0200",
               "box": {
-                "x_min": 114,
-                "y_min": 80,
-                "x_max": 294,
-                "y_max": 843
+                "x_min": 94,
+                "y_min": 761,
+                "x_max": 192,
+                "y_max": 794
               }
             }
           },
@@ -404,18 +404,18 @@
             "end_text": null,
             "location": "SYM 0200",
             "block": {
-              "x_min": 548,
-              "y_min": 752,
-              "x_max": 727,
-              "y_max": 843
+              "x_min": 408,
+              "y_min": 754,
+              "x_max": 617,
+              "y_max": 868
             },
             "evidence": {
-              "quote": "Wednesday\nMATH141 Lec\nSYM 0200",
+              "quote": "MATH141 Lec\nSYM 0200",
               "box": {
-                "x_min": 548,
-                "y_min": 80,
-                "x_max": 727,
-                "y_max": 843
+                "x_min": 416,
+                "y_min": 761,
+                "x_max": 514,
+                "y_max": 794
               }
             }
           },
@@ -429,71 +429,71 @@
             "end_text": null,
             "location": "CHM 1402",
             "block": {
-              "x_min": 734,
-              "y_min": 752,
-              "x_max": 915,
-              "y_max": 830
+              "x_min": 623,
+              "y_min": 754,
+              "x_max": 832,
+              "y_max": 832
             },
             "evidence": {
-              "quote": "Thursday\nMATH141 Lec\nCHM 1402",
+              "quote": "MATH141 Lec\nCHM 1402",
               "box": {
-                "x_min": 734,
-                "y_min": 80,
-                "x_max": 915,
-                "y_max": 830
+                "x_min": 631,
+                "y_min": 761,
+                "x_max": 761,
+                "y_max": 794
               }
             }
           }
         ]
       },
       "rereads": {
-        "classes.0": {
-          "text": "• Fall 2026 Tuesday Wednesday MATH141 Dis MTH 0101",
-          "legible": "clear"
-        },
-        "classes.1": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec MATH141 Lec MATH141 Lec",
-          "legible": "clear"
-        },
-        "classes.2": {
-          "text": "• Fall 2026 Tuesday Wednesday MATH141 Dis MTH 0101 CMSC131 Lec IRB 0324 PHYS161 Le PHY 1412",
-          "legible": "clear"
-        },
-        "classes.3": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
-          "legible": "clear"
-        },
-        "classes.4": {
-          "text": "hedule of Classes • Fal y view Monday Tuesday MATH14 MTH 0101 CMSC13 IRB 0324 PHYS161 Lec PHY 1412 CMSC131 Lab CSI 2107 MATH141 Lec SYM 0200",
-          "legible": "clear"
-        },
-        "classes.5": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
-          "legible": "clear"
-        },
         "classes.6": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
+          "text": "PHYS161 Lec PHY 1412",
           "legible": "clear"
         },
         "classes.7": {
-          "text": "hedule of Classes • Fal y view Monday Tuesday MATH14 MTH 0101 CMSC13 IRB 0324 PHYS161 Lec PHY 1412 CMSC131 Lab CSI 2107 MATH141 Lec SYM 0200",
+          "text": "CMSC131 Lab CSI 2107",
           "legible": "clear"
         },
         "classes.8": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
+          "text": "CMSC131 La CSI 2107",
           "legible": "clear"
         },
         "classes.9": {
-          "text": "hedule of Classes • Fal y view Monday Tuesday MATH14 MTH 0101 CMSC13 IRB 0324 PHYS161 Lec PHY 1412 CMSC131 Lab CSI 2107 MATH141 Lec SYM 0200",
+          "text": "MATH141 Lec SYM 0200",
           "legible": "clear"
         },
         "classes.10": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
+          "text": "MATH141 Lec SYM 0200",
           "legible": "clear"
         },
         "classes.11": {
-          "text": "Schedule of Classes · Fall 2026 Synthetic Student (sample data) Weekly view Monday Tuesday Wednesday Thursday Friday 8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm 1pm PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 PHYS161 Lec PHY 1412 2pm CMSC131 Lab CSI 2107 CMSC131 Lab CSI 2107 3pm MATH141 Lec SYM 0200 MATH141 Lec SYM 0200 MATH141 Lec CHM 1402 4pm MATH141 meets at CHM 1402 5pm",
+          "text": "MATH141 Lec CHM 1402",
           "legible": "clear"
+        },
+        "classes.0": {
+          "text": "8am 9am MATH141 Dis MTH 0101 MATH141 Dis MTH 0101 10am",
+          "legible": "clear"
+        },
+        "classes.1": {
+          "text": "MATH141 Dis MTH 0101",
+          "legible": "clear"
+        },
+        "classes.2": {
+          "text": "10am 11am CMSC131 Lec IRB 0324 CMSC131 Lec IRB 0324 12pm",
+          "legible": "clear"
+        },
+        "classes.3": {
+          "text": "CMSC131 Lec IRB 0324",
+          "legible": "clear"
+        },
+        "classes.4": {
+          "text": "PHYS161 Lec PHY 1412",
+          "legible": "clear"
+        },
+        "classes.5": {
+          "text": "PHYS161 Lec PHY 1412",
+          "legible": "unsure"
         }
       },
       "sam": null
@@ -501,18 +501,18 @@
   ],
   "stages": {
     "extract": {
-      "calls": 2,
-      "input_tokens": 8286,
-      "cached_tokens": 0,
-      "output_tokens": 6902,
-      "cost_usd": 0.039691000000000004
+      "calls": 1,
+      "input_tokens": 3237,
+      "cached_tokens": 1905,
+      "output_tokens": 2892,
+      "cost_usd": 0.01424175
     },
     "reread_box": {
-      "calls": 2,
-      "input_tokens": 12571,
-      "cached_tokens": 0,
-      "output_tokens": 3361,
-      "cost_usd": 0.029997999999999997
+      "calls": 3,
+      "input_tokens": 1865,
+      "cached_tokens": 226,
+      "output_tokens": 1346,
+      "cost_usd": 0.00780315
     },
     "sam_segment": {
       "calls": 0,

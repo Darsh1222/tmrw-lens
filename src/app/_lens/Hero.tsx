@@ -117,7 +117,7 @@ export function Hero() {
           <p className="text-sm text-ink-2">10 seconds, free, no sign-up.</p>
         </div>
         <p className="text-sm text-ink-2">
-          0 invented dates in 201 · every rebuild rule kept in 204 runs ·{" "}
+          0 invented dates in 210 · every rebuild rule kept in 204 runs ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
             how it&apos;s measured
           </Link>

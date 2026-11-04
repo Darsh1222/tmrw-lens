@@ -479,3 +479,16 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   frames. Grain: a tiled SVG noise overlay (multiply / screen) on frames and stat cards, and a mask in the ink of
   labels (never under 88%). Paper: offset-layer shadows, hover lift by `translate` so it composes with arrivals. D6
   (flow field) skipped for time.
+- 2026-11-04: Speed (owner's brief). Text-layer pages (>= 40 non-space characters) go as text only: no vision, quotes
+  checked against the text; their evidence boxes are null, so the proof shows the quote, not a crop. Eight requests in
+  flight across files, each page joining the plan as it lands; reading starts on add (a kind changed later re-reads).
+  Re-read batches of 6, in parallel (CROP_VERSION 5, crops padded 8% sideways). The schedule check no longer requires
+  a grid block's day inside its quote (the column header isn't part of the block); grid days are always the person's
+  to confirm, closing a gap where multi-column groups were counted verified. Minimal effort for syllabus, schedule,
+  and course-page reads; low for whiteboards and notes (at minimal one board lost a line). Not done before the freeze:
+  streaming a photo's items before its second read, turning sideways scans upright before reading, HEIC in browsers
+  that can't open it, and computing PDF boxes from the text layer's positions.
+- 2026-11-04: Dates. Day first (a 13+ in front, or the source writes one that way) is a choice, never US order; a
+  written weekday settles it when exactly one reading fits. Ranges are a choice of first or last day; "every", "each",
+  "weekly" are not one date. ISO and day-before-month dates resolve. Calendar (.ics) events become lines of text that
+  are also their quotes, resolved by the same code as a syllabus; repeating events (classes) are left out.

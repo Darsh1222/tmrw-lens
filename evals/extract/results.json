@@ -1,22 +1,22 @@
 {
   "headline": {
     "cases": 4,
-    "auto_applied_right": "9/9",
+    "auto_applied_right": "8/8",
     "precision": "100.0%",
     "recall": "100.0%",
     "invented_dates": "0 of 13",
     "changes_caught": "2/2",
     "changes_applied_before_answer": 0,
     "duplicates_recognized": "2/2",
-    "cost_per_photo": 0.01271,
+    "cost_per_photo": 0.01185,
     "calls_per_photo": 3.3,
-    "tokens_per_call": "1704 in, 314 out"
+    "tokens_per_call": "1724 in, 362 out"
   },
   "cases": [
     {
       "name": "whiteboard-moves-quiz",
-      "auto": 1,
-      "autoRight": 1,
+      "auto": 0,
+      "autoRight": 0,
       "gold": 0,
       "goldFound": 0,
       "invented": 0,
@@ -26,9 +26,9 @@
       "changesAutoBeforeAnswer": 0,
       "duplicatesExpected": 1,
       "duplicatesRight": 1,
-      "questions": 1,
+      "questions": 2,
       "misses": [],
-      "first_text": "From your photo: nothing new to add yet. 1 already in your plan. 1 question for you."
+      "first_text": "From your photo: nothing new to add yet. 1 already in your plan. 2 questions for you."
     },
     {
       "name": "canvas-todo",

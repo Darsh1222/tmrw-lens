@@ -30,7 +30,9 @@ export type PageInput = {
 
 type Opts = Omit<CallOptions, "task">;
 
-const MAX_CROPS = 24;
+// Small batches, all at once: each call writes little, so the slowest is short. (24 to a call ran out of room on a
+// schedule screenshot, whose crops each hold a whole column.)
+const MAX_CROPS = 6;
 
 /** One SAM call per concept (SAM takes one per request). Below this confidence a match is dropped. */
 const CONCEPTS: { phrase: string; label: ObjectLabel }[] = [
@@ -43,9 +45,9 @@ const MIN_CONFIDENCE = 0.5;
 export const SEGMENTED_KINDS: SourceKind[] = ["whiteboard_photo", "notes_photo"];
 
 /** Bumped when how photos are segmented or cropped changes: recorded evals of photos are then re-read. */
-export const CROP_VERSION = 3;
+export const CROP_VERSION = 5;
 /** Bumped when how schedule grids are measured changes (src/lib/images/grid.ts): cached readings are then re-read. */
-export const GRID_VERSION = 2;
+export const GRID_VERSION = 3;
 
 export function dataUrl(bytes: Uint8Array, mime: string): string {
   return `data:${mime};base64,${Buffer.from(bytes).toString("base64")}`;
@@ -147,8 +149,21 @@ async function readCrops(
   rereads: Record<string, Reread>,
   calls: CallResult[],
 ) {
-  for (let start = 0; start < crops.length; start += MAX_CROPS) {
-    const batch = crops.slice(start, start + MAX_CROPS);
+  // Every batch at once: the wait is one batch's, not the sum of them.
+  const batches: (typeof crops)[] = [];
+  for (let start = 0; start < crops.length; start += MAX_CROPS) batches.push(crops.slice(start, start + MAX_CROPS));
+  await Promise.all(batches.map((batch) => readBatch(image, batch, opts, rereads, calls)));
+  return { rereads, calls };
+}
+
+async function readBatch(
+  image: Uint8Array,
+  batch: { key: string; bbox: BBox; object: SceneObject | null; whole: boolean }[],
+  opts: Opts,
+  rereads: Record<string, Reread>,
+  calls: CallResult[],
+) {
+  {
     const pngs = await Promise.all(
       batch.map(async (c) =>
         (c.whole ? cropObjects(image, [c.object!]) : cropBoxes(image, [c.bbox], [c.object?.outline ?? null])).then(
@@ -167,16 +182,15 @@ async function readCrops(
       if (crop) rereads[crop.key] = { text: r.text, legible: r.legible };
     }
   }
-  return { rereads, calls };
 }
 
 /** One page or photo: read, then on photos segmented (when `sam`) and re-read. */
 export async function readPage(
   kind: SourceKind,
   p: PageInput,
-  opts: Opts & { sam?: boolean } = {},
+  opts: Opts & { sam?: boolean; onExtracted?: (page: PageReading) => void } = {},
 ): Promise<{ page: PageReading; calls: CallResult[] }> {
-  const { sam = true, ...callOpts } = opts;
+  const { sam = true, onExtracted, ...callOpts } = opts;
   // SAM doesn't need the reading, so it runs alongside it: a photo's wait is the slower of the two, not both.
   const segmenting =
     p.text === null && p.image && sam && SEGMENTED_KINDS.includes(kind)
@@ -191,6 +205,8 @@ export async function readPage(
       ? await measureGrid(p.image, read.extraction)
       : read.extraction;
   const page: PageReading = { page: p.page, text: p.text, extraction, rereads: {} };
+  // What was read, before it's checked: the app shows it as "checking" while SAM and the re-read finish.
+  if (p.text === null && p.image) onExtracted?.({ ...page });
   if (p.text === null && p.image) {
     if (segmenting) {
       const s = await segmenting;

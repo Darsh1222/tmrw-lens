@@ -244,18 +244,21 @@ function gridMeetings(data: ScheduleExtraction): { c: Meeting; members: { i: num
   const mins = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3));
   const close = (a: { start: string; end: string }, b: { start: string; end: string }) =>
     Math.abs(mins(a.start) - mins(b.start)) <= 10 && Math.abs(mins(a.end) - mins(b.end)) <= 10;
+  // Two rooms are the same unless both are read and differ: a block cut off at the screenshot's edge loses its room.
+  const sameRoom = (a: string | null, b: string | null) => !a || !b || a === b;
+  const roomOf = (g: typeof all) => g.find((x) => x.c.location)?.c.location ?? null;
   for (const e of all) {
     const placed = placedOf(e.c);
     // A block a popup covers stays on its own: its visible part isn't the class's time.
-    const base = [normalizeCode(e.c.course_code), e.c.meeting_type, e.c.location, coveredOf(e.c).join("+")].join("|");
-    const near = placed
-      ? [...groups.keys()].find((k) => {
-          const first = groups.get(k)![0].c;
-          const other = placedOf(first);
-          return k.startsWith(`${base}|placed|`) && other && close(placed, other);
-        })
-      : undefined;
-    const k = near ?? (placed ? `${base}|placed|${placed.start}|${placed.end}` : `${base}|${e.c.start_text}|${e.c.end_text}`); // prettier-ignore
+    const base = [normalizeCode(e.c.course_code), e.c.meeting_type, coveredOf(e.c).join("+")].join("|");
+    const near = [...groups.keys()].find((k) => {
+      const g = groups.get(k)!;
+      if (!sameRoom(roomOf(g), e.c.location)) return false;
+      if (!placed) return k === `${base}|${e.c.start_text}|${e.c.end_text}|${roomOf(g) ?? e.c.location ?? ""}` || (k.startsWith(`${base}|${e.c.start_text}|${e.c.end_text}|`)); // prettier-ignore
+      const other = placedOf(g[0].c);
+      return k.startsWith(`${base}|placed|`) && other && close(placed, other);
+    });
+    const k = near ?? (placed ? `${base}|placed|${placed.start}|${placed.end}|${e.c.location ?? ""}` : `${base}|${e.c.start_text}|${e.c.end_text}|${e.c.location ?? ""}`); // prettier-ignore
     groups.set(k, [...(groups.get(k) ?? []), e]);
   }
   return [...groups.values()].map((g) => {
@@ -329,9 +332,10 @@ export function classBlocks(
       const startT = placed?.start ?? (start?.ok && start.kind === "clock" ? start.start : null);
       const endT = placed?.end ?? (end?.ok && end.kind === "clock" ? end.start : null);
       // On a grid, days come from which column a block sits in: no quote can prove that, so the person confirms.
+      // On a grid the days come from which column a block sits in, quoted or not: the person confirms them.
       const daysCheck: Check = !days
         ? { status: "unverified", reason: `Can't read "${c.days_text}".` }
-        : grid && contains(c.evidence.quote, c.days_text)
+        : grid
           ? { status: "needs_question", reason: GRID_DAYS }
           : read.fields[0];
       const cover = [...new Set(members.flatMap(({ i }) => coveredOf(data.classes[i])))];
@@ -354,9 +358,12 @@ export function classBlocks(
       seen.add(key);
       const evidence = evidenceOf(c.evidence, source, page);
       const ds = days ?? [];
+      // On a grid the day words are the column headers the block sits under (read with it, confirmed by the person),
+      // so the meetings' dates trace to the headers and the block together.
+      const dayEvidence = grid && !c.days_text.split(/\s+/).every((w) => contains(evidence.quote, w)) ? { ...evidence, quote: `${c.days_text}\n${evidence.quote}` } : evidence; // prettier-ignore
       const firstTrace = (from: string): DateTrace => ({
         text: c.days_text,
-        evidence,
+        evidence: dayEvidence,
         rule: "first_meeting",
         inputs: { term_start: from, photo_date: null, added_date: null },
       });
@@ -384,7 +391,7 @@ export function classBlocks(
                 value: lastMeeting(ds, until),
                 trace: {
                   text: c.days_text,
-                  evidence,
+                  evidence: dayEvidence,
                   rule: "last_meeting",
                   inputs: { term_start: null, photo_date: null, added_date: null, term_end: until },
                 },
@@ -552,7 +559,11 @@ export const TBA = /^\s*(?:date\s*)?(?:tba|tbd|to be (?:announced|determined))\b
 export function candidates(readings: SourceReading[], term: TermDate, zone: string): Candidate[] {
   const known = knownCourses(readings);
   const notes = syllabusNotes(readings);
-  return rawItems(readings, known).map(({ source, page, key, raw }) => {
+  const raws = rawItems(readings, known);
+  // A source that writes a date day first anywhere ("25/11") writes them all that way: its "3/11" is asked, not read
+  // as March 11.
+  const dayFirst = new Set(raws.filter(({ raw }) => /\b(1[3-9]|2\d|3[01])[/.]\d{1,2}\b/.test(raw.date_text ?? "")).map(({ source }) => source.id)); // prettier-ignore
+  return raws.map(({ source, page, key, raw }) => {
     const read = verifyReading(
       page,
       key,
@@ -573,6 +584,7 @@ export function candidates(readings: SourceReading[], term: TermDate, zone: stri
       term_start: term.date?.value ?? null,
       photo_date: source.captured_at ? localDate(source.captured_at, zone) : null,
       added_date: localDate(source.added_at, zone),
+      ...(dayFirst.has(source.id) && { day_first: true }),
     };
     let date: Candidate["date"] = null;
     let dateCheck: Check = ok;

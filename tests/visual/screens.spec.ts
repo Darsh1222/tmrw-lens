@@ -49,11 +49,14 @@ test("home and hero", async ({ page }) => {
   await check(page, errors, "home");
 });
 
-test("upload, with files ready", async ({ page }) => {
+test("upload, reading as soon as it's added", async ({ page }) => {
   const errors = await watch(page);
+  // Held open, so the screen shows reading in progress (and no model is called).
+  await page.route("**/api/read", () => new Promise(() => {}));
   await page.goto("/");
   await page.locator('input[type="file"]').setInputFiles([`${FIXTURES}whiteboard-quiz-moved.jpg`, `${FIXTURES}syllabus-math141.pdf`]); // prettier-ignore
-  await expect(page.getByText(/Read all 2/)).toBeVisible({ timeout: 20000 });
+  await expect(page.getByText(/Reading page 1 of 2/)).toBeVisible({ timeout: 20000 });
+  await expect(page.getByText(/Reading and outlining what's on it/)).toBeVisible();
   await check(page, errors, "upload-ready");
 });
 
@@ -62,7 +65,6 @@ test("upload, past today's limit", async ({ page }) => {
   await page.route("**/api/read", (r) => r.fulfill({ status: 429, json: { code: "user_limit", error: "That's all the free reading for today. Come back tomorrow; the sample week is always free." } })); // prettier-ignore
   await page.goto("/");
   await page.locator('input[type="file"]').setInputFiles(`${FIXTURES}whiteboard-quiz-moved.jpg`);
-  await page.getByRole("button", { name: /Read it/ }).click();
   await expect(page.getByText(/Come back tomorrow/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Try the sample week instead" })).toBeVisible();
   await check(page, errors, "upload-rate-limited");
@@ -73,7 +75,6 @@ test("upload, the model failed", async ({ page }) => {
   await page.route("**/api/read", (r) => r.fulfill({ status: 502, json: { error: "The model didn't answer properly. Try this page again." } })); // prettier-ignore
   await page.goto("/");
   await page.locator('input[type="file"]').setInputFiles(`${FIXTURES}whiteboard-quiz-moved.jpg`);
-  await page.getByRole("button", { name: /Read it/ }).click();
   await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
   await check(page, errors, "upload-error");
 });

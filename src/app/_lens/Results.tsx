@@ -6,7 +6,7 @@ import rebuild from "../../../evals/rebuild/results.json";
 // IV · Results: the headline numbers, read from the same result files CI replays, so the page can't drift from them.
 
 const r = rebuild.headline;
-const invented = extraction.headline.with_sam.invented_dates; // "0 of 201"
+const invented = extraction.headline.with_sam.invented_dates; // "0 of 210"
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 const STATS = [

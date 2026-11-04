@@ -4,13 +4,13 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 4,
-    "extract_syllabus_page": 4,
-    "extract_whiteboard": 4,
-    "extract_notes": 4,
+    "extract_schedule": 6,
+    "extract_syllabus_page": 6,
+    "extract_whiteboard": 7,
+    "extract_notes": 7,
     "reread_crops": 1
   },
-  "crops": 3,
+  "crops": 5,
   "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
@@ -29,10 +29,10 @@
             "evidence": {
               "quote": "PHYS HW 8\ndue Fri 11/6",
               "box": {
-                "x_min": 95,
-                "y_min": 200,
-                "x_max": 230,
-                "y_max": 330
+                "x_min": 68,
+                "y_min": 92,
+                "x_max": 310,
+                "y_max": 443
               }
             },
             "crossed_out": false
@@ -49,9 +49,9 @@
               "quote": "ENGL peer review\nMon 11/2 in class",
               "box": {
                 "x_min": 332,
-                "y_min": 238,
-                "x_max": 530,
-                "y_max": 370
+                "y_min": 123,
+                "x_max": 575,
+                "y_max": 492
               }
             },
             "crossed_out": false
@@ -67,17 +67,17 @@
             "evidence": {
               "quote": "CMSC131 office hrs\nThu 3-4pm",
               "box": {
-                "x_min": 672,
-                "y_min": 205,
-                "x_max": 865,
-                "y_max": 330
+                "x_min": 644,
+                "y_min": 91,
+                "x_max": 890,
+                "y_max": 397
               }
             },
             "crossed_out": false
           },
           {
             "kind": "task",
-            "title": "buy bluebook for calc midterm",
+            "title": "buy bluebook",
             "course_hint": "calc",
             "date_text": null,
             "time_text": null,
@@ -86,10 +86,10 @@
             "evidence": {
               "quote": "buy bluebook\nfor calc midterm",
               "box": {
-                "x_min": 354,
-                "y_min": 640,
-                "x_max": 522,
-                "y_max": 771
+                "x_min": 300,
+                "y_min": 518,
+                "x_max": 535,
+                "y_max": 870
               }
             },
             "crossed_out": false
@@ -102,11 +102,11 @@
           "legible": "clear"
         },
         "items.1": {
-          "text": "ENGL peer revie Mon 11/2 in cla",
+          "text": "ENGL peer review Mon 11/2 in class",
           "legible": "clear"
         },
         "items.2": {
-          "text": "CMSC131 office hr Thu 3-4pm",
+          "text": "CMSC131 office hrs Thu 3-4pm",
           "legible": "clear"
         },
         "items.3": {
@@ -131,7 +131,7 @@
                 0.7827
               ],
               [
-                0.0231,
+                0.0238,
                 0.7818
               ],
               [
@@ -171,7 +171,7 @@
                 1
               ]
             ],
-            "confidence": 0.9064327478408813
+            "confidence": 0.9024390578269958
           },
           {
             "id": "sticky_note_1",
@@ -273,7 +273,7 @@
               ],
               [
                 0.0819,
-                0.4291
+                0.4282
               ],
               [
                 0.0756,
@@ -369,7 +369,7 @@
                 0.4109
               ],
               [
-                0.9669,
+                0.9663,
                 0.4118
               ],
               [
@@ -442,8 +442,12 @@
                 0.7482
               ],
               [
+                0.3525,
+                0.6264
+              ],
+              [
                 0.3531,
-                0.6145
+                0.6155
               ],
               [
                 0.3588,
@@ -474,7 +478,7 @@
                 0.4964
               ],
               [
-                0.4619,
+                0.4613,
                 0.5055
               ],
               [
@@ -659,6 +663,10 @@
                 0.1464
               ],
               [
+                0.6587,
+                0.22
+              ],
+              [
                 0.6538,
                 0.3645
               ],
@@ -683,11 +691,11 @@
                 0.4627
               ],
               [
-                0.5781,
+                0.5775,
                 0.4591
               ],
               [
-                0.4381,
+                0.4388,
                 0.4491
               ],
               [
@@ -753,7 +761,7 @@
               ],
               [
                 0.3,
-                0.9727
+                0.9782
               ],
               [
                 0.2994,
@@ -861,7 +869,7 @@
                 0.4345
               ],
               [
-                0.0975,
+                0.0969,
                 0.4373
               ],
               [
@@ -938,7 +946,7 @@
                 0.0682
               ],
               [
-                0.9638,
+                0.9631,
                 0.0691
               ],
               [
@@ -966,12 +974,20 @@
                 0.4091
               ],
               [
-                0.97,
+                0.9706,
+                0.41
+              ],
+              [
+                0.9694,
                 0.4109
               ],
               [
                 0.9669,
                 0.4118
+              ],
+              [
+                0.9088,
+                0.4145
               ],
               [
                 0.85,
@@ -1093,10 +1109,6 @@
               [
                 0.6331,
                 0.5364
-              ],
-              [
-                0.6325,
-                0.55
               ],
               [
                 0.6319,
@@ -1315,17 +1327,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 3306,
-      "cached_tokens": 881,
-      "output_tokens": 2082,
-      "cost_usd": 0.012011899999999999
+      "input_tokens": 3336,
+      "cached_tokens": 1009,
+      "output_tokens": 1715,
+      "cost_usd": 0.01034885
     },
     "reread_box": {
       "calls": 1,
-      "input_tokens": 796,
-      "cached_tokens": 113,
-      "output_tokens": 286,
-      "cost_usd": 0.0020862
+      "input_tokens": 2338,
+      "cached_tokens": 0,
+      "output_tokens": 204,
+      "cost_usd": 0.0037895
     },
     "sam_segment": {
       "calls": 3,
@@ -1338,8 +1350,8 @@
       "calls": 1,
       "input_tokens": 1172,
       "cached_tokens": 113,
-      "output_tokens": 195,
-      "cost_usd": 0.00216945
+      "output_tokens": 200,
+      "cost_usd": 0.0021907
     }
   }
 }

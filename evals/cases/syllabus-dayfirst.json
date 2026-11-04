@@ -1,0 +1,42 @@
+{
+  "name": "syllabus-dayfirst",
+  "description": "Dates written day first (25/11/2026, 03/11/2026) are asked, never read the US way; '11 December 2026' resolves",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-econ210-dayfirst.pdf"],
+  "expect": {
+    "term_start": null,
+    "items": [
+      {
+        "course": "ECON210",
+        "title": "Problem set 2",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "problem set 2",
+        "ask": true
+      },
+      {
+        "course": "ECON210",
+        "title": "Class test",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "class test",
+        "ask": true
+      },
+      {
+        "course": "ECON210",
+        "title": "Final exam",
+        "date": "2026-12-11",
+        "time": null,
+        "end": null,
+        "match": "final"
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

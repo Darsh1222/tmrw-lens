@@ -53,8 +53,25 @@ describe("resolveDate", () => {
   it("won't place a weekday without a photo date", () => {
     expect(date("Wed", syllabus)).toMatchObject({ ok: false, needs: "photo_date" });
   });
+  it("asks about a date written day first, never reading it the US way", () => {
+    expect(date("25/11/2026", syllabus)).toMatchObject({ ok: false, needs: "choice", options: ["2026-11-25"] });
+    // In a source that writes dates day first, "3/11" is a question too.
+    expect(date("3/11/2026", { ...syllabus, day_first: true })).toMatchObject({ ok: false, needs: "choice", options: ["2026-11-03"] }); // prettier-ignore
+    // A weekday written with it settles it: that's a check, not a guess.
+    expect(date("Tue 03/11/2026", { ...syllabus, day_first: true })).toBe("2026-11-03");
+  });
+  it("reads ISO dates and the day before a written month", () => {
+    expect(date("2026-11-03", syllabus)).toBe("2026-11-03");
+    expect(date("11 December 2026", syllabus)).toBe("2026-12-11");
+    expect(date("Wed 11 November", syllabus)).toBe("2026-11-11");
+  });
+  it("won't make one date out of something that repeats", () => {
+    expect(date("every Friday", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
+    expect(date("weekly on Mon", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
+  });
   it("rejects what isn't one date", () => {
-    expect(date("Oct 26 - Oct 30", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
+    // A range is a choice between its first and last day, never one picked quietly.
+    expect(date("Oct 26 - Oct 30", syllabus)).toMatchObject({ ok: false, needs: "choice", options: ["2026-10-26", "2026-10-30"] }); // prettier-ignore
     expect(date("before Midterm 1", syllabus)).toMatchObject({ ok: false, needs: "reference" });
     expect(date("2/30", syllabus)).toMatchObject({ ok: false, needs: "rewrite" });
   });

@@ -36,6 +36,7 @@ import type { PageReading, Plan, PlanItem, Reread, SceneObject, SourceMeta, Sour
 import { parseDays } from "@/lib/resolve/dates";
 import type { SourceKind } from "@/lib/schemas/evidence";
 import { renderPdfPages } from "./lib/render-pdf";
+import { usableText } from "@/lib/files/convert";
 
 const ROOT = join(import.meta.dirname, "..");
 const args = process.argv.slice(2);
@@ -67,6 +68,8 @@ type GoldItem = {
   optional?: boolean;
   /** Its source says the date may change. */
   tentative?: boolean;
+  /** Written in a way that can't be one date ("due next class", a range, "every Friday", day first): it must be asked, never dated. */
+  ask?: boolean;
 };
 type GoldConflict = { title: string; course: string; fields: string[]; options: string[]; suggested: string };
 type Expect = {
@@ -170,13 +173,13 @@ async function inputsOf(file: string): Promise<PageInput[]> {
   const path = join(FIX, file);
   const ext = extname(file).toLowerCase();
   if (ext === ".txt") return [{ page: null, image: null, text: readFileSync(path, "utf8") }];
+  // As the app sends them: a page with real text goes as its text alone; a scanned page as its picture.
   if (ext === ".pdf")
-    return (await renderPdfPages(new Uint8Array(readFileSync(path)))).map((p) => ({
-      page: p.page,
-      image: new Uint8Array(p.png),
-      mime: "image/png" as const,
-      text: p.text,
-    }));
+    return (await renderPdfPages(new Uint8Array(readFileSync(path)))).map((p) =>
+      usableText(p.text)
+        ? { page: p.page, image: null, text: p.text }
+        : { page: p.page, image: new Uint8Array(p.png), mime: "image/png" as const, text: null },
+    );
   if (!real) {
     const bytes = new Uint8Array(readFileSync(path));
     return [{ page: null, image: bytes, mime: ext === ".png" ? "image/png" : "image/jpeg", text: null }];
@@ -339,6 +342,8 @@ function scoreDates(gold: GoldItem[], plan: Plan, s: Score, after: boolean) {
       if (g.tba && item.date) s.wrong.push(`${g.title}: TBA but dated ${item.date.value}`);
       if (!!g.optional !== !!item.optional) s.notes.push(`${g.title}: optional ${!!item.optional}`);
       if (!!g.tentative !== !!item.tentative) s.notes.push(`${g.title}: tentative ${!!item.tentative}`);
+      if (g.ask && item.date) s.wrong.push(`${g.title}: dated ${item.date.value}, but it should be asked`);
+      if (g.ask && !item.date && !plan.questions.some((q) => q.about === item.id)) s.notes.push(`${g.title}: no date and no question`); // prettier-ignore
     }
     if (!g.date) continue;
     if (after) s.thenDates++;

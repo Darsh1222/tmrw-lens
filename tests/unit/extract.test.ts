@@ -63,12 +63,13 @@ describe("assemble", () => {
     const today = { question_id: "q_photo_date_photo1", option_id: "today" };
     const r = assemble(quizMoved([today]), REVIEW);
     expect(r.changes).toMatchObject([{ existing_id: "t_quiz3", to: { date: "2026-11-02" }, kind: "moved", status: "needs_question", auto_apply: false }]); // prettier-ignore
-    expect(r.questions.map((q) => q.id)).toEqual(["q_change_t_quiz3"]);
+    // The change's one question (a line the second read saw differently gets its own, separately).
+    expect(r.questions.map((q) => q.id).filter((id) => id.startsWith("q_change"))).toEqual(["q_change_t_quiz3"]);
     expect(r.items.some((i) => i.title.toLowerCase().includes("quiz"))).toBe(false);
 
     const yes = assemble(quizMoved([today, { question_id: "q_change_t_quiz3", option_id: "new" }]), REVIEW);
     expect(yes.changes[0]).toMatchObject({ status: "confirmed", auto_apply: true });
-    expect(yes.questions).toEqual([]);
+    expect(yes.questions.filter((q) => q.id.startsWith("q_change"))).toEqual([]);
 
     const keep = assemble(quizMoved([today, { question_id: "q_change_t_quiz3", option_id: "keep" }]), REVIEW);
     expect(keep.changes[0]).toMatchObject({ status: "kept", auto_apply: false });
@@ -138,7 +139,7 @@ describe("POST /api/extract/answer", () => {
     const answer = (answers: unknown[]) =>
       POST(new Request("http://lens.test/api/extract/answer", { method: "POST", headers: { Authorization: `Bearer ${SECRET}` }, body: JSON.stringify({ version: 1, review: link.token, answers }) })); // prettier-ignore
     const first = ExtractResponse.parse(await (await answer([{ question_id: "q_photo_date_photo1", option_id: "today", value: null }])).json()); // prettier-ignore
-    expect(first.questions.map((q) => q.id)).toEqual(["q_change_t_quiz3"]);
+    expect(first.questions.map((q) => q.id).filter((id) => id.startsWith("q_change"))).toEqual(["q_change_t_quiz3"]);
     // Answers accumulate in the link: the next text only carries the next answer.
     const second = ExtractResponse.parse(await (await answer([{ question_id: "q_change_t_quiz3", option_id: "new", value: null }])).json()); // prettier-ignore
     expect(second.changes[0]).toMatchObject({ status: "confirmed", auto_apply: true });

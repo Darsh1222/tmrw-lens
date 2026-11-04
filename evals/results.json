@@ -1,40 +1,40 @@
 {
   "headline": {
-    "cases": 16,
+    "cases": 19,
     "with_sam": {
-      "fully_verified": "101/142 (71%)",
-      "invented_dates": "0 of 201",
-      "items_found": "99/99",
+      "fully_verified": "98/159 (62%)",
+      "invented_dates": "0 of 210",
+      "items_found": "116/116",
       "classes_right": "43/43",
-      "dates_right": "85/85",
+      "dates_right": "92/92",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
       "conflicts_caught": "4/4",
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "41/41",
-      "status": "verified 101, needs_question 36, conflict 4, unverified 1"
+      "status": "verified 98, needs_question 49, conflict 4, unverified 8"
     },
     "without_sam": {
-      "fully_verified": "101/142 (71%)",
-      "invented_dates": "0 of 201",
-      "items_found": "99/99",
+      "fully_verified": "98/159 (62%)",
+      "invented_dates": "0 of 210",
+      "items_found": "116/116",
       "classes_right": "43/43",
-      "dates_right": "85/85",
+      "dates_right": "92/92",
       "dates_right_after_answers": "4/4",
       "wrong_dates": 0,
       "conflicts_caught": "4/4",
       "conflict_answer_preselected_right": "4/4",
       "false_conflicts": 0,
       "photo_quotes_in_an_object": "0/41",
-      "status": "verified 101, needs_question 34, conflict 4, unverified 3"
+      "status": "verified 98, needs_question 49, conflict 4, unverified 8"
     },
     "cost": {
       "photos": 6,
-      "box_per_photo": 0.01622396666666667,
-      "sam_per_photo": 0.0225432,
-      "tokens_per_call": "2262 in, 1267 out",
-      "cache_hit_rate": "18%"
+      "box_per_photo": 0.017294524999999998,
+      "sam_per_photo": 0.02314706666666667,
+      "tokens_per_call": "1555 in, 676 out",
+      "cache_hit_rate": "40%"
     }
   },
   "cases": [
@@ -303,9 +303,9 @@
     {
       "name": "schedule-grid",
       "things": 6,
-      "verified": 6,
+      "verified": 0,
       "status": {
-        "verified": 6
+        "needs_question": 6
       },
       "goldItems": 0,
       "found": 0,
@@ -442,6 +442,35 @@
       "notes": []
     },
     {
+      "name": "syllabus-dayfirst",
+      "things": 3,
+      "verified": 1,
+      "status": {
+        "needs_question": 2,
+        "verified": 1
+      },
+      "goldItems": 3,
+      "found": 3,
+      "extra": [],
+      "missed": [],
+      "dates": 1,
+      "datesRight": 1,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 1,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 0,
+      "classesExpected": 0,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
+      "notes": []
+    },
+    {
       "name": "syllabus-math141",
       "things": 10,
       "verified": 9,
@@ -484,6 +513,63 @@
       "missed": [],
       "dates": 4,
       "datesRight": 4,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 4,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 0,
+      "classesExpected": 0,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
+      "notes": []
+    },
+    {
+      "name": "syllabus-scan-rotated",
+      "things": 7,
+      "verified": 0,
+      "status": {
+        "unverified": 7
+      },
+      "goldItems": 7,
+      "found": 7,
+      "extra": [],
+      "missed": [],
+      "dates": 3,
+      "datesRight": 3,
+      "wrong": [],
+      "invented": [],
+      "datesAudited": 4,
+      "conflictsExpected": 0,
+      "conflictsCaught": 0,
+      "suggestedRight": 0,
+      "falseConflicts": [],
+      "classesRight": 0,
+      "classesExpected": 0,
+      "thenDates": 0,
+      "thenRight": 0,
+      "photoQuotes": 0,
+      "inRegion": 0,
+      "notes": []
+    },
+    {
+      "name": "syllabus-weekly",
+      "things": 7,
+      "verified": 2,
+      "status": {
+        "verified": 2,
+        "needs_question": 5
+      },
+      "goldItems": 7,
+      "found": 7,
+      "extra": [],
+      "missed": [],
+      "dates": 3,
+      "datesRight": 3,
       "wrong": [],
       "invented": [],
       "datesAudited": 4,

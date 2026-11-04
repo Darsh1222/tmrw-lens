@@ -1,7 +1,18 @@
 "use client";
 
 import { KIND_LABEL } from "@/lib/extract/kinds";
+import {
+  csvText,
+  docxText,
+  htmlText,
+  icsReading,
+  pptxText,
+  TEXT_LIMIT,
+  usableText,
+  xlsxText,
+} from "@/lib/files/convert";
 import { readExif } from "@/lib/images/exif";
+import type { PageReading } from "@/lib/plan/types";
 import type { SourceKind } from "@/lib/schemas/evidence";
 
 // Getting inputs ready in the browser, before anything leaves the device:
@@ -29,6 +40,8 @@ export type Prepared = {
   takenAt: string | null;
   pages: PreparedPage[];
   note: string | null;
+  /** Already read, in code (a calendar file): nothing to send. */
+  readings?: PageReading[];
 };
 
 function canvasBlob(c: HTMLCanvasElement, type: string, quality?: number): Promise<Blob> {
@@ -37,9 +50,37 @@ function canvasBlob(c: HTMLCanvasElement, type: string, quality?: number): Promi
   );
 }
 
+/** What a file is, by its name: documents with their own text (read as text) and pictures (read by vision). */
+export type FileType = "pdf" | "docx" | "pptx" | "xlsx" | "csv" | "html" | "ics" | "text" | "image";
+export function fileType(name: string, type: string): FileType | null {
+  const n = name.toLowerCase();
+  if (type === "application/pdf" || n.endsWith(".pdf")) return "pdf";
+  if (n.endsWith(".docx")) return "docx";
+  if (n.endsWith(".pptx")) return "pptx";
+  if (n.endsWith(".xlsx")) return "xlsx";
+  if (n.endsWith(".csv") || type === "text/csv") return "csv";
+  if (/\.html?$/.test(n) || type === "text/html") return "html";
+  if (n.endsWith(".ics") || type === "text/calendar") return "ics";
+  if (n.endsWith(".txt") || type === "text/plain") return "text";
+  if (type.startsWith("image/") || /\.(jpe?g|png|webp|heic|heif|gif|bmp)$/.test(n)) return "image";
+  if (/\.(doc|ppt|xls|pages|key|numbers|rtf|odt)$/.test(n))
+    throw new Error("That's an older or non-Microsoft format. Save it as PDF or .docx, or take a screenshot.");
+  return null;
+}
+
+export { usableText };
+
 export function guessKind(name: string, type: string): SourceKind {
   const n = name.toLowerCase();
-  if (type === "application/pdf" || n.endsWith(".pdf")) return "syllabus_pdf";
+  const t = (() => {
+    try {
+      return fileType(name, type);
+    } catch {
+      return null;
+    }
+  })();
+  if (t === "html") return "lms_screenshot";
+  if (t && ["pdf", "docx", "pptx", "xlsx", "csv", "ics"].includes(t)) return "syllabus_pdf";
   if (type.startsWith("text/") || n.endsWith(".txt")) return "testudo_text";
   if (/canvas|elms|to-?do|assignments/.test(n)) return "lms_screenshot";
   if (/testudo|schedule|screen ?shot/.test(n)) return "testudo_screenshot";
@@ -78,7 +119,11 @@ async function renderPdf(file: Blob): Promise<{ pages: PreparedPage[]; total: nu
   const pdfjs = await import("pdfjs-dist");
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
   const task = pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()), standardFontDataUrl: "/pdfjs/standard_fonts/" }); // prettier-ignore
-  const doc = await task.promise;
+  const doc = await task.promise.catch((e: unknown) => {
+    if (e instanceof Error && e.name === "PasswordException")
+      throw new Error("This PDF is password-protected. Export it without a password, or take a screenshot.");
+    throw new Error("This PDF couldn't be opened. Try exporting it again, or take a screenshot.");
+  });
   const pages: PreparedPage[] = [];
   try {
     for (let n = 1; n <= Math.min(doc.numPages, MAX_PDF_PAGES); n++) {
@@ -115,8 +160,25 @@ async function renderPdf(file: Blob): Promise<{ pages: PreparedPage[]; total: nu
   return { pages, total: doc.numPages };
 }
 
+const textPage = (text: string): PreparedPage => ({ page: null, blob: null, url: null, width: 0, height: 0, text: text.slice(0, TEXT_LIMIT) }); // prettier-ignore
+
 export async function prepare(file: File | Blob, name: string, kind?: SourceKind): Promise<Prepared> {
   const k = kind ?? guessKind(name, file.type);
+  const type = fileType(name, file.type);
+  // Documents that hold their own words: taken out here, read once as text.
+  if (type && ["docx", "pptx", "xlsx", "csv", "html", "ics"].includes(type)) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (type === "ics") {
+      const { reading, note } = icsReading(new TextDecoder().decode(bytes), Intl.DateTimeFormat().resolvedOptions().timeZone); // prettier-ignore
+      return { kind: "syllabus_pdf", label: "calendar file", takenAt: null, pages: [textPage(reading.text ?? "")], note, readings: [reading] }; // prettier-ignore
+    }
+    const text =
+      type === "docx" ? docxText(bytes) : type === "pptx" ? pptxText(bytes) : type === "xlsx" ? xlsxText(bytes) : type === "csv" ? csvText(new TextDecoder().decode(bytes)) : htmlText(new TextDecoder().decode(bytes)); // prettier-ignore
+    if (!usableText(text)) throw new Error("There's no text in this file to read. Try a PDF or a screenshot.");
+    const label = { docx: "Word document", pptx: "slides", xlsx: "spreadsheet", csv: "spreadsheet", html: "course site page" }[type as "docx"]; // prettier-ignore
+    const note = text.length > TEXT_LIMIT ? `Only the first ${TEXT_LIMIT.toLocaleString()} characters are read.` : null;
+    return { kind: k, label, takenAt: null, pages: [textPage(text)], note };
+  }
   if (k === "testudo_text") {
     const text = (await file.text()).slice(0, 40_000);
     return { kind: k, label: KIND_LABEL[k], takenAt: null, pages: [{ page: null, blob: null, url: null, width: 0, height: 0, text }], note: null }; // prettier-ignore

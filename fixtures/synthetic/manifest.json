@@ -44,6 +44,21 @@
     "label": "PHYS161 syllabus",
     "captured_at": null
   },
+  "syllabus-stat400-weekly.pdf": {
+    "kind": "syllabus_pdf",
+    "label": "STAT400 syllabus",
+    "captured_at": null
+  },
+  "syllabus-econ210-dayfirst.pdf": {
+    "kind": "syllabus_pdf",
+    "label": "ECON210 syllabus",
+    "captured_at": null
+  },
+  "syllabus-stat400-scan-rotated.jpg": {
+    "kind": "syllabus_pdf",
+    "label": "STAT400 syllabus (scan)",
+    "captured_at": null
+  },
   "whiteboard-math141.jpg": {
     "kind": "whiteboard_photo",
     "label": "whiteboard photo",

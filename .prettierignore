@@ -14,3 +14,4 @@ src/lib/demo/sample-week.json
 src/lib/demo/rebuilds.json
 local-inputs/
 tomorrow-integration/
+evals/bench.json

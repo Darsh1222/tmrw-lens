@@ -128,3 +128,27 @@ test("Add to calendar downloads the verified plan as an .ics file", async ({ pag
   expect(text).toMatch(/^BEGIN:VCALENDAR\r\n/);
   expect(text).toContain("RRULE:FREQ=WEEKLY");
 });
+
+test("files with their own text: a calendar is read in code; Word goes as text, never as a picture", async ({
+  page,
+}) => {
+  lightOnly();
+  const reads: { text: boolean; image: boolean }[] = [];
+  await page.route("**/api/read", async (r) => {
+    const body = r.request().postDataBuffer()?.toString("latin1") ?? "";
+    reads.push({ text: /name="text"/.test(body), image: /name="image"/.test(body) });
+    await r.fulfill({ status: 502, json: { error: "The model didn't answer properly. Try this page again." } });
+  });
+  await page.goto("/");
+  const ics = ["BEGIN:VCALENDAR", "BEGIN:VEVENT", "SUMMARY:MATH141 Exam 2", "DTSTART;TZID=America/New_York:20261111T150000", "DTEND;TZID=America/New_York:20261111T161500", "END:VEVENT", "END:VCALENDAR"].join("\r\n"); // prettier-ignore
+  await page.locator('input[type="file"]').setInputFiles({ name: "math141.ics", mimeType: "text/calendar", buffer: Buffer.from(ics) }); // prettier-ignore
+  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("MATH141 Exam 2").first()).toBeAttached();
+  expect(reads).toEqual([]);
+
+  const { zipSync, strToU8 } = await import("fflate");
+  const docx = zipSync({ "word/document.xml": strToU8("<w:document><w:body><w:p><w:r><w:t>STAT400 Homework 1 due Thursday, September 17, 2026 at 11:59pm</w:t></w:r></w:p></w:body></w:document>") }); // prettier-ignore
+  await page.locator('input[type="file"]').setInputFiles({ name: "syllabus.docx", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", buffer: Buffer.from(docx) }); // prettier-ignore
+  await expect.poll(() => reads.length, { timeout: 15_000 }).toBe(1);
+  expect(reads[0]).toEqual({ text: true, image: false });
+});

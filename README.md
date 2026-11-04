@@ -59,8 +59,8 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 
 | What                                  | Result                                                                     |
 | ------------------------------------- | -------------------------------------------------------------------------- |
-| Invented dates                        | **0** of 201 (extraction), **0** of 13 (text-a-photo)                      |
-| Items found / classes right           | 99 of 99 / 43 of 43; 71% of items and classes fully verified               |
+| Invented dates                        | **0** of 210 (extraction), **0** of 13 (text-a-photo)                      |
+| Items found / classes right           | 116 of 116 / 43 of 43; 62% fully verified, the rest asked (never guessed)  |
 | Conflicts caught, answer pre-selected | 4 of 4, 4 of 4, 0 false                                                    |
 | Rebuilds: hard rules kept             | **100%** of 204 runs (68 cases, 3 runs each)                               |
 | Rebuilds: placement (code's oracle)   | top-1 **100%**, top-3 **100%**; 68 of 68 cases pass                        |
@@ -175,14 +175,45 @@ crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM
 
 |                                       | with SAM                                   | without SAM  |
 | ------------------------------------- | ------------------------------------------ | ------------ |
-| Invented dates                        | **0** of 201                               | **0** of 201 |
-| Fully verified                        | **71%** (101 of 142)                       | **71%**      |
-| Items found                           | 99 of 99                                   | 99 of 99     |
+| Invented dates                        | **0** of 210                               | **0** of 210 |
+| Fully verified                        | **62%** (98 of 159)                        | **62%**      |
+| Items found                           | 116 of 116                                 | 116 of 116   |
 | Classes right                         | 43 of 43                                   | 43 of 43     |
-| Dates right                           | 85 of 85, after answers 4 of 4             | same         |
+| Dates right                           | 92 of 92, after answers 4 of 4             | same         |
 | Conflicts caught                      | 4 of 4, pre-selected right 4 of 4, false 0 | same         |
 | Photo quotes in an object (highlight) | 41 of 41                                   | none         |
-| Model cost per photo                  | $0.0225                                    | $0.0162      |
+| Model cost per photo                  | $0.0231                                    | $0.0173      |
+
+"Fully verified" is lower than it was (71%) because the cases got harder on purpose: syllabi with "due next class",
+ranges, "every Friday", dates written day first, and a page scanned sideways. Those are asked, never dated; a grid's
+class days, which only the column says, are confirmed by the person.
+
+### Speed
+
+`pnpm bench` times a fixed set of synthetic files with live calls and no cache (p50 / p90, two runs each;
+`evals/bench.json`). "First" is when the first page's items show; "full" is every page read and checked.
+
+| Input                     | Before: first / full (p50)   | Now: first / full (p50) | Now, full p90 |
+| ------------------------- | ---------------------------- | ----------------------- | ------------- |
+| Text PDF (1-4 pages)      | 11.0 s / 12.5 s              | **6.7 s / 8.4 s**       | 10.7 s        |
+| Photo (whiteboard, notes) | 20.3 s / 20.3 s              | 8.4 s* / **10.5 s**     | 11.6 s        |
+| Testudo grid screenshot   | 64 s / 64 s                  | 18.7 s* / **21.3 s**    | 23.3 s        |
+| Scanned PDF, 10 pages     | 10.9 s / 52 s                | **5.5 s / 26.5 s**      | 29.0 s        |
+| Calendar file (.ics)      | not supported                | **instant** (no model)  |               |
+| The same file again       | one cache round trip (< 1 s) | the same                |               |
+
+\* when the page's own read is back; the page shows once its second read finishes (full). What made the difference:
+pages with a text layer go as text (no vision); every page at once (eight in flight); the second-read batches in
+parallel and smaller; a schedule-grid check that failed on every first try (forcing a full retry) fixed; minimal
+reasoning for documents and schedules (photos stay at low, where minimal lost a line). Each call writes about 150
+tokens a second, so a page's read takes a few seconds however it's sent.
+
+### What it reads
+
+PDF (text or scanned, up to 12 pages; password-protected ones get a plain message), Word (.docx), PowerPoint (.pptx),
+Excel (.xlsx) and CSV, a saved course page (.html), pasted text, calendar exports (.ics, read in code with exact dates
+and no model), and photos and screenshots (JPEG, PNG, WebP; HEIC where the browser can open it). Older Office formats
+(.doc, .ppt, .xls) get a message to save as PDF or .docx.
 
 Every date traces to a quote and a code computation, including dates relative to another item ("the day after Quiz
 3" moves when the Quiz 3 conflict is answered), the end of every class recurrence, and every class meeting skipped for a

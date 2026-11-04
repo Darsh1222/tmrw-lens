@@ -4,13 +4,13 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 4,
-    "extract_syllabus_page": 4,
-    "extract_whiteboard": 4,
-    "extract_notes": 4,
+    "extract_schedule": 6,
+    "extract_syllabus_page": 6,
+    "extract_whiteboard": 7,
+    "extract_notes": 7,
     "reread_crops": 1
   },
-  "crops": 3,
+  "crops": 5,
   "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
@@ -29,10 +29,10 @@
             "evidence": {
               "quote": "PHYS161 lab report - Tue 10/27 11:59pm",
               "box": {
-                "x_min": 195,
-                "y_min": 255,
-                "x_max": 825,
-                "y_max": 300
+                "x_min": 190,
+                "y_min": 250,
+                "x_max": 860,
+                "y_max": 315
               }
             },
             "crossed_out": false
@@ -48,10 +48,10 @@
             "evidence": {
               "quote": "ENGL101 draft due Wed",
               "box": {
-                "x_min": 190,
-                "y_min": 335,
-                "x_max": 560,
-                "y_max": 375
+                "x_min": 185,
+                "y_min": 355,
+                "x_max": 630,
+                "y_max": 425
               }
             },
             "crossed_out": true
@@ -67,10 +67,10 @@
             "evidence": {
               "quote": "ENGL101 draft - Fri 10/30 5pm",
               "box": {
-                "x_min": 195,
-                "y_min": 436,
-                "x_max": 660,
-                "y_max": 480
+                "x_min": 190,
+                "y_min": 475,
+                "x_max": 715,
+                "y_max": 545
               }
             },
             "crossed_out": false
@@ -87,9 +87,9 @@
               "quote": "call advisor re: spring registration",
               "box": {
                 "x_min": 190,
-                "y_min": 534,
-                "x_max": 725,
-                "y_max": 585
+                "y_min": 600,
+                "x_max": 755,
+                "y_max": 665
               }
             },
             "crossed_out": false
@@ -106,9 +106,9 @@
               "quote": "calc PS6 - Thu 11/5",
               "box": {
                 "x_min": 185,
-                "y_min": 625,
-                "x_max": 485,
-                "y_max": 665
+                "y_min": 715,
+                "x_max": 535,
+                "y_max": 770
               }
             },
             "crossed_out": false
@@ -121,19 +121,19 @@
           "legible": "clear"
         },
         "items.1": {
-          "text": "ENGL101 draft due Wed",
+          "text": "ENGL101 draft due Wed ENGL101 draft - Fri 10/30 5pm",
           "legible": "clear"
         },
         "items.2": {
-          "text": "ENGL101 draft - Fri 10/30 5pm",
+          "text": "☑ ENGL 101 draft due Wed ☐ ENGL 101 draft - Fri 10/30 5pm ☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
           "legible": "clear"
         },
         "items.3": {
-          "text": "call advisor re: spring registration",
+          "text": "☐ ENGL 101 draft - Fri 10/30 5pm ☐ call advisor re: spring registration ☐ calc PS6 - Thu 11/5",
           "legible": "clear"
         },
         "items.4": {
-          "text": "calc PS6 - Thu 11/5",
+          "text": "☐ calc PS6 - Thu 11/5",
           "legible": "clear"
         }
       },
@@ -215,7 +215,7 @@
               ],
               [
                 0.9331,
-                0.1101
+                0.1093
               ],
               [
                 0.9301,
@@ -246,7 +246,7 @@
                 0.9407
               ],
               [
-                0.8755,
+                0.8745,
                 0.9407
               ],
               [
@@ -304,7 +304,7 @@
               ],
               [
                 0.088,
-                0.1351
+                0.1359
               ],
               [
                 0.09,
@@ -395,7 +395,7 @@
                 0.9372
               ],
               [
-                0.0999,
+                0.1009,
                 0.9235
               ],
               [
@@ -420,19 +420,19 @@
         ],
         "rereads": {
           "items.0": {
-            "text": "PHYS161 lab report - Tue 10/27 11:59pm",
+            "text": "☐ PHYS161 lab report - Tue 10/27 11:59pm",
             "legible": "clear"
           },
           "items.1": {
-            "text": "ENGL101 draft due Wed",
+            "text": "☑ ENGL101 draft due Wed ☐ ENGL101 draft - Fri 10/30 5pm",
             "legible": "clear"
           },
           "items.2": {
-            "text": "ENGL101 draft - Fri 10/30 5pm",
+            "text": "ENGL101 draft due Wed ENGL101 draft - Fri 10/30 5pm call advisor re: spring registration calc PS6 - Thu 11/5",
             "legible": "clear"
           },
           "items.3": {
-            "text": "call advisor re: spring registration",
+            "text": "ENGL101 draft - Fri 10/30 5pm call advisor re: spring registration calc PS6 - Thu 11/5",
             "legible": "clear"
           },
           "items.4": {
@@ -446,17 +446,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 3424,
-      "cached_tokens": 0,
-      "output_tokens": 1620,
-      "cost_usd": 0.011165
+      "input_tokens": 3454,
+      "cached_tokens": 1009,
+      "output_tokens": 1448,
+      "cost_usd": 0.009361600000000001
     },
     "reread_box": {
-      "calls": 1,
-      "input_tokens": 801,
-      "cached_tokens": 113,
-      "output_tokens": 317,
-      "cost_usd": 0.0022242
+      "calls": 2,
+      "input_tokens": 4672,
+      "cached_tokens": 226,
+      "output_tokens": 1149,
+      "cost_usd": 0.01047465
     },
     "sam_segment": {
       "calls": 3,
@@ -466,11 +466,11 @@
       "cost_usd": 0.0075
     },
     "reread_sam": {
-      "calls": 1,
-      "input_tokens": 801,
-      "cached_tokens": 753,
-      "output_tokens": 341,
-      "cost_usd": 0.0016222
+      "calls": 2,
+      "input_tokens": 4672,
+      "cached_tokens": 113,
+      "output_tokens": 984,
+      "cost_usd": 0.009897699999999999
     }
   }
 }

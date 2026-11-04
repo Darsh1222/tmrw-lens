@@ -31,12 +31,14 @@
     "eval:rebuild:live": "tsx --env-file=.env.local scripts/eval-rebuild.ts --live",
     "eval:extract": "tsx scripts/eval-extract.ts",
     "eval:extract:live": "tsx --env-file=.env.local scripts/eval-extract.ts --live",
-    "sample": "tsx scripts/make-sample.ts"
+    "sample": "tsx scripts/make-sample.ts",
+    "bench": "tsx --env-file=.env.local scripts/bench.ts"
   },
   "dependencies": {
     "@meta-sam/parser": "0.1.0",
     "@napi-rs/canvas": "^1.0.13",
     "@phosphor-icons/react": "2.1.7",
+    "fflate": "0.8.2",
     "luxon": "^3.7.2",
     "next": "16.4.3",
     "pdfjs-dist": "^6.4.299",

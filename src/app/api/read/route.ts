@@ -19,7 +19,7 @@ import { readCached } from "@/lib/server/read";
 export const maxDuration = 120;
 
 const MAX_IMAGE_BYTES = 4_000_000;
-const MAX_TEXT = 40_000;
+const MAX_TEXT = 40_000; // the same as the browser's TEXT_LIMIT
 
 const Meta = z.object({
   kind: SourceKind,
@@ -58,7 +58,9 @@ export async function POST(request: Request): Promise<Response> {
   const mime = image ? imageMime(image) : null;
   if (image && !mime) return fail(415, "Only JPEG and PNG images can be read.");
   if (!image && !text) return fail(400, "Nothing to read.");
-  if (kind === "testudo_text" ? !text : !image) return fail(400, "That kind of input needs an image.");
+  // Documents can come as their text alone (the fast path: no vision); photos and screenshots need the picture.
+  const textKinds: (typeof kind)[] = ["testudo_text", "syllabus_pdf", "lms_screenshot"];
+  if (!image && !textKinds.includes(kind)) return fail(400, "That kind of input needs an image.");
 
   const env = readEnv();
   const kv = kvFor(env);

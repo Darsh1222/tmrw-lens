@@ -4,13 +4,13 @@
   "model": "muse-spark-1.3",
   "sam_model": "sam-3.1",
   "tasks": {
-    "extract_schedule": 4,
-    "extract_syllabus_page": 4,
-    "extract_whiteboard": 4,
-    "extract_notes": 4,
+    "extract_schedule": 6,
+    "extract_syllabus_page": 6,
+    "extract_whiteboard": 7,
+    "extract_notes": 7,
     "reread_crops": 1
   },
-  "crops": 3,
+  "crops": 5,
   "added_at": "2026-10-29T09:00:00-04:00",
   "pages": [
     {
@@ -30,9 +30,9 @@
               "quote": "PHYS161 HW 9\ndue Fri 11/6",
               "box": {
                 "x_min": 40,
-                "y_min": 60,
-                "x_max": 182,
-                "y_max": 250
+                "y_min": 62,
+                "x_max": 172,
+                "y_max": 248
               }
             },
             "crossed_out": false
@@ -48,48 +48,10 @@
             "evidence": {
               "quote": "ENGL101 draft 2\ndue Thu 11/5 9am",
               "box": {
-                "x_min": 44,
+                "x_min": 45,
                 "y_min": 296,
-                "x_max": 168,
+                "x_max": 170,
                 "y_max": 473
-              }
-            },
-            "crossed_out": false
-          },
-          {
-            "kind": "assignment",
-            "title": "proj 4",
-            "course_hint": "CMSC131",
-            "date_text": "Mon 11/9",
-            "time_text": "11pm",
-            "change_text": null,
-            "legible": "clear",
-            "evidence": {
-              "quote": "CMSC131 proj 4\ndue Mon 11/9 11pm",
-              "box": {
-                "x_min": 48,
-                "y_min": 530,
-                "x_max": 170,
-                "y_max": 710
-              }
-            },
-            "crossed_out": false
-          },
-          {
-            "kind": "quiz",
-            "title": "quiz 4",
-            "course_hint": "MATH141",
-            "date_text": "Thu 11/5",
-            "time_text": "in class",
-            "change_text": null,
-            "legible": "clear",
-            "evidence": {
-              "quote": "MATH141 quiz 4\nThu 11/5 in class",
-              "box": {
-                "x_min": 50,
-                "y_min": 763,
-                "x_max": 170,
-                "y_max": 918
               }
             },
             "crossed_out": false
@@ -105,10 +67,10 @@
             "evidence": {
               "quote": "CHEM131 quiz 2 - Mon 11/2",
               "box": {
-                "x_min": 314,
-                "y_min": 217,
-                "x_max": 607,
-                "y_max": 261
+                "x_min": 312,
+                "y_min": 215,
+                "x_max": 616,
+                "y_max": 265
               }
             },
             "crossed_out": false
@@ -125,9 +87,9 @@
               "quote": "HIST200 outline due Wed 11/4",
               "box": {
                 "x_min": 313,
-                "y_min": 287,
-                "x_max": 621,
-                "y_max": 330
+                "y_min": 290,
+                "x_max": 624,
+                "y_max": 332
               }
             },
             "crossed_out": false
@@ -143,10 +105,10 @@
             "evidence": {
               "quote": "MATH141 HW 7 due Fri 11/6",
               "box": {
-                "x_min": 309,
-                "y_min": 350,
-                "x_max": 609,
-                "y_max": 395
+                "x_min": 310,
+                "y_min": 355,
+                "x_max": 614,
+                "y_max": 398
               }
             },
             "crossed_out": false
@@ -162,8 +124,8 @@
             "evidence": {
               "quote": "laundry!!",
               "box": {
-                "x_min": 709,
-                "y_min": 84,
+                "x_min": 710,
+                "y_min": 98,
                 "x_max": 830,
                 "y_max": 285
               }
@@ -182,15 +144,72 @@
               "quote": "CHEM lab report\ndue Tue 11/10",
               "box": {
                 "x_min": 702,
-                "y_min": 294,
-                "x_max": 830,
-                "y_max": 466
+                "y_min": 295,
+                "x_max": 828,
+                "y_max": 468
               }
             },
             "crossed_out": false
           },
           {
-            "kind": "reminder",
+            "kind": "assignment",
+            "title": "proj 4",
+            "course_hint": "CMSC131",
+            "date_text": "Mon 11/9",
+            "time_text": "11pm",
+            "change_text": null,
+            "legible": "clear",
+            "evidence": {
+              "quote": "CMSC131 proj 4\ndue Mon 11/9 11pm",
+              "box": {
+                "x_min": 48,
+                "y_min": 528,
+                "x_max": 170,
+                "y_max": 708
+              }
+            },
+            "crossed_out": false
+          },
+          {
+            "kind": "quiz",
+            "title": "quiz 4",
+            "course_hint": "MATH141",
+            "date_text": "Thu 11/5",
+            "time_text": "in class",
+            "change_text": null,
+            "legible": "clear",
+            "evidence": {
+              "quote": "MATH141 quiz 4\nThu 11/5 in class",
+              "box": {
+                "x_min": 49,
+                "y_min": 769,
+                "x_max": 170,
+                "y_max": 937
+              }
+            },
+            "crossed_out": false
+          },
+          {
+            "kind": "other",
+            "title": "career fair",
+            "course_hint": null,
+            "date_text": "Wed 11/4",
+            "time_text": "10am-3pm",
+            "change_text": null,
+            "legible": "clear",
+            "evidence": {
+              "quote": "career fair\nWed 11/4 10am-3pm",
+              "box": {
+                "x_min": 166,
+                "y_min": 658,
+                "x_max": 293,
+                "y_max": 844
+              }
+            },
+            "crossed_out": false
+          },
+          {
+            "kind": "other",
             "title": "office hrs",
             "course_hint": "MATH",
             "date_text": "Tue 11/3",
@@ -200,10 +219,10 @@
             "evidence": {
               "quote": "MATH office hrs\nTue 11/3 2-3pm",
               "box": {
-                "x_min": 274,
-                "y_min": 510,
+                "x_min": 276,
+                "y_min": 517,
                 "x_max": 402,
-                "y_max": 706
+                "y_max": 710
               }
             },
             "crossed_out": false
@@ -219,10 +238,10 @@
             "evidence": {
               "quote": "return library\nbooks by Sat 11/7",
               "box": {
-                "x_min": 402,
-                "y_min": 558,
-                "x_max": 524,
-                "y_max": 748
+                "x_min": 403,
+                "y_min": 566,
+                "x_max": 522,
+                "y_max": 743
               }
             },
             "crossed_out": false
@@ -238,10 +257,10 @@
             "evidence": {
               "quote": "flu shot\nFri 11/6 1pm",
               "box": {
-                "x_min": 520,
-                "y_min": 512,
-                "x_max": 641,
-                "y_max": 707
+                "x_min": 519,
+                "y_min": 515,
+                "x_max": 640,
+                "y_max": 706
               }
             },
             "crossed_out": false
@@ -258,28 +277,9 @@
               "quote": "HIST200 ch. 6\nread by Wed 11/4",
               "box": {
                 "x_min": 632,
-                "y_min": 532,
-                "x_max": 760,
-                "y_max": 730
-              }
-            },
-            "crossed_out": false
-          },
-          {
-            "kind": "other",
-            "title": "career fair",
-            "course_hint": null,
-            "date_text": "Wed 11/4",
-            "time_text": "10am-3pm",
-            "change_text": null,
-            "legible": "clear",
-            "evidence": {
-              "quote": "career fair\nWed 11/4 10am-3pm",
-              "box": {
-                "x_min": 167,
-                "y_min": 656,
-                "x_max": 292,
-                "y_max": 834
+                "y_min": 542,
+                "x_max": 758,
+                "y_max": 731
               }
             },
             "crossed_out": false
@@ -295,10 +295,10 @@
             "evidence": {
               "quote": "STAT400 exam 2\nThu 11/12",
               "box": {
-                "x_min": 290,
-                "y_min": 754,
+                "x_min": 291,
+                "y_min": 765,
                 "x_max": 412,
-                "y_max": 915
+                "y_max": 938
               }
             },
             "crossed_out": false
@@ -314,16 +314,16 @@
             "evidence": {
               "quote": "call mom\nSun 11/8",
               "box": {
-                "x_min": 405,
-                "y_min": 762,
+                "x_min": 419,
+                "y_min": 767,
                 "x_max": 540,
-                "y_max": 939
+                "y_max": 946
               }
             },
             "crossed_out": false
           },
           {
-            "kind": "task",
+            "kind": "other",
             "title": "club mtg",
             "course_hint": null,
             "date_text": "Wed 11/4",
@@ -334,9 +334,9 @@
               "quote": "club mtg\nWed 11/4 7pm",
               "box": {
                 "x_min": 535,
-                "y_min": 754,
-                "x_max": 660,
-                "y_max": 931
+                "y_min": 767,
+                "x_max": 659,
+                "y_max": 937
               }
             },
             "crossed_out": false
@@ -352,10 +352,10 @@
             "evidence": {
               "quote": "buy bluebook",
               "box": {
-                "x_min": 664,
-                "y_min": 766,
-                "x_max": 786,
-                "y_max": 930
+                "x_min": 666,
+                "y_min": 779,
+                "x_max": 785,
+                "y_max": 945
               }
             },
             "crossed_out": false
@@ -372,51 +372,27 @@
           "legible": "clear"
         },
         "items.2": {
-          "text": "CMSC131 proj 4 due Mon 11/9 11pm",
-          "legible": "clear"
-        },
-        "items.3": {
-          "text": "MATH141 quiz 4 Thu 11/5 in class",
-          "legible": "clear"
-        },
-        "items.4": {
           "text": "CHEM131 quiz 2 - Mon 11/2",
           "legible": "clear"
         },
-        "items.5": {
+        "items.3": {
           "text": "HIST200 outline due Wed 11/4",
           "legible": "clear"
         },
-        "items.6": {
+        "items.4": {
           "text": "MATH141 HW 7 due Fri 11/6",
           "legible": "clear"
         },
-        "items.7": {
-          "text": "laundry!!",
-          "legible": "clear"
-        },
-        "items.8": {
-          "text": "CHEM lab report due Tue 11/10",
-          "legible": "clear"
-        },
-        "items.9": {
-          "text": "MATH office hrs Tue 11/3 2-3pm",
-          "legible": "clear"
-        },
-        "items.10": {
-          "text": "return library books by Sat 11/7",
-          "legible": "clear"
-        },
-        "items.11": {
-          "text": "flu shot Fri 11/6 1pm",
+        "items.5": {
+          "text": "laundry!! CHEM lab report",
           "legible": "clear"
         },
         "items.12": {
-          "text": "HIST200 ch. 6 read by Wed 11/4",
+          "text": "flu shot Fri 11/6 1pm",
           "legible": "clear"
         },
         "items.13": {
-          "text": "career fair Wed 11/4 10am-3pm",
+          "text": "HIST200 ch. 6 read by Wed 11/4",
           "legible": "clear"
         },
         "items.14": {
@@ -433,6 +409,30 @@
         },
         "items.17": {
           "text": "buy bluebook",
+          "legible": "clear"
+        },
+        "items.6": {
+          "text": "CHEM lab report due Tue 11/10",
+          "legible": "clear"
+        },
+        "items.7": {
+          "text": "CMSC131 proj 4 due Mon 11/9 11pm",
+          "legible": "clear"
+        },
+        "items.8": {
+          "text": "MATH141 quiz 4 Thu 11/5 in class",
+          "legible": "clear"
+        },
+        "items.9": {
+          "text": "career fair Wed 11/4 10am-3pm",
+          "legible": "clear"
+        },
+        "items.10": {
+          "text": "MATH office hrs Tue 11/3 2-3pm",
+          "legible": "clear"
+        },
+        "items.11": {
+          "text": "return library books by Sat 11/7",
           "legible": "clear"
         }
       },
@@ -465,7 +465,7 @@
                 0.555
               ],
               [
-                0.4185,
+                0.419,
                 0.5543
               ],
               [
@@ -521,15 +521,15 @@
                 0.7221
               ],
               [
-                0.5105,
+                0.511,
                 0.7229
               ],
               [
-                0.4775,
+                0.477,
                 0.7243
               ],
               [
-                0.4375,
+                0.437,
                 0.725
               ],
               [
@@ -724,7 +724,7 @@
               ],
               [
                 0.4105,
-                0.7429
+                0.7421
               ],
               [
                 0.411,
@@ -732,7 +732,7 @@
               ],
               [
                 0.411,
-                0.7964
+                0.7971
               ],
               [
                 0.4105,
@@ -793,7 +793,7 @@
             "outline": [
               [
                 0.6645,
-                0.8771
+                0.8779
               ],
               [
                 0.665,
@@ -872,7 +872,11 @@
                 0.9214
               ],
               [
-                0.783,
+                0.7835,
+                0.9221
+              ],
+              [
+                0.7825,
                 0.9229
               ],
               [
@@ -880,7 +884,7 @@
                 0.9229
               ],
               [
-                0.744,
+                0.7445,
                 0.9221
               ],
               [
@@ -909,7 +913,7 @@
               ],
               [
                 0.6645,
-                0.8929
+                0.8921
               ]
             ],
             "confidence": 0.9649122953414917
@@ -1087,7 +1091,7 @@
               ],
               [
                 0.8305,
-                0.1886
+                0.1879
               ],
               [
                 0.8305,
@@ -1414,7 +1418,7 @@
               ],
               [
                 0.6605,
-                0.8721
+                0.8729
               ],
               [
                 0.6605,
@@ -1462,19 +1466,19 @@
               ],
               [
                 0.5405,
-                0.9129
+                0.9136
               ],
               [
                 0.5385,
                 0.8657
               ],
               [
-                0.5375,
-                0.835
+                0.538,
+                0.8529
               ],
               [
                 0.535,
-                0.7529
+                0.7536
               ]
             ],
             "confidence": 0.9532163739204407
@@ -1648,11 +1652,11 @@
               ],
               [
                 0.83,
-                0.4336
+                0.4343
               ],
               [
                 0.83,
-                0.4371
+                0.4364
               ],
               [
                 0.8295,
@@ -1728,11 +1732,7 @@
                 0.6543
               ],
               [
-                0.168,
-                0.6536
-              ],
-              [
-                0.169,
+                0.1685,
                 0.6529
               ],
               [
@@ -1845,7 +1845,7 @@
               ],
               [
                 0.167,
-                0.6664
+                0.6679
               ]
             ],
             "confidence": 0.9649122953414917
@@ -1879,10 +1879,6 @@
               [
                 0.2965,
                 0.5186
-              ],
-              [
-                0.336,
-                0.515
               ],
               [
                 0.3845,
@@ -1922,7 +1918,7 @@
               ],
               [
                 0.399,
-                0.6064
+                0.6057
               ],
               [
                 0.4005,
@@ -1990,7 +1986,7 @@
               ],
               [
                 0.2755,
-                0.5593
+                0.56
               ],
               [
                 0.2745,
@@ -2090,7 +2086,7 @@
                 0.6936
               ],
               [
-                0.107,
+                0.1065,
                 0.6943
               ],
               [
@@ -2207,7 +2203,11 @@
                 0.9214
               ],
               [
-                0.432,
+                0.4445,
+                0.9243
+              ],
+              [
+                0.4315,
                 0.925
               ],
               [
@@ -4575,7 +4575,7 @@
                 0.085
               ],
               [
-                0.653,
+                0.6535,
                 0.085
               ],
               [
@@ -4611,19 +4611,15 @@
                 0.4679
               ],
               [
-                0.688,
+                0.6875,
                 0.4686
               ],
               [
-                0.6565,
+                0.657,
                 0.4693
               ],
               [
-                0.513,
-                0.47
-              ],
-              [
-                0.3645,
+                0.4535,
                 0.4707
               ],
               [
@@ -4655,6 +4651,30 @@
           }
         ],
         "rereads": {
+          "items.6": {
+            "text": "CHEM lab report due Tue 11/10",
+            "legible": "clear"
+          },
+          "items.7": {
+            "text": "CMSC131 proj 4 due Mon 11/9 11pm",
+            "legible": "clear"
+          },
+          "items.8": {
+            "text": "MATH141 quiz 4 Thu 11/5 in class",
+            "legible": "clear"
+          },
+          "items.9": {
+            "text": "career fair Wed 11/4 10am-3pm",
+            "legible": "clear"
+          },
+          "items.10": {
+            "text": "MATH office hrs Tue 11/3 2-3pm",
+            "legible": "clear"
+          },
+          "items.11": {
+            "text": "return library books by Sat 11/7",
+            "legible": "clear"
+          },
           "items.0": {
             "text": "PHYS161 HW 9 due Fri 11/6",
             "legible": "clear"
@@ -4664,51 +4684,27 @@
             "legible": "clear"
           },
           "items.2": {
-            "text": "CMSC131 proj 4 due Mon 11/9 11pm",
-            "legible": "clear"
-          },
-          "items.3": {
-            "text": "MATH141 quiz 4 Thu 11/5 in class",
-            "legible": "clear"
-          },
-          "items.4": {
             "text": "CHEM131 quiz 2 - Mon 11/2",
             "legible": "clear"
           },
-          "items.5": {
+          "items.3": {
             "text": "HIST200 outline due Wed 11/4",
             "legible": "clear"
           },
-          "items.6": {
+          "items.4": {
             "text": "MATH141 HW 7 due Fri 11/6",
             "legible": "clear"
           },
-          "items.7": {
+          "items.5": {
             "text": "laundry!!",
             "legible": "clear"
           },
-          "items.8": {
-            "text": "CHEM lab report due Tue 11/10",
-            "legible": "clear"
-          },
-          "items.9": {
-            "text": "MATH office hrs Tue 11/3 2-3pm",
-            "legible": "clear"
-          },
-          "items.10": {
-            "text": "return library books by Sat 11/7",
-            "legible": "clear"
-          },
-          "items.11": {
+          "items.12": {
             "text": "flu shot Fri 11/6 1pm",
             "legible": "clear"
           },
-          "items.12": {
-            "text": "HIST200 ch. 6 read by Wed 11/4",
-            "legible": "clear"
-          },
           "items.13": {
-            "text": "career fair Wed 11/4 10am-3pm",
+            "text": "HIST200 ch. 6 read by Wed 11/4",
             "legible": "clear"
           },
           "items.14": {
@@ -4734,17 +4730,17 @@
   "stages": {
     "extract": {
       "calls": 1,
-      "input_tokens": 4536,
+      "input_tokens": 4566,
       "cached_tokens": 881,
-      "output_tokens": 4380,
-      "cost_usd": 0.0233159
+      "output_tokens": 4273,
+      "cost_usd": 0.022898650000000003
     },
     "reread_box": {
-      "calls": 1,
-      "input_tokens": 4459,
-      "cached_tokens": 113,
-      "output_tokens": 1149,
-      "cost_usd": 0.0103327
+      "calls": 3,
+      "input_tokens": 5718,
+      "cached_tokens": 339,
+      "output_tokens": 1635,
+      "cost_usd": 0.013723349999999999
     },
     "sam_segment": {
       "calls": 3,
@@ -4754,11 +4750,11 @@
       "cost_usd": 0.0075
     },
     "reread_sam": {
-      "calls": 1,
-      "input_tokens": 1728,
-      "cached_tokens": 113,
-      "output_tokens": 789,
-      "cost_usd": 0.00538895
+      "calls": 3,
+      "input_tokens": 2222,
+      "cached_tokens": 595,
+      "output_tokens": 966,
+      "cost_usd": 0.0062285
     }
   }
 }

@@ -12,7 +12,7 @@ import type { PageReading, SourceReading } from "@/lib/plan/types";
 import type { SourceKind } from "@/lib/schemas/evidence";
 import { EvidenceDrawer } from "./plan/EvidenceDrawer";
 import { SemesterView, WeekView } from "./plan/PlanViews";
-import { guessKind, KIND_LABEL, prepare } from "./prepare";
+import { guessKind, KIND_LABEL, prepare, usableText } from "./prepare";
 import { QuestionCard } from "./QuestionCard";
 import { SendPanel } from "./SendPanel";
 import { metaOf, type Input } from "./types";
@@ -30,7 +30,20 @@ import { Viewer, type Mark } from "./Viewer";
 /** Set once the "Tap any item" hint is dismissed. */
 const HINT = "lens_hint_proof";
 const SAMPLE = sample as unknown as { zone: string; files: string[]; readings: SourceReading[] };
-const CONCURRENCY = 3;
+/** Pages in flight at once, across every file: enough that a 10-page PDF reads in about one page's time. */
+const CONCURRENCY = 8;
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+async function slot<T>(f: () => Promise<T>): Promise<T> {
+  if (inFlight >= CONCURRENCY) await new Promise<void>((r) => waiting.push(r));
+  inFlight++;
+  try {
+    return await f();
+  } finally {
+    inFlight--;
+    waiting.shift()?.();
+  }
+}
 
 const browserZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || "America/New_York";
 const newId = () => Math.random().toString(36).slice(2, 8);
@@ -58,18 +71,16 @@ export function Lens() {
   // From the click that starts a read until the plan exists: the results area holds a screen's height, so what
   // arrives fills it instead of pushing the page below it around.
   const [loading, setLoading] = useState(false);
-  // Inputs being read right now: they join the plan together when the last page is in, so the plan appears once
-  // (opening on the photo SAM outlined) instead of reshuffling as each page lands.
-  const [batch, setBatch] = useState<string[]>([]);
 
   const update = (id: string, f: (i: Input) => Input) => setInputs((xs) => xs.map((x) => (x.id === id ? f(x) : x)));
 
   const readings: SourceReading[] = useMemo(
     () =>
       inputs
-        .filter((i) => i.status === "read" && !batch.includes(i.id))
+        // Each page joins the plan as soon as it's read: a 10-page PDF shows its first page's items in seconds.
+        .filter((i) => (i.status === "read" || i.status === "reading") && i.readings.some(Boolean))
         .map((i) => ({ source: metaOf(i), pages: i.readings.filter((r): r is PageReading => r !== null) })),
-    [inputs, batch],
+    [inputs],
   );
   const session = useMemo(() => (readings.length ? planFrom(readings, { zone, answers }) : null), [readings, zone, answers]); // prettier-ignore
   const plan = session?.plan ?? null;
@@ -101,16 +112,22 @@ export function Lens() {
       try {
         const p = await prepare(file, file.name);
         const taken = p.takenAt ? DateTime.fromISO(p.takenAt, { zone: browserZone(), setZone: /[+-]\d{2}:\d{2}$/.test(p.takenAt) }).toISO() : null; // prettier-ignore
-        update(ids[n], (x) => ({
-          ...x,
-          kind: p.kind,
-          label: x.label.startsWith(KIND_LABEL[x.kind]) ? x.label.replace(KIND_LABEL[x.kind], p.label) : x.label,
-          captured_at: p.kind === "whiteboard_photo" || p.kind === "notes_photo" ? taken : null,
-          pages: p.pages,
-          readings: p.pages.map(() => null),
-          status: "ready",
-          note: p.note,
-        }));
+        update(ids[n], (x) => {
+          const kindLabel = KIND_LABEL[x.kind];
+          return {
+            ...x,
+            kind: p.kind,
+            label: x.label.startsWith(kindLabel) ? x.label.replace(kindLabel, p.label) : x.label,
+            captured_at: p.kind === "whiteboard_photo" || p.kind === "notes_photo" ? taken : null,
+            pages: p.pages,
+            // A calendar file is read in code already; everything else is read now, without waiting for a click.
+            readings: p.readings ?? p.pages.map(() => null),
+            done: p.readings ? p.pages.length : 0,
+            status: p.readings ? "read" : "ready",
+            note: p.note,
+          };
+        });
+        if (!p.readings) void readInputs([{ id: ids[n], kind: p.kind, pages: p.pages }]);
       } catch (e) {
         setInputs((xs) => xs.filter((x) => x.id !== ids[n]));
         setBusy(
@@ -127,52 +144,62 @@ export function Lens() {
 
   const remove = (id: string) => setInputs((xs) => xs.filter((x) => x.id !== id));
 
+  /** A photo read as the wrong kind: change it and it's read again as that kind. */
   function setKind(id: string, kind: SourceKind) {
-    update(id, (i) => ({
+    const i = inputs.find((x) => x.id === id);
+    if (!i) return;
+    const next: Input = {
       ...i,
       kind,
       label: KIND_LABEL[kind],
       captured_at: kind === "whiteboard_photo" || kind === "notes_photo" ? i.captured_at : null,
-    }));
+    };
+    update(id, () => next);
+    if (i.status !== "opening" && i.status !== "reading") void readInputs([next]);
   }
 
-  async function readAll() {
+  /** Read these inputs' pages, all at once up to the shared limit. Each page joins the plan the moment it's back. */
+  async function readInputs(todo: Pick<Input, "id" | "kind" | "pages">[]) {
+    if (!todo.length) return;
     setLoading(true);
-    const todo = inputs.filter((i) => i.status === "ready" || i.status === "error");
-    setBatch(todo.map((i) => i.id));
     const jobs = todo.flatMap((i) => i.pages.map((p, n) => ({ input: i, page: p, n })));
     for (const i of todo)
-      update(i.id, (x) => ({ ...x, status: "reading", error: null, done: 0, startedAt: Date.now() }));
-    let next = 0;
+      update(i.id, (x) => ({ ...x, status: "reading", error: null, done: 0, readings: x.pages.map(() => null), startedAt: Date.now() })); // prettier-ignore
     const failed = new Set<string>();
-    const worker = async () => {
-      while (next < jobs.length) {
-        const { input, page, n } = jobs[next++];
-        if (failed.has(input.id)) continue;
-        const form = new FormData();
-        form.set("meta", JSON.stringify({ kind: input.kind, page: page.page }));
-        if (page.blob) form.set("image", page.blob, "page");
-        if (page.text) form.set("text", page.text);
-        const res = await fetch("/api/read", { method: "POST", body: form }).catch(() => null);
-        const body = res ? await res.json().catch(() => null) : null;
-        if (!res?.ok || !body?.page) {
-          failed.add(input.id);
-          update(input.id, (x) => ({ ...x, status: "error", error: body?.error ?? "Couldn't reach Lens. Try again." }));
-          continue;
-        }
-        update(input.id, (x) => {
-          const readings = x.readings.map((r, k) => (k === n ? (body.page as PageReading) : r));
-          const done = readings.filter(Boolean).length;
-          return { ...x, readings, done, cost_usd: x.cost_usd + (body.cost_usd ?? 0), status: done === x.pages.length ? "read" : "reading" }; // prettier-ignore
-        });
-      }
-    };
-    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-    setBatch([]);
+    await Promise.all(
+      jobs.map(({ input, page, n }) =>
+        slot(async () => {
+          if (failed.has(input.id)) return;
+          const form = new FormData();
+          form.set("meta", JSON.stringify({ kind: input.kind, page: page.page }));
+          // A page with real text goes as text alone (one fast text read, no vision); otherwise the picture.
+          const photo = input.kind === "whiteboard_photo" || input.kind === "notes_photo" || input.kind === "testudo_screenshot"; // prettier-ignore
+          if (!photo && usableText(page.text)) form.set("text", page.text!);
+          else if (page.blob) form.set("image", page.blob, "page");
+          else if (page.text) form.set("text", page.text);
+          const res = await fetch("/api/read", { method: "POST", body: form }).catch(() => null);
+          const body = res ? await res.json().catch(() => null) : null;
+          if (!res?.ok || !body?.page) {
+            failed.add(input.id);
+            update(input.id, (x) => ({ ...x, status: "error", error: body?.error ?? "Couldn't reach Lens. Check your connection and try again." })); // prettier-ignore
+            return;
+          }
+          update(input.id, (x) => {
+            if (x.status === "error") return x;
+            const readings = x.readings.map((r, k) => (k === n ? (body.page as PageReading) : r));
+            const done = readings.filter(Boolean).length;
+            return { ...x, readings, done, cost_usd: x.cost_usd + (body.cost_usd ?? 0), status: done === x.pages.length ? "read" : "reading" }; // prettier-ignore
+          });
+        }),
+      ),
+    );
     setLoading(false);
-    const photo = todo.find((i) => (i.kind === "whiteboard_photo" || i.kind === "notes_photo") && !failed.has(i.id)) ?? todo[0]; // prettier-ignore
+    const photo = todo.find((i) => (i.kind === "whiteboard_photo" || i.kind === "notes_photo") && !failed.has(i.id)); // prettier-ignore
     if (photo) setAt({ input: photo.id, page: 0 });
   }
+
+  /** "Try again": whatever didn't read. */
+  const readAll = () => readInputs(inputs.filter((i) => i.status === "ready" || i.status === "error"));
 
   async function trySample() {
     setBusy("Opening the sample week…");
@@ -309,17 +336,15 @@ export function Lens() {
   const all = plan ? [...plan.items, ...plan.classes] : [];
   const verified = all.filter((x) => x.status === "verified").length;
   const hintSeen = useStored(HINT) !== null;
-  // Counts only for inputs in the plan: one still waiting for the rest of its batch hasn't been counted yet.
+  // What each input contributed to the plan so far (a PDF still reading counts the pages that are in).
   const found = Object.fromEntries(
-    inputs
-      .filter((i) => !batch.includes(i.id))
-      .map((i) => {
-        const mine = [
-          ...(plan?.items.filter((x) => x.evidence.some((e) => e.source_id === i.id)) ?? []),
-          ...(plan?.classes.filter((x) => x.evidence.source_id === i.id) ?? []),
-        ];
-        return [i.id, { all: mine.length, verified: mine.filter((x) => x.status === "verified").length }];
-      }),
+    inputs.map((i) => {
+      const mine = [
+        ...(plan?.items.filter((x) => x.evidence.some((e) => e.source_id === i.id)) ?? []),
+        ...(plan?.classes.filter((x) => x.evidence.source_id === i.id) ?? []),
+      ];
+      return [i.id, { all: mine.length, verified: mine.filter((x) => x.status === "verified").length }];
+    }),
   );
   const today = inputs.map((i) => i.added_at.slice(0, 10)).sort()[0] ?? "";
   const tone = plan ? palette([...plan.items.map((i) => i.course), ...plan.classes.map((c) => c.course)]) : null;

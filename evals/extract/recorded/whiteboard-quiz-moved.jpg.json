@@ -1,6 +1,6 @@
 {
   "image_sha": "325b982315726b726b99a81abb6d2854aea591a0e9937cbdd10f64a18a40b529",
-  "versions": "1|4|1|3",
+  "versions": "1|7|1|5",
   "photo": {
     "index": 0,
     "kind": "whiteboard_photo",
@@ -23,10 +23,10 @@
           "evidence": {
             "quote": "Quiz moved to Mon!",
             "box": {
-              "x_min": 95,
-              "y_min": 310,
-              "x_max": 420,
-              "y_max": 390
+              "x_min": 90,
+              "y_min": 280,
+              "x_max": 365,
+              "y_max": 365
             }
           }
         },
@@ -41,15 +41,15 @@
           "evidence": {
             "quote": "PS6 due Thu 11/5",
             "box": {
-              "x_min": 90,
-              "y_min": 470,
-              "x_max": 360,
+              "x_min": 88,
+              "y_min": 455,
+              "x_max": 340,
               "y_max": 545
             }
           }
         },
         {
-          "kind": "reminder",
+          "kind": "task",
           "title": "Office hours",
           "course_hint": "MATH141",
           "date_text": "today",
@@ -60,9 +60,9 @@
             "quote": "Office hours today 2-3pm",
             "box": {
               "x_min": 95,
-              "y_min": 595,
-              "x_max": 460,
-              "y_max": 680
+              "y_min": 620,
+              "x_max": 425,
+              "y_max": 712
             }
           }
         }
@@ -78,7 +78,7 @@
         "legible": "clear"
       },
       "items.2": {
-        "text": "Office hours today 2-3pm",
+        "text": "Office hours today 2-5pm",
         "legible": "clear"
       }
     },
@@ -93,33 +93,114 @@
           "y1": 0.959
         },
         "outline": [
-          [0.0288, 0.0871],
-          [0.0297, 0.0812],
-          [0.0334, 0.0724],
-          [0.0343, 0.0709],
-          [0.0361, 0.0694],
-          [0.0499, 0.068],
-          [0.9234, 0.04],
-          [0.9547, 0.04],
-          [0.9574, 0.0415],
-          [0.9593, 0.0444],
-          [0.9602, 0.0474],
-          [0.9639, 0.274],
-          [0.9676, 0.5596],
-          [0.9713, 0.9085],
-          [0.9713, 0.9129],
-          [0.9703, 0.9261],
-          [0.9685, 0.9291],
-          [0.9602, 0.9306],
-          [0.9464, 0.932],
-          [0.9059, 0.9335],
-          [0.0656, 0.96],
-          [0.0481, 0.96],
-          [0.0426, 0.9571],
-          [0.0398, 0.9541],
-          [0.0389, 0.9453],
-          [0.0297, 0.1828],
-          [0.0288, 0.1048]
+          [
+            0.0288,
+            0.0871
+          ],
+          [
+            0.0297,
+            0.0812
+          ],
+          [
+            0.0334,
+            0.0724
+          ],
+          [
+            0.0343,
+            0.0709
+          ],
+          [
+            0.0361,
+            0.0694
+          ],
+          [
+            0.0499,
+            0.068
+          ],
+          [
+            0.9234,
+            0.04
+          ],
+          [
+            0.9547,
+            0.04
+          ],
+          [
+            0.9574,
+            0.0415
+          ],
+          [
+            0.9593,
+            0.0444
+          ],
+          [
+            0.9602,
+            0.0474
+          ],
+          [
+            0.9639,
+            0.274
+          ],
+          [
+            0.9676,
+            0.5596
+          ],
+          [
+            0.9713,
+            0.9085
+          ],
+          [
+            0.9713,
+            0.9129
+          ],
+          [
+            0.9703,
+            0.9261
+          ],
+          [
+            0.9685,
+            0.9291
+          ],
+          [
+            0.9602,
+            0.9306
+          ],
+          [
+            0.9464,
+            0.932
+          ],
+          [
+            0.9059,
+            0.9335
+          ],
+          [
+            0.0656,
+            0.96
+          ],
+          [
+            0.0481,
+            0.96
+          ],
+          [
+            0.0426,
+            0.9571
+          ],
+          [
+            0.0398,
+            0.9541
+          ],
+          [
+            0.0389,
+            0.9468
+          ],
+          [
+            0.0297,
+            0.1828
+          ],
+          [
+            0.0288,
+            0.1062
+          ]
         ],
         "confidence": 0.8904109597206116
       }
@@ -130,22 +211,22 @@
     {
       "usage": {
         "input_tokens": 2364,
-        "output_tokens": 72,
+        "output_tokens": 97,
         "cached_tokens": 2289,
-        "reasoning_tokens": 48
+        "reasoning_tokens": 76
       },
-      "costUsd": 0.0007430999999999999,
-      "latencyMs": 617
+      "costUsd": 0.0008493499999999999,
+      "latencyMs": 1466
     },
     {
       "usage": {
-        "input_tokens": 3038,
-        "output_tokens": 877,
+        "input_tokens": 3068,
+        "output_tokens": 1206,
         "cached_tokens": 881,
-        "reasoning_tokens": 576
+        "reasoning_tokens": 905
       },
-      "costUsd": 0.00655565,
-      "latencyMs": 4307
+      "costUsd": 0.0079914,
+      "latencyMs": 10653
     },
     {
       "usage": {
@@ -155,7 +236,7 @@
         "reasoning_tokens": 0
       },
       "costUsd": 0.0025,
-      "latencyMs": 647
+      "latencyMs": 293
     },
     {
       "usage": {
@@ -165,7 +246,7 @@
         "reasoning_tokens": 0
       },
       "costUsd": 0.0025,
-      "latencyMs": 457
+      "latencyMs": 1332
     },
     {
       "usage": {
@@ -175,17 +256,17 @@
         "reasoning_tokens": 0
       },
       "costUsd": 0.0025,
-      "latencyMs": 547
+      "latencyMs": 646
     },
     {
       "usage": {
-        "input_tokens": 604,
-        "output_tokens": 161,
+        "input_tokens": 642,
+        "output_tokens": 345,
         "cached_tokens": 113,
-        "reasoning_tokens": 73
+        "reasoning_tokens": 257
       },
-      "costUsd": 0.00131495,
-      "latencyMs": 1496
+      "costUsd": 0.00214445,
+      "latencyMs": 3860
     }
   ]
 }

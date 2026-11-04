@@ -26,6 +26,8 @@ export type DateInputs = {
   ref?: { item_id: string; date: string } | null;
   /** For a date the person gave: the question they answered. */
   answer?: string;
+  /** The source writes dates day first (it has a "25/11" somewhere): its "3/11" can't be taken as March 11. */
+  day_first?: boolean;
 };
 
 export type DateResult =
@@ -174,11 +176,56 @@ export function resolveDate(text: string, inputs: DateInputs): DateResult {
     };
   }
 
-  const numeric = [...t.matchAll(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{4}|\d{2}))?\b/g)];
-  const named = [...t.matchAll(new RegExp(`\\b(${MONTH_RE})\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b(?:\\s+(\\d{4}))?`, "g"))];
+  // "Every Friday" repeats: it's not one date, and Lens doesn't pick one.
+  if (/\b(every|each|weekly)\b/.test(t)) return fail(`"${text}" repeats; it isn't one date`, "rewrite");
+  // "Nov 23-27": a range is a choice between its first and last day, never one picked quietly.
+  if (RANGE_SEP.test(text) && !inputs.ref) {
+    const r = parseDateRange(text, inputs);
+    if (r.ok && r.start !== r.end) return fail(`"${text}" is a range of days`, "choice", [r.start, r.end]);
+  }
+  const isoDate = /\b(\d{4})-(\d{2})-(\d{2})\b/.exec(t);
+  if (isoDate) {
+    const d = DateTime.utc(Number(isoDate[1]), Number(isoDate[2]), Number(isoDate[3]));
+    return d.isValid ? { ok: true, date: iso(d), rule: "numeric" } : fail(`"${text}" isn't a real date`, "rewrite");
+  }
+  const numeric = [...t.matchAll(/\b(\d{1,2})([/.])(\d{1,2})(?:\2(\d{4}|\d{2}))?\b/g)];
+  const named = [
+    ...t.matchAll(new RegExp(`\\b(${MONTH_RE})\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b(?:,?\\s+(\\d{4}))?`, "g")),
+  ];
+  // "11 Nov 2026", "Wed 11 November": the day before the month, which is unambiguous when the month is a word.
+  const dayNamed = [
+    ...t.matchAll(new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(${MONTH_RE})\\b(?:,?\\s+(\\d{4}))?`, "g")),
+  ];
+  // Numbers in either order. Written day first (a 13+ in front, or dots, as much of the world writes dates), or in a
+  // source that writes them that way, "3/11" is a question: Lens doesn't guess which is the month.
+  for (const m of numeric) {
+    const [a, b] = [Number(m[1]), Number(m[3])];
+    const year = m[4];
+    const at = (month: number, dayN: number) => {
+      if (year) {
+        const d = DateTime.utc(year.length === 2 ? 2000 + Number(year) : Number(year), month, dayN);
+        return d.isValid ? d : null;
+      }
+      const anchor = inputs.term_start ?? inputs.photo_date ?? inputs.added_date;
+      return anchor ? inferYear(month, dayN, anchor) : null;
+    };
+    const dayFirst = a > 12 || m[2] === "." || (!!inputs.day_first && b <= 12);
+    if (!dayFirst) continue;
+    const us = a <= 12 && b <= 31 ? at(a, b) : null;
+    const eu = b <= 12 ? at(b, a) : null;
+    const options = [eu, ...(inputs.day_first || m[2] === "." ? [] : [us])].filter((d): d is DateTime => !!d);
+    // A weekday written with it settles which reading is meant: that's a check, not a guess.
+    if (weekday) {
+      const fits = [eu, us].filter((d): d is DateTime => !!d && d.weekday === weekday);
+      if (fits.length === 1) return { ok: true, date: iso(fits[0]), rule: "numeric" };
+    }
+    if (!options.length) return fail(`"${text}" isn't a real date`, "rewrite");
+    return fail(`"${text}" is written day first, not the US way; which date is it?`, "choice", options.map(iso));
+  }
   const found = [
-    ...numeric.map((m) => ({ month: Number(m[1]), day: Number(m[2]), year: m[3], rule: "numeric" as const })),
+    ...numeric.map((m) => ({ month: Number(m[1]), day: Number(m[3]), year: m[4], rule: "numeric" as const })),
     ...named.map((m) => ({ month: MONTHS[m[1]], day: Number(m[2]), year: m[3], rule: "month_day" as const })),
+    ...dayNamed.map((m) => ({ month: MONTHS[m[2]], day: Number(m[1]), year: m[3], rule: "month_day" as const })),
   ];
   if (found.length > 1) return fail(`"${text}" has more than one date in it`, "rewrite");
   if (found.length === 1) {

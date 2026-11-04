@@ -1,0 +1,77 @@
+{
+  "name": "syllabus-weekly",
+  "description": "Landscape week-by-week table: 'Week 3 Thu' dates are worked out from the term start; 'due next class', a range, 'every Friday', and TBA are asked, never dated",
+  "zone": "America/New_York",
+  "added_at": "2026-10-29T09:00:00-04:00",
+  "sources": ["syllabus-stat400-weekly.pdf"],
+  "expect": {
+    "term_start": "2026-08-31",
+    "items": [
+      {
+        "course": "STAT400",
+        "title": "Homework 1",
+        "date": "2026-09-17",
+        "time": null,
+        "end": null,
+        "match": "homework 1"
+      },
+      {
+        "course": "STAT400",
+        "title": "Homework 4",
+        "date": "2026-11-09",
+        "time": null,
+        "end": null,
+        "match": "homework 4"
+      },
+      {
+        "course": "STAT400",
+        "title": "Midterm 1",
+        "date": "2026-10-14",
+        "time": null,
+        "end": null,
+        "match": "midterm 1"
+      },
+      {
+        "course": "STAT400",
+        "title": "Lab report 1",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "lab report",
+        "ask": true
+      },
+      {
+        "course": "STAT400",
+        "title": "Project proposals",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "proposal",
+        "ask": true
+      },
+      {
+        "course": "STAT400",
+        "title": "Final project presentations",
+        "date": null,
+        "time": null,
+        "end": null,
+        "match": "presentation",
+        "ask": true,
+        "tba": true
+      },
+      {
+        "course": "STAT400",
+        "title": "Reading quizzes",
+        "match": "reading quiz",
+        "date": null,
+        "time": null,
+        "end": null,
+        "ask": true
+      }
+    ],
+    "classes": [],
+    "conflicts": [],
+    "crossed_out": [],
+    "overlaps": []
+  }
+}

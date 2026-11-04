@@ -35,10 +35,10 @@ function statusLine(i: Input, now: number): string {
   const what =
     i.pages.length > 1
       ? `Reading page ${Math.min(i.done + 1, i.pages.length)} of ${i.pages.length}`
-      : i.kind === "whiteboard_photo" || i.kind === "notes_photo"
-        ? "Reading and outlining what's on it"
-        : i.kind === "testudo_text"
-          ? "Reading the text"
+      : !i.pages[0]?.blob
+        ? "Reading the text"
+        : i.kind === "whiteboard_photo" || i.kind === "notes_photo"
+          ? "Reading and outlining what's on it"
           : "Reading the screenshot";
   return `${what}… ${secs}s`;
 }
@@ -70,7 +70,8 @@ export function Upload({
   const [paste, setPaste] = useState("");
   const reading = inputs.some((i) => i.status === "reading");
   const now = useTicking(reading);
-  const unread = inputs.filter((i) => i.status === "ready" || i.status === "error");
+  // Everything is read as soon as it's added; only a failed read waits for "Try again".
+  const unread = inputs.filter((i) => i.status === "error");
   const live = inputs.filter((i) => !i.recorded);
   const pages = live.reduce((a, i) => a + i.pages.length, 0);
   const done = live.reduce((a, i) => a + i.done, 0);
@@ -99,7 +100,11 @@ export function Upload({
         <UploadSimple size={32} weight="light" aria-hidden className="text-ink-2" />
         <div className="flex flex-col gap-1">
           <p className="text-lg">Drop PDFs, photos, or screenshots here</p>
-          <p className="text-sm text-ink-2">PDF (up to 12 pages), JPEG, PNG, or HEIC. Up to 25 pages a day, free.</p>
+          <p className="text-sm text-ink-2">
+            PDF (up to 12 pages), Word, PowerPoint, Excel or CSV, a saved course page (.html), a calendar file (.ics), or
+            a photo or screenshot (JPEG, PNG, WebP, HEIC). Reading starts as soon as you add it. Up to 25 pages a day,
+            free.
+          </p>
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           <button onClick={() => fileRef.current?.click()} className={buttonClass("primary")}>
@@ -113,7 +118,7 @@ export function Upload({
           ref={fileRef}
           type="file"
           multiple
-          accept="image/*,application/pdf,.pdf,.txt"
+          accept="image/*,.heic,.heif,application/pdf,.pdf,.txt,.docx,.pptx,.xlsx,.csv,.html,.htm,.ics"
           className="sr-only"
           tabIndex={-1}
           aria-hidden
@@ -194,7 +199,8 @@ export function Upload({
                   </div>
                   <div className="flex min-h-[92px] flex-1 flex-col gap-1 p-3">
                     <div className="flex items-start justify-between gap-2">
-                      {i.status === "ready" && PICKABLE.includes(i.kind) ? (
+                      {/* Read as the wrong kind? Pick the right one and it's read again. */}
+                      {(i.status === "ready" || i.status === "read" || i.status === "error") && !i.recorded && PICKABLE.includes(i.kind) ? (
                         <select
                           value={i.kind}
                           onChange={(e) => onKind(i.id, e.target.value as SourceKind)}
@@ -233,7 +239,7 @@ export function Upload({
           {unread.length > 0 && (
             <div className="flex flex-wrap items-center gap-3">
               <button onClick={onRead} disabled={reading} className={buttonClass("primary")}>
-                {reading ? "Reading…" : unread.some((i) => i.status === "error") ? "Try again" : `Read ${unread.length === 1 ? "it" : `all ${unread.length}`}`}
+                {reading ? "Reading…" : "Try again"}
               </button>
               {inputs.some((i) => i.error && /Come back tomorrow/.test(i.error)) && (
                 <button onClick={onSample} className={buttonClass("quiet")}>
