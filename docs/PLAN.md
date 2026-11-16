@@ -62,3 +62,7 @@ No secrets (META_API_KEY in .env.local), gitleaks pre-commit + GitHub push prote
 - Nov 2: polish, demo mode, caps, rehearse 10x, README/HACKATHON.md.
 - Nov 3: 3-min video + write-up + X post.
 - Nov 4: final secret scan, submit by ~2 PM.
+
+## November 16, 2026 — Authorized standalone extension
+
+The owner requested a simpler, differentiated standalone product based on market research and explicit idea ranking. Extend the submission branch with the evidence-linked next-step loop described in docs/research/PRODUCT-DIRECTION.md. This is additional Lens work, not private Tomorrow code. Keep source extraction/SMS contracts and frozen original release unchanged. The new card uses local deterministic planning, explicit progress, and opt-in local persistence. No new model/provider integration.

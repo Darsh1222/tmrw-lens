@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-16",
+  "weights": {
+    "usefulness": 0.3,
+    "differentiation": 0.2,
+    "simplicity": 0.25,
+    "feasibility": 0.15,
+    "measurability": 0.1
+  },
+  "scenarios": 5000,
+  "sensitivity": "Weights vary ±30% then normalize; each editorial rating varies ±0.6, bounded 0–5. Seed 20261116. Scenario frequency measures this model's stability, not probability of adoption, impact, or winning.",
+  "ranking": [
+    {
+      "id": "evidence-to-progress",
+      "name": "One next step, with its source and honest remaining work",
+      "decisionScoreOutOf5": 4.525,
+      "sensitivityScenariosLeading": 4708
+    },
+    {
+      "id": "uncertainty-review",
+      "name": "Review the one deadline ambiguity that blocks action",
+      "decisionScoreOutOf5": 4.13,
+      "sensitivityScenariosLeading": 291
+    },
+    {
+      "id": "robustness-margin",
+      "name": "Stress-test a plan against underestimated effort",
+      "decisionScoreOutOf5": 3.74,
+      "sensitivityScenariosLeading": 1
+    },
+    {
+      "id": "auto-breakdown",
+      "name": "Generate a smaller first action",
+      "decisionScoreOutOf5": 3.62,
+      "sensitivityScenariosLeading": 0
+    },
+    {
+      "id": "study-pair",
+      "name": "Coordinate a shared recovery session with a peer",
+      "decisionScoreOutOf5": 3.235,
+      "sensitivityScenariosLeading": 0
+    },
+    {
+      "id": "context-assistant",
+      "name": "Conversational assistant across every task and calendar",
+      "decisionScoreOutOf5": 2.895,
+      "sensitivityScenariosLeading": 0
+    }
+  ],
+  "selected": "evidence-to-progress",
+  "limitation": "Weighted multi-criteria decision analysis with seeded sensitivity scenarios. Ratings are editorial judgments informed by the cited public product documentation and the existing repository, not measured demand or predicted success probabilities."
+}

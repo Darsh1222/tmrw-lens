@@ -70,7 +70,7 @@ export function Nav({ home }: { home: boolean }) {
           </a>
         </div>
         <a href="/recover" className={buttonClass("primary", "ml-1 whitespace-nowrap px-3 sm:ml-2 sm:px-4")}>
-          Recover a task
+          Your next step
         </a>
         <button
           onClick={() => setOpen((o) => !o)}

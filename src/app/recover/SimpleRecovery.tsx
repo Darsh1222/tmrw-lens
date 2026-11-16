@@ -14,14 +14,9 @@ import {
   type RecoveryResult,
   type Obstacle,
 } from "@/lib/recovery/engine";
-import {
-  completionKey,
-  buildRequest,
-  recoveryCalendar,
-  MEMORY_KEY,
-  WORKSPACE_KEY,
-  type Setup,
-} from "@/lib/recovery/workspace";
+import { buildRequest, MEMORY_KEY, WORKSPACE_KEY, type Setup } from "@/lib/recovery/workspace";
+import { beginNextTask, sourceForTask, type NextTask, type TaskSource } from "@/lib/recovery/next-step";
+import { NextStepCard, returningTask, keepTask, clearTask } from "./NextStepCard";
 import { preferredProposal } from "@/lib/recovery/presentation";
 import { buttonClass } from "../_lens/styles";
 
@@ -98,9 +93,11 @@ function demoFromLocation() {
 }
 function RecoveryFlow() {
   const [demo] = useState(demoFromLocation);
-  const [step, setStep] = useState(demo?.step ?? 0),
+  const [active, setActive] = useState<NextTask | null>(() => (!demo && !readImport() ? returningTask() : null));
+  const [carriedSource, setCarriedSource] = useState<TaskSource | null>(active?.source ?? null);
+  const [step, setStep] = useState(active ? 3 : (demo?.step ?? 0)),
     [setup, setSetup] = useState(initialSetup),
-    [request, setRequest] = useState<RebuildRequest | null>(demo?.request ?? null),
+    [request, setRequest] = useState<RebuildRequest | null>(active?.input.request ?? demo?.request ?? null),
     [example, setExample] = useState(!!demo);
   const [obstacle, setObstacle] = useState<Obstacle>(demo?.obstacle ?? "unsure"),
     [budget, setBudget] = useState(20),
@@ -117,18 +114,19 @@ function RecoveryFlow() {
   const [calibrate, setCalibrate] = useState(false),
     [allowMove, setAllowMove] = useState(false);
   const [run, setRun] = useState<{ input: RecoveryInput; result: RecoveryResult } | null>(
-      demo ? { input: demo.input, result: demo.result } : null,
+      active
+        ? { input: active.input, result: recover(active.input) }
+        : demo
+          ? { input: demo.input, result: demo.result }
+          : null,
     ),
-    [selected, setSelected] = useState(demo?.selected ?? "");
+    [selected, setSelected] = useState(active?.plan.id ?? demo?.selected ?? "");
   const [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
-    [actual, setActual] = useState(60);
+    [notice, setNotice] = useState("");
   const selectedPlan = run?.result.proposals.find((p) => p.id === selected);
   const date = (s: string) =>
     DateTime.fromISO(s, { zone: request?.zone ?? setup.zone }).toFormat("ccc, LLL d · h:mm a");
   const time = (s: string) => DateTime.fromISO(s, { zone: request?.zone ?? setup.zone }).toFormat("h:mm a");
-  const completionId = request ? completionKey(request) : "";
-  const logged = memory.history.some((h) => h.id === completionId);
   const updateMemory = (m: Memory) => {
     const checked = Memory.parse(m);
     setMemory(checked);
@@ -167,18 +165,23 @@ function RecoveryFlow() {
       setError("This plan needs another check. Go back and compare again.");
       return;
     }
+    const next = beginNextTask(run.input, selectedPlan, sourceForTask(payload, source) ?? carriedSource, example);
+    setActive(next);
+    try {
+      keepTask(next, !!localStorage.getItem("lens_next_step_v1"));
+      if (!example) sessionStorage.removeItem(WORKSPACE_KEY);
+    } catch {
+      setError("This plan works here, but your browser could not save it for a return visit.");
+    }
     setStep(3);
     setNotice("");
   };
-  const saveCalendar = () => {
-    if (!request || !selectedPlan) return;
-    const url = URL.createObjectURL(
-      new Blob([recoveryCalendar(request, selectedPlan, new Date())], { type: "text/calendar" }),
-    );
-    Object.assign(document.createElement("a"), { href: url, download: "lens-recovery.ics" }).click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
   const reset = () => {
+    setActive(null);
+    setCarriedSource(null);
+    setSetup(initialSetup());
+    setPayload(null);
+    setSource("");
     setStep(0);
     setRequest(null);
     setRun(null);
@@ -188,19 +191,23 @@ function RecoveryFlow() {
   const task = request?.items.find((i) => i.id === request.missed.item_id);
   return (
     <div className="mx-auto flex w-full max-w-[780px] flex-col gap-6 pb-16">
-      <ol aria-label="Your progress" className="flex items-center gap-2 text-sm text-ink-2">
-        {["Your task", "What happened", "Your plan"].map((label, n) => (
-          <li
-            key={label}
-            aria-current={Math.min(step, 2) === n ? "step" : undefined}
-            className={`flex flex-1 items-center gap-2 border-b-2 pb-3 ${Math.min(step, 2) === n ? "border-crimson text-ink" : "border-line"}`}
-          >
-            <span className="text-xs">{n + 1}</span>
-            {label}
-          </li>
-        ))}
-      </ol>
-      {example && step > 0 && <p className="text-sm text-ink-2">Example week · Nov 4–6, 2026 · no personal data</p>}
+      {step < 3 && (
+        <ol aria-label="Your progress" className="flex items-center gap-2 text-sm text-ink-2">
+          {["Your task", "What happened", "Your plan"].map((label, n) => (
+            <li
+              key={label}
+              aria-current={Math.min(step, 2) === n ? "step" : undefined}
+              className={`flex flex-1 items-center gap-2 border-b-2 pb-3 ${Math.min(step, 2) === n ? "border-crimson text-ink" : "border-line"}`}
+            >
+              <span className="text-xs">{n + 1}</span>
+              {label}
+            </li>
+          ))}
+        </ol>
+      )}
+      {example && step > 0 && step < 3 && (
+        <p className="text-sm text-ink-2">Example week · Nov 4–6, 2026 · no personal data</p>
+      )}
       {error && (
         <p role="alert" className="rounded-xl border border-crimson bg-card p-4 text-sm text-crimson">
           {error}
@@ -680,88 +687,45 @@ function RecoveryFlow() {
           </button>
         </section>
       )}
-      {step === 3 && selectedPlan && (
-        <section className={box} aria-labelledby="done-heading">
-          <span className="text-sm text-ink-2">Your plan is ready</span>
-          <h2 id="done-heading" className="forum-display mt-3 text-3xl sm:text-4xl">
-            One thing to do next.
-          </h2>
-          <p className="mb-5 mt-4 text-xl">{task?.title}</p>
-          {selectedPlan.placements.map((p, n) => (
-            <p key={n} className="mb-3 rounded-xl bg-well p-4">
-              {date(p.start)}
-              <span className="mt-1 block text-sm text-ink-2">
-                {p.minutes} minutes · ends {time(p.end)}
-              </span>
-            </p>
-          ))}
-          <button className={buttonClass("primary", "mt-4 min-h-12 w-full text-base")} onClick={saveCalendar}>
-            Add these sessions to my calendar
-          </button>
-          <p className="mt-3 text-xs text-ink-2">
-            Downloads a calendar file. Check for duplicates. Existing calendar events are not changed
-            {selectedPlan.moved.length ? "; update the other moved task yourself" : ""}.
-          </p>
-          <button
-            className={buttonClass("plain", "mt-3 w-full")}
-            onClick={() => {
-              setStep(2);
-              setNotice("Undone. You’re back at the preview; your source and external calendar were not changed.");
-            }}
-          >
-            Undo this plan
-          </button>
-          <details className="mt-5 border-t border-line pt-4 text-sm">
-            <summary className="cursor-pointer">After I finish: record actual time</summary>
-            <form
-              className="mt-4 flex flex-col gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (example || logged || actual < 1 || actual > 1200) return;
-                updateMemory({
-                  ...memory,
-                  history: [
-                    ...memory.history,
-                    {
-                      id: completionId,
-                      category: setup.category,
-                      estimated: run!.result.estimate.base,
-                      actual,
-                      at: new Date().toISOString(),
-                    },
-                  ].slice(-100),
-                });
-                setNotice("Recorded from your report. This does not assume better grades or reduced stress.");
-              }}
-            >
-              <label>
-                Total minutes for all these sessions
-                <input
-                  required
-                  type="number"
-                  min={1}
-                  max={1200}
-                  className={`${field} mt-2`}
-                  value={actual}
-                  onChange={(e) => setActual(Number(e.target.value))}
-                />
-              </label>
-              <button disabled={example || logged} className={buttonClass("quiet")}>
-                {example
-                  ? "Example work isn’t added to your history"
-                  : logged
-                    ? "Already recorded"
-                    : "Record completed work"}
-              </button>
-              <p className="text-xs text-ink-2">
-                Record the whole task once, after you finish it. Completion is never inferred from the clock.
-              </p>
-            </form>
-          </details>
-          <button className="mt-6 w-full text-center text-sm underline underline-offset-4" onClick={reset}>
-            Plan another task
-          </button>
-        </section>
+      {step === 3 && active && (
+        <NextStepCard
+          task={active}
+          onChange={(next) => {
+            setActive(next);
+            if (next.status === "active" && memory.history.some((h) => h.id === next.id))
+              updateMemory({ ...memory, history: memory.history.filter((h) => h.id !== next.id) });
+          }}
+          onNewTask={reset}
+          onUndoPlan={() => {
+            if (!active.example) clearTask();
+            setCarriedSource(active.source);
+            setActive(null);
+            const input = active.input;
+            const result = recover(input);
+            setRequest(input.request);
+            setRun({ input, result });
+            setSelected(preferredProposal(result, input.obstacle)?.id ?? "");
+            setStep(2);
+          }}
+          logged={memory.history.some((h) => h.id === active.id)}
+          onRecord={(task, actual) => {
+            if (task.example || task.status !== "done" || memory.history.some((h) => h.id === task.id)) return;
+            updateMemory({
+              ...memory,
+              history: [
+                ...memory.history,
+                {
+                  id: task.id,
+                  category: task.category,
+                  estimated: task.originalEstimateMinutes,
+                  actual,
+                  at: new Date().toISOString(),
+                },
+              ].slice(-100),
+            });
+            setNotice("Actual time recorded from your report.");
+          }}
+        />
       )}
       <details className={`${box} text-sm`}>
         <summary className="cursor-pointer font-medium">Preferences & learning</summary>

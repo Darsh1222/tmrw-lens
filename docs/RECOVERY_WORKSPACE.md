@@ -1,16 +1,14 @@
 # Recovery workspace
 
-Open `/recover`. A labeled synthetic week is available without AI credentials. For real work, choose **Use my own week**, enter the remaining minutes and a confirmed deadline within 14 days, and review study/sleep hours and busy time. Or open a verified Lens plan, choose **Open recovery workspace**, then **Load verified Lens handoff**. Only confirmed items pass through the existing import audit. Select a source item and explicitly confirm remaining effort and the proposed time on any date-only deadline. Weekly classes are expanded only for supported recurrence rules, preserving weekday, local time, term end, and exceptions. Unsupported recurrences require manual review.
+Open `/recover`. Enter a task or choose the labeled example. Confirm remaining work, a deadline within 14 days, and available time; then choose what got in the way and approve one checked recommendation. The detailed comparison workspace remains at `/recover/details`. From a verified source plan, **Make a study plan** passes confirmed items into the guided setup; choose the source item and explicitly confirm effort and any date-only deadline's clock time. Supported weekly classes retain term end and exceptions; unsupported recurrence requires review.
 
-## User flow
+## Minimal next-step loop
 
-1. Review the loaded task and commitments.
-2. Describe the obstacle if useful; the simple phrase matcher can suggest a label, which you can correct.
-3. Set remaining effort, category, and maximum small-step length. Include any interruption as explicit busy time; text does not silently change availability.
-4. Optionally enable effort calibration and comparison of moving one flexible task.
-5. Compare complete proposals. Every proposal displays sessions, the complete remaining-work allocation, and additional changes. No feasible result produces a capacity/constraint explanation instead of silently dropping the task.
-6. Apply a proposal to the visit's working plan. Undo restores the source. Export creates an .ics for recovered work only. It does not update existing external events; when another task moves, update that calendar event separately.
-7. After finishing the whole recovered task, explicitly record actual minutes once. A calendar event ending is not completion. Synthetic example mode disables personal completion logging.
+After approval, one card shows the next session, the whole-task remainder and the deadline. **Finished this step** is an explicit report about that step's planned work; **Plans changed** asks for the unfinished estimate and previews another complete plan. All remaining minutes must stay scheduled; completed steps are not restarted. Already approved other-task moves stay in place. Replanning never moves another task without a separate permission flow, or expands available time or alters the deadline. A no-fit result leaves the current task unchanged. Source evidence, complete remaining sessions, calendar export and undo stay under disclosure. Edited/manual deadlines are not labeled verified by their old source.
+
+The card survives a tab refresh via sessionStorage. Optional “Remember this task on this device” also uses localStorage. Saving the task does not save the person's effort-history records or identifiers. Examples cannot overwrite personal saved tasks or enter completion history. A time ending never marks work complete. An outdated plan is shown as needing an update; calendar export is disabled for past sessions. An independent validator checks the current action time before applying a recovery preview. Undo can restore the last state; withdrawing completion also removes its now-invalid effort record.
+
+After the whole task is explicitly finished, optional actual minutes can be recorded against the original remaining-work estimate. Planned minutes and actual elapsed effort are kept distinct. Calendar exports contain remaining sessions only and cannot update existing external events. The plan covers one active task; starting another replaces that task, not an account-wide task database. Newly occurring commitments must be reflected in supplied availability; live calendar sync remains outside this implementation.
 
 ## Learning and memory
 
@@ -26,7 +24,7 @@ This is bounded search, not a mathematically global optimizer: when permitted it
 
 ## Technical boundaries
 
-Engine: `src/lib/recovery/engine.ts`. Import/calendar adapter: `src/lib/recovery/workspace.ts`. Interface: `src/app/recover/Workspace.tsx`. Source handoff: `SendPanel.tsx`. Unit tests: `tests/unit/recovery.test.ts`.
+Engine: `src/lib/recovery/engine.ts`. Import/calendar adapter: `src/lib/recovery/workspace.ts`. Guided interface: `src/app/recover/SimpleRecovery.tsx` and `NextStepCard.tsx`. Active-task state machine: `src/lib/recovery/next-step.ts`. Detailed interface: `src/app/recover/Workspace.tsx`. Source handoff: `SendPanel.tsx`. Unit tests: `tests/unit/recovery.test.ts`.
 
 The new workspace makes no model calls and has no new server endpoint. The original Meta reader and rebuild agent remain available. The new preferences and completion records are not automatically shared with Tomorrow's private SMS app. This is implemented, useful web functionality; cross-device/SMS synchronization needs a separate integration.
 
