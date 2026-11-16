@@ -47,6 +47,15 @@ const iso = (s: string, zone: string) => {
   return t;
 };
 
+/** Stable for one recovery event, distinct across tasks created at the same time. */
+export function completionKey(request: RebuildRequest): string {
+  const task = request.items.find((item) => item.id === request.missed.item_id);
+  const source = JSON.stringify([request.now, request.missed.item_id, task?.title, task?.due]);
+  let hash = 2166136261;
+  for (let n = 0; n < source.length; n++) hash = Math.imul(hash ^ source.charCodeAt(n), 16777619);
+  return `done_${Date.parse(request.now)}_${(hash >>> 0).toString(36)}`;
+}
+
 /** Explicit defaults are displayed before building a personal request; dates without a time remain a user decision. */
 export function buildRequest(raw: Setup, importPayload?: ImportRequest): RebuildRequest {
   const input = Setup.parse(raw);

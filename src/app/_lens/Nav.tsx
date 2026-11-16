@@ -69,8 +69,8 @@ export function Nav({ home }: { home: boolean }) {
             GitHub
           </a>
         </div>
-        <a href={href("missed-session")} className={buttonClass("primary", "ml-1 whitespace-nowrap px-3 sm:ml-2 sm:px-4")}>
-          Try a missed session
+        <a href="/recover" className={buttonClass("primary", "ml-1 whitespace-nowrap px-3 sm:ml-2 sm:px-4")}>
+          Recover a task
         </a>
         <button
           onClick={() => setOpen((o) => !o)}

@@ -19,6 +19,7 @@ import {
   type RecoveryResult,
 } from "@/lib/recovery/engine";
 import {
+  completionKey,
   applyProposal,
   buildRequest,
   MEMORY_KEY,
@@ -122,8 +123,7 @@ function RecoveryWorkspace() {
   const loadHandoff = () => {
     try {
       const raw = sessionStorage.getItem(WORKSPACE_KEY);
-      if (!raw)
-        throw new Error("No verified import is waiting. Open your Lens plan and choose Open recovery workspace.");
+      if (!raw) throw new Error("No verified import is waiting. Open your Lens plan and choose Make a study plan.");
       const data = ImportRequest.parse(JSON.parse(raw));
       invalidate();
       setPayload(data);
@@ -181,7 +181,7 @@ function RecoveryWorkspace() {
   const timestamp = (s: string) => DateTime.fromISO(s, { zone: request.zone }).toFormat("ccc LLL d, h:mm a");
   const result = comparison?.result;
   const missed = request.items.find((i) => i.id === request.missed.item_id)!;
-  const completionId = `done_${Date.parse(request.now)}_${missed.id.slice(0, 40)}`;
+  const completionId = completionKey(request);
   const alreadyRecorded = memory.history.some((h) => h.id === completionId);
   const deadline = missed.due ?? request.deadlines.find((d) => d.id === missed.for)?.due;
   const plan = applied ? applyProposal(request, applied) : request.items;

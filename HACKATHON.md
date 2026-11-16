@@ -299,3 +299,9 @@ Prepared a separate submission branch with a /demo guide, synthetic-evaluation q
 ## November 16, 2026 — Recovery workspace implementation
 
 Built `/recover`: personal-week setup with editable study/sleep hours and protected busy time; verified-source handoff; editable obstacle suggestions; complete alternative recovery plans; small-start plus remaining-work accounting; one optional flexible-task move; overload/capacity explanation; apply/undo and calendar export. Added opt-in browser-local effort history, a bounded median estimator, rejected-hour feedback, editable preference, and inspect/delete/reset controls. Synthetic examples remain labeled and do not train personal history. Runtime AI extraction and the existing rebuild API remain unchanged. Added unit tests covering supported scenario outputs, overlap/deadline/effort tampering, capacity exhaustion, move permission, learning thresholds, imports, and daylight-saving ambiguities.
+
+## November 16, 2026 — Guided recovery and submission film
+
+Simplified the default `/recover` entry into one task, an explicit obstacle, and one recommended plan. Tired prefers a checked tomorrow option; stuck prefers a checked small start with the full remaining effort scheduled. All options must still pass the independent constraints check. Keep alternatives and advanced settings under disclosure; preserve the full workspace at `/recover/details`. Source imports carry their original time zone. Stable completion identity distinguishes different tasks at the same timestamp.
+
+The new Hyperframes submission film reuses the creator's original narration and music, with fresh high-resolution screenshots of real product states. It distinguishes the original recorded AI rebuild agent and synthetic evaluation results from the new local deterministic planner. No generated narration or student outcome claims.

@@ -164,8 +164,8 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
           if (!payload) return;
           try { sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(payload)); router.push("/recover"); }
           catch { setState({ s: "error", message: "This browser could not prepare the recovery handoff." }); }
-        }}>Open recovery workspace</button>
-        <p className="text-xs text-ink-2">Carries confirmed items to this browser tab. Select Load verified Lens handoff there; confirm remaining effort and any date-only deadline time.</p>
+        }}>Make a study plan</button>
+        <p className="text-xs text-ink-2">Continue with your confirmed dates. Choose a task and check how much work is left.</p>
         <button onClick={calendar} disabled={!count} className={buttonClass("quiet")}>
           Add to calendar (.ics)
         </button>

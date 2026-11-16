@@ -7,7 +7,7 @@ import { PlayCircle, SealCheck, UploadSimple } from "@phosphor-icons/react";
 // zone) and briefly highlights it on arrival, so it's clear where to look.
 
 const STEPS = [
-  { n: 1, Icon: PlayCircle, title: "Watch a rebuild", text: "Press “Try a missed session”.", hash: "missed-session", target: "missed-session" }, // prettier-ignore
+  { n: 1, Icon: PlayCircle, title: "Recover one task", text: "Say what got in the way.", hash: "/recover", target: "recover" }, // prettier-ignore
   { n: 2, Icon: SealCheck, title: "See the proof", text: "Open the sample week and tap any date.", hash: "sample-week", target: "prove" }, // prettier-ignore
   { n: 3, Icon: UploadSimple, title: "Use your own", text: "Upload a syllabus, schedule screenshot or photo.", hash: "upload", target: "upload" }, // prettier-ignore
 ];
@@ -37,7 +37,7 @@ export function HowTo() {
         {STEPS.map((s) => (
           <li key={s.n}>
             <a
-              href={`#${s.hash}`}
+              href={s.hash.startsWith("/") ? s.hash : `#${s.hash}`}
               onClick={() => flash(s.target, s.hash === "sample-week" ? 900 : 400)}
               className="group flex h-full items-start gap-4 rounded-2xl border border-line bg-card p-5 transition-colors hover:border-line-strong hover:bg-well"
             >

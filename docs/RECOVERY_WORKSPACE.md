@@ -29,3 +29,7 @@ This is bounded search, not a mathematically global optimizer: when permitted it
 Engine: `src/lib/recovery/engine.ts`. Import/calendar adapter: `src/lib/recovery/workspace.ts`. Interface: `src/app/recover/Workspace.tsx`. Source handoff: `SendPanel.tsx`. Unit tests: `tests/unit/recovery.test.ts`.
 
 The new workspace makes no model calls and has no new server endpoint. The original Meta reader and rebuild agent remain available. The new preferences and completion records are not automatically shared with Tomorrow's private SMS app. This is implemented, useful web functionality; cross-device/SMS synchronization needs a separate integration.
+
+## Guided entry
+
+`/recover` presents three stages: task, what happened, and one checked recommendation. The recommended option uses the explicit obstacle: tired prefers the checked tomorrow option, stuck the checked small-start option, otherwise the default checked option. A fallback never bypasses proposal validation. Alternatives remain available in a disclosure. `/recover/details` preserves the full comparison controls. The guided path shows the next session, supports calendar export and undo, and keeps memory controls collapsed by default.

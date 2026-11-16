@@ -11,7 +11,8 @@ import {
   RecoveryInput,
   type RecoveryInput as Input,
 } from "@/lib/recovery/engine";
-import { applyProposal, buildRequest, recoveryCalendar } from "@/lib/recovery/workspace";
+import { completionKey, applyProposal, buildRequest, recoveryCalendar } from "@/lib/recovery/workspace";
+import { preferredProposal } from "@/lib/recovery/presentation";
 import { ImportRequest } from "@/lib/tomorrow/contract";
 const input = (name = "simple-move"): Input => ({
   request: RebuildRequest.parse(REBUILD_CASES.find((c) => c.name === name)!.request),
@@ -258,5 +259,30 @@ describe("personal and verified import setup", () => {
       exdates: [],
     };
     expect(() => buildRequest(setup(), payload)).toThrow(/recurrence/);
+  });
+});
+
+describe("simple recovery recommendations", () => {
+  it("offers rest first for tired students and a real starter for stuck students", () => {
+    const i = input();
+    const result = recover(i);
+    expect(preferredProposal(result, "tired")?.id).toBe("tomorrow");
+    expect(preferredProposal(result, "stuck")?.id).toBe("starter");
+    expect(preferredProposal(result, "unsure")?.otherChanges).toBe(0);
+  });
+  it("does not promise an unavailable option", () => {
+    const i = input();
+    i.request.open_windows = [];
+    expect(preferredProposal(recover(i), "tired")).toBeUndefined();
+  });
+});
+
+describe("completion identity", () => {
+  it("keeps one event stable and distinguishes different tasks at the same time", () => {
+    const original = input().request;
+    const other = structuredClone(original);
+    other.items.find((item) => item.id === other.missed.item_id)!.title = "A different task";
+    expect(completionKey(structuredClone(original))).toBe(completionKey(original));
+    expect(completionKey(other)).not.toBe(completionKey(original));
   });
 });
