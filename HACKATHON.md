@@ -309,3 +309,7 @@ The new Hyperframes submission film reuses the creator's original narration and 
 ## November 16, 2026 — One evidence-linked next step
 
 Researched Motion, Shovel, Reclaim 2.0, Sunsama and Goblin Tools using official documentation. Ranked six concepts with a transparent weighted score and 5,000 seeded sensitivity scenarios. Selected the evidence-linked next-step loop, not a claimed world first or predicted winner. Added one returning action card with explicit step completion, partial remaining-work replanning, attached source evidence, stale-plan handling, independent action-time validation, undo, remaining-only ICS export, visit-local storage and optional device persistence. Added regression tests for progress accounting, duplicate actions, constraint preservation, source attribution, completion and corrupt storage. No student outcomes have been collected.
+
+## November 16, 2026 — Framework patch before deployment
+
+The installed build surfaced a known security advisory for Next.js 16.4.3. Verified the official v16.4.5 release and applied the same-series security patch, aligning eslint-config-next. Revalidate the product and normal GitHub production build after the patch; preserve build configuration and the original Meta tag. Also reset the free-again default when opening a recovery so a finished demo step cannot leave its default in the past.

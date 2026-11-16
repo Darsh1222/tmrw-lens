@@ -178,6 +178,13 @@ export function NextStepCard({
                 setChanging(!changing);
                 setPreview(null);
                 setLeft(task.remainingMinutes);
+                setFreeAgain(
+                  DateTime.fromISO(task.example ? task.updatedAt : new Date().toISOString(), {
+                    zone: task.input.request.zone,
+                  })
+                    .plus({ hours: 1 })
+                    .toFormat("yyyy-MM-dd'T'HH:mm"),
+                );
                 setError("");
               }}
             >
