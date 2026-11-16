@@ -496,3 +496,11 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
 ## November 16, 2026 — Demo and evidence scope
 
 Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.
+
+## November 16, 2026 — Obstacle-aware recovery workspace
+
+Add `/recover` as a real, browser-local workspace, reachable from the homepage and a verified Lens import. Keep source-reader AI and the existing SMS rebuild contract unchanged. The new planner uses explicit code rules, not a new language-model call: the person confirms the obstacle, remaining estimate, deadline, availability, and preferences. Do not infer a mental-health condition or availability from free text. A lightweight phrase matcher only suggests an editable obstacle label.
+
+Compare full-work plans that keep other commitments fixed, keep today free, or split a small first action from the remaining work with a break. Opt-in permits moving at most one flexible task. Recheck every proposed session together against availability, fixed events, deadline, sleep, spacing, and total required effort. Do not quietly drop work or relax hard constraints. Search is bounded (14-day input, up to 8 work sessions and 6 candidate slots per displaced task), not a proof of global optimality or impossibility.
+
+Effort learning uses the median of up to 10 self-reported same-category ratios after at least 3 records, capped at 0.5–2×. It is optional and transparent. Rejected start hours affect only the default option's candidate order. Records stay in memory unless the person explicitly saves them locally; they can inspect/delete records, edit the daytime preference, or reset all memory. Synthetic demos cannot be recorded as personal completions. Apply/undo affects the visit's working copy; calendar export includes recovered work only and cannot mutate external events. SMS and cross-device memory integration remain separate future work.

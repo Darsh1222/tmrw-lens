@@ -45,6 +45,7 @@ export function SiteFooter() {
               is cached, encrypted, for 24 hours.
             </p>
             <p className="flex flex-wrap gap-4">
+              <Link href="/recover" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">Recovery workspace</Link>
               <Link href="/demo" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
                 Demo guide
               </Link>

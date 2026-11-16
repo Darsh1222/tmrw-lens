@@ -50,6 +50,9 @@ export default function DemoGuide() {
             Try a missed session
           </a>
         </header>
+        <Link href="/recover" className={buttonClass("quiet", "self-start")}>
+          Try obstacle-aware recovery and effort learning
+        </Link>
         <ol className="grid gap-5 md:grid-cols-3">
           {steps.map((step, n) => (
             <li key={step.title} className="flex flex-col gap-4 rounded-2xl border border-line bg-card p-6">

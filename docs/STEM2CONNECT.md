@@ -9,3 +9,7 @@ Reviewer path: /demo → recorded recovery → /#sample-week → inspect a date 
 Evidence: evals/results.json, evals/rebuild/results.json, evals/extract/results.json. Recorded replay is a code regression check, not a fresh model benchmark. Best-slot agreement is internal. SAM adds evidence localization in this set, not an extraction-score improvement. Average recorded rebuild cost $0.008 = 0.8 cents.
 
 Known pending items: final ≤6-minute public/unlisted demo URL, organizer clarification, builder review of personal learning narrative, Devpost entry and team roster, November 24 Demo Day arrangements. Student testing is planned, not complete.
+
+## Expanded recovery implementation
+
+The branch now also contains the working /recover flow described in [RECOVERY_WORKSPACE.md](RECOVERY_WORKSPACE.md): obstacle-aware comparisons, small-step recovery, effort calibration, feedback controls, verified-source handoff, and explicit capacity limits. This is additional November 16 work. The older 3:09 review video does not show these new features; record an updated demo before representing them in the video. Existing recorded-agent metrics apply to the older agent, not this new planner.

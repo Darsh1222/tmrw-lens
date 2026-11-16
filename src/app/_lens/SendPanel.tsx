@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { WORKSPACE_KEY } from "@/lib/recovery/workspace";
 import type { Plan, SourceMeta } from "@/lib/plan/types";
 import { toIcs } from "@/lib/calendar/ics";
 import { NotSendable, sendable, toImport, type ImportResponse } from "@/lib/tomorrow/contract";
@@ -37,6 +39,7 @@ const saved = {
 };
 
 export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[] }) {
+  const router = useRouter();
   const remembered = useSyncExternalStore(saved.subscribe, saved.read, () => null);
   const [typed, setToken] = useState("");
   const token = remembered ?? typed;
@@ -156,6 +159,13 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
         </p>
       )}
       <div className="flex flex-col items-start gap-1">
+        <button disabled={!count} className={buttonClass("quiet")} onClick={() => {
+          const payload = build();
+          if (!payload) return;
+          try { sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(payload)); router.push("/recover"); }
+          catch { setState({ s: "error", message: "This browser could not prepare the recovery handoff." }); }
+        }}>Open recovery workspace</button>
+        <p className="text-xs text-ink-2">Carries confirmed items to this browser tab. Select Load verified Lens handoff there; confirm remaining effort and any date-only deadline time.</p>
         <button onClick={calendar} disabled={!count} className={buttonClass("quiet")}>
           Add to calendar (.ics)
         </button>

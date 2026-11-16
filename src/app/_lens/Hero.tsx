@@ -109,6 +109,7 @@ export function Hero() {
         </p>
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
+            <Link href="/recover" className={buttonClass("quiet", "px-5")}>Recover your week</Link>
             <a href="#missed-session" className={buttonClass("primary", "px-5")}>
               Try a missed session
             </a>

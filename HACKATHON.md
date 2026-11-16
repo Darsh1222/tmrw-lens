@@ -295,3 +295,7 @@ Per-person spend limits and two global brakes keep the public demo from using To
 ## November 16, 2026 — STEM2Connect preparation
 
 Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.
+
+## November 16, 2026 — Recovery workspace implementation
+
+Built `/recover`: personal-week setup with editable study/sleep hours and protected busy time; verified-source handoff; editable obstacle suggestions; complete alternative recovery plans; small-start plus remaining-work accounting; one optional flexible-task move; overload/capacity explanation; apply/undo and calendar export. Added opt-in browser-local effort history, a bounded median estimator, rejected-hour feedback, editable preference, and inspect/delete/reset controls. Synthetic examples remain labeled and do not train personal history. Runtime AI extraction and the existing rebuild API remain unchanged. Added unit tests covering supported scenario outputs, overlap/deadline/effort tampering, capacity exhaustion, move permission, learning thresholds, imports, and daylight-saving ambiguities.
