@@ -492,3 +492,7 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   written weekday settles it when exactly one reading fits. Ranges are a choice of first or last day; "every", "each",
   "weekly" are not one date. ISO and day-before-month dates resolve. Calendar (.ics) events become lines of text that
   are also their quotes, resolved by the same code as a syllabus; repeating events (classes) are left out.
+
+## November 16, 2026 — Demo and evidence scope
+
+Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.

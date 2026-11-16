@@ -44,7 +44,10 @@ export function SiteFooter() {
               Privacy: Standard mode, so nothing you add is used for training. Photos are never stored; what was read
               is cached, encrypted, for 24 hours.
             </p>
-            <p className="flex gap-4">
+            <p className="flex flex-wrap gap-4">
+              <Link href="/demo" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
+                Demo guide
+              </Link>
               <Link href="/evals" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
                 Evals
               </Link>

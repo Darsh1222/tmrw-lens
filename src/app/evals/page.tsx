@@ -110,6 +110,12 @@ export default function Evals() {
           <Figure value={extract.headline.precision.replace(".0", "")} label="Text-a-photo precision" note={`Recall ${extract.headline.recall.replace(".0", "")}`} /> {/* prettier-ignore */}
         </div>
 
+        <aside aria-labelledby="limits-title" className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-6">
+          <h2 id="limits-title" className="forum-display text-2xl">What these results establish</h2>
+          <p className="text-sm text-ink-2">These are developer-maintained synthetic fixtures and recorded model outputs. Replaying them checks the current code against those recordings; it does not measure fresh model behavior. Best-slot agreement uses our own ranking, not independent student preferences.</p>
+          <p className="text-sm text-ink-2">A second read can repeat the first model&apos;s mistake. SAM localizes evidence in this set; the extraction scores above are equal with and without it. Field verification is not the same as perfect extraction or proven student benefit.</p>
+        </aside>
+
         <Section n="I · Read" title="Reading and verifying" intro={`${x.cases} cases over synthetic fixtures. Each photo is read once, then checked a second way: on SAM 3.1's crop of the object it's written on, and on a plain box crop, so the two columns differ only in SAM.`}> {/* prettier-ignore */}
           <Table
             caption="Reading, with and without SAM"

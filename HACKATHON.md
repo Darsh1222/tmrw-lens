@@ -291,3 +291,7 @@ Per-person spend limits and two global brakes keep the public demo from using To
   deadline, Tomorrow asks instead of dropping: "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow,
   or skip it?" When someone says they're sick: "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read
   HIST ch. 4 to 3pm tomorrow. Nothing else changed." Every rebuild message is now human-reviewed.
+
+## November 16, 2026 — STEM2Connect preparation
+
+Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.

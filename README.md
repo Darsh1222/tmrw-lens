@@ -2,11 +2,12 @@
 
 **Tomorrow Lens turns the messy paper of student life into a verified plan, and rebuilds it the moment life gets in the way.**
 
-> **Frozen: this is the hackathon version** ([`v1.0-hackathon`](https://github.com/Darsh1222/tmrw-lens/releases/tag/v1.0-hackathon),
-> everything built Oct 27 to Nov 4, 2026). Lens now continues inside Tomorrow, which is private; this repository
-> gets no new features and will be archived.
+The original Meta submission is preserved at [`v1.0-hackathon`](https://github.com/Darsh1222/tmrw-lens/releases/tag/v1.0-hackathon).
+This branch prepares Lens for STEM2Connect (Education): a demo guide, clearer evaluation claims, and submission documentation.
+The earlier Tomorrow assistant remains separate and is not claimed as new work. Prior-entry eligibility needs organizer clarification.
 
-**Video:** _[demo video link to be added]_ · **The real SMS loop:** _[SMS clip link to be added]_
+**Demo guide:** `/demo` when running this branch locally or after deployment. **Original video:** [Meta demo, 10:55](https://youtu.be/xGFFAUn4RMg) (reference only; too long for STEM2Connect's six-minute maximum).
+**Submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md).
 
 **Live:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app) · Built for the Meta Global AI Developer Hackathon
 (track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
@@ -72,6 +73,10 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 | Cost per photo read / per rebuild     | $0.023 with SAM / $0.0080 (3.7 model calls, about 8 s)                     |
 
 Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
+
+## AI coding assistance
+
+The original [build log](HACKATHON.md) credits Claude Code. Codex assisted with November 16 submission preparation: winner research, demo-guide implementation, evaluation wording, draft submission materials, and animation tooling. Runtime models are described above. The builder reviews and validates the final work.
 
 ## Privacy
 
@@ -173,7 +178,7 @@ lists every one, with its default.
 
 ## Evals
 
-Sixteen cases (`evals/cases/`) over the made-up fixtures in `fixtures/synthetic/`, two with deliberate conflicts
+Nineteen cases (`evals/cases/`) over the made-up fixtures in `fixtures/synthetic/`, two with deliberate conflicts
 between sources. Each photo is read once, then second-read two ways: on SAM 3.1 object crops, and on plain box
 crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM 3.1 (`evals/results.json`):
 
@@ -274,14 +279,14 @@ with their evidence ("whiteboard says Quiz 3 → Mon Nov 2"), never applied unti
 ambiguity, and a signed review link that lasts 24 hours. Four synthetic cases (`evals/extract/cases.ts`): a whiteboard
 moving a syllabus quiz, a course site's to-do list (alone, and against items already in Tomorrow), and a blurry photo:
 
-|                                           | text-a-photo        |
-| ----------------------------------------- | ------------------- |
-| Auto-applied and right (precision)        | **9 of 9**          |
-| Gold items auto-applied (recall)          | **100%**            |
-| Invented dates                            | **0** of 13         |
-| Changes caught (applied before an answer) | 2 of 2 (0)          |
-| Duplicates recognized                     | 2 of 2              |
-| Model cost per photo                      | $0.0127 (3.3 calls) |
+|                                           | text-a-photo         |
+| ----------------------------------------- | -------------------- |
+| Auto-applied and right (precision)        | **8 of 8**           |
+| Gold items auto-applied (recall)          | **100%**             |
+| Invented dates                            | **0** of 13          |
+| Changes caught (applied before an answer) | 2 of 2 (0)           |
+| Duplicates recognized                     | 2 of 2               |
+| Model cost per photo                      | $0.01185 (3.3 calls) |
 
 ## License
 

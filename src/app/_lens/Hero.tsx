@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import extraction from "../../../evals/results.json";
+import rebuild from "../../../evals/rebuild/results.json";
 import { Contours } from "./Contours";
 import { Reveal } from "./Reveal";
 import { useEffect, useState } from "react";
@@ -114,10 +116,11 @@ export function Hero() {
               Upload your own
             </a>
           </div>
-          <p className="text-sm text-ink-2">10 seconds, free, no sign-up.</p>
+          <p className="text-sm text-ink-2">Recorded example, free, no sign-up. <Link href="/demo" className="underline underline-offset-4">Start with the demo guide</Link>.</p>
         </div>
         <p className="text-sm text-ink-2">
-          0 invented dates in 210 · every rebuild rule kept in 204 runs ·{" "}
+          Invented dates: {extraction.headline.with_sam.invented_dates} · rebuild rules kept in{" "}
+          {rebuild.headline.cases * rebuild.headline.runs_per_case} recorded runs. Synthetic tests ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
             how it&apos;s measured
           </Link>
