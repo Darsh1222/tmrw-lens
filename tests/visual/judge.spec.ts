@@ -27,6 +27,25 @@ test("The home workspace previews and applies a real checked recovery", async ({
   await expect(page.getByRole("button", { name: "Finished this step", exact: true })).toBeVisible();
 });
 
+test("typed notes clarify an ambiguous time and change the real calendar", async ({ page }) => {
+  lightOnly();
+  await page.goto("/?tab=week&example=stuck");
+  const note = page.getByRole("textbox", { name: "Tell us what happened", exact: true });
+  await note.fill("I'm busy until 8");
+  await page.getByRole("button", { name: "Use my note", exact: true }).click();
+  await expect(page.getByText(/Is that AM or PM/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Find a time that fits", exact: true })).toBeDisabled();
+  await note.fill("I'm busy until 8 PM.");
+  await page.getByRole("button", { name: "Use my note", exact: true }).click();
+  await page.getByRole("button", { name: "Find a time that fits", exact: true }).click();
+  const schedule = page.getByRole("region", { name: "Your changing schedule" });
+  await expect(schedule).toHaveAttribute("data-phase", "preview");
+  await expect(schedule.getByRole("button", { name: /Unavailable until the time you gave/ })).toBeVisible();
+  await expect(page.getByText("No sessions before", { exact: false })).toContainText("8:00 PM");
+  await page.getByRole("button", { name: "Use this plan", exact: true }).click();
+  await expect(schedule).toHaveAttribute("data-phase", "active");
+});
+
 test("Send remembers the Tomorrow token after a send it accepts, and forgets it on a 401", async ({ page }) => {
   lightOnly();
   let status = 200;

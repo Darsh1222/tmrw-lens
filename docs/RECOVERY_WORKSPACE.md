@@ -35,3 +35,7 @@ The homepage presents three stages: task, what happened, and one checked recomme
 ## Schedule projection
 
 The calendar reads the same validated request and proposal as the task card. It displays exact session times, supplied fixed commitments and deadlines. Motion connects old and new positions; preview and approval have distinct labels. Completed effort is removed from remaining sessions. Midnight-spanning events split by civil date in the request time zone, including DST; visual minimum heights and collision lanes never alter actual timestamps. Personal tasks never receive invented missed-session events. Example-only original-week comparisons are clearly labeled. Motion respects the system reduced-motion preference.
+
+## Typed recovery notes
+
+“What got in the way?” accepts a short note. **Use my note** reads common scheduling phrases locally and shows the inferred settings before the student requests a plan. Examples: “I'm busy until 8 PM”, “I'm stuck and only have 20 minutes tonight”, “I need 90 minutes to finish”, and “Start with five minutes”. A today-only cap applies to the total scheduled work today. It does not discard the remainder. Ambiguous or unsupported text asks for clarification; quick answers remain available. Changing the note removes its applied constraints until reread. The raw text is component-local only; the resulting structured constraints can be retained in the approved task. No general-purpose language-model understanding is claimed.

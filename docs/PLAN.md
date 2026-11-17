@@ -70,3 +70,7 @@ The owner requested a simpler, differentiated standalone product based on market
 ## November 16, 2026 — Unified website and live schedule
 
 Owner requested removal of irrelevant competition branding and a higher-quality integrated website. Make the homepage the working product: course-material intake and the recovery/next-step flow share one workspace. Project the actual checked proposal beside the controls; visually distinguish preview from applied state, preserve fixed commitments and progress, and respect reduced motion. Old recovery URLs resolve to this homepage. Preserve original source/model integration and evaluation honesty; do not introduce simulated personal calendar data.
+
+## November 16, 2026 — Typed recovery notes
+
+The owner requested a useful free-text input in “What got in the way?”. Add a bounded on-device interpreter for feelings, first-step budgets, today-only capacity, remaining effort and explicit free-again times. Show exactly what was understood before planning; ambiguous or unsupported constraints require clarification or manual controls. Derive a restricted working request, preserve deadlines and fixed commitments, and continue to require plan approval. No new provider, API call, or raw-note storage.
