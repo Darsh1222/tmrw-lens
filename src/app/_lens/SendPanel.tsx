@@ -111,7 +111,6 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
   return (
     <section aria-labelledby="send-title" className="source-next-step">
       <div>
-        <span className="workspace-eyebrow">From dates to doing</span>
         <h2 id="send-title" className="forum-display text-3xl">
           Ready to make room for the work?
         </h2>

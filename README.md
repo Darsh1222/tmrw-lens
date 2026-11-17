@@ -26,9 +26,9 @@ Start with one task, choose what got in the way, and review one checked recommen
 
 ## Try it in 10 seconds
 
-Open the homepage. The clearly labeled example puts the next action beside a live three-day schedule. Choose **Find a time** to preview where the work fits, then **Use this plan** to apply it. Compare the original week with the new plan. Finish a step or choose **Plans changed** and watch the remaining work find a new place without losing completed effort.
+Open the homepage. The clearly labeled example puts the next action beside a live three-day schedule. Choose **Preview my plan** to preview where the work fits, then **Use this plan** to apply it. Compare the original week with the new plan. Finish a step or choose **Plans changed** and watch the remaining work find a new place without losing completed effort.
 
-Choose **Plan my task** to use your own task, deadline, available hours, and fixed commitments. Choose **Course material** to try the recorded sample or upload course material. Review each item's source evidence, then **Make a study plan** to carry verified deadlines and classes into the same workspace. Calendar export and the separate Tomorrow assistant remain optional. The recorded tool-calling SMS demonstration is at `/demo`.
+Choose **Use my own task** to use your own task, deadline, available hours, and fixed commitments. Choose **Course material** to try the recorded sample or upload course material. Review each item's source evidence, then **Make a study plan** to carry verified deadlines and classes into the same workspace. Calendar export and the separate Tomorrow assistant remain optional. The recorded tool-calling SMS demonstration is at `/demo`.
 
 ## How Meta's models are used
 

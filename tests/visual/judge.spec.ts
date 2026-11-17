@@ -18,9 +18,9 @@ test("Course material opens the recorded evidence without model calls", async ({
 test("The home workspace previews and applies a real checked recovery", async ({ page }) => {
   lightOnly();
   await page.goto("/");
-  const schedule = page.getByRole("region", { name: "Your changing schedule" });
+  const schedule = page.locator('section[aria-label="Your changing schedule"]');
   await expect(schedule).toHaveAttribute("data-phase", "before");
-  await page.getByRole("button", { name: "Find a time that fits", exact: true }).click();
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
   await expect(schedule).toHaveAttribute("data-phase", "preview");
   await page.getByRole("button", { name: "Use this plan", exact: true }).click();
   await expect(schedule).toHaveAttribute("data-phase", "active");
@@ -30,20 +30,34 @@ test("The home workspace previews and applies a real checked recovery", async ({
 test("typed notes clarify an ambiguous time and change the real calendar", async ({ page }) => {
   lightOnly();
   await page.goto("/?tab=week&example=stuck");
-  const note = page.getByRole("textbox", { name: "Tell us what happened", exact: true });
+  const note = page.getByRole("textbox", { name: /^Tell us what happened/ });
   await note.fill("I'm busy until 8");
-  await page.getByRole("button", { name: "Use my note", exact: true }).click();
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
   await expect(page.getByText(/Is that AM or PM/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Find a time that fits", exact: true })).toBeDisabled();
+  await expect(page.getByRole("heading", { name: "What got in the way?" })).toBeVisible();
+  await expect(note).toHaveAttribute("aria-invalid", "true");
   await note.fill("I'm busy until 8 PM.");
-  await page.getByRole("button", { name: "Use my note", exact: true }).click();
-  await page.getByRole("button", { name: "Find a time that fits", exact: true }).click();
-  const schedule = page.getByRole("region", { name: "Your changing schedule" });
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
+  const schedule = page.locator('section[aria-label="Your changing schedule"]');
   await expect(schedule).toHaveAttribute("data-phase", "preview");
+  if (test.info().project.name.endsWith("mobile"))
+    await page.getByRole("button", { name: "Schedule Preview", exact: true }).click();
   await expect(schedule.getByRole("button", { name: /Unavailable until the time you gave/ })).toBeVisible();
+  if (test.info().project.name.endsWith("mobile"))
+    await page.getByRole("button", { name: "Review plan", exact: true }).click();
   await expect(page.getByText("No sessions before", { exact: false })).toContainText("8:00 PM");
   await page.getByRole("button", { name: "Use this plan", exact: true }).click();
   await expect(schedule).toHaveAttribute("data-phase", "active");
+});
+
+test("a source import exits an example deep link instead of reopening the demo", async ({ page }) => {
+  lightOnly();
+  await page.goto("/?tab=sources&example=stuck&view=plan");
+  await page.getByRole("button", { name: "Try the sample week", exact: true }).click();
+  await page.getByRole("button", { name: "Make a study plan", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "What needs doing?", exact: true })).toBeVisible();
+  await expect(page.getByLabel("From your confirmed Lens plan")).toBeVisible();
+  expect(new URL(page.url()).searchParams.has("example")).toBe(false);
 });
 
 test("Send remembers the Tomorrow token after a send it accepts, and forgets it on a 401", async ({ page }) => {

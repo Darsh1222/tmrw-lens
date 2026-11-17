@@ -36,7 +36,7 @@ export function Nav({ home }: { home: boolean }) {
         >
           How we check
         </Link>
-        <Link href="/?intent=task" onClick={plan} className={buttonClass("primary", "rounded-full px-4 sm:px-5")}>
+        <Link href="/?intent=task" onClick={plan} className={buttonClass(home ? "quiet" : "primary", "px-4 sm:px-5")}>
           Plan a task
           <ArrowUpRight size={15} />
         </Link>

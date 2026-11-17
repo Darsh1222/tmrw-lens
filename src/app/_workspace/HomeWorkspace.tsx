@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { MotionConfig, motion } from "motion/react";
-import { ArrowDown, ArrowUpRight, CalendarBlank, FileText, ShieldCheck, Sparkle } from "@phosphor-icons/react";
+import { ArrowRight, CalendarBlank, FileText, ShieldCheck, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { SimpleRecovery } from "../recover/SimpleRecovery";
 import { Lens } from "../_lens/Lens";
 import { LiveSchedule } from "./LiveSchedule";
@@ -22,8 +22,7 @@ export function HomeWorkspace() {
         <Workspace />
       ) : (
         <div className="workspace-loading">
-          <span className="workspace-eyebrow">Tomorrow Lens</span>
-          <h1 className="forum-display">Make room for what’s next.</h1>
+          <h1>Make room for what’s next.</h1>
           <p>Opening your week…</p>
         </div>
       )}
@@ -41,26 +40,35 @@ function Workspace() {
   const [mode, setMode] = useState<"auto" | "example" | "personal">(() =>
     new URLSearchParams(window.location.search).get("intent") === "task" ? "personal" : "auto",
   );
+  const [mobileView, setMobileView] = useState<"action" | "schedule">("action");
   const [revision, setRevision] = useState(0);
   const [snapshot, setSnapshot] = useState<ScheduleSnapshot | null>(null);
   const updateSchedule = useCallback((next: ScheduleSnapshot | null) => setSnapshot(next), []);
-  const navigate = useCallback((next: Tab) => {
+  const navigate = useCallback((next: Tab, clearEntry = false) => {
     setTab(next);
     if (next === "sources") setReaderOpened(true);
     const url = new URL(window.location.href);
     url.searchParams.set("tab", next);
+    if (clearEntry) for (const key of ["example", "view", "intent"]) url.searchParams.delete(key);
     url.hash = "";
     window.history.replaceState(null, "", url);
   }, []);
   useEffect(() => {
+    const entry = new URL(window.location.href);
+    if (entry.searchParams.get("intent") === "task") {
+      for (const key of ["example", "view", "intent"]) entry.searchParams.delete(key);
+      window.history.replaceState(null, "", entry);
+    }
     const tabEvent = (event: Event) => navigate((event as CustomEvent<Tab>).detail);
     const personal = () => {
-      navigate("week");
+      navigate("week", true);
+      setMobileView("action");
       setMode("personal");
       setRevision((n) => n + 1);
     };
     const imported = () => {
-      navigate("week");
+      navigate("week", true);
+      setMobileView("action");
       setMode("auto");
       setRevision((n) => n + 1);
       document.getElementById("workspace")?.scrollIntoView({ block: "start" });
@@ -83,22 +91,28 @@ function Workspace() {
       window.removeEventListener("hashchange", hash);
     };
   }, [navigate]);
+  const focusView = (view: "action" | "schedule") => {
+    setMobileView(view);
+    requestAnimationFrame(() => {
+      const heading = document.querySelector<HTMLElement>(view === "action" ? "#next-action h2" : "#calendar h2");
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+        heading.scrollIntoView({ block: "start" });
+      }
+    });
+  };
   const choose = (next: "example" | "personal") => {
-    navigate("week");
+    navigate("week", next === "personal");
+    setMobileView("action");
     setMode(next);
     setRevision((n) => n + 1);
   };
   return (
-    <div className="lens-workspace">
+    <div className={`lens-workspace mobile-view-${mobileView}`}>
       <header className="workspace-intro">
-        <div>
-          <p className="workspace-eyebrow">
-            <Sparkle size={15} weight="light" />
-            Less catching up. More moving forward.
-          </p>
-          <h1 className="forum-display">Make room for what’s next.</h1>
-        </div>
-        <p>Your deadlines, your time, and a plan that can change with you.</p>
+        <h1>Make room for what’s next.</h1>
+        <p>One next step. A schedule that can change with you.</p>
       </header>
       <div
         className="workspace-tabs"
@@ -145,33 +159,63 @@ function Workspace() {
         <div className="workspace-section-bar" id="workspace">
           <div>
             <span className={`workspace-dot ${snapshot?.example ? "" : "is-personal"}`} />
-            <span>
-              {snapshot?.example ? "An example you can try" : snapshot ? "Your working plan" : "Start with one task"}
-            </span>
+            <p>
+              <strong>
+                {snapshot?.example
+                  ? "Try it with an example"
+                  : snapshot
+                    ? "Your working plan"
+                    : "Let’s start with one task"}
+              </strong>
+              <span>
+                {snapshot?.example
+                  ? "Sample dates · your own tasks stay saved"
+                  : "Checked against the time and commitments you provide"}
+              </span>
+            </p>
           </div>
-          <div className="flex gap-2">
-            <button onClick={() => choose("example")} className={buttonClass("plain", "min-h-9 px-2 text-xs")}>
-              Try an example
+          <div className="workspace-mode-actions">
+            <button onClick={() => choose("example")} className={buttonClass("plain", "workspace-reset")}>
+              <ArrowCounterClockwise size={16} />
+              {snapshot?.example ? "Reset" : "Try example"}
             </button>
-            <button onClick={() => choose("personal")} className={buttonClass("quiet", "min-h-9 px-3 text-xs")}>
-              Plan my task
-              <ArrowUpRight size={13} />
+            <button onClick={() => choose("personal")} className={buttonClass("quiet")}>
+              {snapshot?.example ? "Use my own task" : "New task"}
+              <ArrowRight size={15} />
             </button>
           </div>
+        </div>
+        <div className="mobile-workspace-switch" role="group" aria-label="Workspace view">
+          <button
+            aria-pressed={mobileView === "action"}
+            aria-controls="next-action"
+            onClick={() => setMobileView("action")}
+          >
+            {snapshot?.phase === "preview" ? "Review plan" : "Next step"}
+          </button>
+          <button
+            aria-pressed={mobileView === "schedule"}
+            aria-controls="calendar"
+            onClick={() => setMobileView("schedule")}
+          >
+            <CalendarBlank size={16} />
+            Schedule{snapshot?.phase === "preview" && <span>Preview</span>}
+          </button>
         </div>
         <div className="workspace-grid">
           <div className="workspace-action" id="next-action">
             <SimpleRecovery key={revision} mode={mode} startWithExample onSchedule={updateSchedule} embedded />
-            <a className="mobile-calendar-link" href="#calendar">
+            <button className="mobile-calendar-link" onClick={() => focusView("schedule")}>
               See the schedule
-              <ArrowDown size={15} />
-            </a>
+              <ArrowRight size={15} />
+            </button>
           </div>
           <div className="workspace-calendar" id="calendar">
             <LiveSchedule snapshot={snapshot} />
-            <a className="mobile-calendar-link" href="#next-action">
-              Back to your next step ↑
-            </a>
+            <button className="mobile-calendar-link" onClick={() => focusView("action")}>
+              {snapshot?.phase === "preview" ? "Back to review and approve" : "Back to your next step"}
+              <ArrowRight size={15} />
+            </button>
           </div>
         </div>
       </section>
@@ -189,26 +233,11 @@ function Workspace() {
         )}
       </section>
       <section className="workspace-how" id="how" aria-labelledby="how-title">
-        <div>
-          <p className="workspace-eyebrow">A plan you can trust</p>
-          <h2 id="how-title" className="forum-display">
-            Clear about the facts. Flexible about the plan.
-          </h2>
-        </div>
-        <div className="workspace-principles">
-          <p>
-            <span>01</span>
-            <strong>Check the source.</strong>Every extracted deadline stays connected to the words it came from.
-          </p>
-          <p>
-            <span>02</span>
-            <strong>Make room.</strong>Study time fits around the commitments and availability you provide.
-          </p>
-          <p>
-            <span>03</span>
-            <strong>Keep going.</strong>Finish a step or change the plan. Unfinished work stays accounted for.
-          </p>
-        </div>
+        <h2 id="how-title">How Lens helps</h2>
+        <p>
+          <strong>Check the source.</strong> Review deadlines from your course material. <strong>Make room.</strong>{" "}
+          Plan around your commitments. <strong>Keep going.</strong> Adjust unfinished work when life changes.
+        </p>
       </section>
     </div>
   );

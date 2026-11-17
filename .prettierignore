@@ -15,3 +15,5 @@ src/lib/demo/rebuilds.json
 local-inputs/
 tomorrow-integration/
 evals/bench.json
+
+.agents/skills/impeccable/

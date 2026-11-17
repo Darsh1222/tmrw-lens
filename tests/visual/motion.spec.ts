@@ -26,9 +26,9 @@ test("the real schedule follows preview and approval with reduced motion enabled
   lightOnly();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const schedule = page.getByRole("region", { name: "Your changing schedule" });
+  const schedule = page.locator('section[aria-label="Your changing schedule"]');
   await expect(schedule).toHaveAttribute("data-phase", "before");
-  await page.getByRole("button", { name: "Find a time" }).click();
+  await page.getByRole("button", { name: "Preview my plan" }).click();
   await expect(schedule).toHaveAttribute("data-phase", "preview");
   await page.getByRole("button", { name: "Use this plan" }).click();
   await expect(schedule).toHaveAttribute("data-phase", "active");

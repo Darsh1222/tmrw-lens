@@ -116,14 +116,7 @@ export function NextStepCard({
   };
   return (
     <section className="rounded-2xl border border-line bg-card p-6 sm:p-8" aria-labelledby="next-heading">
-      <p className="text-sm text-ink-2">
-        {task.example
-          ? "Example task · no personal history is saved"
-          : task.status === "done"
-            ? "Finished, from your report"
-            : "Your next step"}
-      </p>
-      <h2 id="next-heading" className="forum-display mt-3 text-3xl sm:text-4xl">
+      <h2 id="next-heading" className="next-task-heading">
         {task.status === "done" ? "That task is finished." : item.title}
       </h2>
       {error && (
@@ -138,7 +131,7 @@ export function NextStepCard({
       )}
       {task.status === "active" && step && (
         <>
-          <div className="my-6 rounded-xl border border-line bg-well p-5">
+          <div className="next-session">
             <p className="text-2xl font-medium">
               {step.minutes} minutes{step.starter ? " to get started" : " for this step"}
             </p>
@@ -153,7 +146,7 @@ export function NextStepCard({
               This planned time has passed. Tell us what happened; nothing was marked finished.
             </p>
           )}
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="next-step-actions grid gap-3 sm:grid-cols-2">
             <button
               className={buttonClass("primary", "min-h-12 text-base")}
               onClick={() => {

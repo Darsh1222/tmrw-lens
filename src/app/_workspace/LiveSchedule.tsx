@@ -67,8 +67,7 @@ export function LiveSchedule({ snapshot }: { snapshot: ScheduleSnapshot | null }
     <section className="live-calendar" aria-label="Your changing schedule" data-phase={snapshot?.phase ?? "empty"}>
       <header className="calendar-toolbar">
         <div>
-          <p className="workspace-eyebrow">A little room for life</p>
-          <h2 className="forum-display">Your schedule</h2>
+          <h2>Your schedule</h2>
         </div>
         <span className={`calendar-status ${snapshot?.phase === "preview" ? "is-preview" : ""}`} role="status">
           <span />
@@ -79,7 +78,7 @@ export function LiveSchedule({ snapshot }: { snapshot: ScheduleSnapshot | null }
         <div>
           <strong>{startDay.toFormat("LLLL yyyy")}</strong>
           <span>
-            {snapshot?.example ? "Example week" : "Your loaded availability"} · {zone.replaceAll("_", " ")}
+            {snapshot?.example ? "Example schedule" : "Your availability"} · {zone.replaceAll("_", " ")}
           </span>
         </div>
         <div className="flex items-center gap-1">

@@ -74,3 +74,7 @@ Owner requested removal of irrelevant competition branding and a higher-quality 
 ## November 16, 2026 — Typed recovery notes
 
 The owner requested a useful free-text input in “What got in the way?”. Add a bounded on-device interpreter for feelings, first-step budgets, today-only capacity, remaining effort and explicit free-again times. Show exactly what was understood before planning; ambiguous or unsupported constraints require clarification or manual controls. Derive a restricted working request, preserve deadlines and fixed commitments, and continue to require plan approval. No new provider, API call, or raw-note storage.
+
+## November 17, 2026 — Impeccable usability pass
+
+The owner requested installation and use of Impeccable to make the existing interface easier to use. Preserve the current Lens identity and all planning/source constraints. Refine the workspace into a compact operational screen, expose quick answers, combine note reading with the explicit preview action, keep approval separate, and provide mobile action/schedule switching without losing state. Use the installed distill, Operate and polish guidance plus primary usability/accessibility research; do not change the private Tomorrow app or model prompts.

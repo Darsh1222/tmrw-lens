@@ -22,7 +22,7 @@ import type { Proposal } from "@/lib/recovery/engine";
 import { AnimatePresence, motion } from "motion/react";
 import { preferredProposal } from "@/lib/recovery/presentation";
 import { RecoveryNote, emptyNoteDraft } from "./RecoveryNote";
-import { requestWithNote, type RecoveryNoteSettings } from "@/lib/recovery/note";
+import { readRecoveryNote, requestWithNote, type RecoveryNoteSettings } from "@/lib/recovery/note";
 import { buttonClass } from "../_lens/styles";
 
 const field = "min-h-12 w-full rounded-xl border border-line-input bg-paper px-4 py-3 text-base";
@@ -184,21 +184,41 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
   const compare = () => {
     if (!request) return;
     try {
+      let settings = noteSettings;
+      let nextObstacle = obstacle,
+        nextBudget = budget,
+        nextCalibrate = calibrate;
+      if (noteDraft.text.trim() && !noteDraft.applied) {
+        const reading = readRecoveryNote(noteDraft.text, request);
+        setNoteDraft({ ...noteDraft, reading, applied: !reading.questions.length });
+        if (reading.questions.length) {
+          flowElement.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus();
+          return;
+        }
+        settings = reading.settings;
+        nextObstacle = settings.obstacle ?? obstacle;
+        nextBudget = settings.starterMinutes ?? budget;
+        if (settings.remainingMinutes !== undefined) nextCalibrate = false;
+        setNoteSettings(settings);
+        setObstacle(nextObstacle);
+        setBudget(nextBudget);
+        setCalibrate(nextCalibrate);
+      }
       const input: RecoveryInput = {
-        request: noteSettings ? requestWithNote(request, noteSettings) : request,
-        obstacle,
-        budget,
+        request: settings ? requestWithNote(request, settings) : request,
+        obstacle: nextObstacle,
+        budget: nextBudget,
         category: setup.category,
-        useEstimates: calibrate,
+        useEstimates: nextCalibrate,
         allowOneMove: allowMove,
         memory,
       };
       const result = recover(input);
       setRun({ input, result });
-      setSelected(preferredProposal(result, obstacle)?.id ?? "");
+      setSelected(preferredProposal(result, nextObstacle)?.id ?? "");
       setError("");
       setNotice("");
-      setNoteSummary(!!noteSettings);
+      setNoteSummary(!!settings);
       setStep(2);
     } catch {
       setError("Please check the task, deadline, and available times, then try again.");
@@ -263,7 +283,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
         className={`mx-auto flex w-full max-w-[780px] flex-col gap-5 ${embedded ? "workbench-flow" : "pb-16"}`}
       >
         {step < 3 && (
-          <ol aria-label="Your progress" className="flex items-center gap-2 text-sm text-ink-2">
+          <ol aria-label="Your progress" className="recovery-progress">
             {["Your task", "What happened", "Your plan"].map((label, n) => (
               <li
                 key={label}
@@ -277,7 +297,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
           </ol>
         )}
         {example && step > 0 && step < 3 && (
-          <p className="text-sm text-ink-2">Example week · Nov 4–6, 2026 · no personal data</p>
+          <p className="example-caption">Example week · Nov 4–6, 2026 · no personal data</p>
         )}
         {error && (
           <p role="alert" className="rounded-xl border border-crimson bg-card p-4 text-sm text-crimson">
@@ -291,7 +311,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
         )}
         {step === 0 && (
           <section className={box} aria-labelledby="task-heading">
-            <h2 id="task-heading" className="forum-display text-3xl sm:text-4xl">
+            <h2 id="task-heading" className="recovery-heading">
               What needs doing?
             </h2>
             <p className="mb-6 mt-3 text-ink-2">One task is enough. We’ll find room for it.</p>
@@ -543,24 +563,15 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
           </section>
         )}
         {step === 1 && (
-          <section className={box} aria-labelledby="obstacle-heading">
-            <p className="mb-3 text-sm text-ink-2">{task?.title}</p>
-            <h2 id="obstacle-heading" className="forum-display text-3xl sm:text-4xl">
+          <section className={`${box} recovery-checkin`} aria-labelledby="obstacle-heading">
+            <h2 id="obstacle-heading" className="recovery-heading">
               What got in the way?
             </h2>
-            <p className="mb-6 mt-3 text-ink-2">We’ll find a way forward that fits your day.</p>
+            <p className="mb-6 mt-3 text-ink-2">{task?.title} · Choose what would help, or add a note.</p>
             {request && (
               <RecoveryNote
                 draft={noteDraft}
                 onDraftChange={setNoteDraft}
-                request={request}
-                onApply={(settings) => {
-                  setNoteSettings(settings);
-                  if (settings.obstacle) setObstacle(settings.obstacle);
-                  if (settings.starterMinutes) setBudget(settings.starterMinutes);
-                  if (settings.remainingMinutes) setCalibrate(false);
-                  setError("");
-                }}
                 onClear={() => {
                   setNoteSettings(null);
                   setObstacle(demo?.obstacle ?? "unsure");
@@ -568,59 +579,58 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                 }}
               />
             )}
-            <details className="mt-5 rounded-xl border border-line p-4">
-              <summary className="cursor-pointer text-sm font-medium">
-                Quick answer: {choices.find((c) => c[0] === obstacle)?.[1]}
-              </summary>
-              <fieldset className="mt-4 grid gap-2 sm:grid-cols-2">
-                <legend className="sr-only">What happened</legend>
-                {choices.map(([id, title, help]) => (
-                  <label
-                    key={id}
-                    className={`flex cursor-pointer items-start gap-2 rounded-xl border p-3 ${obstacle === id ? "border-crimson bg-well" : "border-line"}`}
-                  >
-                    <input
-                      type="radio"
-                      name="obstacle"
-                      value={id}
-                      checked={obstacle === id}
-                      onChange={() => {
-                        setObstacle(id);
-                        setNoteSettings(null);
-                        setNoteDraft(emptyNoteDraft());
-                      }}
-                    />
-                    <span>
-                      <strong className="font-medium">{title}</strong>
-                      <span className="mt-1 block text-sm text-ink-2">{help}</span>
-                    </span>
-                  </label>
-                ))}
-              </fieldset>
-            </details>
+            <fieldset className="obstacle-options">
+              <legend className="sr-only">What happened</legend>
+              {choices.map(([id, title, help]) => (
+                <label key={id} className={`obstacle-choice ${obstacle === id ? "is-selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="obstacle"
+                    value={id}
+                    checked={obstacle === id}
+                    onClick={() => {
+                      setNoteSettings(null);
+                      setNoteDraft(emptyNoteDraft());
+                    }}
+                    onChange={() => {
+                      setObstacle(id);
+                      setNoteSettings(null);
+                      setNoteDraft(emptyNoteDraft());
+                    }}
+                  />
+                  <span>
+                    <strong className="font-medium">{title}</strong>
+                    <span className="sr-only">{help}</span>
+                  </span>
+                </label>
+              ))}
+            </fieldset>
             {obstacle === "stuck" && (
-              <fieldset className="mt-6">
-                <legend className="mb-3 text-sm">If you try a small first step, how long feels manageable?</legend>
-                <div className="flex gap-3">
-                  {Array.from(new Set([10, 20, 30, budget]))
-                    .sort((a, b) => a - b)
-                    .map((m) => (
-                      <button
-                        key={m}
-                        type="button"
-                        aria-pressed={budget === m}
-                        className={buttonClass(budget === m ? "primary" : "quiet", "flex-1")}
-                        onClick={() => {
-                          setBudget(m);
-                          if (noteSettings) setNoteSettings({ ...noteSettings, starterMinutes: m });
-                        }}
-                      >
-                        {m} min
-                      </button>
-                    ))}
-                </div>
-                <p className="mt-2 text-xs text-ink-2">This limits the first step, not the rest of your work.</p>
-              </fieldset>
+              <details className="first-step-settings">
+                <summary>First step: up to {budget} minutes</summary>
+                <fieldset>
+                  <legend className="mb-3 text-sm">First step: how long feels manageable?</legend>
+                  <div className="flex gap-3">
+                    {Array.from(new Set([10, 20, 30, budget]))
+                      .sort((a, b) => a - b)
+                      .map((m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          aria-pressed={budget === m}
+                          className={buttonClass(budget === m ? "primary" : "quiet", "flex-1")}
+                          onClick={() => {
+                            setBudget(m);
+                            if (noteSettings) setNoteSettings({ ...noteSettings, starterMinutes: m });
+                          }}
+                        >
+                          {m} min
+                        </button>
+                      ))}
+                  </div>
+                  <p className="mt-2 text-xs text-ink-2">This limits the first step, not the rest of your work.</p>
+                </fieldset>
+              </details>
             )}
             {obstacle === "underestimated" && (
               <label className="mt-6 block text-sm">
@@ -665,18 +675,10 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                 </button>
               </p>
             )}
-            {noteDraft.text.trim() && !noteDraft.applied && (
-              <p className="mt-5 text-sm text-ink-2">
-                Choose “Use my note”, or select a quick answer to plan without it.
-              </p>
-            )}
-            <button
-              disabled={!!noteDraft.text.trim() && !noteDraft.applied}
-              className={buttonClass("primary", "mt-7 min-h-12 w-full text-base")}
-              onClick={compare}
-            >
-              Find a time that fits
+            <button className={buttonClass("primary", "mt-6 min-h-12 w-full text-base")} onClick={compare}>
+              Preview my plan
             </button>
+            <p className="approval-hint">Review the changes before you apply them.</p>
             <button
               className={buttonClass("plain", "mt-2 w-full")}
               onClick={() => {
@@ -692,22 +694,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
         )}
         {step === 2 && run && (
           <section className={box} aria-labelledby="plan-heading">
-            {noteSummary && (
-              <div className="mb-5 rounded-xl border border-line bg-well p-4 text-sm">
-                <p className="font-medium">Planned around your note</p>
-                {noteSettings?.todayMinutes !== undefined && (
-                  <p className="mt-2">At most {noteSettings.todayMinutes} minutes for this task today.</p>
-                )}
-                {noteSettings?.freeAgainAt && (
-                  <p className="mt-2">No sessions before {date(noteSettings.freeAgainAt)}.</p>
-                )}
-                {noteSettings?.remainingMinutes !== undefined && (
-                  <p className="mt-2">All {noteSettings.remainingMinutes} remaining minutes accounted for.</p>
-                )}
-                <p className="mt-2 text-xs text-ink-2">Your deadline and existing commitments are preserved.</p>
-              </div>
-            )}
-            <h2 id="plan-heading" className="forum-display text-3xl sm:text-4xl">
+            <h2 id="plan-heading" className="recovery-heading">
               {selectedPlan
                 ? obstacle === "tired" && selectedPlan.id === "tomorrow"
                   ? "Keep tonight free."
@@ -725,7 +712,22 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                       ? "Begin small. The rest is still in the plan."
                       : "Your other commitments stay protected."}
                 </p>
-                <div className="rounded-xl border border-line bg-well p-5">
+                {noteSummary && (
+                  <div className="note-plan-summary">
+                    <h3>From your note</h3>
+                    {noteSettings?.todayMinutes !== undefined && (
+                      <p className="mt-2">At most {noteSettings.todayMinutes} minutes for this task today.</p>
+                    )}
+                    {noteSettings?.freeAgainAt && (
+                      <p className="mt-2">No sessions before {date(noteSettings.freeAgainAt)}.</p>
+                    )}
+                    {noteSettings?.remainingMinutes !== undefined && (
+                      <p className="mt-2">All {noteSettings.remainingMinutes} remaining minutes accounted for.</p>
+                    )}
+                    <p className="mt-2 text-xs text-ink-2">Your deadline and existing commitments are preserved.</p>
+                  </div>
+                )}
+                <div className="plan-sessions">
                   <h3 className="mb-4 text-xl font-medium">{task?.title}</h3>
                   <ol className="flex flex-col gap-4">
                     {selectedPlan.placements.map((p, n) => (

@@ -365,7 +365,6 @@ export function Lens() {
 
       <section id="prove" aria-labelledby="prove-title" className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <span className="forum-caps">II · Prove</span>
         <Reveal id="prove-title" className="forum-display text-3xl sm:text-4xl" text="Every date, with its proof." />
         <p className="max-w-2xl text-ink-2">
           Each item links to the exact words it came from and how its date was worked out. Tap one to see it.

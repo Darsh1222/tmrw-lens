@@ -10,7 +10,7 @@ export const PITCH =
 
 export function SiteHeader({ home = false }: { home?: boolean }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2">
         Skip to content
       </a>

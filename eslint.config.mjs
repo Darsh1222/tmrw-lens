@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "public/pdfjs/**",
     // A read-only snapshot of Tomorrow's hackathon code, shown as it is; it isn't built here.
     "tomorrow-integration/**",
+    // Locally installed third-party design tooling, not application code.
+    ".agents/skills/impeccable/**",
   ]),
 ]);
 

@@ -79,7 +79,6 @@ export function Upload({
   return (
     <section id="upload" aria-labelledby="upload-title" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <span className="forum-caps">I · Read</span>
         <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your course material." />
         <p className="max-w-2xl text-ink-2">
           Add a syllabus, class schedule, or photo. Check the deadlines we find, then make a study plan.
