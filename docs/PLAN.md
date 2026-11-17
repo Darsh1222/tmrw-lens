@@ -66,3 +66,7 @@ No secrets (META_API_KEY in .env.local), gitleaks pre-commit + GitHub push prote
 ## November 16, 2026 — Authorized standalone extension
 
 The owner requested a simpler, differentiated standalone product based on market research and explicit idea ranking. Extend the submission branch with the evidence-linked next-step loop described in docs/research/PRODUCT-DIRECTION.md. This is additional Lens work, not private Tomorrow code. Keep source extraction/SMS contracts and frozen original release unchanged. The new card uses local deterministic planning, explicit progress, and opt-in local persistence. No new model/provider integration.
+
+## November 16, 2026 — Unified website and live schedule
+
+Owner requested removal of irrelevant competition branding and a higher-quality integrated website. Make the homepage the working product: course-material intake and the recovery/next-step flow share one workspace. Project the actual checked proposal beside the controls; visually distinguish preview from applied state, preserve fixed commitments and progress, and respect reduced motion. Old recovery URLs resolve to this homepage. Preserve original source/model integration and evaluation honesty; do not introduce simulated personal calendar data.

@@ -1,8 +1,7 @@
 # Tomorrow Lens
 
 Photograph your week (Testudo schedule, syllabus PDF, whiteboard, handwritten notes) and get a verified plan that
-rebuilds when you miss something. Built on Meta's Muse Spark and SAM 3.1 for the Meta Global AI Developer Hackathon
-(build Oct 27 to Nov 4, 2026; submit Nov 4 about 2 PM ET). Public repo, Apache-2.0.
+rebuilds when you miss something. Built on Muse Spark and SAM 3.1. Public repo, Apache-2.0.
 
 ## Source of truth
 

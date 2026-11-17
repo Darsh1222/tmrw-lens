@@ -520,3 +520,9 @@ Connect confirmed deadline evidence, explicit planned-step completion and remain
 ## November 16, 2026 — Framework patch before deployment
 
 The installed build surfaced a known security advisory for Next.js 16.4.3. Verified the official v16.4.5 release and applied the same-series security patch, aligning eslint-config-next. Revalidate the product and normal GitHub production build after the patch; preserve build configuration and the original Meta tag. Also reset the free-again default when opening a recovery so a finished demo step cannot leave its default in the past.
+
+## November 16, 2026 — Integrated calendar and purposeful motion
+
+Replace the disconnected marketing/recovery entry points with one homepage workspace. Keep course material mounted when switching views; a confirmed-source handoff activates the planner without another site or route. The calendar is a read-only projection of the same checked request/proposal/active task used by the action card, not a second scheduler. Stable event identities animate between actual slots with Motion for React; protected commitments retain their identity. New personal tasks never acquire a fabricated past missed event. Recorded examples remain labeled. Preserve local civil dates, split overnight intervals, and separate visual collisions without changing times.
+
+Use short opacity/content transitions and longer (~620ms) schedule moves to make the destination legible. Respect system reduced motion via MotionConfig and CSS, retaining state labels. Research: https://motion.dev/docs/react-layout-animations, https://motion.dev/docs/react-accessibility, https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions, https://www.nngroup.com/articles/animation-purpose-ux/ . Remove past-competition branding from product pages and README while keeping technical model credits and truthful build provenance in submission records.

@@ -13,7 +13,7 @@ import {
   taskDeadline,
   type NextTask,
 } from "@/lib/recovery/next-step";
-import type { Obstacle } from "@/lib/recovery/engine";
+import type { Obstacle, RecoveryInput, Proposal } from "@/lib/recovery/engine";
 import { recoveryCalendar } from "@/lib/recovery/workspace";
 import { buttonClass } from "../_lens/styles";
 
@@ -47,7 +47,9 @@ export function NextStepCard({
   onUndoPlan,
   onRecord,
   logged,
+  onPreview,
 }: {
+  onPreview?: (preview: { input: RecoveryInput; plan: Proposal } | null) => void;
   task: NextTask;
   onChange: (task: NextTask) => void;
   onNewTask: () => void;
@@ -91,6 +93,9 @@ export function NextStepCard({
   const stale = !!step && !task.example && Date.parse(step.end) < clock;
   const deadline = taskDeadline(task);
   const picked = preview && preferredProposal(preview.result, obstacle);
+  useEffect(() => {
+    onPreview?.(preview && picked ? { input: preview.input, plan: picked } : null);
+  }, [onPreview, preview, picked]);
   const commit = (next: NextTask) => {
     setPrevious(task);
     onChange(next);

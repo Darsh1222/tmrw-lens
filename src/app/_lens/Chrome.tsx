@@ -14,7 +14,7 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2">
         Skip to content
       </a>
-      <div className="relative mx-auto flex h-16 w-full max-w-[1120px] items-center justify-between gap-2 px-4 sm:px-8">
+      <div className="relative mx-auto flex h-16 w-full max-w-[1360px] items-center justify-between gap-2 px-4 sm:px-8">
         <Link href="/" className="forum-display shrink-0 text-xl">
           Tomorrow <span className="italic text-crimson">Lens</span>
         </Link>
@@ -26,39 +26,23 @@ export function SiteHeader({ home = false }: { home?: boolean }) {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto">
-      <div className="mx-auto w-full max-w-[1120px] px-4 sm:px-8">
-        <div className="flex flex-col gap-1" aria-hidden>
-          <div className="h-px bg-gilt" />
-          <div className="h-px bg-gilt" />
-        </div>
-        <div className="grid gap-6 py-10 text-sm text-ink-2 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-12">
-          <div className="flex flex-col gap-2">
-            <p className="forum-display text-lg text-ink">{PITCH}</p>
-            <p>
-              Built during the Meta Global AI Developer Hackathon (Oct 27–Nov 4, 2026) with Muse Spark 1.3 + SAM 3.1.
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <p>
-              Privacy: Standard mode, so nothing you add is used for training. Photos are never stored; what was read
-              is cached, encrypted, for 24 hours.
-            </p>
-            <p className="flex flex-wrap gap-4">
-              <Link href="/recover" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">Recovery workspace</Link>
-              <Link href="/demo" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
-                Demo guide
-              </Link>
-              <Link href="/evals" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
-                Evals
-              </Link>
-              <a href="https://github.com/Darsh1222/tmrw-lens" className="text-ink underline decoration-line-strong underline-offset-4 hover:decoration-crimson">
-                GitHub
-              </a>
-            </p>
-          </div>
-        </div>
+    <footer className="lens-footer">
+      <div>
+        <p className="forum-display">Tomorrow Lens</p>
+        <span>A plan you can check. Room to change.</span>
       </div>
+      <nav aria-label="Footer">
+        <Link href="/#workspace">Your week</Link>
+        <Link href="/evals">Evaluations</Link>
+        <a href="https://github.com/Darsh1222/tmrw-lens">Source code</a>
+        <details>
+          <summary>Data & privacy</summary>
+          <p>
+            The planner runs in your browser. Course uploads use the AI reader. Remembering a task on this device is
+            optional. Source reading uses Muse Spark and SAM 3.1.
+          </p>
+        </details>
+      </nav>
     </footer>
-  ); // prettier-ignore
+  );
 }

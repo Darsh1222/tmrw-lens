@@ -29,7 +29,7 @@ async function check(page: Page, errors: string[], name: string) {
 }
 
 async function sample(page: Page) {
-  await page.goto("/");
+  await page.goto("/?tab=sources");
   await page.getByRole("button", { name: "Try the sample week" }).click();
   await page.getByRole("heading", { name: "What Lens found." }).waitFor();
   await page.waitForTimeout(2000); // the outlines draw
@@ -44,7 +44,7 @@ async function sample(page: Page) {
 test("home and hero", async ({ page }) => {
   const errors = await watch(page);
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("rebuilt");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Make room");
   await page.waitForTimeout(600);
   await check(page, errors, "home");
 });
@@ -53,7 +53,7 @@ test("upload, reading as soon as it's added", async ({ page }) => {
   const errors = await watch(page);
   // Held open, so the screen shows reading in progress (and no model is called).
   await page.route("**/api/read", () => new Promise(() => {}));
-  await page.goto("/");
+  await page.goto("/?tab=sources");
   await page.locator('input[type="file"]').setInputFiles([`${FIXTURES}whiteboard-quiz-moved.jpg`, `${FIXTURES}syllabus-math141.pdf`]); // prettier-ignore
   await expect(page.getByText(/Reading page 1 of 2/)).toBeVisible({ timeout: 20000 });
   await expect(page.getByText(/Reading and outlining what's on it/)).toBeVisible();
@@ -63,7 +63,7 @@ test("upload, reading as soon as it's added", async ({ page }) => {
 test("upload, past today's limit", async ({ page }) => {
   const errors = await watch(page);
   await page.route("**/api/read", (r) => r.fulfill({ status: 429, json: { code: "user_limit", error: "That's all the free reading for today. Come back tomorrow; the sample week is always free." } })); // prettier-ignore
-  await page.goto("/");
+  await page.goto("/?tab=sources");
   await page.locator('input[type="file"]').setInputFiles(`${FIXTURES}whiteboard-quiz-moved.jpg`);
   await expect(page.getByText(/Come back tomorrow/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Try the sample week instead" })).toBeVisible();
@@ -73,7 +73,7 @@ test("upload, past today's limit", async ({ page }) => {
 test("upload, the model failed", async ({ page }) => {
   const errors = await watch(page);
   await page.route("**/api/read", (r) => r.fulfill({ status: 502, json: { error: "The model didn't answer properly. Try this page again." } })); // prettier-ignore
-  await page.goto("/");
+  await page.goto("/?tab=sources");
   await page.locator('input[type="file"]').setInputFiles(`${FIXTURES}whiteboard-quiz-moved.jpg`);
   await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
   await check(page, errors, "upload-error");
@@ -83,7 +83,7 @@ test("results: plan, question, send", async ({ page }) => {
   const errors = await watch(page);
   await sample(page);
   await expect(page.getByRole("form", { name: "A question" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Send to Tomorrow" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ready to make room for the work?" })).toBeVisible();
   await check(page, errors, "results");
 });
 
@@ -120,7 +120,7 @@ test("answering the question with the keyboard", async ({ page }) => {
 
 test("missed session, played", async ({ page }) => {
   const errors = await watch(page);
-  await page.goto("/");
+  await page.goto("/demo");
   const panel = page.locator("#missed-session");
   await panel.getByRole("button", { name: /^Play: miss/ }).click();
   await expect(panel.getByRole("button", { name: "Play again" })).toBeVisible({ timeout: 30000 });

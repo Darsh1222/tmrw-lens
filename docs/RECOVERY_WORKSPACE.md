@@ -1,6 +1,6 @@
 # Recovery workspace
 
-Open `/recover`. Enter a task or choose the labeled example. Confirm remaining work, a deadline within 14 days, and available time; then choose what got in the way and approve one checked recommendation. The detailed comparison workspace remains at `/recover/details`. From a verified source plan, **Make a study plan** passes confirmed items into the guided setup; choose the source item and explicitly confirm effort and any date-only deadline's clock time. Supported weekly classes retain term end and exceptions; unsupported recurrence requires review.
+Open the homepage. The **Your week** tab puts one next action beside the changing schedule; **Course material** holds source review and handoff. Old `/recover` links redirect here and preserve example deep links. Enter a task or choose the labeled example. Confirm remaining work, a deadline within 14 days, and available time; then choose what got in the way and approve one checked recommendation. The detailed comparison workspace remains at `/recover/details`. From a verified source plan, **Make a study plan** passes confirmed items into the guided setup; choose the source item and explicitly confirm effort and any date-only deadline's clock time. Supported weekly classes retain term end and exceptions; unsupported recurrence requires review.
 
 ## Minimal next-step loop
 
@@ -30,4 +30,8 @@ The new workspace makes no model calls and has no new server endpoint. The origi
 
 ## Guided entry
 
-`/recover` presents three stages: task, what happened, and one checked recommendation. The recommended option uses the explicit obstacle: tired prefers the checked tomorrow option, stuck the checked small-start option, otherwise the default checked option. A fallback never bypasses proposal validation. Alternatives remain available in a disclosure. `/recover/details` preserves the full comparison controls. The guided path shows the next session, supports calendar export and undo, and keeps memory controls collapsed by default.
+The homepage presents three stages: task, what happened, and one checked recommendation. The recommended option uses the explicit obstacle: tired prefers the checked tomorrow option, stuck the checked small-start option, otherwise the default checked option. A fallback never bypasses proposal validation. Alternatives remain available in a disclosure. `/recover/details` preserves the full comparison controls. The guided path shows the next session, supports calendar export and undo, and keeps memory controls collapsed by default.
+
+## Schedule projection
+
+The calendar reads the same validated request and proposal as the task card. It displays exact session times, supplied fixed commitments and deadlines. Motion connects old and new positions; preview and approval have distinct labels. Completed effort is removed from remaining sessions. Midnight-spanning events split by civil date in the request time zone, including DST; visual minimum heights and collision lanes never alter actual timestamps. Personal tasks never receive invented missed-session events. Example-only original-week comparisons are clearly labeled. Motion respects the system reduced-motion preference.

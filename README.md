@@ -2,18 +2,13 @@
 
 **Tomorrow Lens turns the messy paper of student life into a verified plan, and rebuilds it the moment life gets in the way.**
 
-The original Meta submission is preserved at [`v1.0-hackathon`](https://github.com/Darsh1222/tmrw-lens/releases/tag/v1.0-hackathon).
-This branch prepares Lens for STEM2Connect (Education): a demo guide, clearer evaluation claims, and submission documentation.
-The earlier Tomorrow assistant remains separate and is not claimed as new work. Prior-entry eligibility needs organizer clarification.
+Open the integrated workspace to read course material, check deadline evidence, and see study sessions move into a complete recovery plan. Every change waits for your approval.
 
-**Demo guide:** `/demo` when running this branch locally or after deployment. **Original video:** [Meta demo, 10:55](https://youtu.be/xGFFAUn4RMg) (reference only; too long for STEM2Connect's six-minute maximum).
-**Submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md).
+**Website:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app). The submission branch contains the latest redesign; deploy it before expecting the public site to match.
+**Try locally:** `pnpm install`, `pnpm dev`, then open the homepage. Recorded examples and the local planner need no AI credentials; live uploads need the configured reader.
+**Demo guide:** `/demo`. **Build and submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md). Built solo with disclosed AI coding assistance; the separate Tomorrow assistant remains an optional integration.
 
-**Live:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app) · Built for the Meta Global AI Developer Hackathon
-(track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
-the hackathon window ([HACKATHON.md](HACKATHON.md)).
-
-## What's new: built during the hackathon
+## Capabilities and implementation
 
 Only work built during the hackathon is shown as the submission. What existed before, and what was built during it:
 
@@ -31,15 +26,9 @@ Start with one task, choose what got in the way, and review one checked recommen
 
 ## Try it in 10 seconds
 
-Open the live site and press **Try a missed session**. A made-up week plays: a study session passes undone, the
-student replies "too tired tonight", Muse Spark works out what to move (you see each tool call), the session glides to
-its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am tomorrow, so tonight can be off, the
-soonest it fits before Quiz 3. Nothing else changed."_ The recorded runs are free and never count against a limit; type
-your own reply to run it live.
+Open the homepage. The clearly labeled example puts the next action beside a live three-day schedule. Choose **Find a time** to preview where the work fits, then **Use this plan** to apply it. Compare the original week with the new plan. Finish a step or choose **Plans changed** and watch the remaining work find a new place without losing completed effort.
 
-Then step 2, **See the proof**, opens the sample week (free, instant, no limits); or **Upload your own** syllabus,
-Testudo schedule, whiteboard photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact
-words, and the date math. When it's right, **Send to Tomorrow**, or **Add to calendar (.ics)** for any calendar app.
+Choose **Plan my task** to use your own task, deadline, available hours, and fixed commitments. Choose **Course material** to try the recorded sample or upload course material. Review each item's source evidence, then **Make a study plan** to carry verified deadlines and classes into the same workspace. Calendar export and the separate Tomorrow assistant remain optional. The recorded tool-calling SMS demonstration is at `/demo`.
 
 ## How Meta's models are used
 

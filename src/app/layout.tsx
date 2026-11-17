@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { forumCaps, forumDisplay, forumSans } from "./fonts";
 import "./globals.css";
+import "./_workspace/workspace.css";
 
 export const metadata: Metadata = {
   title: "Tomorrow Lens",

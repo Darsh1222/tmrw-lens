@@ -1,6 +1,6 @@
 # STEM2Connect submission preparation — November 16, 2026
 
-Primary track: Education. Lens originally built October 28–November 4 and entered in Meta's competition. Original release remains v1.0-hackathon. The separate Tomorrow assistant existed earlier. Do not imply this preparation changes that history. Prior-entry eligibility is not explicitly answered by the rules and needs organizer clarification.
+Primary track: Education. Lens originally built October 28–November 4 and previously entered in a competition. Original release remains v1.0-hackathon. The separate Tomorrow assistant existed earlier. Do not imply this preparation changes that history. Prior-entry eligibility is not explicitly answered by the rules and needs organizer clarification.
 
 This branch adds /demo, links from the homepage and footer, derives hero counts from evaluation results, qualifies synthetic results and internal ranking agreement, corrects the 19-case extraction count, and credits Codex assistance. It does not claim to have collected student results.
 
