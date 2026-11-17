@@ -81,7 +81,7 @@ export function Upload({
       <div className="flex flex-col gap-2">
         <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your course material." />
         <p className="max-w-2xl text-ink-2">
-          Add a syllabus, class schedule, or photo. Check the deadlines we find, then make a study plan.
+          See what’s due, where it came from, and what you can do next. Lens helps you fit study time around your commitments and recover unfinished work when plans change, without losing the progress you’ve already made.
         </p>
       </div>
 

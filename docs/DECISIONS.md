@@ -538,3 +538,7 @@ Installed Impeccable 4.9.1 project-locally with the requested npm installer, the
 Research: NN/G https://www.nngroup.com/articles/ten-usability-heuristics/ supports visible state, recognition, user control and minimalism. W3C https://www.w3.org/WAI/tutorials/forms/labels/ and https://www.w3.org/WAI/tutorials/forms/notifications/ support visible associated labels and concise inline errors. These are design principles, not evidence of measured student outcomes.
 
 Clear one-shot `example`, `view` and `intent` query flags when switching to personal work or accepting a source import. Otherwise an old example link can silently win over a verified handoff or a returning task. Keep the mobile view switch sticky below the header so reviewing the schedule never strands the approval action off-screen.
+
+## November 17, 2026 — Course material explains the full benefit
+
+Replaced the generic upload introduction with the actual Lens workflow: source-backed deadlines, a next action around supplied commitments, and recovery of unfinished work while retaining completed progress. Avoided uniqueness or outcome claims that have not been measured.
