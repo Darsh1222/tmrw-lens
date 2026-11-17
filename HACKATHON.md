@@ -335,3 +335,9 @@ Browser validation: desktop at 1280×800, intermediate 768px and phone 390px. Ve
 ## November 17, 2026 — Course-material introduction
 
 Updated the course-material introduction to explain source evidence, realistic study time, recovery when plans change and retained progress, rather than repeat the supported input types. Copy-only change.
+
+## November 17, 2026 — A clear journey for students and judges
+
+Moved a concise product explanation above the workspace tabs and made the course-material introduction explain uploading and reviewing dates. Clarified source review, handoff, task time estimates, plan details, calendar states, navigation, the current web demo path and the scope of recorded evaluation results. Added a feature/usefulness/test inventory and test data for a fresh source-to-recovery demonstration. No scheduling or model behavior changed; no new student outcomes claimed.
+
+Validation: 338 unit tests and three recorded evaluation replays passed. Typecheck, lint, formatting, environment checks and production webpack build passed with the existing sandbox workaround. Browser-checked the revised upload instructions, walkthrough and evaluation scope. Fresh AI reading is blocked locally because no reader key is configured; no fresh AI success claimed. Native ICS import found a one-off deadline, asked for the missing course and kept unconfirmed handoff disabled; repeating events were explicitly skipped. No student outcomes collected.

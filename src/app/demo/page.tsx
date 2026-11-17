@@ -5,82 +5,104 @@ import { MissDemo } from "../_lens/MissDemo";
 import { buttonClass } from "../_lens/styles";
 
 export const metadata: Metadata = {
-  title: "Demo guide · Tomorrow Lens",
-  description: "Try the evidence, a conflicting deadline, and a missed-session recovery without an account.",
+  title: "How Lens works · Tomorrow Lens",
+  description: "Check a deadline, preview study time, and recover unfinished work without restarting your progress.",
 };
-
 const steps = [
   {
-    title: "Inspect a date",
-    text: "Open the sample week and select a class or deadline. The evidence panel shows the source words and how the date was computed.",
+    title: "Check a deadline",
+    text: "Open the sample course material and select a date. Inspect the source text. If two sources disagree, confirm the right date before using it.",
     href: "/#sample-week",
-    action: "Open the sample week",
+    action: "Try source checking",
   },
   {
-    title: "Resolve a disagreement",
-    text: "The sample quiz has different dates in the syllabus and whiteboard. Compare the sources and answer. A suggested answer waits for your confirmation; Undo last answer reverses it.",
-    href: "/#sample-week",
-    action: "Compare the sources",
+    title: "Preview a study plan",
+    text: "Open the example plan. It starts with ten minutes and accounts for all the work left. The schedule is a preview until you choose Use this plan.",
+    href: "/?tab=week&example=stuck&view=plan",
+    action: "Open the example plan",
   },
   {
-    title: "Take the plan with you",
-    text: "Add to calendar downloads confirmed items as an .ics file without an account. Send to Tomorrow needs a connection token from the separate texting assistant.",
-    href: "/#sample-week",
-    action: "Try calendar export",
+    title: "Recover without restarting",
+    text: "Apply the example plan, mark the ten-minute step finished, then choose Plans changed. Lens replans the remaining fifty minutes and keeps the ten you finished.",
+    href: "/?tab=week&example=stuck&view=plan",
+    action: "Try the recovery example",
   },
 ];
-
 export default function DemoGuide() {
   return (
     <>
       <SiteHeader />
-      <main id="main" className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-16 px-4 pb-24 pt-12 sm:px-8">
-        <header className="flex max-w-3xl flex-col gap-5">
-          <span className="forum-caps">Demo guide · Education</span>
-          <h1 className="forum-display text-5xl leading-tight">A deadline you can check. A week you can repair.</h1>
+      <main id="main" className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-10 px-4 pb-16 pt-8 sm:px-8">
+        <header className="flex max-w-3xl flex-col gap-4">
+          <h1 className="text-3xl font-medium leading-tight">From a deadline to a next step.</h1>
           <p className="text-lg text-ink-2">
-            Course information is scattered. Lens turns it into a reviewable plan, asks when sources disagree, and helps
-            recover a missed study session.
+            Check the source, find study time, and adjust unfinished work when plans change.
           </p>
-          <p className="text-sm text-ink-2">
-            The sample plan and default recovery are recorded, synthetic examples. They need no account or API credits.
-            Uploads and custom recovery replies request live AI processing within usage limits.
+          <p className="text-sm leading-relaxed text-ink-2">
+            The examples use made-up course data and need no account or API credits. The web planner runs locally in
+            your browser. Reading new course documents and photos uses the configured AI service; calendar files are
+            read directly.
           </p>
-          <a href="#missed-session" className={buttonClass("primary", "self-start")}>
-            Try a missed session
-          </a>
+          <Link href="/?tab=week&example=stuck&view=plan" className={buttonClass("primary", "self-start")}>
+            Try the example plan
+          </Link>
         </header>
-        <Link href="/recover" className={buttonClass("quiet", "self-start")}>
-          Try obstacle-aware recovery and effort learning
-        </Link>
-        <ol className="grid gap-5 md:grid-cols-3">
+        <ol className="grid gap-5 md:grid-cols-3" aria-label="Try the full Lens workflow">
           {steps.map((step, n) => (
-            <li key={step.title} className="flex flex-col gap-4 rounded-2xl border border-line bg-card p-6">
-              <span className="forum-caps">Step {n + 1}</span>
-              <h2 className="forum-display text-2xl">{step.title}</h2>
-              <p className="flex-1 text-sm text-ink-2">{step.text}</p>
+            <li key={step.title} className="flex flex-col gap-4 rounded-xl border border-line bg-card p-5">
+              <h2 className="text-xl font-medium">
+                {n + 1}. {step.title}
+              </h2>
+              <p className="flex-1 text-sm leading-relaxed text-ink-2">{step.text}</p>
               <Link href={step.href} className="text-sm underline decoration-crimson underline-offset-4">
                 {step.action}
               </Link>
             </li>
           ))}
         </ol>
-        <MissDemo />
-        <section aria-labelledby="boundaries-title" className="flex max-w-3xl flex-col gap-4">
-          <h2 id="boundaries-title" className="forum-display text-3xl">
-            What is checked, and what still needs you
+        <section className="flex max-w-3xl flex-col gap-3" aria-labelledby="your-work-title">
+          <h2 id="your-work-title" className="text-xl font-medium">
+            Use it for your own work
           </h2>
           <p className="text-ink-2">
-            AI reads and proposes. Code computes dates and checks scheduling constraints. You answer conflicting or
-            unclear information. A verification label describes these checks; it does not guarantee correctness.
+            Choose Course material to add files and review dates. Choose Your week to plan one task around your
+            available hours and busy times. You can export confirmed dates or remaining study sessions as a calendar
+            file.
           </p>
+          <p className="text-sm text-ink-2">
+            Lens plans one active task at a time. Calendar downloads do not update existing external events. Task saving
+            on this device is optional.
+          </p>
+          <Link href="/?tab=sources" className="self-start text-sm underline underline-offset-4">
+            Add course material
+          </Link>
+        </section>
+        <section aria-labelledby="assistant-title" className="flex flex-col gap-4 border-t border-line pt-8">
+          <h2 id="assistant-title" className="text-xl font-medium">
+            Optional: see the texting assistant demo
+          </h2>
+          <p className="max-w-3xl text-sm leading-relaxed text-ink-2">
+            This recorded demo shows the separate Tomorrow assistant using AI tools to recover a missed session. It is
+            different from the local web planner above. Default replies play recorded runs; custom replies request live
+            AI processing.
+          </p>
+          <MissDemo />
+        </section>
+        <section aria-labelledby="boundaries-title" className="flex max-w-3xl flex-col gap-3 border-t border-line pt-8">
+          <h2 id="boundaries-title" className="text-xl font-medium">
+            What the checks mean
+          </h2>
           <p className="text-ink-2">
-            Current evaluation evidence is synthetic. It does not establish improved grades, lower stress, or accuracy
-            across real student documents. The next step is consented testing of correction effort and recovery
-            usefulness.
+            AI reads course information. Code checks source evidence, dates and scheduling constraints. You resolve
+            unclear information and approve changes. A verified label describes those checks; it is not a guarantee that
+            a source or reading is correct.
           </p>
-          <Link href="/evals" className="self-start underline decoration-crimson underline-offset-4">
-            Inspect the evaluation and its limits
+          <p className="text-sm text-ink-2">
+            Current evaluations use synthetic data and recorded model outputs. Student testing is still needed to
+            measure whether Lens saves time or makes recovery easier.
+          </p>
+          <Link href="/evals" className="self-start text-sm underline underline-offset-4">
+            View test results and their limits
           </Link>
         </section>
       </main>

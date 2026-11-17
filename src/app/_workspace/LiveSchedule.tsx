@@ -52,14 +52,14 @@ export function LiveSchedule({ snapshot }: { snapshot: ScheduleSnapshot | null }
   const height = (endHour - startHour) * PX;
   const details = segments.find((p) => p.key === selected);
   const phase = before
-    ? "Original plan"
+    ? "Original schedule"
     : snapshot?.phase === "preview"
-      ? "Preview · not applied"
+      ? "Preview · approve to use"
       : snapshot?.phase === "active"
         ? "Plan updated"
         : snapshot?.phase === "done"
-          ? "Work finished"
-          : "Before recovery";
+          ? "Task complete"
+          : "Current schedule";
   const duration = reduced ? 0 : 0.62;
   const eventTitle = (p: ScheduleSegment) =>
     `${p.title}, ${DateTime.fromISO(p.start, { zone }).toFormat("ccc h:mm a")}–${DateTime.fromISO(p.end, { zone }).toFormat("h:mm a")}${snapshot?.phase === "preview" && p.kind === "work" ? ", proposed" : ""}`;

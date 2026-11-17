@@ -6,7 +6,7 @@ import "./_workspace/workspace.css";
 export const metadata: Metadata = {
   title: "Tomorrow Lens",
   description:
-    "Photograph your week. Lens reads it, checks every date against the words it came from, and rebuilds the plan when life happens.",
+    "Verify course deadlines, plan study time around your commitments, and recover unfinished work when plans change.",
 };
 
 export const viewport: Viewport = {

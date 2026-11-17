@@ -33,7 +33,7 @@ export function SiteFooter() {
       </div>
       <nav aria-label="Footer">
         <Link href="/#workspace">Your week</Link>
-        <Link href="/evals">Evaluations</Link>
+        <Link href="/evals">Test results</Link>
         <a href="https://github.com/Darsh1222/tmrw-lens">Source code</a>
         <details>
           <summary>Data & privacy</summary>

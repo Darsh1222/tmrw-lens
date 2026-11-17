@@ -26,7 +26,7 @@ export function Nav({ home }: { home: boolean }) {
       <nav aria-label="Main" className="flex items-center gap-2 sm:gap-5">
         <Link
           className="hidden min-h-11 items-center text-sm text-ink-2 transition-colors hover:text-ink md:inline-flex"
-          href="/#how"
+          href="/demo"
         >
           How it works
         </Link>
@@ -81,7 +81,7 @@ export function Nav({ home }: { home: boolean }) {
           >
             Course material
           </Link>
-          <Link href="/#how" onClick={() => setOpen(false)} className="rounded-lg p-3 text-sm">
+          <Link href="/demo" onClick={() => setOpen(false)} className="rounded-lg p-3 text-sm">
             How it works
           </Link>
           <Link href="/evals" onClick={() => setOpen(false)} className="rounded-lg p-3 text-sm">

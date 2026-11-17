@@ -112,7 +112,7 @@ function Workspace() {
     <div className={`lens-workspace mobile-view-${mobileView}`}>
       <header className="workspace-intro">
         <h1>Make room for what’s next.</h1>
-        <p>One next step. A schedule that can change with you.</p>
+        <p>Check deadlines, plan study time, and recover when plans change.</p>
       </header>
       <div
         className="workspace-tabs"

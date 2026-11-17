@@ -542,3 +542,7 @@ Clear one-shot `example`, `view` and `intent` query flags when switching to pers
 ## November 17, 2026 — Course material explains the full benefit
 
 Replaced the generic upload introduction with the actual Lens workflow: source-backed deadlines, a next action around supplied commitments, and recovery of unfinished work while retaining completed progress. Avoided uniqueness or outcome claims that have not been measured.
+
+## November 17, 2026 — Product promise above, task instructions below
+
+The global introduction states the three outcomes: check deadlines, plan study time and recover when plans change. The upload introduction names the inputs and immediate review action. Source review, handoff, task form, plan details, demo guide and evaluation explanations use consistent action-oriented wording. Make the one-active-task and 14-day planning bounds visible where they affect a decision. The guide separates browser-local planning, fresh AI reading, recorded AI demonstrations and synthetic test evidence. Prepared a comprehensive feature/test matrix and student test protocol; no participant results or win probability are invented. Official judging rules were checked on Devpost.

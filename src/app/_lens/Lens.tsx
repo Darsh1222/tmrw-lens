@@ -365,15 +365,15 @@ export function Lens() {
 
       <section id="prove" aria-labelledby="prove-title" className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <Reveal id="prove-title" className="forum-display text-3xl sm:text-4xl" text="Every date, with its proof." />
+        <Reveal id="prove-title" className="forum-display text-3xl sm:text-4xl" text="Review dates and classes." />
         <p className="max-w-2xl text-ink-2">
-          Each item links to the exact words it came from and how its date was worked out. Tap one to see it.
+          Select a date or class to see its source. Confirm anything unclear or conflicting before using it in your plan.
         </p>
       </div>
       <div ref={results} className={loading && !plan ? "min-h-[100svh]" : ""}>
       {!loading && !plan && (
         <div className="flex flex-col items-start gap-4 rounded-2xl border border-line bg-card p-6">
-          <p className="text-ink-2">Nothing to prove yet. Open the sample week to see a verified plan, or add your own above.</p>
+          <p className="text-ink-2">Add course material above, or open the sample to see how source checking works.</p>
           <button onClick={trySample} className={buttonClass("quiet")}>
             Open the sample week
           </button>
@@ -381,8 +381,8 @@ export function Lens() {
       )}
       {loading && !plan && (
         <div className="flex flex-col gap-3" role="status">
-          <p className="forum-display text-3xl text-ink-2 sm:text-4xl">Reading your week…</p>
-          <p className="text-ink-2">The plan appears here, with every date traced to the words it came from.</p>
+          <p className="forum-display text-3xl text-ink-2 sm:text-4xl">Reading your course material…</p>
+          <p className="text-ink-2">Dates and classes will appear here with links to their sources.</p>
         </div>
       )}
       {plan && session && (
@@ -411,7 +411,7 @@ export function Lens() {
             ) : (
               !hintSeen && (
                 <p className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-card px-4 py-3 text-sm">
-                  <span>Tap any item to see where it came from.</span>
+                  <span>Select an item to review its source and date details.</span>
                   <button onClick={() => writeStored(HINT, "1")} className={buttonClass("plain", "min-h-9 px-2")}>
                     Got it
                   </button>

@@ -403,7 +403,7 @@ export function NextStepCard({
         )}
       </details>
       <details className="mt-4 text-sm">
-        <summary className="cursor-pointer">Your plan & controls</summary>
+        <summary className="cursor-pointer">Plan details</summary>
         <div className="mt-4 flex flex-col gap-4">
           {task.plan.placements.map((p, n) => (
             <p key={n}>

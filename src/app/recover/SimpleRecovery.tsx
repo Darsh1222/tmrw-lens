@@ -363,8 +363,8 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                     </select>
                   </label>
                   <p className="mt-2 text-xs text-ink-2">
-                    Your confirmed classes stay protected. Check the deadline below; if the source has no time, 5 PM is
-                    only a suggestion.
+                    Choose a deadline in the next 14 days. Confirm its time below; 5 PM is a suggestion when the source
+                    gives only a date. Confirmed classes stay fixed.
                   </p>
                   {source && (
                     <details className="mt-3 text-sm">
@@ -402,7 +402,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               </label>
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="text-sm">
-                  How much time is left?
+                  How much study time do you need?
                   <select
                     className={`${field} mt-2`}
                     value={setup.minutes}
@@ -870,7 +870,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
           />
         )}
         <details className={`${box} text-sm`}>
-          <summary className="cursor-pointer font-medium">Preferences & learning</summary>
+          <summary className="cursor-pointer font-medium">Time estimates and preferences</summary>
           <div className="mt-5 flex flex-col gap-4">
             <p className="text-ink-2">
               Nothing is remembered after this visit unless you turn on saving. You control every record.

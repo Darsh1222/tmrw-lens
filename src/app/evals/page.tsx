@@ -8,7 +8,7 @@ import { SiteFooter, SiteHeader } from "../_lens/Chrome";
 // replays). Everything here is synthetic: made-up schedules, syllabi, photos.
 
 export const metadata: Metadata = {
-  title: "Evals · Tomorrow Lens",
+  title: "Checks and results · Tomorrow Lens",
   description: "How Lens is measured: verification, invented dates, rebuilds, and text-a-photo, with cost per call.",
 };
 
@@ -76,9 +76,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6" data-check={n}>
       <div className="flex flex-col gap-2">
-        <span className="forum-caps">{n}</span>
         <h2 className="forum-display text-3xl">{title}</h2>
         <p className="max-w-2xl text-ink-2">{intro}</p>
       </div>
@@ -93,25 +92,22 @@ export default function Evals() {
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-20 px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
         <header className="flex max-w-3xl flex-col gap-4">
-          <span className="forum-caps">Evals</span>
-          <h1 className="forum-display text-5xl leading-[1.05] sm:text-6xl">
-            Every date traces to the <em className="text-crimson">words</em> it came from.
-          </h1>
+          <h1 className="text-3xl font-medium leading-tight">How we check Lens</h1>
           <p className="text-lg text-ink-2">
-            Lens is scored on made-up schedules, syllabi, whiteboards, and notes, with deliberate conflicts. Recorded
-            model readings replay in CI on every push, so these numbers can&apos;t quietly get worse.
+            These checks cover reading course material, resolving conflicting dates, and recovering missed sessions.
+            The figures below come from recorded AI runs on synthetic examples.
           </p>
         </header>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <Figure value={sam.invented_dates.split(" ")[0]} label="Invented dates" note={`of ${sam.invented_dates.split(" of ")[1]} audited`} />
           <Figure value={sam.fully_verified.match(/\((.+)\)/)?.[1] ?? sam.fully_verified} label="Fully verified on first read" note="The rest are real questions, asked once" /> {/* prettier-ignore */}
-          <Figure value={`${Math.round(rebuild.headline.hard_rules * 100)}%`} label="Rebuilds that keep every rule" note={`${rebuild.headline.cases} cases, ${rebuild.headline.runs_per_case} runs each`} /> {/* prettier-ignore */}
-          <Figure value={extract.headline.precision.replace(".0", "")} label="Text-a-photo precision" note={`Recall ${extract.headline.recall.replace(".0", "")}`} /> {/* prettier-ignore */}
+          <Figure value={`${Math.round(rebuild.headline.hard_rules * 100)}%`} label="Recorded agent runs that keep every rule" note={`${rebuild.headline.cases} cases, ${rebuild.headline.runs_per_case} runs each`} /> {/* prettier-ignore */}
+          <Figure value={extract.headline.precision.replace(".0", "")} label="Photo-update precision (separate assistant)" note={`Recall ${extract.headline.recall.replace(".0", "")}`} /> {/* prettier-ignore */}
         </div>
 
         <aside aria-labelledby="limits-title" className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-6">
-          <h2 id="limits-title" className="forum-display text-2xl">What these results establish</h2>
+          <h2 id="limits-title" className="forum-display text-2xl">What these results mean</h2>
           <p className="text-sm text-ink-2">These are developer-maintained synthetic fixtures and recorded model outputs. Replaying them checks the current code against those recordings; it does not measure fresh model behavior. Best-slot agreement uses our own ranking, not independent student preferences.</p>
           <p className="text-sm text-ink-2">A second read can repeat the first model&apos;s mistake. SAM localizes evidence in this set; the extraction scores above are equal with and without it. Field verification is not the same as perfect extraction or proven student benefit.</p>
         </aside>

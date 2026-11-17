@@ -6,7 +6,7 @@ Open the integrated workspace to read course material, check deadline evidence, 
 
 **Website:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app). The submission branch contains the latest redesign; deploy it before expecting the public site to match.
 **Try locally:** `pnpm install`, `pnpm dev`, then open the homepage. Recorded examples and the local planner need no AI credentials; live uploads need the configured reader.
-**Demo guide:** `/demo`. **Build and submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md). Built solo with disclosed AI coding assistance; the separate Tomorrow assistant remains an optional integration.
+**Demo guide:** `/demo`. **Feature and test checklist:** [docs/FEATURES-AND-TESTS.md](docs/FEATURES-AND-TESTS.md). **Build and submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md). Built solo with disclosed AI coding assistance; the separate Tomorrow assistant remains an optional integration.
 
 ## Capabilities and implementation
 

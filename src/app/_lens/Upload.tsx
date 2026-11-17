@@ -81,7 +81,7 @@ export function Upload({
       <div className="flex flex-col gap-2">
         <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your course material." />
         <p className="max-w-2xl text-ink-2">
-          See what’s due, where it came from, and what you can do next. Lens helps you fit study time around your commitments and recover unfinished work when plans change, without losing the progress you’ve already made.
+          Upload a syllabus, class schedule, or a photo of your notes. Review the dates and class times Lens finds, then choose a task to plan.
         </p>
       </div>
 
@@ -99,7 +99,7 @@ export function Upload({
         <div className="flex flex-col gap-1">
           <p className="text-lg">Drop PDFs, photos, or screenshots here</p>
           <p className="text-sm text-ink-2">
-            PDFs, documents, calendars, and images. Reading starts when you add a file. Up to 25 pages a day, free.
+            PDFs, documents, calendars and images. Documents and photos use AI; calendar files are read directly. Reading starts when you add a file. Up to 25 pages a day, free.
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-3">
@@ -124,7 +124,7 @@ export function Upload({
           }}
         />
         <details className="w-full max-w-xl text-left text-sm">
-          <summary className="cursor-pointer text-center text-ink-2 hover:text-ink">Or paste your Testudo schedule as text</summary>
+          <summary className="cursor-pointer text-center text-ink-2 hover:text-ink">Or paste a Testudo class schedule</summary>
           <div className="mt-3 flex flex-col gap-2">
             <textarea
               value={paste}

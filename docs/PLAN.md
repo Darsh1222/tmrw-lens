@@ -78,3 +78,7 @@ The owner requested a useful free-text input in “What got in the way?”. Add 
 ## November 17, 2026 — Impeccable usability pass
 
 The owner requested installation and use of Impeccable to make the existing interface easier to use. Preserve the current Lens identity and all planning/source constraints. Refine the workspace into a compact operational screen, expose quick answers, combine note reading with the explicit preview action, keep approval separate, and provide mobile action/schedule switching without losing state. Use the installed distill, Operate and polish guidance plus primary usability/accessibility research; do not change the private Tomorrow app or model prompts.
+
+## November 17, 2026 — Clear product explanation and feature testing
+
+The owner requested a brief product-level explanation above the tabs, practical instructions beneath each section heading, a consistent user/judge journey across the website, and a full feature/usefulness/testing inventory tied to the hackathon rubric. Keep claims bounded by implemented behavior and collected evidence. Update the demo guide to prioritize the current web workflow and clearly distinguish the optional recorded assistant demo and recorded synthetic evaluations.

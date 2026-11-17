@@ -83,7 +83,7 @@ test("results: plan, question, send", async ({ page }) => {
   const errors = await watch(page);
   await sample(page);
   await expect(page.getByRole("form", { name: "A question" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Ready to make room for the work?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose a task to plan." })).toBeVisible();
   await check(page, errors, "results");
 });
 

@@ -1,0 +1,7 @@
+SYNTHETIC TEST COURSE. Made-up data for testing Tomorrow Lens. No student information.
+CS101 Study Skills, Fall 2026.
+Term begins Monday, August 31, 2026 and ends Friday, December 11, 2026.
+Lecture meets Monday, Wednesday and Friday from 10:00 AM to 10:50 AM in Example Room 1.
+All times are America/New_York.
+Practice worksheet is due Wednesday, November 25, 2026 at 5:00 PM.
+Quiz review is due Monday, November 23, 2026 at 3:00 PM.

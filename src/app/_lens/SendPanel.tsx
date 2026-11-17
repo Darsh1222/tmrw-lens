@@ -112,11 +112,11 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
     <section aria-labelledby="send-title" className="source-next-step">
       <div>
         <h2 id="send-title" className="forum-display text-3xl">
-          Ready to make room for the work?
+          Choose a task to plan.
         </h2>
         <p>
-          {count} confirmed items{waiting ? ` · ${waiting} still need a look` : ""}. Only confirmed dates go into your
-          plan.
+          {count} confirmed items{waiting ? ` · ${waiting} still need a look` : ""}. Next, choose a task and confirm its
+          deadline and how much study time you need.
         </p>
       </div>
       <div className="flex flex-wrap gap-3">

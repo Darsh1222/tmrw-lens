@@ -83,7 +83,7 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
 
   status = 401;
   await page.getByRole("button", { name: /^Send \d+/ }).click();
-  await expect(page.getByRole("region", { name: "Ready to make room for the work?" }).getByRole("alert")).toContainText(
+  await expect(page.getByRole("region", { name: "Choose a task to plan." }).getByRole("alert")).toContainText(
     "didn't accept that token",
   );
   await expect(page.getByLabel("Lens token")).toBeVisible();
