@@ -38,8 +38,9 @@ export function SiteFooter() {
         <details>
           <summary>Data & privacy</summary>
           <p>
-            The planner runs in your browser. Course uploads use the AI reader. Remembering a task on this device is
-            optional. Source reading uses Muse Spark and SAM 3.1.
+            The planner runs in your browser. Course uploads use the AI reader. Reviewed schedules and approved tasks
+            are saved on this device. You can remove tasks from Plan details. Source reading uses Muse Spark and SAM
+            3.1.
           </p>
         </details>
       </nav>

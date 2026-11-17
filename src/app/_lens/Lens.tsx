@@ -1,5 +1,9 @@
 "use client";
 
+import { LiveSchedule } from "../_workspace/LiveSchedule";
+import { useSavedWeek } from "../_workspace/week-store";
+import { NEXT_STEP_KEY } from "@/lib/recovery/next-step";
+import { officeHours } from "@/lib/recovery/meeting";
 import { DateTime } from "luxon";
 import { Reveal } from "./Reveal";
 import { swarm } from "./swarm";
@@ -54,6 +58,7 @@ function labelled(inputs: Input[], base: string): string {
 }
 
 export function Lens() {
+  const savedWeek = useSavedWeek();
   const [inputs, setInputs] = useState<Input[]>([]);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [zone, setZone] = useState<string>("America/New_York");
@@ -273,6 +278,16 @@ export function Lens() {
   }
 
   function select(id: string) {
+    if (id.startsWith("saved:")) {
+      const task = savedWeek.tasks.find((x) => x.task.id === id.slice(6))?.task;
+      if (task) {
+        sessionStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+        localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+        window.dispatchEvent(new CustomEvent("lens:navigate", { detail: "week" }));
+        window.dispatchEvent(new Event("lens:open-saved-task"));
+      }
+      return;
+    }
     setSelected(id);
     setDrawer(id);
     const ev = plan?.items.find((i) => i.id === id)?.evidence[0] ?? plan?.classes.find((c) => c.id === id)?.evidence;
@@ -458,7 +473,7 @@ export function Lens() {
           </div>
           <section aria-labelledby="plan-title" className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 id="plan-title" className="forum-display text-2xl">Your plan</h3>
+              <h3 id="plan-title" className="forum-display text-2xl">Course calendar</h3>
               <div role="radiogroup" aria-label="Plan view" className="flex rounded-lg border border-line-strong p-1">
                 {(["week", "semester"] as const).map((v) => (
                   <button
@@ -482,13 +497,14 @@ export function Lens() {
             </div>
             {plan.classes.length > 0 && tone && (
               <div className="flex flex-col gap-2">
-                <h4 className="text-sm text-ink-2">Classes, weekly</h4>
+                <h4 className="text-sm text-ink-2">Weekly classes and optional help</h4>
+                <p className="text-xs text-ink-2">Classes reserve time in your study plan. Office hours are optional instructor or TA help; choose whether to reserve them in Your week.</p>
                 <ul className="flex flex-wrap gap-2">
                   {plan.classes.map((c) => (
                     <li key={c.id}>
                       <button onClick={() => select(c.id)} className="flex min-h-9 items-center gap-2 rounded-lg border border-line px-3 text-sm hover:border-line-strong">
                         <Swatch tone={tone(c.course)} />
-                        {c.course} {c.meeting_type}
+                        {c.course} {officeHours(`${c.title} ${c.marker}`) ? "office hours · optional help" : c.meeting_type === "other" ? c.title ?? "class" : c.meeting_type}
                         {c.status !== "verified" && <Chip status={c.status} />}
                       </button>
                     </li>
@@ -507,6 +523,7 @@ export function Lens() {
       </div>
       </section>
 
+      {!plan && savedWeek.courses && <section className="saved-course-summary"><h2>Your schedule is saved.</h2><p>{savedWeek.courses.items.filter((i)=>i.kind === "class_block").length} recurring classes and {savedWeek.tasks.length} study tasks are available in Your week. Add more material above to review an updated schedule.</p><button className={buttonClass("quiet")} onClick={()=>window.dispatchEvent(new CustomEvent("lens:navigate",{detail:"week"}))}>Open your saved week</button><LiveSchedule snapshot={null} week={savedWeek} onOpenTask={(id)=>select(`saved:${id}`)} /></section>}
       {plan && <EvidenceDrawer plan={plan} inputs={inputs} id={drawer} onClose={closeDrawer} onAnswer={answer} />}
     </div>
   ); // prettier-ignore

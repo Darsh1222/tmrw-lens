@@ -4,6 +4,8 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { DateTime } from "luxon";
 import { Fragment, useState } from "react";
 import type { Plan } from "@/lib/plan/types";
+import { useSavedWeek } from "../../_workspace/week-store";
+import { weekEvents } from "@/lib/recovery/week";
 import { Chip, Swatch } from "../ui";
 import { entriesFor, firstWeek, rowsFor, semesterWeeks, weekDays, yOf, type Entry } from "./model";
 
@@ -43,9 +45,35 @@ export function WeekView({
 }) {
   const [monday, setMonday] = useState(() => firstWeek(plan, today));
   const days = weekDays(monday);
-  const entries = entriesFor(plan, days);
+  const saved = useSavedWeek();
+  const savedWork: Entry[] = weekEvents(
+    { ...saved, courses: null },
+    DateTime.fromISO(days[0], { zone: plan.zone }).toISO()!,
+    DateTime.fromISO(days[6], { zone: plan.zone }).plus({ days: 1 }).toISO()!,
+  ).map((p) => {
+    const start = DateTime.fromISO(p.start, { zone: plan.zone }),
+      end = DateTime.fromISO(p.end, { zone: plan.zone });
+    return {
+      key: p.key,
+      id: `saved:${p.taskId}`,
+      kind: "study",
+      title: p.title,
+      course: null,
+      tone: "blush",
+      status: "verified",
+      day: start.toISODate()!,
+      start: start.hour + start.minute / 60,
+      end: end.hasSame(start, "day") ? end.hour + end.minute / 60 : 24,
+      label: p.kind === "completed" ? "Finished" : `${p.minutes} min study`,
+    };
+  });
+  const entries = [...entriesFor(plan, days), ...savedWork].filter(
+    (e, n, all) =>
+      e.kind !== "office" ||
+      all.findIndex((x) => x.kind === "office" && x.day === e.day && x.start === e.start && x.end === e.end) === n,
+  );
   const rows = rowsFor(entries);
-  const height = rows.reduce((a, r) => a + r.px, 0);
+  const height = rows.reduce((a, r) => a + r.px, 0) + 36;
   const timed = entries.filter((e) => e.start !== null);
   const due = entries.filter((e) => e.start === null);
   const week = (n: number) => setMonday(DateTime.fromISO(monday).plus({ weeks: n }).toISODate()!);
@@ -127,26 +155,34 @@ export function WeekView({
           {timed.map((e) => {
             const c = days.indexOf(e.day);
             const top = yOf(rows, e.start!);
-            const h = Math.max(28, yOf(rows, e.end ?? e.start! + 0.5) - top);
+            const h = Math.max(28, Math.min(height - top, yOf(rows, e.end ?? e.start! + 0.5) - top));
             const cls = e.kind === "class";
             return (
               <button
                 key={e.key}
                 data-item={e.id}
                 onClick={() => onOpen(e.id)}
-                aria-label={`${e.title}, ${DateTime.fromISO(e.day).toFormat("cccc")} ${e.label}${cls ? ", class" : ""}`}
+                aria-label={`${e.title}, ${DateTime.fromISO(e.day).toFormat("cccc")} ${e.label}${cls ? ", regular class" : e.kind === "office" ? ", optional instructor or TA help" : ""}`}
                 className={`absolute overflow-hidden rounded-lg px-1.5 py-1 text-left text-xs ${cls ? "text-ink-2" : "paper text-ink"} ${arrive(n++) ?? ""}`}
                 style={{
                   left: `calc(${AXIS}px + (100% - ${AXIS}px) * ${c} / 7 + 3px)`,
                   width: `calc((100% - ${AXIS}px) / 7 - 6px)`,
                   top,
                   height: h,
-                  background: cls ? "var(--tm-sunken)" : `var(--tm-${e.tone})`,
+                  background: cls
+                    ? "var(--tm-sunken)"
+                    : e.kind === "office"
+                      ? "var(--tm-lavender)"
+                      : `var(--tm-${e.tone})`,
                   border: "1px solid var(--tm-border)",
                 }}
               >
                 <span className="block truncate font-medium">{e.title}</span>
-                <span className="block truncate text-ink-2">{cls ? "class" : e.label}</span>
+                {h >= 46 && (
+                  <span className="block truncate text-ink-2">
+                    {cls ? "Regular class" : e.kind === "office" ? "Optional help" : e.label}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -176,7 +212,12 @@ export function WeekView({
                         <span className="w-24 shrink-0 whitespace-nowrap text-xs text-ink-2">
                           {e.start === null ? "Due" : e.label}
                         </span>
-                        <span className="min-w-0 flex-1 truncate font-medium">{e.title}</span>
+                        <span className="min-w-0 flex-1 truncate font-medium">
+                          {e.title}
+                          {e.kind === "office" && (
+                            <small className="block text-ink-2">Optional instructor or TA help</small>
+                          )}
+                        </span>
                         {e.kind === "item" && e.status !== "verified" && <Chip status={e.status} />}
                       </button>
                     </li>

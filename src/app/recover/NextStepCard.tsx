@@ -13,8 +13,10 @@ import {
   taskDeadline,
   type NextTask,
 } from "@/lib/recovery/next-step";
-import type { Obstacle, RecoveryInput, Proposal } from "@/lib/recovery/engine";
+import { proposalProblems, type Obstacle, type RecoveryInput, type Proposal } from "@/lib/recovery/engine";
 import { recoveryCalendar } from "@/lib/recovery/workspace";
+import { currentWeek, updateWeek, removeSavedTask } from "../_workspace/week-store";
+import { saveWeekTask, savedTaskBlocks } from "@/lib/recovery/week";
 import { buttonClass } from "../_lens/styles";
 
 export function returningTask(): NextTask | null {
@@ -23,18 +25,51 @@ export function returningTask(): NextTask | null {
       readNextTask(sessionStorage.getItem(NEXT_STEP_KEY)),
       readNextTask(localStorage.getItem(NEXT_STEP_KEY)),
     ].filter((t): t is NextTask => !!t && !t.example);
-    return candidates.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))[0] ?? null;
+    return (
+      candidates.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))[0] ??
+      currentWeek()
+        .tasks.filter((x) => x.task.status === "active")
+        .sort(
+          (a, b) =>
+            Date.parse(a.task.plan.placements[0]?.start ?? a.task.updatedAt) -
+            Date.parse(b.task.plan.placements[0]?.start ?? b.task.updatedAt),
+        )[0]?.task ??
+      null
+    );
   } catch {
     return null;
   }
 }
 export function keepTask(task: NextTask, remember: boolean) {
   if (task.example) return;
+  void remember;
+  const week = currentWeek();
+  if (task.status === "active") {
+    const protectedInput = {
+      ...task.input,
+      request: {
+        ...task.input.request,
+        fixed: [
+          ...task.input.request.fixed,
+          ...savedTaskBlocks(
+            week,
+            task.input.request.now,
+            taskDeadline(task) ?? task.input.request.open_windows.at(-1)!.end,
+            task.id,
+          ),
+        ],
+      },
+    };
+    if (proposalProblems(protectedInput, task.plan).length)
+      throw new Error("Another saved task now uses this time. Find a new plan before saving.");
+  }
+  updateWeek((w) => saveWeekTask(w, task));
   sessionStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
-  if (remember) localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
-  else localStorage.removeItem(NEXT_STEP_KEY);
+  localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
 }
 export function clearTask() {
+  const task = readNextTask(sessionStorage.getItem(NEXT_STEP_KEY)) ?? readNextTask(localStorage.getItem(NEXT_STEP_KEY));
+  if (task) removeSavedTask(task.id);
   sessionStorage.removeItem(NEXT_STEP_KEY);
   localStorage.removeItem(NEXT_STEP_KEY);
 }
@@ -80,13 +115,7 @@ export function NextStepCard({
   );
   const [actual, setActual] = useState(""),
     [message, setMessage] = useState("");
-  const [remember, setRemember] = useState(() => {
-    try {
-      return !task.example && !!localStorage.getItem(NEXT_STEP_KEY);
-    } catch {
-      return false;
-    }
-  });
+  const remember = !task.example;
   const step = task.plan.placements[0],
     item = task.input.request.items.find((i) => i.id === task.input.request.missed.item_id)!;
   const date = (s: string) => DateTime.fromISO(s, { zone: task.input.request.zone }).toFormat("ccc, LLL d · h:mm a");
@@ -97,14 +126,16 @@ export function NextStepCard({
     onPreview?.(preview && picked ? { input: preview.input, plan: picked } : null);
   }, [onPreview, preview, picked]);
   const commit = (next: NextTask) => {
-    setPrevious(task);
-    onChange(next);
-    setLeft(next.remainingMinutes);
-    setError("");
     try {
       keepTask(next, remember);
+      setPrevious(task);
+      onChange(next);
+      setLeft(next.remainingMinutes);
+      setError("");
     } catch {
-      setError("Your change works here, but this browser could not save it. Keep this tab open.");
+      setError(
+        "This change could not be saved. Check that its times are still free and browser storage is available, then try again.",
+      );
     }
   };
   const download = () => {
@@ -207,7 +238,26 @@ export function NextStepCard({
                     throw new Error("Choose an unambiguous local time.");
                   setPreview(
                     previewTaskChange(
-                      task,
+                      {
+                        ...task,
+                        input: {
+                          ...task.input,
+                          request: {
+                            ...task.input.request,
+                            fixed: [
+                              ...task.input.request.fixed,
+                              ...(task.example
+                                ? []
+                                : savedTaskBlocks(
+                                    currentWeek(),
+                                    task.example ? task.updatedAt : new Date().toISOString(),
+                                    taskDeadline(task) ?? task.input.request.open_windows.at(-1)!.end,
+                                    task.id,
+                                  )),
+                            ],
+                          },
+                        },
+                      },
                       left,
                       obstacle,
                       task.example ? task.updatedAt : new Date().toISOString(),
@@ -358,13 +408,7 @@ export function NextStepCard({
               </form>
             </details>
           )}
-          <button
-            className={buttonClass("primary", "min-h-12 w-full")}
-            onClick={() => {
-              if (!task.example) clearTask();
-              onNewTask();
-            }}
-          >
+          <button className={buttonClass("primary", "min-h-12 w-full")} onClick={onNewTask}>
             Plan another task
           </button>
         </>
@@ -457,30 +501,10 @@ export function NextStepCard({
               Back to plan choices
             </button>
           )}
-          {!task.example && (
-            <label className="flex gap-3">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => {
-                  try {
-                    keepTask(task, e.target.checked);
-                    setRemember(e.target.checked);
-                    setError("");
-                  } catch {
-                    setError("This browser could not save your task.");
-                  }
-                }}
-              />
-              Remember this task on this device
-            </label>
-          )}
           <p className="text-xs text-ink-2">
             {task.example
               ? "The example never replaces a saved personal task."
-              : remember
-                ? "Saved only in this browser. No account or cross-device sync. Starting another task replaces this one."
-                : "Kept in this tab for this visit. Turn on remembering to return after closing it."}
+              : "Saved on this device with your other tasks. No account or cross-device sync."}
           </p>
           <button
             className={buttonClass("plain")}

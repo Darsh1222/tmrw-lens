@@ -10,5 +10,5 @@ const BUTTON = {
 };
 
 export function buttonClass(kind: keyof typeof BUTTON = "quiet", extra = "") {
-  return `inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-[color,background-color,border-color,filter,transform] duration-150 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 ${BUTTON[kind]} ${extra}`; // prettier-ignore
+  return `lens-button inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-[color,background-color,border-color,filter,transform] duration-200 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 ${BUTTON[kind]} ${extra}`; // prettier-ignore
 }

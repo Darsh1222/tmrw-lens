@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+import { updateWeek } from "../_workspace/week-store";
 import { WORKSPACE_KEY } from "@/lib/recovery/workspace";
 import type { Plan, SourceMeta } from "@/lib/plan/types";
 import { toIcs } from "@/lib/calendar/ics";
@@ -101,6 +102,7 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
     const payload = build();
     if (!payload) return;
     try {
+      updateWeek((week) => ({ ...week, courses: payload }));
       sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(payload));
       if (window.location.pathname === "/") window.dispatchEvent(new Event("lens:import-ready"));
       else router.push("/?tab=week");
@@ -112,16 +114,16 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
     <section aria-labelledby="send-title" className="source-next-step">
       <div>
         <h2 id="send-title" className="forum-display text-3xl">
-          Choose a task to plan.
+          Save your schedule.
         </h2>
         <p>
-          {count} confirmed items{waiting ? ` · ${waiting} still need a look` : ""}. Next, choose a task and confirm its
-          deadline and how much study time you need.
+          {count} confirmed items{waiting ? ` · ${waiting} still need a look` : ""}. Save the reviewed dates and classes
+          on this device. New tasks will use this schedule.
         </p>
       </div>
       <div className="flex flex-wrap gap-3">
         <button disabled={!count} className={buttonClass("primary", "rounded-full")} onClick={makePlan}>
-          Make a study plan
+          Save schedule and continue
         </button>
         <button disabled={!count} className={buttonClass("quiet", "rounded-full")} onClick={calendar}>
           Export confirmed dates

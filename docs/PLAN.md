@@ -82,3 +82,7 @@ The owner requested installation and use of Impeccable to make the existing inte
 ## November 17, 2026 — Clear product explanation and feature testing
 
 The owner requested a brief product-level explanation above the tabs, practical instructions beneath each section heading, a consistent user/judge journey across the website, and a full feature/usefulness/testing inventory tied to the hackathon rubric. Keep claims bounded by implemented behavior and collected evidence. Update the demo guide to prioritize the current web workflow and clearly distinguish the optional recorded assistant demo and recorded synthetic evaluations.
+
+## November 17, 2026 — Saved course-first week
+
+Owner requested course uploads before task setup, persistent tasks across week navigation, automatic placement around a saved schedule, clear office-hour semantics, visible preferences and refined motion/spacing. Extend the standalone workspace to a browser-local multi-task week, preserving one focused task card and explicit approval. Save reviewed course imports and approved tasks on this device; new tasks protect existing tasks. Keep completed-session history visible and undoable. Recurring classes reserve time; office hours are optional help and only reserve time for new tasks when explicitly chosen. Preserve original provider and SMS contracts. The recorded examples remain isolated.

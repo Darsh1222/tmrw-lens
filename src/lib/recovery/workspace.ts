@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { z } from "zod";
 import { RebuildRequest } from "@/lib/rebuild/contract";
 import { ImportRequest } from "@/lib/tomorrow/contract";
+import { officeHours } from "./meeting";
 import type { Proposal } from "./engine";
 
 export const WORKSPACE_KEY = "lens_recovery_import_v1";
@@ -73,6 +74,7 @@ export function buildRequest(raw: Setup, importPayload?: ImportRequest): Rebuild
     const payload = ImportRequest.parse(importPayload);
     if (payload.zone !== input.zone) throw new Error("Keep the source time zone when using verified imports.");
     for (const item of payload.items) {
+      if (officeHours(item.title)) continue;
       if (item.kind !== "class_block") {
         // Only timed, duration-bearing events block time. A deadline is not an occupied day.
         if (

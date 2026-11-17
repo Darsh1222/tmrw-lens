@@ -14,7 +14,7 @@ import {
   type RecoveryResult,
   type Obstacle,
 } from "@/lib/recovery/engine";
-import { buildRequest, MEMORY_KEY, WORKSPACE_KEY, type Setup } from "@/lib/recovery/workspace";
+import { MEMORY_KEY, WORKSPACE_KEY, type Setup } from "@/lib/recovery/workspace";
 import { beginNextTask, sourceForTask, type NextTask, type TaskSource } from "@/lib/recovery/next-step";
 import { NextStepCard, returningTask, keepTask, clearTask } from "./NextStepCard";
 import type { ScheduleSnapshot } from "@/lib/recovery/schedule";
@@ -23,6 +23,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { preferredProposal } from "@/lib/recovery/presentation";
 import { RecoveryNote, emptyNoteDraft } from "./RecoveryNote";
 import { readRecoveryNote, requestWithNote, type RecoveryNoteSettings } from "@/lib/recovery/note";
+import { currentWeek } from "../_workspace/week-store";
+import { buildWeekRequest } from "@/lib/recovery/week";
 import { buttonClass } from "../_lens/styles";
 
 const field = "min-h-12 w-full rounded-xl border border-line-input bg-paper px-4 py-3 text-base";
@@ -33,7 +35,6 @@ const choices: [Obstacle, string, string][] = [
   ["stuck", "I’m stuck", "Find a smaller way to begin."],
   ["interrupted", "Something came up", "Find another time that fits."],
   ["underestimated", "I need more time", "Update how much is left."],
-  ["unsure", "Something else", "Keep the reason private if you like."],
 ];
 function readMemory() {
   try {
@@ -46,22 +47,28 @@ function readMemory() {
 function readImport() {
   try {
     const value = sessionStorage.getItem(WORKSPACE_KEY);
-    return value ? ImportRequest.parse(JSON.parse(value)) : null;
+    return value ? ImportRequest.parse(JSON.parse(value)) : currentWeek().courses;
   } catch {
     return null;
   }
 }
 const local = (d: DateTime) => d.toFormat("yyyy-MM-dd'T'HH:mm");
 function initialSetup(): Setup {
-  const now = DateTime.now().startOf("minute");
+  const zone = currentWeek().courses?.zone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const now = DateTime.now().setZone(zone).startOf("minute");
+  const prefs = currentWeek().tasks.at(-1)?.task.input.request.prefs;
   return {
     title: "",
     category: "study",
     minutes: 60,
-    zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    zone,
     now: local(now),
     due: local(now.plus({ days: 1 }).set({ hour: 17, minute: 0 })),
     busy: [],
+    studyStart: prefs?.study_hours?.start ?? "09:00",
+    studyEnd: prefs?.study_hours?.end ?? "21:00",
+    sleepStart: prefs?.sleep?.start ?? "23:00",
+    sleepEnd: prefs?.sleep?.end ?? "07:00",
   };
 }
 type RecoveryProps = {
@@ -108,9 +115,7 @@ function demoFromLocation(mode: RecoveryProps["mode"], startWithExample: boolean
 }
 function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, embedded = false }: RecoveryProps) {
   const [demo] = useState(() => demoFromLocation(mode, startWithExample));
-  const [active, setActive] = useState<NextTask | null>(() =>
-    !demo && mode !== "personal" && !readImport() ? returningTask() : null,
-  );
+  const [active, setActive] = useState<NextTask | null>(() => (!demo && mode !== "personal" ? returningTask() : null));
   const [carriedSource, setCarriedSource] = useState<TaskSource | null>(active?.source ?? null);
   const [step, setStep] = useState(active ? 3 : (demo?.step ?? 0)),
     [setup, setSetup] = useState(initialSetup),
@@ -156,6 +161,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
         example: active.example,
         completedMinutes: active.completedMinutes,
         baseline: demo?.request,
+        taskId: active.id,
       });
     } else if (request) {
       onSchedule({
@@ -231,13 +237,18 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
       return;
     }
     const next = beginNextTask(run.input, selectedPlan, sourceForTask(payload, source) ?? carriedSource, example);
-    setActive(next);
+    if (!example && currentWeek().tasks.some((x) => x.task.id === next.id))
+      next.id = `${next.id.slice(0, 38)}_${crypto.randomUUID()}`;
     try {
       keepTask(next, !!localStorage.getItem("lens_next_step_v1"));
       if (!example) sessionStorage.removeItem(WORKSPACE_KEY);
     } catch {
-      setError("This plan works here, but your browser could not save it for a return visit.");
+      setError(
+        "This plan could not be saved. Another saved task may use this time, or browser storage may be unavailable. Find a new plan and try again.",
+      );
+      return;
     }
+    setActive(next);
     setStep(3);
     setNotice("");
   };
@@ -282,7 +293,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
         transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
         className={`mx-auto flex w-full max-w-[780px] flex-col gap-5 ${embedded ? "workbench-flow" : "pb-16"}`}
       >
-        {step < 3 && (
+        {step < 3 && example && (
           <ol aria-label="Your progress" className="recovery-progress">
             {["Your task", "What happened", "Your plan"].map((label, n) => (
               <li
@@ -320,13 +331,28 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               onSubmit={(e) => {
                 e.preventDefault();
                 try {
-                  const zone = payload?.zone ?? setup.zone;
+                  const saved = currentWeek();
+                  const zone = payload?.zone ?? saved.courses?.zone ?? setup.zone;
                   const fresh = { ...setup, zone, now: local(DateTime.now().setZone(zone).startOf("minute")) };
-                  setRequest(buildRequest(fresh, payload ?? undefined));
+                  const request = buildWeekRequest(fresh, saved, payload ?? undefined);
+                  const input: RecoveryInput = {
+                    request,
+                    obstacle: "unsure",
+                    budget: 20,
+                    category: fresh.category,
+                    useEstimates: calibrate,
+                    allowOneMove: false,
+                    memory,
+                  };
+                  const result = recover(input);
+                  setRequest(request);
+                  setRun({ input, result });
+                  setSelected(preferredProposal(result, "unsure")?.id ?? "");
+                  setObstacle("unsure");
                   setSetup(fresh);
                   setExample(false);
                   setError("");
-                  setStep(1);
+                  setStep(2);
                 } catch {
                   setError("Choose a future deadline within 14 days, and check that busy times end after they start.");
                 }
@@ -335,7 +361,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               {payload && (
                 <div className="rounded-xl border border-line bg-well p-4">
                   <label className="text-sm">
-                    From your confirmed Lens plan
+                    Choose from your reviewed deadlines
                     <select
                       className={`${field} mt-2`}
                       value={source}
@@ -427,8 +453,8 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                 </label>
               </div>
               <p className="text-sm text-ink-2">
-                We can plan within {setup.studyStart ?? "09:00"}–{setup.studyEnd ?? "21:00"}. Add classes or busy times
-                below before continuing.
+                Lens finds a complete plan around your saved classes and tasks, within {setup.studyStart ?? "09:00"}–
+                {setup.studyEnd ?? "21:00"}. Review the proposed times before saving.
               </p>
               <details className="rounded-xl border border-line p-4 text-sm">
                 <summary className="cursor-pointer font-medium">Check when you’re free</summary>
@@ -543,7 +569,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                 </fieldset>
               </details>
               <button className={buttonClass("primary", "min-h-12 w-full text-base")} type="submit">
-                Continue
+                Find the best available time
               </button>
             </form>
             <div className="mt-6 border-t border-line pt-5 text-center">
@@ -869,11 +895,13 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
             }}
           />
         )}
-        <details className={`${box} text-sm`}>
-          <summary className="cursor-pointer font-medium">Time estimates and preferences</summary>
-          <div className="mt-5 flex flex-col gap-4">
+        <section className="planning-preferences" aria-labelledby="preferences-heading">
+          <h2 id="preferences-heading">Planning preferences</h2>
+          <p>Fine-tune future suggestions. Your saved schedule stays in place.</p>
+          <div className="preferences-controls">
             <p className="text-ink-2">
-              Nothing is remembered after this visit unless you turn on saving. You control every record.
+              Learning history stays temporary unless you save it below. Approved tasks and your reviewed schedule are
+              saved separately on this device.
             </p>
             <label className="flex gap-3">
               <input
@@ -903,11 +931,11 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               Use my actual completion times to improve estimates
             </label>
             <p className="text-xs text-ink-2">
-              At least three completions in the same work category are required. The estimate uses the median of the
-              last ten ratios, capped at 0.5–2×.
+              Estimates become available after you record actual time for three completed tasks of the same type. You
+              can inspect or delete those records below.
             </p>
             <label>
-              Work category
+              Type of work
               <input
                 className={`${field} mt-1`}
                 maxLength={60}
@@ -929,7 +957,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               />
               Finish sessions before 9 PM
             </label>
-            <label className="flex gap-3">
+            <label className="flex gap-3" hidden={embedded}>
               <input
                 type="checkbox"
                 checked={allowMove}
@@ -1012,7 +1040,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
               Open the detailed planner
             </Link>
           </div>
-        </details>
+        </section>
         <p className="text-center text-xs text-ink-2">
           Plans are checked against the information you provide. This workspace stays in your browser; it does not send
           texts or sync an external calendar.

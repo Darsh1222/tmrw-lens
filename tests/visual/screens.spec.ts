@@ -34,7 +34,7 @@ async function sample(page: Page) {
   await page.getByRole("heading", { name: "What Lens found." }).waitFor();
   await page.waitForTimeout(2000); // the outlines draw
   // The plan's cards only arrive once the plan is in view, as for a person scrolling down.
-  await page.getByRole("heading", { name: "Your plan" }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Course calendar" }).scrollIntoViewIfNeeded();
   await page.mouse.wheel(0, 300);
   await expect(page.locator('section[aria-labelledby="plan-title"] [data-anim]')).toHaveAttribute("data-anim", /playing|done/, { timeout: 5000 }); // prettier-ignore
   await page.waitForTimeout(1500);
@@ -83,7 +83,7 @@ test("results: plan, question, send", async ({ page }) => {
   const errors = await watch(page);
   await sample(page);
   await expect(page.getByRole("form", { name: "A question" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Choose a task to plan." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Save your schedule." })).toBeVisible();
   await check(page, errors, "results");
 });
 

@@ -65,13 +65,13 @@ export default function DemoGuide() {
             Use it for your own work
           </h2>
           <p className="text-ink-2">
-            Choose Course material to add files and review dates. Choose Your week to plan one task around your
-            available hours and busy times. You can export confirmed dates or remaining study sessions as a calendar
-            file.
+            Choose Course material to add files and review dates. Save the reviewed schedule, then choose Your week to
+            add tasks around classes, existing work and available hours. You can export confirmed dates or remaining
+            study sessions as a calendar file.
           </p>
           <p className="text-sm text-ink-2">
-            Lens plans one active task at a time. Calendar downloads do not update existing external events. Task saving
-            on this device is optional.
+            Lens keeps your reviewed schedule and approved tasks on this device. Add another task without replacing
+            earlier work. Calendar downloads do not update existing external events.
           </p>
           <Link href="/?tab=sources" className="self-start text-sm underline underline-offset-4">
             Add course material

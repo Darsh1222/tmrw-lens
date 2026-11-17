@@ -2,12 +2,18 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { MotionConfig, motion } from "motion/react";
 import { ArrowRight, CalendarBlank, FileText, ShieldCheck, ArrowCounterClockwise } from "@phosphor-icons/react";
+import { returningTask } from "../recover/NextStepCard";
 import { SimpleRecovery } from "../recover/SimpleRecovery";
 import { Lens } from "../_lens/Lens";
 import { LiveSchedule } from "./LiveSchedule";
+import { useSavedWeek, currentWeek, updateWeek } from "./week-store";
+import { NEXT_STEP_KEY, readNextTask } from "@/lib/recovery/next-step";
+import { emptyWeek, saveWeekTask } from "@/lib/recovery/week";
+import { DateTime } from "luxon";
 import type { ScheduleSnapshot } from "@/lib/recovery/schedule";
 import { buttonClass } from "../_lens/styles";
 
+const EMPTY_WEEK = emptyWeek();
 const subscribe = () => () => {};
 type Tab = "week" | "sources";
 export function HomeWorkspace() {
@@ -30,11 +36,17 @@ export function HomeWorkspace() {
   );
 }
 function Workspace() {
+  const week = useSavedWeek();
   const [tab, setTab] = useState<Tab>(() =>
     new URLSearchParams(window.location.search).get("tab") === "sources" ||
     /sample-week|upload|prove/.test(window.location.hash)
       ? "sources"
-      : "week",
+      : new URLSearchParams(window.location.search).has("example") ||
+          currentWeek().courses ||
+          currentWeek().tasks.length ||
+          returningTask()
+        ? "week"
+        : "sources",
   );
   const [readerOpened, setReaderOpened] = useState(tab === "sources");
   const [mode, setMode] = useState<"auto" | "example" | "personal">(() =>
@@ -54,6 +66,14 @@ function Workspace() {
     window.history.replaceState(null, "", url);
   }, []);
   useEffect(() => {
+    try {
+      const legacy =
+        readNextTask(sessionStorage.getItem(NEXT_STEP_KEY)) ?? readNextTask(localStorage.getItem(NEXT_STEP_KEY));
+      if (legacy && !legacy.example && !currentWeek().tasks.some((x) => x.task.id === legacy.id))
+        updateWeek((w) => saveWeekTask(w, legacy));
+    } catch {
+      /* A blocked browser store is reported when saving. */
+    }
     const entry = new URL(window.location.href);
     if (entry.searchParams.get("intent") === "task") {
       for (const key of ["example", "view", "intent"]) entry.searchParams.delete(key);
@@ -61,6 +81,10 @@ function Workspace() {
     }
     const tabEvent = (event: Event) => navigate((event as CustomEvent<Tab>).detail);
     const personal = () => {
+      if (!currentWeek().courses) {
+        navigate("sources", true);
+        return;
+      }
       navigate("week", true);
       setMobileView("action");
       setMode("personal");
@@ -69,7 +93,7 @@ function Workspace() {
     const imported = () => {
       navigate("week", true);
       setMobileView("action");
-      setMode("auto");
+      setMode("personal");
       setRevision((n) => n + 1);
       document.getElementById("workspace")?.scrollIntoView({ block: "start" });
     };
@@ -82,11 +106,18 @@ function Workspace() {
     };
     window.addEventListener("lens:navigate", tabEvent);
     window.addEventListener("lens:plan-task", personal);
+    const openSaved = () => {
+      setMode("auto");
+      setRevision((n) => n + 1);
+      setMobileView("action");
+    };
+    window.addEventListener("lens:open-saved-task", openSaved);
     window.addEventListener("lens:import-ready", imported);
     window.addEventListener("hashchange", hash);
     return () => {
       window.removeEventListener("lens:navigate", tabEvent);
       window.removeEventListener("lens:plan-task", personal);
+      window.removeEventListener("lens:open-saved-task", openSaved);
       window.removeEventListener("lens:import-ready", imported);
       window.removeEventListener("hashchange", hash);
     };
@@ -103,10 +134,24 @@ function Workspace() {
     });
   };
   const choose = (next: "example" | "personal") => {
+    if (next === "personal" && !week.courses) {
+      navigate("sources");
+      return;
+    }
     navigate("week", next === "personal");
     setMobileView("action");
     setMode(next);
     setRevision((n) => n + 1);
+  };
+  const openTask = (id: string) => {
+    const task = week.tasks.find((x) => x.task.id === id)?.task;
+    if (!task) return;
+    sessionStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+    localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+    navigate("week", true);
+    setMode("auto");
+    setRevision((n) => n + 1);
+    setMobileView("action");
   };
   return (
     <div className={`lens-workspace mobile-view-${mobileView}`}>
@@ -165,12 +210,12 @@ function Workspace() {
                   ? "Try it with an example"
                   : snapshot
                     ? "Your working plan"
-                    : "Let’s start with one task"}
+                    : "Add a task to your week"}
               </strong>
               <span>
                 {snapshot?.example
                   ? "Sample dates · your own tasks stay saved"
-                  : "Checked against the time and commitments you provide"}
+                  : "Saved on this device · new tasks fit around your existing week"}
               </span>
             </p>
           </div>
@@ -189,14 +234,14 @@ function Workspace() {
           <button
             aria-pressed={mobileView === "action"}
             aria-controls="next-action"
-            onClick={() => setMobileView("action")}
+            onClick={() => focusView("action")}
           >
             {snapshot?.phase === "preview" ? "Review plan" : "Next step"}
           </button>
           <button
             aria-pressed={mobileView === "schedule"}
             aria-controls="calendar"
-            onClick={() => setMobileView("schedule")}
+            onClick={() => focusView("schedule")}
           >
             <CalendarBlank size={16} />
             Schedule{snapshot?.phase === "preview" && <span>Preview</span>}
@@ -204,14 +249,56 @@ function Workspace() {
         </div>
         <div className="workspace-grid">
           <div className="workspace-action" id="next-action">
-            <SimpleRecovery key={revision} mode={mode} startWithExample onSchedule={updateSchedule} embedded />
+            {week.tasks.length > 0 && !snapshot?.example && (
+              <section className="saved-task-list" aria-label="Your saved tasks">
+                <div>
+                  <h2>Your tasks</h2>
+                  <span>{week.tasks.filter((x) => x.task.status === "active").length} active</span>
+                </div>
+                <ul>
+                  {[...week.tasks]
+                    .sort(
+                      (a, b) =>
+                        Date.parse(a.task.plan.placements[0]?.start ?? a.task.updatedAt) -
+                        Date.parse(b.task.plan.placements[0]?.start ?? b.task.updatedAt),
+                    )
+                    .map(({ task }) => (
+                      <li key={task.id}>
+                        <button
+                          onClick={() => openTask(task.id)}
+                          aria-current={snapshot?.taskId === task.id ? "true" : undefined}
+                        >
+                          <strong>
+                            {task.input.request.items.find((i) => i.id === task.input.request.missed.item_id)?.title}
+                          </strong>
+                          <span>
+                            {task.status === "done"
+                              ? "Finished"
+                              : `${task.remainingMinutes} min left · ${DateTime.fromISO(task.plan.placements[0]?.start ?? task.updatedAt, { zone: task.input.request.zone }).toFormat("ccc, LLL d")}`}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              </section>
+            )}
+            <SimpleRecovery key={revision} mode={mode} onSchedule={updateSchedule} embedded />
             <button className="mobile-calendar-link" onClick={() => focusView("schedule")}>
               See the schedule
               <ArrowRight size={15} />
             </button>
           </div>
           <div className="workspace-calendar" id="calendar">
-            <LiveSchedule snapshot={snapshot} />
+            <LiveSchedule
+              snapshot={snapshot}
+              week={
+                snapshot?.example ||
+                (!snapshot && (mode === "example" || new URLSearchParams(window.location.search).has("example")))
+                  ? EMPTY_WEEK
+                  : week
+              }
+              onOpenTask={openTask}
+            />
             <button className="mobile-calendar-link" onClick={() => focusView("action")}>
               {snapshot?.phase === "preview" ? "Back to review and approve" : "Back to your next step"}
               <ArrowRight size={15} />
@@ -229,6 +316,18 @@ function Workspace() {
         {readerOpened && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Lens />
+            {!week.courses && (
+              <button
+                className={buttonClass("plain", "mt-4")}
+                onClick={() => {
+                  navigate("week", true);
+                  setMode("personal");
+                  setRevision((n) => n + 1);
+                }}
+              >
+                Skip course setup for now
+              </button>
+            )}
           </motion.div>
         )}
       </section>

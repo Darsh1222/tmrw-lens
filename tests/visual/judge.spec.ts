@@ -11,13 +11,13 @@ test("Course material opens the recorded evidence without model calls", async ({
   const calls: string[] = [];
   page.on("request", (r) => /\/api\/(read|rebuild|extract)/.test(r.url()) && calls.push(r.url()));
   await page.goto("/#sample-week");
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   expect(calls).toEqual([]);
 });
 
 test("The home workspace previews and applies a real checked recovery", async ({ page }) => {
   lightOnly();
-  await page.goto("/");
+  await page.goto("/?example=tired");
   const schedule = page.locator('section[aria-label="Your changing schedule"]');
   await expect(schedule).toHaveAttribute("data-phase", "before");
   await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
@@ -54,9 +54,9 @@ test("a source import exits an example deep link instead of reopening the demo",
   lightOnly();
   await page.goto("/?tab=sources&example=stuck&view=plan");
   await page.getByRole("button", { name: "Try the sample week", exact: true }).click();
-  await page.getByRole("button", { name: "Make a study plan", exact: true }).click();
+  await page.getByRole("button", { name: "Save schedule and continue", exact: true }).click();
   await expect(page.getByRole("heading", { name: "What needs doing?", exact: true })).toBeVisible();
-  await expect(page.getByLabel("From your confirmed Lens plan")).toBeVisible();
+  await expect(page.getByLabel("Choose from your reviewed deadlines")).toBeVisible();
   expect(new URL(page.url()).searchParams.has("example")).toBe(false);
 });
 
@@ -74,7 +74,7 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
     ),
   );
   await page.goto("/#sample-week");
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   await page.getByText("Connect the Tomorrow assistant", { exact: false }).click();
   await page.getByLabel("Lens token").fill("lens_test_token_123");
   await page.getByRole("button", { name: /^Send \d+/ }).click();
@@ -83,7 +83,7 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
 
   status = 401;
   await page.getByRole("button", { name: /^Send \d+/ }).click();
-  await expect(page.getByRole("region", { name: "Choose a task to plan." }).getByRole("alert")).toContainText(
+  await expect(page.getByRole("region", { name: "Save your schedule." }).getByRole("alert")).toContainText(
     "didn't accept that token",
   );
   await expect(page.getByLabel("Lens token")).toBeVisible();
@@ -109,6 +109,8 @@ test("the top bar opens a personal task and the mobile menu closes with Escape",
     await expect(page.locator("#nav-menu")).toHaveCount(0);
   }
   await bar.getByRole("link", { name: "Plan a task" }).click();
+  await expect(page.getByRole("heading", { name: "Add your course material." })).toBeVisible();
+  await page.getByRole("button", { name: "Skip course setup for now" }).click();
   await expect(page.getByRole("heading", { name: "What needs doing?" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
@@ -130,7 +132,7 @@ test("keyboard navigation moves between workspace tabs", async ({ page }) => {
 test("Add to calendar downloads the verified plan as an .ics file", async ({ page }) => {
   lightOnly();
   await page.goto("/#sample-week");
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Export confirmed dates" }).click()]); // prettier-ignore
   expect(file.suggestedFilename()).toBe("lens-plan.ics");
   const text = await (await file.createReadStream()).toArray().then((c) => Buffer.concat(c).toString("utf8"));
@@ -151,7 +153,7 @@ test("files with their own text: a calendar is read in code; Word goes as text, 
   await page.goto("/?tab=sources");
   const ics = ["BEGIN:VCALENDAR", "BEGIN:VEVENT", "SUMMARY:MATH141 Exam 2", "DTSTART;TZID=America/New_York:20261111T150000", "DTEND;TZID=America/New_York:20261111T161500", "END:VEVENT", "END:VCALENDAR"].join("\r\n"); // prettier-ignore
   await page.locator('input[type="file"]').setInputFiles({ name: "math141.ics", mimeType: "text/calendar", buffer: Buffer.from(ics) }); // prettier-ignore
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText("MATH141 Exam 2").first()).toBeAttached();
   expect(reads).toEqual([]);
 

@@ -10,13 +10,15 @@ export type ScheduleSnapshot = {
   example: boolean;
   completedMinutes: number;
   baseline?: RebuildRequest;
+  taskId?: string;
 };
 export type ScheduleEvent = {
   key: string;
   title: string;
   start: string;
   end: string;
-  kind: "fixed" | "other" | "work" | "ghost";
+  kind: "fixed" | "other" | "work" | "ghost" | "office" | "completed";
+  taskId?: string;
   minutes: number;
   starter?: boolean;
 };
