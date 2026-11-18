@@ -7,8 +7,9 @@ import { SimpleRecovery } from "../recover/SimpleRecovery";
 import { Lens } from "../_lens/Lens";
 import { LiveSchedule } from "./LiveSchedule";
 import { useSavedWeek, currentWeek, updateWeek } from "./week-store";
+import { WORKSPACE_KEY } from "@/lib/recovery/workspace";
 import { NEXT_STEP_KEY, readNextTask } from "@/lib/recovery/next-step";
-import { emptyWeek, saveWeekTask } from "@/lib/recovery/week";
+import { emptyWeek, savedDeadlines, saveWeekTask } from "@/lib/recovery/week";
 import { DateTime } from "luxon";
 import type { ScheduleSnapshot } from "@/lib/recovery/schedule";
 import { buttonClass } from "../_lens/styles";
@@ -54,6 +55,8 @@ function Workspace() {
   );
   const [mobileView, setMobileView] = useState<"action" | "schedule">("action");
   const [revision, setRevision] = useState(0);
+  const [sourceToPlan, setSourceToPlan] = useState<string | undefined>();
+  const [calendarExpanded, setCalendarExpanded] = useState(false);
   const [snapshot, setSnapshot] = useState<ScheduleSnapshot | null>(null);
   const updateSchedule = useCallback((next: ScheduleSnapshot | null) => setSnapshot(next), []);
   const navigate = useCallback((next: Tab, clearEntry = false) => {
@@ -79,8 +82,21 @@ function Workspace() {
       for (const key of ["example", "view", "intent"]) entry.searchParams.delete(key);
       window.history.replaceState(null, "", entry);
     }
+    const planSource = (event: Event) => {
+      const courses = currentWeek().courses;
+      if (courses) sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(courses));
+      setSourceToPlan((event as CustomEvent<string>).detail);
+      navigate("week", true);
+      setMobileView("action");
+      setMode("personal");
+      setCalendarExpanded(false);
+      setRevision((n) => n + 1);
+      requestAnimationFrame(() => document.getElementById("next-action")?.scrollIntoView({ block: "start" }));
+    };
+    window.addEventListener("lens:plan-source", planSource);
     const tabEvent = (event: Event) => navigate((event as CustomEvent<Tab>).detail);
     const personal = () => {
+      setSourceToPlan(undefined);
       if (!currentWeek().courses) {
         navigate("sources", true);
         return;
@@ -91,6 +107,7 @@ function Workspace() {
       setRevision((n) => n + 1);
     };
     const imported = () => {
+      setSourceToPlan(undefined);
       navigate("week", true);
       setMobileView("action");
       setMode("personal");
@@ -115,6 +132,7 @@ function Workspace() {
     window.addEventListener("lens:import-ready", imported);
     window.addEventListener("hashchange", hash);
     return () => {
+      window.removeEventListener("lens:plan-source", planSource);
       window.removeEventListener("lens:navigate", tabEvent);
       window.removeEventListener("lens:plan-task", personal);
       window.removeEventListener("lens:open-saved-task", openSaved);
@@ -140,6 +158,7 @@ function Workspace() {
     }
     navigate("week", next === "personal");
     setMobileView("action");
+    setSourceToPlan(undefined);
     setMode(next);
     setRevision((n) => n + 1);
   };
@@ -150,9 +169,16 @@ function Workspace() {
     localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
     navigate("week", true);
     setMode("auto");
+    setSourceToPlan(undefined);
+    setCalendarExpanded(false);
     setRevision((n) => n + 1);
     setMobileView("action");
+    requestAnimationFrame(() => document.getElementById("next-action")?.scrollIntoView({ block: "start" }));
   };
+  const missingTimes =
+    snapshot?.example || (!snapshot && new URLSearchParams(window.location.search).has("example"))
+      ? []
+      : savedDeadlines(week).filter((d) => d.dateOnly);
   return (
     <div className={`lens-workspace mobile-view-${mobileView}`}>
       <header className="workspace-intro">
@@ -230,6 +256,15 @@ function Workspace() {
             </button>
           </div>
         </div>
+        {missingTimes.length > 0 && (
+          <button className="workspace-time-alert" onClick={() => focusView("schedule")}>
+            <strong>
+              {missingTimes.length} {missingTimes.length === 1 ? "deadline needs" : "deadlines need"} a time
+            </strong>
+            <span>Review the missing times in your calendar.</span>
+            <ArrowRight size={16} />
+          </button>
+        )}
         <div className="mobile-workspace-switch" role="group" aria-label="Workspace view">
           <button
             aria-pressed={mobileView === "action"}
@@ -247,7 +282,7 @@ function Workspace() {
             Schedule{snapshot?.phase === "preview" && <span>Preview</span>}
           </button>
         </div>
-        <div className="workspace-grid">
+        <div className={`workspace-grid ${calendarExpanded ? "calendar-expanded" : ""}`}>
           <div className="workspace-action" id="next-action">
             {week.tasks.length > 0 && !snapshot?.example && (
               <section className="saved-task-list" aria-label="Your saved tasks">
@@ -282,7 +317,13 @@ function Workspace() {
                 </ul>
               </section>
             )}
-            <SimpleRecovery key={revision} mode={mode} onSchedule={updateSchedule} embedded />
+            <SimpleRecovery
+              key={revision}
+              mode={mode}
+              onSchedule={updateSchedule}
+              initialSourceId={sourceToPlan}
+              embedded
+            />
             <button className="mobile-calendar-link" onClick={() => focusView("schedule")}>
               See the schedule
               <ArrowRight size={15} />
@@ -298,6 +339,10 @@ function Workspace() {
                   : week
               }
               onOpenTask={openTask}
+              onShowCurrentTask={() => focusView("action")}
+              onPlanSource={(id) => window.dispatchEvent(new CustomEvent("lens:plan-source", { detail: id }))}
+              expanded={calendarExpanded}
+              onExpand={() => setCalendarExpanded((v) => !v)}
             />
             <button className="mobile-calendar-link" onClick={() => focusView("action")}>
               {snapshot?.phase === "preview" ? "Back to review and approve" : "Back to your next step"}

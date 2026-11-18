@@ -2,8 +2,12 @@ import { describe, expect, it } from "vitest";
 import { DateTime } from "luxon";
 import { buildRequest } from "@/lib/recovery/workspace";
 import { emptyMemory, recover, type RecoveryInput } from "@/lib/recovery/engine";
-import { beginNextTask, finishNextStep, nextStepKey } from "@/lib/recovery/next-step";
+import { beginNextTask, finishNextStep, nextStepKey, sourceForTask } from "@/lib/recovery/next-step";
 import {
+  calendarDeadlines,
+  confirmDeadlineTime,
+  confirmedSourceTime,
+  savedDeadlines,
   buildWeekRequest,
   courseEvents,
   emptyWeek,
@@ -156,6 +160,81 @@ describe("durable shared week", () => {
       { ...emptyWeek(), courses: office, attendOfficeHours: true },
     );
     expect(reserved.fixed.some((p) => p.title.includes("office hours"))).toBe(true);
+  });
+  it("flags date-only deadlines and records a user time without changing source evidence", () => {
+    const payload = ImportRequest.parse({
+      ...courses,
+      items: [
+        ...courses.items,
+        {
+          lens_id: "worksheet",
+          kind: "deadline",
+          title: "Worksheet",
+          course: "MATH101",
+          date: "2026-11-25",
+          start_time: null,
+          end_time: null,
+          start: null,
+          end: null,
+          evidence: courses.items[0].evidence,
+        },
+      ],
+    });
+    const week = { ...emptyWeek(), courses: payload };
+    expect(savedDeadlines(week)[0]).toMatchObject({ dateOnly: true, timeOrigin: "missing", sourceId: "worksheet" });
+    const confirmed = confirmDeadlineTime(week, "worksheet", "16:30", "2026-11-17T15:00:00-05:00");
+    expect(savedDeadlines(confirmed)[0]).toMatchObject({ dateOnly: false, timeOrigin: "user" });
+    expect(DateTime.fromISO(savedDeadlines(confirmed)[0].due).toUTC().toISO()).toBe("2026-11-25T21:30:00.000Z");
+    expect(confirmed.courses).toEqual(payload);
+    expect(confirmedSourceTime(confirmed, "worksheet")).toBe("16:30");
+    expect(() => confirmDeadlineTime(week, "worksheet", "26:30", "2026-11-17T15:00:00-05:00")).toThrow();
+    const changed = structuredClone(confirmed);
+    const item = changed.courses!.items.find((i) => i.lens_id === "worksheet")!;
+    if (item.kind !== "class_block") item.date = "2026-11-26";
+    expect(confirmedSourceTime(changed, "worksheet")).toBeNull();
+  });
+  it("links a course deadline to its original task through source identity", () => {
+    const payload = ImportRequest.parse({
+      ...courses,
+      items: [
+        {
+          lens_id: "worksheet",
+          kind: "deadline",
+          title: "Worksheet",
+          course: "MATH101",
+          date: "2026-11-25",
+          start_time: null,
+          end_time: null,
+          start: null,
+          end: null,
+          evidence: courses.items[0].evidence,
+        },
+      ],
+    });
+    const a = task();
+    a.source = sourceForTask(payload, "worksheet");
+    const week = saveWeekTask({ ...emptyWeek(), courses: payload }, a);
+    const deadlines = savedDeadlines(week);
+    expect(deadlines).toHaveLength(1);
+    expect(deadlines[0]).toMatchObject({ taskId: a.id, sourceId: "worksheet", dateOnly: false, timeOrigin: "user" });
+    expect(a.source).toHaveProperty("lensId", "worksheet");
+    expect(
+      calendarDeadlines(
+        { request: a.input.request, plan: a.plan, phase: "active", example: false, completedMinutes: 0, taskId: a.id },
+        week,
+      ),
+    ).toHaveLength(1);
+  });
+  it("keeps two different task deadlines at the same instant separately linked", () => {
+    const a = task(),
+      b = task("Essay"),
+      week = saveWeekTask(saveWeekTask(emptyWeek(), a), b);
+    expect(
+      savedDeadlines(week)
+        .map((d) => d.taskId)
+        .sort(),
+    ).toEqual([a.id, b.id].sort());
+    expect(new Set(savedDeadlines(week).map((d) => d.due)).size).toBe(1);
   });
   it("isolates examples and ignores corrupt saved data", () => {
     const a = task();

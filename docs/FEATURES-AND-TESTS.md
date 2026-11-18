@@ -1,6 +1,6 @@
 # Tomorrow Lens: features, usefulness and test plan
 
-Prepared November 17, 2026. **These are expected test results, not a claim that students have completed them.** The product has 345 passing unit tests in the latest checked run; live provider access, external assistant delivery and real student outcomes need separate verification.
+Prepared November 17, 2026. **These are expected test results, not a claim that students have completed them.** The product has 349 passing unit tests in the latest checked run; live provider access, external assistant delivery and real student outcomes need separate verification.
 
 ## The strongest case to present
 
@@ -29,7 +29,7 @@ The [official rules](https://stem2connect-online-hackathon.devpost.com/rules) gi
 
 ## Observed developer checks on November 17
 
-- 345 unit tests passed, all three recorded evaluation suites passed, and the production build, typecheck, lint, formatting and environment-file check passed.
+- 349 unit tests passed, all three recorded evaluation suites passed, and the production build, typecheck, lint, formatting and environment-file check passed.
 - Browser-checked the new course-material instructions, current walkthrough and evaluation labels.
 - A fresh synthetic text upload showed a reading error. The local process has no configured AI reader key. **Fresh AI reading is blocked locally and has not passed this check.** Verify it on the configured deployed build before recording.
 - Native calendar import read the supplied one-off worksheet event, asked for its missing course, and kept planning/export disabled while unconfirmed. It explicitly skipped the recurring class. This is a partial import check, not a completed source-to-plan test.
@@ -157,3 +157,12 @@ Deploy and smoke-test the branch; record an up-to-date demo and upload a public/
 ## Additional saved-week checks
 
 Save a reviewed course schedule before adding work. Add two tasks and confirm neither disappears and their sessions do not overlap. Page to next week and back, then refresh. Confirm each task stays on its original dates. Finish a starter and verify that its completed session stays visible while only unfinished minutes are replanned. Undo the completion and verify that its completed marker disappears. Inspect regular classes versus optional office hours and test the office-hour setting with a new task. Check the visible Planning preferences panel at desktop and phone widths.
+
+## November 18 calendar checks
+
+- Compare desktop 3 days, expanded Week and phone Day views. Task titles should remain readable, with exact times in details. Short-session visual enlargement must not alter actual times.
+- Open a date-only deadline. Check its source quote and missing-time notice. Confirm a synthetic clock time, refresh, reopen and change it. The clock must be labeled as chosen by you, not provided by the source.
+- Choose Plan this task for an unplanned source deadline. Confirm its source item, title and confirmed clock are prefilled.
+- Click a saved task's timed deadline, then Open linked task. Test two unrelated tasks with the same deadline instant; each must retain its own link.
+- Change a synthetic source date in a developer test. Its old clock confirmation must not be reused silently.
+- Office-hour wording must explain optional instructor/TA help, new-task blocking, and the absence of appointment booking or retroactive task changes.

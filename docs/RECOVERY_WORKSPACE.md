@@ -47,3 +47,9 @@ The main workspace uses compact task-focused headings, visible quick answers and
 ## Saved-week behavior
 
 The full-week calendar keeps tasks on their original dates when paging or refreshing. It does not repeat one-off work every week. Regular classes recur with their source term bounds and exceptions. Office hours are optional help; their separate setting applies to new task placement. Existing task sessions are protected during new-task scheduling and recovery. This is incremental placement, not a global reprioritization of all saved tasks or a guarantee of a mathematically best schedule. Updated course sources may require manually recovering already-approved tasks. Source bytes/photos are not persisted in the shared week, only reviewed import facts and their evidence. Browser storage may be unavailable; saving failures are shown. No cross-device or external calendar synchronization.
+
+## Calendar clarity and deadline review
+
+The calendar defaults to three days on desktop and one day on phones, starting with the focused session/current day. Week and expanded desktop views remain available. Task titles wrap over larger blocks; short sessions use a labeled visual minimum height without changing their times. Timed and date-only deadlines are buttons with a review panel and the related saved-task link. Unscheduled course deadlines can start a prefilled task.
+
+Date-only deadlines are flagged both in the calendar and an in-app review notice. Confirm or change their clock time in the panel. The original source evidence remains unchanged; a local confirmation is stored separately and tied to the source date. A changed source date requires confirmation again. Existing approved task plans are not silently changed by a reviewed-deadline correction. No external alerts, calendar writes, or model calls are added. “Keep office hours free for getting help” blocks reviewed optional help sessions for new tasks only; it does not book appointments.

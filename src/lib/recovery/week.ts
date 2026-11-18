@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { ImportRequest } from "@/lib/tomorrow/contract";
 import { NextTask, taskDeadline } from "./next-step";
 import { buildRequest, type Setup } from "./workspace";
-import { type ScheduleEvent } from "./schedule";
+import { scheduleDeadlines, type ScheduleSnapshot, type ScheduleEvent } from "./schedule";
 
 import { officeHours } from "./meeting";
 export { officeHours } from "./meeting";
@@ -20,9 +20,25 @@ export const SavedWeek = z.object({
   courses: ImportRequest.nullable(),
   tasks: z.array(z.object({ task: NextTask, completed: z.array(Completed).max(100) })).max(100),
   attendOfficeHours: z.boolean(),
+  deadlineTimes: z
+    .record(
+      z.string(),
+      z.object({
+        date: z.iso.date(),
+        time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+        confirmedAt: z.iso.datetime({ offset: true }),
+      }),
+    )
+    .default({}),
 });
 export type SavedWeek = z.infer<typeof SavedWeek>;
-export const emptyWeek = (): SavedWeek => ({ version: 1, courses: null, tasks: [], attendOfficeHours: false });
+export const emptyWeek = (): SavedWeek => ({
+  version: 1,
+  courses: null,
+  tasks: [],
+  attendOfficeHours: false,
+  deadlineTimes: {},
+});
 export function readWeek(raw: string | null): SavedWeek {
   try {
     return SavedWeek.parse(JSON.parse(raw ?? "null"));
@@ -111,27 +127,81 @@ export function weekEvents(week: SavedWeek, from: string, to: string, omitTask?:
   }
   return events.filter((p) => Date.parse(p.end) > Date.parse(from) && Date.parse(p.start) < Date.parse(to));
 }
-export function savedDeadlines(week: SavedWeek) {
-  const deadlines =
-    week.courses?.items.flatMap((i) =>
-      i.kind !== "class_block" && i.date && !officeHours(i.title)
-        ? [
-            {
-              id: `source-${i.lens_id}`,
-              title: i.title,
-              due: i.start ?? DateTime.fromISO(i.date, { zone: week.courses!.zone }).endOf("day").toISO()!,
-              dateOnly: !i.start_time,
-            },
-          ]
-        : [],
-    ) ?? [];
+export type CalendarDeadline = {
+  id: string;
+  title: string;
+  due: string;
+  dateOnly: boolean;
+  taskId?: string;
+  currentTask?: boolean;
+  sourceId?: string;
+  timeOrigin: "source" | "user" | "missing";
+  evidence: { source: string; page: number | null; quote: string; computed_from: string | null }[];
+};
+export function savedDeadlines(week: SavedWeek): CalendarDeadline[] {
+  const deadlines: CalendarDeadline[] = [];
+  for (const item of week.courses?.items ?? []) {
+    if (item.kind === "class_block" || !item.date || officeHours(item.title)) continue;
+    const linked = week.tasks.find(
+      ({ task }) =>
+        task.source?.lensId === item.lens_id ||
+        (task.source?.title === item.title &&
+          task.source?.date === item.date &&
+          task.source.evidence.some((a) => item.evidence.some((b) => a.source === b.source && a.quote === b.quote))),
+    )?.task;
+    const taskDue = linked && taskDeadline(linked);
+    const confirmsSameDay =
+      taskDue && DateTime.fromISO(taskDue, { zone: week.courses!.zone }).toISODate() === item.date;
+    const confirmed = confirmedSourceTime(week, item.lens_id);
+    const chosen =
+      confirmed ?? (confirmsSameDay ? DateTime.fromISO(taskDue, { zone: week.courses!.zone }).toFormat("HH:mm") : null);
+    const time = item.start_time ?? chosen;
+    deadlines.push({
+      id: `source-${item.lens_id}`,
+      title: item.title,
+      due: time
+        ? DateTime.fromISO(`${item.date}T${time}`, { zone: week.courses!.zone }).toISO()!
+        : DateTime.fromISO(item.date, { zone: week.courses!.zone }).endOf("day").toISO()!,
+      dateOnly: !time,
+      timeOrigin: item.start_time ? "source" : time ? "user" : "missing",
+      taskId: linked?.id,
+      sourceId: item.lens_id,
+      evidence: item.evidence,
+    });
+  }
   for (const { task } of week.tasks) {
-    const due = taskDeadline(task);
-    const item = task.input.request.items.find((i) => i.id === task.input.request.missed.item_id)!;
-    if (due && !deadlines.some((d) => d.title === item.title && Date.parse(d.due) === Date.parse(due)))
-      deadlines.push({ id: task.id, title: item.title, due, dateOnly: false });
+    const due = taskDeadline(task),
+      item = task.input.request.items.find((i) => i.id === task.input.request.missed.item_id)!;
+    if (due && !deadlines.some((d) => d.taskId === task.id && Date.parse(d.due) === Date.parse(due)))
+      deadlines.push({
+        id: `task-${task.id}`,
+        title: item.title,
+        due,
+        dateOnly: false,
+        taskId: task.id,
+        timeOrigin: "user",
+        evidence: task.source?.evidence ?? [],
+      });
   }
   return deadlines;
+}
+/** Confirm a date-only deadline without rewriting the source's words or changing a saved task. */
+export function confirmDeadlineTime(week: SavedWeek, sourceId: string, time: string, at: string): SavedWeek {
+  const item = week.courses?.items.find((i) => i.lens_id === sourceId);
+  if (!item || item.kind === "class_block" || !item.date || item.start_time)
+    throw new Error("Review the original deadline before setting a time.");
+  const moment = DateTime.fromISO(`${item.date}T${time}`, { zone: week.courses!.zone });
+  if (
+    !/^([01]\d|2[0-3]):[0-5]\d$/.test(time) ||
+    !moment.isValid ||
+    moment.toFormat("HH:mm") !== time ||
+    moment.getPossibleOffsets().length !== 1
+  )
+    throw new Error("Choose an unambiguous valid local time.");
+  return SavedWeek.parse({
+    ...week,
+    deadlineTimes: { ...week.deadlineTimes, [sourceId]: { date: item.date, time, confirmedAt: at } },
+  });
 }
 /** Saved tasks are protected commitments. Replanning one task never displaces another silently. */
 export function savedTaskBlocks(week: SavedWeek, from: string, to: string, omitTask?: string) {
@@ -153,4 +223,36 @@ export function buildWeekRequest(setup: Setup, week: SavedWeek, pending?: Import
         .map(({ title, start, end }) => ({ title, start, end })),
     );
   return request;
+}
+
+export function calendarDeadlines(snapshot: ScheduleSnapshot | null, week: SavedWeek): CalendarDeadline[] {
+  const deadlines = snapshot?.example ? [] : savedDeadlines(week);
+  if (!snapshot) return deadlines;
+  for (const d of scheduleDeadlines(snapshot)) {
+    const related = snapshot.request.items.find((i) => i.for === d.id || `due-${i.id}` === d.id);
+    const taskId = related?.id === snapshot.request.missed.item_id ? snapshot.taskId : undefined;
+    if (
+      deadlines.some((x) =>
+        taskId ? x.taskId === taskId && Date.parse(x.due) === Date.parse(d.due) : x.id === `request-${d.id}`,
+      )
+    )
+      continue;
+    deadlines.push({
+      id: `request-${d.id}`,
+      title: d.title.replace(/ due$/, ""),
+      due: d.due,
+      dateOnly: false,
+      taskId,
+      timeOrigin: "user",
+      currentTask: related?.id === snapshot.request.missed.item_id,
+      evidence: [],
+    });
+  }
+  return deadlines;
+}
+
+export function confirmedSourceTime(week: SavedWeek, sourceId: string): string | null {
+  const item = week.courses?.items.find((i) => i.lens_id === sourceId),
+    confirmation = week.deadlineTimes[sourceId];
+  return item && item.kind !== "class_block" && confirmation?.date === item.date ? confirmation.time : null;
 }

@@ -95,6 +95,15 @@ describe("live schedule projection", () => {
     expect(parts[0].lane).not.toBe(parts[1].lane);
     expect(parts.map((p) => p.start)).toEqual([a.start, b.start]);
   });
+  it("does not collapse unrelated deadlines at the same time", () => {
+    const s = snapshot(),
+      missed = s.request.items.find((i) => i.id === s.request.missed.item_id)!;
+    missed.for = null;
+    missed.due = s.request.deadlines[0].due;
+    const deadlines = scheduleDeadlines(s).filter((d) => d.due === missed.due);
+    expect(deadlines).toHaveLength(2);
+    expect(new Set(deadlines.map((d) => d.id)).size).toBe(2);
+  });
   it("retains linked deadlines and includes directly entered deadlines", () => {
     const s = snapshot();
     expect(scheduleDeadlines(s)).toEqual(s.request.deadlines);

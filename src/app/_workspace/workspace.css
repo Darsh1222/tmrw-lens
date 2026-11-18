@@ -1398,3 +1398,321 @@ html {
     scroll-margin-top: 132px;
   }
 }
+
+/* A comfortable calendar exposes the work before the user opens details. */
+.lens-main {
+  max-width: 1480px;
+}
+.workspace-grid {
+  grid-template-columns: minmax(340px, 0.7fr) minmax(0, 1.3fr);
+}
+.workspace-calendar {
+  position: static;
+}
+.workspace-grid.calendar-expanded {
+  grid-template-columns: 1fr;
+}
+.calendar-expanded .workspace-calendar {
+  grid-row: 1;
+}
+.calendar-expanded .workspace-action {
+  grid-row: 2;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
+}
+.calendar-inner {
+  min-width: var(--calendar-min-width, 680px);
+}
+.calendar-day-headings,
+.calendar-due-strip {
+  grid-template-columns: 48px repeat(var(--calendar-columns, 3), minmax(0, 1fr));
+}
+.calendar-scroll {
+  max-height: min(68dvh, 740px);
+}
+.calendar-toolbar {
+  align-items: flex-start;
+}
+.calendar-toolbar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.calendar-expand {
+  min-height: 34px;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.calendar-view-choice {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 20px 14px;
+  flex-wrap: wrap;
+}
+.calendar-view-choice button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--tm-border);
+  border-radius: 7px;
+  font-size: 0.75rem;
+}
+.calendar-view-choice button[aria-pressed="true"] {
+  background: var(--tm-sunken);
+  border-color: var(--tm-border-strong);
+}
+.calendar-view-choice > span {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--tm-text-2);
+}
+.calendar-event {
+  padding: 5px 7px;
+}
+.calendar-event strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.calendar-event small {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.calendar-event-content {
+  width: 100%;
+  gap: 3px;
+}
+.calendar-deadline {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.calendar-deadline > span {
+  white-space: normal;
+  text-align: left;
+  max-width: 100%;
+  line-height: 1.3;
+  padding: 4px 6px;
+}
+.calendar-deadline:hover > span,
+.calendar-deadline:focus-visible > span {
+  background: var(--tm-blush);
+}
+.calendar-due-strip button {
+  width: 100%;
+  display: block;
+  text-align: left;
+  padding: 7px;
+  border: 1px solid var(--tm-border-strong);
+  border-radius: 6px;
+  color: var(--tm-gilt-text);
+  background: var(--tm-sunken);
+}
+.calendar-due-strip button strong {
+  display: block;
+  font-weight: 500;
+  white-space: normal;
+}
+.workspace-time-alert {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: left;
+  gap: 7px 14px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--tm-border-strong);
+  border-radius: 10px;
+  color: var(--tm-gilt-text);
+  font-size: 0.8125rem;
+}
+.workspace-time-alert span {
+  color: var(--tm-text-2);
+}
+.workspace-time-alert svg {
+  margin-left: auto;
+}
+.calendar-attention {
+  padding: 14px 20px;
+  border-top: 1px solid var(--tm-border);
+  background: var(--tm-band);
+}
+.calendar-attention > p {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--tm-text-2);
+}
+.calendar-attention > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--tm-gilt-text);
+  margin-bottom: 5px;
+}
+.calendar-attention ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 10px;
+  max-height: 150px;
+  overflow: auto;
+}
+.calendar-attention ul[hidden] {
+  display: none;
+}
+.calendar-attention .calendar-review-times {
+  display: inline-flex;
+  justify-content: center;
+  min-height: 36px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--tm-border-strong);
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+.calendar-attention li {
+  flex: 1 1 200px;
+}
+.calendar-attention button {
+  display: flex;
+  text-align: left;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 40px;
+  padding: 4px 0;
+}
+.calendar-attention button strong {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.calendar-attention button span {
+  font-size: 0.6875rem;
+  color: var(--tm-gilt-text);
+}
+.deadline-detail {
+  padding: 18px 20px;
+  border-top: 1px solid var(--tm-border);
+  background: var(--tm-sunken);
+}
+.deadline-detail-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.deadline-detail h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.deadline-detail-heading button {
+  font-size: 20px;
+  min-width: 32px;
+  min-height: 32px;
+}
+.deadline-detail > p {
+  font-size: 0.8125rem;
+  color: var(--tm-text-2);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+.deadline-detail blockquote {
+  padding: 12px 0;
+  margin-top: 10px;
+  border-top: 1px solid var(--tm-border);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  max-width: 70ch;
+}
+.deadline-detail blockquote > p {
+  margin-top: 5px;
+}
+.deadline-action,
+.deadline-detail form > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--tm-border-strong);
+  border-radius: 7px;
+  margin: 8px 8px 0 0;
+  font-size: 0.8125rem;
+}
+.deadline-detail form {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.deadline-detail form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8125rem;
+}
+.deadline-detail input {
+  min-height: 40px;
+  background: var(--tm-bg);
+  padding: 0 10px;
+  border: 1px solid var(--tm-border-input);
+  border-radius: 7px;
+}
+@media (max-width: 800px) {
+  .workspace-grid {
+    display: block;
+  }
+  .calendar-toolbar {
+    padding: 16px;
+  }
+  .calendar-toolbar-actions {
+    max-width: 160px;
+    gap: 5px;
+  }
+  .calendar-view-choice {
+    padding: 0 16px 12px;
+  }
+  .calendar-view-choice > span {
+    flex-basis: 100%;
+    margin: 5px 0 0;
+  }
+  .calendar-scroll {
+    max-height: 65dvh;
+  }
+  .calendar-attention,
+  .deadline-detail {
+    padding: 14px 16px;
+  }
+}
+.calendar-size-note {
+  padding: 10px 20px;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: var(--tm-text-2);
+  border-top: 1px solid var(--tm-border);
+}
+.deadline-edit-note {
+  flex-basis: 100%;
+  color: var(--tm-text-2);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+@media (max-width: 800px) {
+  .calendar-expand {
+    display: none;
+  }
+}

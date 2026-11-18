@@ -24,7 +24,7 @@ import { preferredProposal } from "@/lib/recovery/presentation";
 import { RecoveryNote, emptyNoteDraft } from "./RecoveryNote";
 import { readRecoveryNote, requestWithNote, type RecoveryNoteSettings } from "@/lib/recovery/note";
 import { currentWeek } from "../_workspace/week-store";
-import { buildWeekRequest } from "@/lib/recovery/week";
+import { buildWeekRequest, confirmedSourceTime } from "@/lib/recovery/week";
 import { buttonClass } from "../_lens/styles";
 
 const field = "min-h-12 w-full rounded-xl border border-line-input bg-paper px-4 py-3 text-base";
@@ -53,11 +53,11 @@ function readImport() {
   }
 }
 const local = (d: DateTime) => d.toFormat("yyyy-MM-dd'T'HH:mm");
-function initialSetup(): Setup {
+function initialSetup(sourceId?: string): Setup {
   const zone = currentWeek().courses?.zone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
   const now = DateTime.now().setZone(zone).startOf("minute");
   const prefs = currentWeek().tasks.at(-1)?.task.input.request.prefs;
-  return {
+  const setup: Setup = {
     title: "",
     category: "study",
     minutes: 60,
@@ -70,12 +70,26 @@ function initialSetup(): Setup {
     sleepStart: prefs?.sleep?.start ?? "23:00",
     sleepEnd: prefs?.sleep?.end ?? "07:00",
   };
+  const payload = readImport(),
+    item = payload?.items.find((i) => i.lens_id === sourceId);
+  if (item && item.kind !== "class_block")
+    return {
+      ...setup,
+      zone: payload!.zone,
+      title: item.title,
+      category: item.course ?? "study",
+      due: item.date
+        ? `${item.date}T${item.start_time ?? confirmedSourceTime(currentWeek(), item.lens_id) ?? "17:00"}`
+        : setup.due,
+    };
+  return setup;
 }
 type RecoveryProps = {
   mode?: "auto" | "example" | "personal";
   startWithExample?: boolean;
   onSchedule?: (snapshot: ScheduleSnapshot | null) => void;
   embedded?: boolean;
+  initialSourceId?: string;
 };
 export function SimpleRecovery(props: RecoveryProps = {}) {
   const ready = useSyncExternalStore(
@@ -113,12 +127,18 @@ function demoFromLocation(mode: RecoveryProps["mode"], startWithExample: boolean
     step: mode !== "example" && query.get("view") === "plan" ? 2 : 1,
   };
 }
-function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, embedded = false }: RecoveryProps) {
+function RecoveryFlow({
+  mode = "auto",
+  startWithExample = false,
+  onSchedule,
+  embedded = false,
+  initialSourceId,
+}: RecoveryProps) {
   const [demo] = useState(() => demoFromLocation(mode, startWithExample));
   const [active, setActive] = useState<NextTask | null>(() => (!demo && mode !== "personal" ? returningTask() : null));
   const [carriedSource, setCarriedSource] = useState<TaskSource | null>(active?.source ?? null);
   const [step, setStep] = useState(active ? 3 : (demo?.step ?? 0)),
-    [setup, setSetup] = useState(initialSetup),
+    [setup, setSetup] = useState(() => initialSetup(initialSourceId)),
     [request, setRequest] = useState<RebuildRequest | null>(active?.input.request ?? demo?.request ?? null),
     [example, setExample] = useState(!!demo);
   const [obstacle, setObstacle] = useState<Obstacle>(demo?.obstacle ?? "unsure"),
@@ -132,7 +152,7 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
     }
   });
   const [payload, setPayload] = useState(readImport),
-    [source, setSource] = useState("");
+    [source, setSource] = useState(initialSourceId ?? "");
   const [calibrate, setCalibrate] = useState(false),
     [allowMove, setAllowMove] = useState(false);
   const [run, setRun] = useState<{ input: RecoveryInput; result: RecoveryResult } | null>(
@@ -374,7 +394,9 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                           zone: payload.zone,
                           title: item.title,
                           category: item.course ?? "study",
-                          due: item.date ? `${item.date}T${item.start_time ?? "17:00"}` : setup.due,
+                          due: item.date
+                            ? `${item.date}T${item.start_time ?? confirmedSourceTime(currentWeek(), item.lens_id) ?? "17:00"}`
+                            : setup.due,
                         });
                       }}
                     >
@@ -389,8 +411,8 @@ function RecoveryFlow({ mode = "auto", startWithExample = false, onSchedule, emb
                     </select>
                   </label>
                   <p className="mt-2 text-xs text-ink-2">
-                    Choose a deadline in the next 14 days. Confirm its time below; 5 PM is a suggestion when the source
-                    gives only a date. Confirmed classes stay fixed.
+                    Use a deadline within 14 days. Confirmed times are reused; 5 PM is only a suggestion for sources
+                    without a time. Review the time below. Saved classes stay fixed.
                   </p>
                   {source && (
                     <details className="mt-3 text-sm">

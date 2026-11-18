@@ -27,6 +27,7 @@ const Plan = z.object({
   otherChanges: z.number().int().min(0).max(1),
 });
 export const TaskSource = z.object({
+  lensId: z.string().max(80).optional(),
   title: z.string().max(200),
   date: z.iso.date().nullable(),
   time: z.string().nullable(),
@@ -72,6 +73,7 @@ export function sourceForTask(payload: ImportRequest | null, id: string): TaskSo
   const item = payload?.items.find((i) => i.lens_id === id);
   return item && item.kind !== "class_block"
     ? TaskSource.parse({
+        lensId: item.lens_id,
         title: item.title,
         date: item.date,
         time: item.start_time,

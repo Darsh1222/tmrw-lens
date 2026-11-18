@@ -523,7 +523,7 @@ export function Lens() {
       </div>
       </section>
 
-      {!plan && savedWeek.courses && <section className="saved-course-summary"><h2>Your schedule is saved.</h2><p>{savedWeek.courses.items.filter((i)=>i.kind === "class_block").length} recurring classes and {savedWeek.tasks.length} study tasks are available in Your week. Add more material above to review an updated schedule.</p><button className={buttonClass("quiet")} onClick={()=>window.dispatchEvent(new CustomEvent("lens:navigate",{detail:"week"}))}>Open your saved week</button><LiveSchedule snapshot={null} week={savedWeek} onOpenTask={(id)=>select(`saved:${id}`)} /></section>}
+      {!plan && savedWeek.courses && <section className="saved-course-summary"><h2>Your schedule is saved.</h2><p>{savedWeek.courses.items.filter((i)=>i.kind === "class_block").length} recurring classes and {savedWeek.tasks.length} study tasks are available in Your week. Add more material above to review an updated schedule.</p><button className={buttonClass("quiet")} onClick={()=>window.dispatchEvent(new CustomEvent("lens:navigate",{detail:"week"}))}>Open your saved week</button><LiveSchedule snapshot={null} week={savedWeek} onOpenTask={(id)=>select(`saved:${id}`)} onPlanSource={(id)=>window.dispatchEvent(new CustomEvent("lens:plan-source",{detail:id}))} /></section>}
       {plan && <EvidenceDrawer plan={plan} inputs={inputs} id={drawer} onClose={closeDrawer} onAnswer={answer} />}
     </div>
   ); // prettier-ignore

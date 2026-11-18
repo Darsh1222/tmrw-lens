@@ -49,7 +49,8 @@ export function scheduleEvents(snapshot: ScheduleSnapshot, before = false): Sche
     });
   }
   if (plan) {
-    for (const [n, p] of plan.placements.entries()) events.push({ ...p, key: `work-${p.itemId}-${n}`, kind: "work" });
+    for (const [n, p] of plan.placements.entries())
+      events.push({ ...p, key: `work-${p.itemId}-${n}`, kind: "work", taskId: snapshot.taskId });
     if (snapshot.example && !before) {
       const source = snapshot.baseline ?? request;
       const missed = source.items.find((i) => i.id === source.missed.item_id)!;
@@ -113,7 +114,7 @@ export function scheduleSegments(events: ScheduleEvent[], zone: string, shownDay
       for (const p of cluster) {
         let lane = ends.findIndex((end) => end <= p.from);
         if (lane < 0) lane = ends.length;
-        ends[lane] = Math.max(p.to, p.from + 0.9);
+        ends[lane] = Math.max(p.to, p.from + 0.96);
         p.lane = lane;
       }
       for (const p of cluster) p.lanes = ends.length;
@@ -125,7 +126,7 @@ export function scheduleSegments(events: ScheduleEvent[], zone: string, shownDay
         until = -Infinity;
       }
       cluster.push(p);
-      until = Math.max(until, p.to, p.from + 0.9);
+      until = Math.max(until, p.to, p.from + 0.96);
     }
     if (cluster.length) place();
   }
@@ -135,7 +136,12 @@ export function scheduleSegments(events: ScheduleEvent[], zone: string, shownDay
 export function scheduleDeadlines(snapshot: ScheduleSnapshot) {
   const deadlines = [...snapshot.request.deadlines];
   const missed = snapshot.request.items.find((i) => i.id === snapshot.request.missed.item_id)!;
-  if (missed.due && !deadlines.some((d) => Date.parse(d.due) === Date.parse(missed.due!)))
+  if (
+    missed.due &&
+    !deadlines.some(
+      (d) => (d.id === missed.for || d.id === `due-${missed.id}`) && Date.parse(d.due) === Date.parse(missed.due!),
+    )
+  )
     deadlines.push({ id: `due-${missed.id}`, title: `${missed.title} due`, due: missed.due, course: missed.course });
   return deadlines;
 }
