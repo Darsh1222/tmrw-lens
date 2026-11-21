@@ -492,3 +492,91 @@ One dated line per judgment call that docs/PLAN.md doesn't cover: what was decid
   written weekday settles it when exactly one reading fits. Ranges are a choice of first or last day; "every", "each",
   "weekly" are not one date. ISO and day-before-month dates resolve. Calendar (.ics) events become lines of text that
   are also their quotes, resolved by the same code as a syllabus; repeating events (classes) are left out.
+
+## November 16, 2026 — Demo and evidence scope
+
+Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.
+
+## November 16, 2026 — Obstacle-aware recovery workspace
+
+Add `/recover` as a real, browser-local workspace, reachable from the homepage and a verified Lens import. Keep source-reader AI and the existing SMS rebuild contract unchanged. The new planner uses explicit code rules, not a new language-model call: the person confirms the obstacle, remaining estimate, deadline, availability, and preferences. Do not infer a mental-health condition or availability from free text. A lightweight phrase matcher only suggests an editable obstacle label.
+
+Compare full-work plans that keep other commitments fixed, keep today free, or split a small first action from the remaining work with a break. Opt-in permits moving at most one flexible task. Recheck every proposed session together against availability, fixed events, deadline, sleep, spacing, and total required effort. Do not quietly drop work or relax hard constraints. Search is bounded (14-day input, up to 8 work sessions and 6 candidate slots per displaced task), not a proof of global optimality or impossibility.
+
+Effort learning uses the median of up to 10 self-reported same-category ratios after at least 3 records, capped at 0.5–2×. It is optional and transparent. Rejected start hours affect only the default option's candidate order. Records stay in memory unless the person explicitly saves them locally; they can inspect/delete records, edit the daytime preference, or reset all memory. Synthetic demos cannot be recorded as personal completions. Apply/undo affects the visit's working copy; calendar export includes recovered work only and cannot mutate external events. SMS and cross-device memory integration remain separate future work.
+
+## November 16, 2026 — Guided recovery and submission film
+
+Simplified the default `/recover` entry into one task, an explicit obstacle, and one recommended plan. Tired prefers a checked tomorrow option; stuck prefers a checked small start with the full remaining effort scheduled. All options must still pass the independent constraints check. Keep alternatives and advanced settings under disclosure; preserve the full workspace at `/recover/details`. Source imports carry their original time zone. Stable completion identity distinguishes different tasks at the same timestamp.
+
+The new Hyperframes submission film reuses the creator's original narration and music, with fresh high-resolution screenshots of real product states. It distinguishes the original recorded AI rebuild agent and synthetic evaluation results from the new local deterministic planner. No generated narration or student outcome claims.
+
+## November 16, 2026 — Market-informed next-step loop
+
+A five-product official-documentation review found scheduling, syllabus intake, replanning, daily guidance, next-task recommendations and spare-time estimates already available. Avoid world-first claims. Use an explicit weighted decision model and seeded sensitivity analysis, with editorial ratings labeled as assumptions rather than success probabilities. Select the evidence-linked next step (4.525/5); preserve the complete reproducible matrix and uncertainty in docs/research.
+
+Connect confirmed deadline evidence, explicit planned-step completion and remaining-work-only recovery on one minimal returning card. Preserve fixed events, deadlines, original effort estimate for optional calibration, prior approved moves and completed steps. Independently validate at application time. Never infer completion from time. Remembering after tab closure is opt-in; examples never write over personal storage. Learning records remain a separate consent boundary. Undo reverses progress and removes a now-withdrawn completion record. No new AI call or SMS/cross-device integration.
+
+## November 16, 2026 — Framework patch before deployment
+
+The installed build surfaced a known security advisory for Next.js 16.4.3. Verified the official v16.4.5 release and applied the same-series security patch, aligning eslint-config-next. Revalidate the product and normal GitHub production build after the patch; preserve build configuration and the original Meta tag. Also reset the free-again default when opening a recovery so a finished demo step cannot leave its default in the past.
+
+## November 16, 2026 — Integrated calendar and purposeful motion
+
+Replace the disconnected marketing/recovery entry points with one homepage workspace. Keep course material mounted when switching views; a confirmed-source handoff activates the planner without another site or route. The calendar is a read-only projection of the same checked request/proposal/active task used by the action card, not a second scheduler. Stable event identities animate between actual slots with Motion for React; protected commitments retain their identity. New personal tasks never acquire a fabricated past missed event. Recorded examples remain labeled. Preserve local civil dates, split overnight intervals, and separate visual collisions without changing times.
+
+Use short opacity/content transitions and longer (~620ms) schedule moves to make the destination legible. Respect system reduced motion via MotionConfig and CSS, retaining state labels. Research: https://motion.dev/docs/react-layout-animations, https://motion.dev/docs/react-accessibility, https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions, https://www.nngroup.com/articles/animation-purpose-ux/ . Remove past-competition branding from product pages and README while keeping technical model credits and truthful build provenance in submission records.
+
+## November 16, 2026 — A note changes scheduling constraints
+
+Use an explicit local phrase reader rather than introduce a new model call for short scheduling notes. Clearly label its supported vocabulary and ask about unknown notes, ambiguous AM/PM, past times, DST gaps/folds, unsupported days and deadline changes. “Only N minutes tonight” caps the task's total available time today, not just its starter; the remaining effort must still fit later. “N minutes left” changes the remainder, while a focus limit changes only the first step. Busy-until adds a protected interval. All derived availability stays inside the original windows. Notes are held only in component memory; applied structured settings can be part of the saved plan. The user sees an interpretation, can clear/edit it, then previews and approves the actual plan. Quick answers remain under disclosure.
+
+## November 17, 2026 — Operate, distill and clarify
+
+Installed Impeccable 4.9.1 project-locally with the requested npm installer, then ran context once and applied distill, Operate, craft-floor and polish guidance to the existing surface. This is a usability refinement of the established Lens system, not a replacement visual identity. Kept the brand wordmark, cream/navy tokens and system theme. Replaced the oversized marketing header with a compact workspace heading, removed decorative labels, exposed reason choices, flattened nested session surfaces and raised calendar label sizes. A single Preview my plan action reads typed notes and either shows inline clarification or a checked proposal; final approval is still explicit. Optional step-length controls are disclosed. Mobile view switching keeps both working panes mounted; inline navigation focuses the destination heading. Local installed skill files are excluded from product source, formatting and linting. No automatic hooks were enabled; the required manual detector ran once and returned no findings.
+
+Research: NN/G https://www.nngroup.com/articles/ten-usability-heuristics/ supports visible state, recognition, user control and minimalism. W3C https://www.w3.org/WAI/tutorials/forms/labels/ and https://www.w3.org/WAI/tutorials/forms/notifications/ support visible associated labels and concise inline errors. These are design principles, not evidence of measured student outcomes.
+
+Clear one-shot `example`, `view` and `intent` query flags when switching to personal work or accepting a source import. Otherwise an old example link can silently win over a verified handoff or a returning task. Keep the mobile view switch sticky below the header so reviewing the schedule never strands the approval action off-screen.
+
+## November 17, 2026 — Course material explains the full benefit
+
+Replaced the generic upload introduction with the actual Lens workflow: source-backed deadlines, a next action around supplied commitments, and recovery of unfinished work while retaining completed progress. Avoided uniqueness or outcome claims that have not been measured.
+
+## November 17, 2026 — Product promise above, task instructions below
+
+The global introduction states the three outcomes: check deadlines, plan study time and recover when plans change. The upload introduction names the inputs and immediate review action. Source review, handoff, task form, plan details, demo guide and evaluation explanations use consistent action-oriented wording. Make the one-active-task and 14-day planning bounds visible where they affect a decision. The guide separates browser-local planning, fresh AI reading, recorded AI demonstrations and synthetic test evidence. Prepared a comprehensive feature/test matrix and student test protocol; no participant results or win probability are invented. Official judging rules were checked on Devpost.
+
+## November 17, 2026 — One durable week and purposeful motion
+
+The old single-task pointer and separate course calendar made tasks appear to disappear. Added a zod-validated browser-local week containing reviewed imports, multiple checked tasks and reported completed-session history. Preserve the legacy task on first visit. Each new task uses the reviewed classes and saved sessions as constraints; an explicit preview/approval remains. The calendar navigates whole weeks, displays the same saved sessions in course review, and keeps precise event details accessible. Office hours mean optional instructor/TA help, not mandatory class attendance; source title identifies them and a separate opt-in reserves them for new tasks. Preferences are a visible panel. Preserve the Forum identity and use restrained control feedback plus positional schedule continuity.
+
+Research: inspected the [Awwwards technology gallery](https://www.awwwards.com/websites/technology/) and its [animation performance guide](https://www.awwwards.com/brainfood-mobile-performance-vol3.pdf) for spacing, easing and response quality. [NN/G heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/) informed visible state, consistent controls, familiar wording and recovery. [Reclaim's current task model](https://help.reclaim.ai/en/articles/16558552-tasks-overview-decide-what-to-work-on-when) and [priority guidance](https://help.reclaim.ai/en/articles/8291694-how-reclaim-uses-priorities-to-intelligently-plan-your-workweek) show the importance of separating calendar time, task details and scheduling constraints. Our implementation retains concrete task sessions and user approval; no global-optimality or success-rate claim.
+
+## November 18, 2026 — Calendar readability, source identity and missing times
+
+A narrow seven-column grid reduced short task blocks to minute counts. Default to a comfortable three-day focus on desktop and one day on phones, retaining Week and an expanded desktop view. Increase time scale and visual minimum height, wrap task titles, and label short-session visual expansion explicitly so display size is not confused with actual duration. Use the actual loaded current date for personal calendars and frozen request time only for examples.
+
+Date-only deadlines receive visible flags and an in-app review notice. Their detail panel retains original evidence and distinguishes source-provided times from user choices. Clock confirmations live in the saved-week schema separately from imported evidence, are validated against local clock/DST ambiguity, and are invalidated by a changed source date. Optional source IDs on saved task evidence preserve backward compatibility while connecting deadline → task; quote-based fallback handles older saved tasks. Two unrelated tasks sharing a deadline instant stay separately linked. Opening an unplanned source deadline prefills its task and any confirmed time. Changing the reviewed deadline does not silently alter approved task plans.
+
+Research: [Motion](https://www.usemotion.com/features/ai-task-manager), [Shovel](https://shovelapp.io/), [Reclaim 2.0](https://help.reclaim.ai/en/articles/16558552-tasks-overview-decide-what-to-work-on-when) and [Goblin Tools](https://goblin.tools/) already cover substantial parts of automatic planning, syllabus intake, replanning, capacity, task breakdown and focus. Candidate directions are high-impact clarification ranking, bounded disruption tests, task-specific help planning and source-change impact maps. Public-page review does not establish a market-first invention. No new algorithmic success probability or student benefit is claimed.
+
+## November 18, 2026 — Workspace visual hierarchy
+
+Refined the existing navy and crimson workspace with a larger introduction, more deliberate spacing, readable labels, quieter panel framing and a clearly highlighted selected task. Retained the current task and calendar behavior and reduced-motion support. Reviewed Awwwards' editorial grid example in its [design collection](https://assets.awwwards.com/awards/gallery/2023/07/HOT-RIGHT-NOW-BOOK-2023.pdf), its [mobile guidance](https://www.awwwards.com/mobile-excellence-guidelines.pdf) and animation performance guidance; applied hierarchy and legibility to an operational interface rather than copying a marketing layout.
+
+## November 18, 2026 — Expressive Lens workspace
+
+The owner requested a much larger visual change inspired by https://www.tech-ish.org/ while keeping Lens colors. Studied its soft moving background, oversized asymmetric typography and rounded panels. Applied a navy and crimson animated atmosphere, large responsive introduction, redesigned tab navigation, coordinated upload and calendar surfaces and eased control feedback. Motion respects reduced-motion settings. The workspace still presents the existing review and scheduling interactions.
+
+## November 18, 2026 — Consistent workspace headings
+
+Changed the hero line to “More room to breathe” and extended the responsive heading style to task setup, recovery, calendar, course summary and the explanation section. Added a soft entry animation for surfaces when reduced motion is not requested. Keep functional status labels and calendar controls readable at phone widths.
+
+## November 18, 2026 — Clear preferences and deadline review
+
+Grouped visible planning preferences into learning, study time and history, with concise descriptions and an explicit explanation of what clearing history also resets. Kept native checkboxes and existing state behavior. Date-only deadline selection closes the list so the chosen source and time form are easier to reach; the student can reopen the list. Added consistent button press/hover feedback and a brief deadline-panel entrance, respecting reduced motion and preserving schedule movement. Research: [GOV.UK checkbox guidance](https://design-system.service.gov.uk/components/checkboxes/), [NN/g animation guidance](https://www.nngroup.com/articles/animation-duration/), [W3C reduced motion](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions), and [Awwwards motion performance](https://www.awwwards.com/brainfood-mobile-performance-vol3.pdf).
+
+## November 18, 2026 — Animated preferences and calendar expansion
+
+At the owner's request, put the grouped preferences in an accessible disclosure with a smooth height transition; setting state remains in the parent while the drawer is closed. Animate the calendar and task columns through their grid layout change rather than swapping instantly. Add a brief, non-blocking visual press response for button activation across the app, including keyboard activation, while respecting reduced-motion preferences and retaining existing control behavior.

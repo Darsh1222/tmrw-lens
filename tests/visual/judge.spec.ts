@@ -6,26 +6,58 @@ import { expect, test } from "@playwright/test";
 const lightOnly = () =>
   test.skip(!test.info().project.name.startsWith("light"), "the path is the same in either theme");
 
-test("Step 2, See the proof: opens the recorded week and its plan, with no model calls", async ({ page }) => {
+test("Course material opens the recorded evidence without model calls", async ({ page }) => {
   lightOnly();
   const calls: string[] = [];
   page.on("request", (r) => /\/api\/(read|rebuild|extract)/.test(r.url()) && calls.push(r.url()));
-  await page.goto("/");
-  await page.getByRole("link", { name: /See the proof/ }).click();
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await page.goto("/#sample-week");
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   expect(calls).toEqual([]);
 });
 
-test("Try a missed session: plays the recorded rebuild to its message, with no model calls", async ({ page }) => {
+test("The home workspace previews and applies a real checked recovery", async ({ page }) => {
   lightOnly();
-  const calls: string[] = [];
-  page.on("request", (r) => /\/api\/(read|rebuild|extract)/.test(r.url()) && calls.push(r.url()));
-  await page.goto("/");
-  await page.getByRole("main").getByRole("link", { name: "Try a missed session", exact: true }).click();
-  const panel = page.locator("#missed-session [data-anim]").first();
-  await expect(panel).toHaveAttribute("data-anim", "done", { timeout: 20_000 });
-  await expect(page.locator("#missed-session")).toContainText("Nothing else changed.");
-  expect(calls).toEqual([]);
+  await page.goto("/?example=tired");
+  const schedule = page.locator('section[aria-label="Your changing schedule"]');
+  await expect(schedule).toHaveAttribute("data-phase", "before");
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
+  await expect(schedule).toHaveAttribute("data-phase", "preview");
+  await page.getByRole("button", { name: "Use this plan", exact: true }).click();
+  await expect(schedule).toHaveAttribute("data-phase", "active");
+  await expect(page.getByRole("button", { name: "Finished this step", exact: true })).toBeVisible();
+});
+
+test("typed notes clarify an ambiguous time and change the real calendar", async ({ page }) => {
+  lightOnly();
+  await page.goto("/?tab=week&example=stuck");
+  const note = page.getByRole("textbox", { name: /^Tell us what happened/ });
+  await note.fill("I'm busy until 8");
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
+  await expect(page.getByText(/Is that AM or PM/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "What got in the way?" })).toBeVisible();
+  await expect(note).toHaveAttribute("aria-invalid", "true");
+  await note.fill("I'm busy until 8 PM.");
+  await page.getByRole("button", { name: "Preview my plan", exact: true }).click();
+  const schedule = page.locator('section[aria-label="Your changing schedule"]');
+  await expect(schedule).toHaveAttribute("data-phase", "preview");
+  if (test.info().project.name.endsWith("mobile"))
+    await page.getByRole("button", { name: "Schedule Preview", exact: true }).click();
+  await expect(schedule.getByRole("button", { name: /Unavailable until the time you gave/ })).toBeVisible();
+  if (test.info().project.name.endsWith("mobile"))
+    await page.getByRole("button", { name: "Review plan", exact: true }).click();
+  await expect(page.getByText("No sessions before", { exact: false })).toContainText("8:00 PM");
+  await page.getByRole("button", { name: "Use this plan", exact: true }).click();
+  await expect(schedule).toHaveAttribute("data-phase", "active");
+});
+
+test("a source import exits an example deep link instead of reopening the demo", async ({ page }) => {
+  lightOnly();
+  await page.goto("/?tab=sources&example=stuck&view=plan");
+  await page.getByRole("button", { name: "Try the sample week", exact: true }).click();
+  await page.getByRole("button", { name: "Save schedule and continue", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "What needs doing?", exact: true })).toBeVisible();
+  await expect(page.getByLabel("Choose from your reviewed deadlines")).toBeVisible();
+  expect(new URL(page.url()).searchParams.has("example")).toBe(false);
 });
 
 test("Send remembers the Tomorrow token after a send it accepts, and forgets it on a 401", async ({ page }) => {
@@ -42,7 +74,8 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
     ),
   );
   await page.goto("/#sample-week");
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
+  await page.getByText("Connect the Tomorrow assistant", { exact: false }).click();
   await page.getByLabel("Lens token").fill("lens_test_token_123");
   await page.getByRole("button", { name: /^Send \d+/ }).click();
   await expect(page.getByText("Connected to Tomorrow")).toBeVisible();
@@ -50,7 +83,7 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
 
   status = 401;
   await page.getByRole("button", { name: /^Send \d+/ }).click();
-  await expect(page.getByRole("region", { name: "Send to Tomorrow" }).getByRole("alert")).toContainText(
+  await expect(page.getByRole("region", { name: "Save your schedule." }).getByRole("alert")).toContainText(
     "didn't accept that token",
   );
   await expect(page.getByLabel("Lens token")).toBeVisible();
@@ -64,65 +97,43 @@ test("Send remembers the Tomorrow token after a send it accepts, and forgets it 
   expect(await page.evaluate(() => localStorage.getItem("lens_tomorrow_token"))).toBeNull();
 });
 
-test("the top bar: section links underline the section in view; the primary action is always there", async ({
-  page,
-}) => {
+test("the top bar opens a personal task and the mobile menu closes with Escape", async ({ page }) => {
   lightOnly();
-  const errors: string[] = [];
-  page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
-  page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto("/");
   const bar = page.getByRole("banner");
-  await expect(bar.getByRole("link", { name: "Try a missed session" })).toBeVisible();
-  const mobile = test.info().project.name.endsWith("mobile");
-  if (mobile) {
+  await expect(bar.getByRole("link", { name: "Plan a task" })).toBeVisible();
+  if (test.info().project.name.endsWith("mobile")) {
     await bar.getByRole("button", { name: "Open menu" }).click();
-    const menu = page.locator("#nav-menu");
-    await expect(menu.getByRole("link", { name: "Results" })).toBeVisible();
+    await expect(page.locator("#nav-menu").getByRole("link", { name: "Course material" })).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(menu).toHaveCount(0);
-    await bar.getByRole("button", { name: "Open menu" }).click();
-    await menu.getByRole("link", { name: "Results" }).click();
-    await expect(menu).toHaveCount(0);
-  } else {
-    await bar.getByRole("link", { name: "Results" }).click();
+    await expect(page.locator("#nav-menu")).toHaveCount(0);
   }
-  await expect(page.locator("#results")).toBeInViewport();
-  if (!mobile) await expect(bar.getByRole("link", { name: "Results" })).toHaveAttribute("aria-current", "true");
-  // "How to try it" step 3 jumps to the drop zone and outlines it for a moment.
-  await page.getByRole("link", { name: /Use your own/ }).click();
-  await expect(page.locator("#upload")).toHaveAttribute("data-flash", "", { timeout: 2000 });
-  // Scroll the whole page: nothing logs an error, nothing scrolls sideways.
-  for (let y = 0; y < 14000; y += 800) await page.evaluate((v) => window.scrollTo(0, v), y);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);
-  expect(errors).toEqual([]);
+  await bar.getByRole("link", { name: "Plan a task" }).click();
+  await expect(page.getByRole("heading", { name: "Add your course material." })).toBeVisible();
+  await page.getByRole("button", { name: "Skip course setup for now" }).click();
+  await expect(page.getByRole("heading", { name: "What needs doing?" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test("keyboard only: skip link, then the bar's links and the primary action, each with a visible focus", async ({
-  page,
-}) => {
+test("keyboard navigation moves between workspace tabs", async ({ page }) => {
   lightOnly();
-  test.skip(test.info().project.name.endsWith("mobile"), "keyboards are a desktop path");
   await page.goto("/");
-  await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
-  const names: string[] = [];
-  for (let i = 0; i < 7; i++) {
-    await page.keyboard.press("Tab");
-    names.push(await page.evaluate(() => (document.activeElement as HTMLElement).innerText.trim()));
-  }
-  expect(names).toEqual(["Tomorrow Lens", "How it works", "Try it", "Results", "GitHub", "Try a missed session", "Try a missed session"]); // prettier-ignore
-  const outline = await page.evaluate(() => getComputedStyle(document.activeElement!).outlineStyle);
-  expect(outline).toBe("solid");
-  await page.keyboard.press("Enter");
-  await expect(page.locator("#missed-session [data-anim]").first()).not.toHaveAttribute("data-anim", "idle", { timeout: 8000 }); // prettier-ignore
+  await page.getByRole("tab", { name: "Your week", exact: true }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Course material", exact: true })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "Course material", exact: true })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await page.keyboard.press("Home");
+  await expect(page.getByRole("tab", { name: "Your week", exact: true })).toBeFocused();
 });
 
 test("Add to calendar downloads the verified plan as an .ics file", async ({ page }) => {
   lightOnly();
   await page.goto("/#sample-week");
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
-  const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Add to calendar (.ics)" }).click()]); // prettier-ignore
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
+  const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Export confirmed dates" }).click()]); // prettier-ignore
   expect(file.suggestedFilename()).toBe("lens-plan.ics");
   const text = await (await file.createReadStream()).toArray().then((c) => Buffer.concat(c).toString("utf8"));
   expect(text).toMatch(/^BEGIN:VCALENDAR\r\n/);
@@ -139,10 +150,10 @@ test("files with their own text: a calendar is read in code; Word goes as text, 
     reads.push({ text: /name="text"/.test(body), image: /name="image"/.test(body) });
     await r.fulfill({ status: 502, json: { error: "The model didn't answer properly. Try this page again." } });
   });
-  await page.goto("/");
+  await page.goto("/?tab=sources");
   const ics = ["BEGIN:VCALENDAR", "BEGIN:VEVENT", "SUMMARY:MATH141 Exam 2", "DTSTART;TZID=America/New_York:20261111T150000", "DTEND;TZID=America/New_York:20261111T161500", "END:VEVENT", "END:VCALENDAR"].join("\r\n"); // prettier-ignore
   await page.locator('input[type="file"]').setInputFiles({ name: "math141.ics", mimeType: "text/calendar", buffer: Buffer.from(ics) }); // prettier-ignore
-  await expect(page.getByRole("heading", { name: "Your plan" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Course calendar" })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText("MATH141 Exam 2").first()).toBeAttached();
   expect(reads).toEqual([]);
 

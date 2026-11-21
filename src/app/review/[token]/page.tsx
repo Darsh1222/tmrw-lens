@@ -29,7 +29,6 @@ export default function Page({ params }: { params: Promise<{ token: string }> })
     <>
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-12 sm:px-8">
-        <span className="forum-caps">Review</span>
         <h1 className="forum-display text-4xl">What Lens read from your photo.</h1>
         <Suspense fallback={<p className="text-ink-2">Loading…</p>}>
           {params.then(({ token }) => (

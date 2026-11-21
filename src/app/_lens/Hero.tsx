@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import extraction from "../../../evals/results.json";
+import rebuild from "../../../evals/rebuild/results.json";
 import { Contours } from "./Contours";
 import { Reveal } from "./Reveal";
 import { useEffect, useState } from "react";
@@ -100,24 +102,20 @@ export function Hero() {
       <Contours />
       <div className="flex flex-col gap-6">
         <span className="forum-caps">Tomorrow Lens</span>
-        <Reveal as="h1" atLoad id="hero-title" className="forum-display text-[2.75rem] leading-[1.05] sm:text-6xl" text="Your week, read, verified, and *rebuilt* when life happens." />
+        <Reveal as="h1" atLoad id="hero-title" className="forum-display text-[2.75rem] leading-[1.05] sm:text-6xl" text="Your week changes. Your plan can *too*." />
         <p className="max-w-xl text-lg text-ink-2">
-          Drop in a syllabus, schedule or whiteboard photo. Lens builds a plan you can verify. Miss a session, and it
-          rebuilds the week.
+          Turn course information into a plan you can check. When something gets in the way, find a new time without starting over.
         </p>
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <a href="#missed-session" className={buttonClass("primary", "px-5")}>
-              Try a missed session
-            </a>
-            <a href="#upload" className={buttonClass("quiet", "px-5")}>
-              Upload your own
-            </a>
+            <Link href="/recover" className={buttonClass("primary", "px-5")}>Try Lens</Link>
+            <a href="#upload" className={buttonClass("quiet", "px-5")}>Add a syllabus or photo</a>
           </div>
-          <p className="text-sm text-ink-2">10 seconds, free, no sign-up.</p>
+          <p className="text-sm text-ink-2">Start with one task, or try an example. No account needed.</p>
         </div>
         <p className="text-sm text-ink-2">
-          0 invented dates in 210 · every rebuild rule kept in 204 runs ·{" "}
+          Invented dates: {extraction.headline.with_sam.invented_dates} · rebuild rules kept in{" "}
+          {rebuild.headline.cases * rebuild.headline.runs_per_case} recorded runs. Synthetic tests ·{" "}
           <Link href="/evals" className="text-ink underline decoration-crimson underline-offset-4 hover:decoration-2">
             how it&apos;s measured
           </Link>

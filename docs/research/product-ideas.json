@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-16",
+  "method": "Weighted multi-criteria decision analysis with seeded sensitivity scenarios. Ratings are editorial judgments informed by the cited public product documentation and the existing repository, not measured demand or predicted success probabilities.",
+  "weights": {
+    "usefulness": 0.3,
+    "differentiation": 0.2,
+    "simplicity": 0.25,
+    "feasibility": 0.15,
+    "measurability": 0.1
+  },
+  "sources": {
+    "motion": "https://www.usemotion.com/help/time-management/auto-scheduling",
+    "shovel": "https://shovelapp.io/",
+    "reclaim": "https://help.reclaim.ai/en/articles/16558552-tasks-overview-decide-what-to-work-on-when",
+    "sunsama": "https://help.sunsama.com/docs/getting-started/basics/daily-planning-the-basics/",
+    "goblin": "https://goblin.tools/About"
+  },
+  "ideas": [
+    {
+      "id": "evidence-to-progress",
+      "name": "One next step, with its source and honest remaining work",
+      "ratings": {
+        "usefulness": 4.6,
+        "differentiation": 3.8,
+        "simplicity": 4.8,
+        "feasibility": 4.7,
+        "measurability": 4.8
+      },
+      "rationale": "Connect existing evidence verification to a returning action card, explicit step completion, and remaining-work-only recovery. Reuses checked Lens scheduling. Relevant-now recommendations and progress tracking already exist in competitors; the specific evidence-bound student recovery flow is the hypothesis to test, not a world-first claim.",
+      "sources": ["shovel", "reclaim", "motion"]
+    },
+    {
+      "id": "uncertainty-review",
+      "name": "Review the one deadline ambiguity that blocks action",
+      "ratings": {
+        "usefulness": 4.2,
+        "differentiation": 4.0,
+        "simplicity": 4.3,
+        "feasibility": 3.7,
+        "measurability": 4.4
+      },
+      "rationale": "Lens already asks source-conflict questions. Ranking questions by downstream scheduling effect may reduce effort, but requires broader multi-task dependency modeling and testing.",
+      "sources": ["shovel", "motion"]
+    },
+    {
+      "id": "robustness-margin",
+      "name": "Stress-test a plan against underestimated effort",
+      "ratings": {
+        "usefulness": 4.1,
+        "differentiation": 2.3,
+        "simplicity": 3.8,
+        "feasibility": 4.2,
+        "measurability": 4.7
+      },
+      "rationale": "Useful, but Shovel already describes Cushion/spare study time and Motion surfaces deadline risk. Extra reserve numbers could complicate the default screen.",
+      "sources": ["shovel", "motion", "reclaim"]
+    },
+    {
+      "id": "auto-breakdown",
+      "name": "Generate a smaller first action",
+      "ratings": {
+        "usefulness": 4.0,
+        "differentiation": 1.8,
+        "simplicity": 4.2,
+        "feasibility": 4.2,
+        "measurability": 3.8
+      },
+      "rationale": "A familiar category; Goblin Tools already offers small AI-powered task tools. Lens can schedule a short step without claiming to know a course-specific solution.",
+      "sources": ["goblin", "shovel"]
+    },
+    {
+      "id": "study-pair",
+      "name": "Coordinate a shared recovery session with a peer",
+      "ratings": {
+        "usefulness": 3.8,
+        "differentiation": 3.5,
+        "simplicity": 2.6,
+        "feasibility": 2.5,
+        "measurability": 3.7
+      },
+      "rationale": "Potential accountability benefit, but needs another participant, invitations, shared permissions, and validated availability. High coordination cost before first value.",
+      "sources": ["reclaim", "sunsama"]
+    },
+    {
+      "id": "context-assistant",
+      "name": "Conversational assistant across every task and calendar",
+      "ratings": {
+        "usefulness": 4.1,
+        "differentiation": 1.6,
+        "simplicity": 2.7,
+        "feasibility": 2.4,
+        "measurability": 3.1
+      },
+      "rationale": "Crowded, broad scope. Reclaim already brings task integrations, memory, and natural-language recommendations together. Adds authentication and reliability dependencies.",
+      "sources": ["reclaim", "shovel", "motion"]
+    }
+  ]
+}

@@ -1,0 +1,412 @@
+"use client";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { MotionConfig, motion } from "motion/react";
+import { ArrowRight, CalendarBlank, FileText, ShieldCheck, ArrowCounterClockwise } from "@phosphor-icons/react";
+import { returningTask } from "../recover/NextStepCard";
+import { SimpleRecovery } from "../recover/SimpleRecovery";
+import { Lens } from "../_lens/Lens";
+import { LiveSchedule } from "./LiveSchedule";
+import { useSavedWeek, currentWeek, updateWeek } from "./week-store";
+import { WORKSPACE_KEY } from "@/lib/recovery/workspace";
+import { NEXT_STEP_KEY, readNextTask } from "@/lib/recovery/next-step";
+import { emptyWeek, savedDeadlines, saveWeekTask } from "@/lib/recovery/week";
+import { DateTime } from "luxon";
+import type { ScheduleSnapshot } from "@/lib/recovery/schedule";
+import { buttonClass } from "../_lens/styles";
+
+const EMPTY_WEEK = emptyWeek();
+const subscribe = () => () => {};
+type Tab = "week" | "sources";
+export function HomeWorkspace() {
+  const ready = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+  return (
+    <MotionConfig reducedMotion="user" transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}>
+      {ready ? (
+        <Workspace />
+      ) : (
+        <div className="workspace-loading">
+          <h1>Make room for what’s next.</h1>
+          <p>Opening your week…</p>
+        </div>
+      )}
+    </MotionConfig>
+  );
+}
+function Workspace() {
+  const week = useSavedWeek();
+  const [tab, setTab] = useState<Tab>(() =>
+    new URLSearchParams(window.location.search).get("tab") === "sources" ||
+    /sample-week|upload|prove/.test(window.location.hash)
+      ? "sources"
+      : new URLSearchParams(window.location.search).has("example") ||
+          currentWeek().courses ||
+          currentWeek().tasks.length ||
+          returningTask()
+        ? "week"
+        : "sources",
+  );
+  const [readerOpened, setReaderOpened] = useState(tab === "sources");
+  const [mode, setMode] = useState<"auto" | "example" | "personal">(() =>
+    new URLSearchParams(window.location.search).get("intent") === "task" ? "personal" : "auto",
+  );
+  const [mobileView, setMobileView] = useState<"action" | "schedule">("action");
+  const [revision, setRevision] = useState(0);
+  const [sourceToPlan, setSourceToPlan] = useState<string | undefined>();
+  const [calendarExpanded, setCalendarExpanded] = useState(false);
+  const [snapshot, setSnapshot] = useState<ScheduleSnapshot | null>(null);
+  const updateSchedule = useCallback((next: ScheduleSnapshot | null) => setSnapshot(next), []);
+  const navigate = useCallback((next: Tab, clearEntry = false) => {
+    setTab(next);
+    if (next === "sources") setReaderOpened(true);
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", next);
+    if (clearEntry) for (const key of ["example", "view", "intent"]) url.searchParams.delete(key);
+    url.hash = "";
+    window.history.replaceState(null, "", url);
+  }, []);
+  useEffect(() => {
+    try {
+      const legacy =
+        readNextTask(sessionStorage.getItem(NEXT_STEP_KEY)) ?? readNextTask(localStorage.getItem(NEXT_STEP_KEY));
+      if (legacy && !legacy.example && !currentWeek().tasks.some((x) => x.task.id === legacy.id))
+        updateWeek((w) => saveWeekTask(w, legacy));
+    } catch {
+      /* A blocked browser store is reported when saving. */
+    }
+    const entry = new URL(window.location.href);
+    if (entry.searchParams.get("intent") === "task") {
+      for (const key of ["example", "view", "intent"]) entry.searchParams.delete(key);
+      window.history.replaceState(null, "", entry);
+    }
+    const planSource = (event: Event) => {
+      const courses = currentWeek().courses;
+      if (courses) sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(courses));
+      setSourceToPlan((event as CustomEvent<string>).detail);
+      navigate("week", true);
+      setMobileView("action");
+      setMode("personal");
+      setCalendarExpanded(false);
+      setRevision((n) => n + 1);
+      requestAnimationFrame(() => document.getElementById("next-action")?.scrollIntoView({ block: "start" }));
+    };
+    window.addEventListener("lens:plan-source", planSource);
+    const tabEvent = (event: Event) => navigate((event as CustomEvent<Tab>).detail);
+    const personal = () => {
+      setSourceToPlan(undefined);
+      if (!currentWeek().courses) {
+        navigate("sources", true);
+        return;
+      }
+      navigate("week", true);
+      setMobileView("action");
+      setMode("personal");
+      setRevision((n) => n + 1);
+    };
+    const imported = () => {
+      setSourceToPlan(undefined);
+      navigate("week", true);
+      setMobileView("action");
+      setMode("personal");
+      setRevision((n) => n + 1);
+      document.getElementById("workspace")?.scrollIntoView({ block: "start" });
+    };
+    const hash = () => {
+      if (window.location.hash === "#workspace") setTab("week");
+      if (/sample-week|upload|prove/.test(window.location.hash)) {
+        setReaderOpened(true);
+        setTab("sources");
+      }
+    };
+    window.addEventListener("lens:navigate", tabEvent);
+    window.addEventListener("lens:plan-task", personal);
+    const openSaved = () => {
+      setMode("auto");
+      setRevision((n) => n + 1);
+      setMobileView("action");
+    };
+    window.addEventListener("lens:open-saved-task", openSaved);
+    window.addEventListener("lens:import-ready", imported);
+    window.addEventListener("hashchange", hash);
+    return () => {
+      window.removeEventListener("lens:plan-source", planSource);
+      window.removeEventListener("lens:navigate", tabEvent);
+      window.removeEventListener("lens:plan-task", personal);
+      window.removeEventListener("lens:open-saved-task", openSaved);
+      window.removeEventListener("lens:import-ready", imported);
+      window.removeEventListener("hashchange", hash);
+    };
+  }, [navigate]);
+  const focusView = (view: "action" | "schedule") => {
+    setMobileView(view);
+    requestAnimationFrame(() => {
+      const heading = document.querySelector<HTMLElement>(view === "action" ? "#next-action h2" : "#calendar h2");
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+        heading.scrollIntoView({ block: "start" });
+      }
+    });
+  };
+  const choose = (next: "example" | "personal") => {
+    if (next === "personal" && !week.courses) {
+      navigate("sources");
+      return;
+    }
+    navigate("week", next === "personal");
+    setMobileView("action");
+    setSourceToPlan(undefined);
+    setMode(next);
+    setRevision((n) => n + 1);
+  };
+  const openTask = (id: string) => {
+    const task = week.tasks.find((x) => x.task.id === id)?.task;
+    if (!task) return;
+    sessionStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+    localStorage.setItem(NEXT_STEP_KEY, JSON.stringify(task));
+    navigate("week", true);
+    setMode("auto");
+    setSourceToPlan(undefined);
+    setCalendarExpanded(false);
+    setRevision((n) => n + 1);
+    setMobileView("action");
+    requestAnimationFrame(() => document.getElementById("next-action")?.scrollIntoView({ block: "start" }));
+  };
+  const missingTimes =
+    snapshot?.example || (!snapshot && new URLSearchParams(window.location.search).has("example"))
+      ? []
+      : savedDeadlines(week).filter((d) => d.dateOnly);
+  return (
+    <div className={`lens-workspace mobile-view-${mobileView}`}>
+      <header className="workspace-intro">
+        <div className="workspace-hero-art" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="workspace-hero-copy">
+          <span className="workspace-hero-kicker">More room to breathe</span>
+          <h1>
+            Make room <span>for what’s next.</span>
+          </h1>
+          <p>Check deadlines, plan study time, and find your way forward when plans change.</p>
+        </div>
+        <div className="workspace-hero-aside" aria-hidden="true">
+          <span>Your week,</span>
+          <span>in perspective.</span>
+          <i />
+        </div>
+      </header>
+      <div
+        className="workspace-tabs"
+        role="tablist"
+        aria-label="Lens workspace"
+        onKeyDown={(event) => {
+          if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+          event.preventDefault();
+          const next =
+            event.key === "Home" ? "week" : event.key === "End" ? "sources" : tab === "week" ? "sources" : "week";
+          navigate(next);
+          document.getElementById(next === "week" ? "week-tab" : "sources-tab")?.focus();
+        }}
+      >
+        <button
+          id="week-tab"
+          tabIndex={tab === "week" ? 0 : -1}
+          role="tab"
+          aria-selected={tab === "week"}
+          aria-controls="week-panel"
+          onClick={() => navigate("week")}
+        >
+          <CalendarBlank size={18} />
+          Your week{tab === "week" && <motion.span layoutId="workspace-tab" className="workspace-tab-indicator" />}
+        </button>
+        <button
+          id="sources-tab"
+          tabIndex={tab === "sources" ? 0 : -1}
+          role="tab"
+          aria-selected={tab === "sources"}
+          aria-controls="sources-panel"
+          onClick={() => navigate("sources")}
+        >
+          <FileText size={18} />
+          Course material
+          {tab === "sources" && <motion.span layoutId="workspace-tab" className="workspace-tab-indicator" />}
+        </button>
+        <span className="workspace-tabs-note">
+          <ShieldCheck size={15} />
+          You approve every change
+        </span>
+      </div>
+      <section id="week-panel" role="tabpanel" aria-labelledby="week-tab" hidden={tab !== "week"}>
+        <div className="workspace-section-bar" id="workspace">
+          <div>
+            <span className={`workspace-dot ${snapshot?.example ? "" : "is-personal"}`} />
+            <p>
+              <strong>
+                {snapshot?.example
+                  ? "Try it with an example"
+                  : snapshot
+                    ? "Your working plan"
+                    : "Add a task to your week"}
+              </strong>
+              <span>
+                {snapshot?.example
+                  ? "Sample dates · your own tasks stay saved"
+                  : "Saved on this device · new tasks fit around your existing week"}
+              </span>
+            </p>
+          </div>
+          <div className="workspace-mode-actions">
+            <button onClick={() => choose("example")} className={buttonClass("plain", "workspace-reset")}>
+              <ArrowCounterClockwise size={16} />
+              {snapshot?.example ? "Reset" : "Try example"}
+            </button>
+            <button onClick={() => choose("personal")} className={buttonClass("quiet")}>
+              {snapshot?.example ? "Use my own task" : "New task"}
+              <ArrowRight size={15} />
+            </button>
+          </div>
+        </div>
+        {missingTimes.length > 0 && (
+          <button className="workspace-time-alert" onClick={() => focusView("schedule")}>
+            <strong>
+              {missingTimes.length} {missingTimes.length === 1 ? "deadline needs" : "deadlines need"} a time
+            </strong>
+            <span>Review the missing times in your calendar.</span>
+            <ArrowRight size={16} />
+          </button>
+        )}
+        <div className="mobile-workspace-switch" role="group" aria-label="Workspace view">
+          <button
+            aria-pressed={mobileView === "action"}
+            aria-controls="next-action"
+            onClick={() => focusView("action")}
+          >
+            {snapshot?.phase === "preview" ? "Review plan" : "Next step"}
+          </button>
+          <button
+            aria-pressed={mobileView === "schedule"}
+            aria-controls="calendar"
+            onClick={() => focusView("schedule")}
+          >
+            <CalendarBlank size={16} />
+            Schedule{snapshot?.phase === "preview" && <span>Preview</span>}
+          </button>
+        </div>
+        <motion.div
+          layout
+          className={`workspace-grid ${calendarExpanded ? "calendar-expanded" : ""}`}
+          transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+        >
+          <motion.div layout="position" className="workspace-action" id="next-action">
+            {week.tasks.length > 0 && !snapshot?.example && (
+              <section className="saved-task-list" aria-label="Your saved tasks">
+                <div>
+                  <h2>Your tasks</h2>
+                  <span>{week.tasks.filter((x) => x.task.status === "active").length} active</span>
+                </div>
+                <ul>
+                  {[...week.tasks]
+                    .sort(
+                      (a, b) =>
+                        Date.parse(a.task.plan.placements[0]?.start ?? a.task.updatedAt) -
+                        Date.parse(b.task.plan.placements[0]?.start ?? b.task.updatedAt),
+                    )
+                    .map(({ task }) => (
+                      <li key={task.id}>
+                        <button
+                          onClick={() => openTask(task.id)}
+                          aria-current={snapshot?.taskId === task.id ? "true" : undefined}
+                        >
+                          <strong>
+                            {task.input.request.items.find((i) => i.id === task.input.request.missed.item_id)?.title}
+                          </strong>
+                          <span>
+                            {task.status === "done"
+                              ? "Finished"
+                              : `${task.remainingMinutes} min left · ${DateTime.fromISO(task.plan.placements[0]?.start ?? task.updatedAt, { zone: task.input.request.zone }).toFormat("ccc, LLL d")}`}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              </section>
+            )}
+            <SimpleRecovery
+              key={revision}
+              mode={mode}
+              onSchedule={updateSchedule}
+              initialSourceId={sourceToPlan}
+              embedded
+            />
+            <button className="mobile-calendar-link" onClick={() => focusView("schedule")}>
+              See the schedule
+              <ArrowRight size={15} />
+            </button>
+          </motion.div>
+          <motion.div
+            layout
+            className="workspace-calendar"
+            id="calendar"
+            transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+          >
+            <LiveSchedule
+              snapshot={snapshot}
+              week={
+                snapshot?.example ||
+                (!snapshot && (mode === "example" || new URLSearchParams(window.location.search).has("example")))
+                  ? EMPTY_WEEK
+                  : week
+              }
+              onOpenTask={openTask}
+              onShowCurrentTask={() => focusView("action")}
+              onPlanSource={(id) => window.dispatchEvent(new CustomEvent("lens:plan-source", { detail: id }))}
+              expanded={calendarExpanded}
+              onExpand={() => setCalendarExpanded((v) => !v)}
+            />
+            <button className="mobile-calendar-link" onClick={() => focusView("action")}>
+              {snapshot?.phase === "preview" ? "Back to review and approve" : "Back to your next step"}
+              <ArrowRight size={15} />
+            </button>
+          </motion.div>
+        </motion.div>
+      </section>
+      <section
+        id="sources-panel"
+        role="tabpanel"
+        aria-labelledby="sources-tab"
+        hidden={tab !== "sources"}
+        className="workspace-sources"
+      >
+        {readerOpened && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+            <Lens />
+            {!week.courses && (
+              <button
+                className={buttonClass("plain", "mt-4")}
+                onClick={() => {
+                  navigate("week", true);
+                  setMode("personal");
+                  setRevision((n) => n + 1);
+                }}
+              >
+                Skip course setup for now
+              </button>
+            )}
+          </motion.div>
+        )}
+      </section>
+      <section className="workspace-how" id="how" aria-labelledby="how-title">
+        <h2 id="how-title">How Lens helps</h2>
+        <p>
+          <strong>Check the source.</strong> Review deadlines from your course material. <strong>Make room.</strong>{" "}
+          Plan around your commitments. <strong>Keep going.</strong> Adjust unfinished work when life changes.
+        </p>
+      </section>
+    </div>
+  );
+}

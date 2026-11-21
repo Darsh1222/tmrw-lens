@@ -62,3 +62,31 @@ No secrets (META_API_KEY in .env.local), gitleaks pre-commit + GitHub push prote
 - Nov 2: polish, demo mode, caps, rehearse 10x, README/HACKATHON.md.
 - Nov 3: 3-min video + write-up + X post.
 - Nov 4: final secret scan, submit by ~2 PM.
+
+## November 16, 2026 — Authorized standalone extension
+
+The owner requested a simpler, differentiated standalone product based on market research and explicit idea ranking. Extend the submission branch with the evidence-linked next-step loop described in docs/research/PRODUCT-DIRECTION.md. This is additional Lens work, not private Tomorrow code. Keep source extraction/SMS contracts and frozen original release unchanged. The new card uses local deterministic planning, explicit progress, and opt-in local persistence. No new model/provider integration.
+
+## November 16, 2026 — Unified website and live schedule
+
+Owner requested removal of irrelevant competition branding and a higher-quality integrated website. Make the homepage the working product: course-material intake and the recovery/next-step flow share one workspace. Project the actual checked proposal beside the controls; visually distinguish preview from applied state, preserve fixed commitments and progress, and respect reduced motion. Old recovery URLs resolve to this homepage. Preserve original source/model integration and evaluation honesty; do not introduce simulated personal calendar data.
+
+## November 16, 2026 — Typed recovery notes
+
+The owner requested a useful free-text input in “What got in the way?”. Add a bounded on-device interpreter for feelings, first-step budgets, today-only capacity, remaining effort and explicit free-again times. Show exactly what was understood before planning; ambiguous or unsupported constraints require clarification or manual controls. Derive a restricted working request, preserve deadlines and fixed commitments, and continue to require plan approval. No new provider, API call, or raw-note storage.
+
+## November 17, 2026 — Impeccable usability pass
+
+The owner requested installation and use of Impeccable to make the existing interface easier to use. Preserve the current Lens identity and all planning/source constraints. Refine the workspace into a compact operational screen, expose quick answers, combine note reading with the explicit preview action, keep approval separate, and provide mobile action/schedule switching without losing state. Use the installed distill, Operate and polish guidance plus primary usability/accessibility research; do not change the private Tomorrow app or model prompts.
+
+## November 17, 2026 — Clear product explanation and feature testing
+
+The owner requested a brief product-level explanation above the tabs, practical instructions beneath each section heading, a consistent user/judge journey across the website, and a full feature/usefulness/testing inventory tied to the hackathon rubric. Keep claims bounded by implemented behavior and collected evidence. Update the demo guide to prioritize the current web workflow and clearly distinguish the optional recorded assistant demo and recorded synthetic evaluations.
+
+## November 17, 2026 — Saved course-first week
+
+Owner requested course uploads before task setup, persistent tasks across week navigation, automatic placement around a saved schedule, clear office-hour semantics, visible preferences and refined motion/spacing. Extend the standalone workspace to a browser-local multi-task week, preserving one focused task card and explicit approval. Save reviewed course imports and approved tasks on this device; new tasks protect existing tasks. Keep completed-session history visible and undoable. Recurring classes reserve time; office hours are optional help and only reserve time for new tasks when explicitly chosen. Preserve original provider and SMS contracts. The recorded examples remain isolated.
+
+## November 18, 2026 — Readable calendar and actionable deadline uncertainty
+
+Owner requested larger calendar blocks, clickable deadlines linked to their original tasks, in-app missing-time notices, a clear office-hour explanation and research into distinctive ideas. Add comfortable focused calendar views (three days on desktop, one day on phones), optional Week/expanded views, readable title wrapping, exact event details and explicit labels for visually expanded short sessions. Date-only deadlines remain date-only until the student confirms a time. Save confirmations separately from source facts, bind them to the source date, and retain explicit source/task identity. Deadline review can open the linked task or prefill setup for an unscheduled source item. Website notices are local UI, not external notifications. New market ideas remain proposals until separately selected.

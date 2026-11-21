@@ -291,3 +291,89 @@ Per-person spend limits and two global brakes keep the public demo from using To
   deadline, Tomorrow asks instead of dropping: "No free time before Quiz 3. Want a 15-min version at 7:15am tomorrow,
   or skip it?" When someone says they're sick: "Feel better. Moved Calc practice to 8am, Essay outline to 2pm and Read
   HIST ch. 4 to 3pm tomorrow. Nothing else changed." Every rebuild message is now human-reviewed.
+
+## November 16, 2026 — STEM2Connect preparation
+
+Prepared a separate submission branch with a /demo guide, synthetic-evaluation qualifications, dynamic hero counts, and clearer provenance and AI assistance disclosure. Preserve the original Meta tag. No model, prompt, scheduling, or verification behavior changed. No user-study outcomes are claimed. See docs/STEM2CONNECT.md.
+
+## November 16, 2026 — Recovery workspace implementation
+
+Built `/recover`: personal-week setup with editable study/sleep hours and protected busy time; verified-source handoff; editable obstacle suggestions; complete alternative recovery plans; small-start plus remaining-work accounting; one optional flexible-task move; overload/capacity explanation; apply/undo and calendar export. Added opt-in browser-local effort history, a bounded median estimator, rejected-hour feedback, editable preference, and inspect/delete/reset controls. Synthetic examples remain labeled and do not train personal history. Runtime AI extraction and the existing rebuild API remain unchanged. Added unit tests covering supported scenario outputs, overlap/deadline/effort tampering, capacity exhaustion, move permission, learning thresholds, imports, and daylight-saving ambiguities.
+
+## November 16, 2026 — Guided recovery and submission film
+
+Simplified the default `/recover` entry into one task, an explicit obstacle, and one recommended plan. Tired prefers a checked tomorrow option; stuck prefers a checked small start with the full remaining effort scheduled. All options must still pass the independent constraints check. Keep alternatives and advanced settings under disclosure; preserve the full workspace at `/recover/details`. Source imports carry their original time zone. Stable completion identity distinguishes different tasks at the same timestamp.
+
+The new Hyperframes submission film reuses the creator's original narration and music, with fresh high-resolution screenshots of real product states. It distinguishes the original recorded AI rebuild agent and synthetic evaluation results from the new local deterministic planner. No generated narration or student outcome claims.
+
+## November 16, 2026 — One evidence-linked next step
+
+Researched Motion, Shovel, Reclaim 2.0, Sunsama and Goblin Tools using official documentation. Ranked six concepts with a transparent weighted score and 5,000 seeded sensitivity scenarios. Selected the evidence-linked next-step loop, not a claimed world first or predicted winner. Added one returning action card with explicit step completion, partial remaining-work replanning, attached source evidence, stale-plan handling, independent action-time validation, undo, remaining-only ICS export, visit-local storage and optional device persistence. Added regression tests for progress accounting, duplicate actions, constraint preservation, source attribution, completion and corrupt storage. No student outcomes have been collected.
+
+## November 16, 2026 — Framework patch before deployment
+
+The installed build surfaced a known security advisory for Next.js 16.4.3. Verified the official v16.4.5 release and applied the same-series security patch, aligning eslint-config-next. Revalidate the product and normal GitHub production build after the patch; preserve build configuration and the original Meta tag. Also reset the free-again default when opening a recovery so a finished demo step cannot leave its default in the past.
+
+## November 16, 2026 — One website, a schedule that changes with the plan
+
+Integrated course-material review, checked recovery and the returning task card into the homepage. Added an animated schedule driven by actual planner state, original/updated example comparison, protected-event styling, precise event detail, deadlines, overnight splitting, and visual collision handling. Preview and applied changes are labeled separately. Added reduced-motion support and responsive layout, simplified source-to-planner handoff and optional assistant connection, redirected old recovery URLs, and removed competition branding from the website and README. Added schedule-projection regression tests; no new model calls or external calendar sync.
+
+Validation: 321 unit tests across 17 files; typecheck, lint, formatting and tracked-environment checks passed. All three recorded evaluation suites passed. Production build passed with the local Tailwind-precompile/webpack workaround (sandbox CSS-worker limitation; source CSS restored). Browser-checked desktop and 390px mobile: preview/apply, two-step recovery preserving 10 finished minutes, course-source handoff, personal-task refresh, keyboard tab navigation, mobile menu, no horizontal page overflow, and legacy redirect. No console errors observed in the final preview. Updated visual-test sources; the Playwright suite was not executed in this environment.
+
+## November 16, 2026 — Tell Lens what happened
+
+Added a free-text box to the guided recovery flow. Common scheduling phrases now affect actual planner inputs: unavailable-until times, a total work cap today, smaller first steps, and revised remaining effort. Show a correctable interpretation, preserve it when returning from preview, clear constraints when editing notes or starting another task, and ask rather than guess about unclear times. Preview projects the derived request into the calendar. Raw notes are not logged, sent to a model or persisted. Regression tests cover semantic distinctions, no availability expansion, work accounting, no-fit cases, fixed commitments, deadline preservation and DST ambiguity.
+
+Validation: all 338 unit tests across 18 files passed, including 17 note regressions. Typecheck, lint, format, environment checks and local production webpack build passed using the documented sandbox workaround. Browser-checked 20-minute-today scheduling, busy-until preview/application, 90-minute effort updates, clarification blocking, note retention on back navigation, and 390px mobile (no page overflow); no console errors. Added a future automated visual-flow regression; the Playwright suite was not executed locally.
+
+## November 17, 2026 — Impeccable usability refinement
+
+Installed and applied Impeccable to the existing workspace. Compact task-first layout, clearer mode banner, visible quick answers, single-action typed-note preview, inline clarification, disclosed first-step controls, clearer calendar type, flat session lists and persistent mobile task/schedule view switching. Preserved planning guarantees, source evidence, completed progress, storage boundaries and separate approval. Removed redundant decorative labels and kept the established Lens identity. Primary research and rationale are in DECISIONS.md. No new model calls or outcome claims.
+
+Browser validation: desktop at 1280×800, intermediate 768px and phone 390px. Verified one-action note preview and inline clarification, complete recovery after a 20-minute-today cap, preservation of 10 completed minutes, keyboard tab navigation, source handoff out of an example URL, and mobile task/schedule view switching. Fixed stale example/new-task URL intent so it cannot override imported work or remain after entry. Mobile switching remains reachable while scrolling. All 338 unit tests passed. Typecheck, lint, formatting, environment checks and production webpack build passed with the existing sandbox workaround. The required Impeccable detector ran once and returned no findings. Automated visual sources were updated; the Playwright suite was not run locally. No usability outcome study was performed.
+
+## November 17, 2026 — Course-material introduction
+
+Updated the course-material introduction to explain source evidence, realistic study time, recovery when plans change and retained progress, rather than repeat the supported input types. Copy-only change.
+
+## November 17, 2026 — A clear journey for students and judges
+
+Moved a concise product explanation above the workspace tabs and made the course-material introduction explain uploading and reviewing dates. Clarified source review, handoff, task time estimates, plan details, calendar states, navigation, the current web demo path and the scope of recorded evaluation results. Added a feature/usefulness/test inventory and test data for a fresh source-to-recovery demonstration. No scheduling or model behavior changed; no new student outcomes claimed.
+
+Validation: 338 unit tests and three recorded evaluation replays passed. Typecheck, lint, formatting, environment checks and production webpack build passed with the existing sandbox workaround. Browser-checked the revised upload instructions, walkthrough and evaluation scope. Fresh AI reading is blocked locally because no reader key is configured; no fresh AI success claimed. Native ICS import found a one-off deadline, asked for the missing course and kept unconfirmed handoff disabled; repeating events were explicitly skipped. No student outcomes collected.
+
+## November 17, 2026 — A saved, course-first week
+
+Replaced the single-task-only browser pointer with a validated local saved week. Review uploaded course material first, save the confirmed schedule, then add tasks with effort and deadline. New tasks automatically preview a complete placement around saved classes and existing study sessions; approval saves another task without replacing earlier work. Retain reported completed sessions as history and remove their markers on undo. Keep source review and the full-week calendar connected across refresh and week navigation. The focused task card still handles one selected task; existing tasks are not silently reprioritized.
+
+Regular classes reserve time. Office hours are labeled as optional instructor/TA help and only reserve time for new tasks when chosen. Preferences are a visible panel. Tightened the recovery note and option spacing, fixed short-event/bottom-of-grid clipping, removed invented clock labels on date-only deadlines, added precise multi-day event details and kept time labels visible during horizontal scrolling. Calendar focus follows the proposed day/time, including when the mobile calendar becomes visible. Controls use consistent fast feedback; positional schedule motion respects reduced motion. Source-first navigation and a secondary manual skip remain available.
+
+Validation: 345 unit tests across 19 files pass, including 7 saved-week regressions. All three recorded evaluation replays pass. Typecheck, lint and local production build pass using the existing sandbox webpack workaround. Browser checks used synthetic data: reviewed sample schedule, two saved tasks including a Nov 23 placement, retained first task after adding another, previous/next week navigation, refresh persistence, saved calendar in Course material, a typed twenty-minute-evening recovery, explicit ten-minute completion with fifty remaining, desktop and 390px mobile switching. No browser errors observed. Impeccable's manual detector ran once and returned no findings. The automated Playwright suite was not executed locally. No fresh AI success or student outcomes are claimed; this local server still lacks the reader key.
+
+## November 18, 2026 — Readable calendar and linked deadlines
+
+Added larger task blocks, wrapped task titles, comfortable three-day desktop and one-day phone views, an optional full-width desktop calendar and a Week overview. Clicking a session reveals exact details. Every deadline opens its own detail panel with source evidence, a linked saved task or a prefilled task setup. Distinct tasks at the same deadline remain distinct. Missing clock times stay date-only, are flagged in a compact in-app notice and can be explicitly confirmed or corrected. The original source quote is preserved; chosen times are stored separately and invalidated when the source date changes. Office-hour copy explains optional help and the difference between protecting time and booking an appointment.
+
+Validation: 349 unit tests across 19 files and all three recorded evaluation replays pass. Typecheck, lint and local production build pass using the documented sandbox webpack workaround. Browser checks used synthetic data: expanded/split/Week views, original-task deadline navigation, date-only source review, explicit time confirmation/correction, task prefill and refresh persistence. Checked the 390px day view with no page overflow. Impeccable's manual detector ran once and returned no findings. Automated Playwright tests were not executed locally. No fresh AI success or student outcomes are claimed; the local reader key remains unconfigured.
+
+Researched Motion, Shovel, Reclaim and Goblin Tools. Existing products already cover much of scheduling, syllabus import, capacity and recovery. Proposed consequence-ranked clarifications, bounded disruption tests, help-aware recovery and source-change impact maps as future investigations, not implemented or verified market-first features.
+
+## November 18, 2026 — Workspace visual refinement
+
+Improved typography, spacing, panel framing, selected-task contrast, calendar labels and interaction feedback while retaining the existing workspace behavior and reduced-motion handling. Reviewed the desktop and 390px mobile layouts with saved synthetic tasks. Lint and the local production webpack build passed using the documented sandbox workaround. This visual pass has not been evaluated with students.
+
+## November 18, 2026 — Expressive workspace redesign
+
+Introduced an animated navy and crimson hero, oversized type, rounded navigation, updated course-upload and calendar surfaces and smoother control feedback. Reduced-motion settings disable the decorative animation. Browser-checked desktop and 390px mobile, course-tab navigation and the mobile schedule switch using saved synthetic data. Typecheck, lint and the local production webpack build passed with the documented sandbox workaround. This is a local preview and has not been tested with students.
+
+## November 18, 2026 — Heading theme throughout the workspace
+
+Updated the hero line and carried its typography and soft color into planning, recovery, calendar and course sections. Added reduced-motion-aware surface entrances. Typecheck, lint and local production build pass; browser-checked the refreshed copy, mobile task/schedule switch and calendar at 394px without horizontal page overflow. No student usability study was performed.
+
+## November 18, 2026 — Preferences and deadline review
+
+Reorganized planning preferences into visible groups with short explanations and clearer history-reset consequences. Selecting a missing-time deadline now collapses the list and opens a focused, styled detail panel; the list can be reopened. Added shared button feedback and reduced-motion-aware panel animation. Browser-checked the preference checkbox and the mobile list/detail/return flow using synthetic data. All 349 unit tests, typecheck, lint, formatting, environment checks and local production build passed with the documented sandbox workaround. Not every individual button was manually exercised, and the automated Playwright suite was not run.
+
+## November 18, 2026 — Preferences drawer and button feedback
+
+Added an animated preferences disclosure, animated split/expanded calendar layout and brief site-wide button activation feedback. The motion respects reduced-motion settings. Browser-checked the drawer opening and closing, retention of a changed option, calendar expansion and return, and verified the button animation and in-progress calendar transform. Typecheck, lint, 349 unit tests, formatting, environment checks and local production build passed with the documented sandbox workaround. Not every individual button was manually exercised.

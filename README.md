@@ -2,17 +2,13 @@
 
 **Tomorrow Lens turns the messy paper of student life into a verified plan, and rebuilds it the moment life gets in the way.**
 
-> **Frozen: this is the hackathon version** ([`v1.0-hackathon`](https://github.com/Darsh1222/tmrw-lens/releases/tag/v1.0-hackathon),
-> everything built Oct 27 to Nov 4, 2026). Lens now continues inside Tomorrow, which is private; this repository
-> gets no new features and will be archived.
+Open the integrated workspace to read course material, check deadline evidence, and see study sessions move into a complete recovery plan. Every change waits for your approval.
 
-**Video:** _[demo video link to be added]_ · **The real SMS loop:** _[SMS clip link to be added]_
+**Website:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app). The submission branch contains the latest redesign; deploy it before expecting the public site to match.
+**Try locally:** `pnpm install`, `pnpm dev`, then open the homepage. Recorded examples and the local planner need no AI credentials; live uploads need the configured reader.
+**Demo guide:** `/demo`. **Feature and test checklist:** [docs/FEATURES-AND-TESTS.md](docs/FEATURES-AND-TESTS.md). **Build and submission notes:** [docs/STEM2CONNECT.md](docs/STEM2CONNECT.md). Built solo with disclosed AI coding assistance; the separate Tomorrow assistant remains an optional integration.
 
-**Live:** [tmrw-lens.vercel.app](https://tmrw-lens.vercel.app) · Built for the Meta Global AI Developer Hackathon
-(track: Build for Your World), Oct 27 to Nov 4, 2026, solo with AI coding assistance. Everything here was built in
-the hackathon window ([HACKATHON.md](HACKATHON.md)).
-
-## What's new: built during the hackathon
+## Capabilities and implementation
 
 Only work built during the hackathon is shown as the submission. What existed before, and what was built during it:
 
@@ -22,17 +18,17 @@ Only work built during the hackathon is shown as the submission. What existed be
 | **Built during the hackathon**              | **All of Tomorrow Lens** (this repository): reading syllabi, schedules, and photos with Muse Spark and SAM 3.1; proof for every date; the rebuild agent; text-a-photo; evals; the site.                                                                                                                                                                                                                                                                                                                                                                                                          | Oct 28 to Nov 4, 2026: every commit in this repo, from `08ff8c7` (Oct 28, initial commit) on. Highlights: `68eeec6` model client (Oct 29), `8476773` plan builder (Oct 29), `2041e8f` SAM 3.1 (Oct 31), `51c37ff` UI and import contract (Oct 31), `7909962` rebuild agent (Nov 1), `d1e5624` text-a-photo (Nov 1), `336332f` per-person limits (Nov 2), `591fe84` rebuild safety bar (Nov 3), `55e50f6` syllabus policies and grid (Nov 3). Full log: [HACKATHON.md](HACKATHON.md). |
 | **Built during the hackathon, in Tomorrow** | Lens import and Connect (Send to Tomorrow); check-ins after planned sessions; a missed session → Lens rebuild → one recovery text (Lens's words, then "Reply UNDO to undo.", in one 160-character SMS) with the change pinned in the app; text-a-photo via Lens's `/api/extract`; the Best-Time Engine, sharing Lens's scoring for placement, the fallback, and checking Lens's moves; `user_ref` and the code-only rebuild when Lens is over its limits; no links in texts; the accuracy work the loop needed (answers from the record, the truth rule, the intent gate, integrity invariants). | Oct 27 to Nov 4, 2026, in 15 pull requests (#22 to #41) in Tomorrow's private repository; that code isn't published here. Lens's side of each: [IMPORT](docs/IMPORT_CONTRACT.md), [REBUILD](docs/REBUILD_CONTRACT.md), [EXTRACT](docs/EXTRACT_CONTRACT.md).                                                                                                                                                                                                                          |
 
+## Recover your own week
+
+The preparation branch adds **[/recover](https://tmrw-lens.vercel.app/recover)** (deploy this branch before using that public route): one task → what happened → one checked plan → a returning next-step card. The card keeps the deadline's source attached, records explicit step completion, and recovers only the work still needed. Two immediate actions: **Finished this step** and **Plans changed**. Other controls are under disclosure. [Market research and reproducible idea ranking](docs/research/PRODUCT-DIRECTION.md) explain this choice; no world-first or predicted-success claim is made.
+
+Start with one task, choose what got in the way, and review one checked recommendation. Tired? Lens prefers keeping tonight free when tomorrow fits. Stuck? It suggests a small first step while scheduling the full remainder. Alternatives stay in disclosure; planning preferences are in a dropdown; the full comparison workspace is available at `/recover/details`. Try the labeled synthetic example or enter a task with a confirmed deadline and busy time. Optional comparison may move one flexible task. Every option is previewed before apply, supports undo, and can export recovered sessions. If nothing fits, Lens explains the loaded capacity and decisions needed. Memory saving is off by default. This new workspace computes locally; the existing reader and SMS agent use Meta models as before. See [scope, guarantees, and limitations](docs/RECOVERY_WORKSPACE.md).
+
 ## Try it in 10 seconds
 
-Open the live site and press **Try a missed session**. A made-up week plays: a study session passes undone, the
-student replies "too tired tonight", Muse Spark works out what to move (you see each tool call), the session glides to
-its new slot, and the one recovery text arrives: _"Moved Calc practice to 7:30am tomorrow, so tonight can be off, the
-soonest it fits before Quiz 3. Nothing else changed."_ The recorded runs are free and never count against a limit; type
-your own reply to run it live.
+Open the homepage. The clearly labeled example puts the next action beside a live three-day schedule. Choose **Preview my plan** to preview where the work fits, then **Use this plan** to apply it. Compare the original week with the new plan. Finish a step or choose **Plans changed** and watch the remaining work find a new place without losing completed effort.
 
-Then step 2, **See the proof**, opens the sample week (free, instant, no limits); or **Upload your own** syllabus,
-Testudo schedule, whiteboard photo, or notes. Tap any item for its proof: the photo crop, SAM 3.1's outline, the exact
-words, and the date math. When it's right, **Send to Tomorrow**, or **Add to calendar (.ics)** for any calendar app.
+First save your reviewed syllabus or class schedule. Add tasks with effort and deadline; Lens finds a placement around saved classes and tasks. Approved tasks stay saved on this device, with a selectable task list and full-week calendar. Office hours are optional help, separate from regular classes. Choose **Course material** to try the recorded sample or upload course material. Review each item's source evidence, then **Save schedule and continue** to carry verified deadlines and classes into the same workspace. Calendar export and the separate Tomorrow assistant remain optional. The recorded tool-calling SMS demonstration is at `/demo`.
 
 ## How Meta's models are used
 
@@ -72,6 +68,10 @@ Synthetic fixtures only (made up, in `fixtures/synthetic/`), scored offline in C
 | Cost per photo read / per rebuild     | $0.023 with SAM / $0.0080 (3.7 model calls, about 8 s)                     |
 
 Details and how each is measured: [Evals](#evals) below, and the live [evals page](https://tmrw-lens.vercel.app/evals).
+
+## AI coding assistance
+
+The original [build log](HACKATHON.md) credits Claude Code. OpenAI Codex assisted with submission research, interface and interaction design, the saved-week and recovery workspace, code, tests, documentation, and demo-video editing. Claude Code assisted with the original build. The builder directed the product, reviewed the changes, and should verify the final submission. Runtime models are described above; AI-assisted development is separate from the browser-local planner.
 
 ## Privacy
 
@@ -173,7 +173,7 @@ lists every one, with its default.
 
 ## Evals
 
-Sixteen cases (`evals/cases/`) over the made-up fixtures in `fixtures/synthetic/`, two with deliberate conflicts
+Nineteen cases (`evals/cases/`) over the made-up fixtures in `fixtures/synthetic/`, two with deliberate conflicts
 between sources. Each photo is read once, then second-read two ways: on SAM 3.1 object crops, and on plain box
 crops, so the two columns differ only in SAM. Latest run, Muse Spark 1.3 and SAM 3.1 (`evals/results.json`):
 
@@ -274,14 +274,14 @@ with their evidence ("whiteboard says Quiz 3 → Mon Nov 2"), never applied unti
 ambiguity, and a signed review link that lasts 24 hours. Four synthetic cases (`evals/extract/cases.ts`): a whiteboard
 moving a syllabus quiz, a course site's to-do list (alone, and against items already in Tomorrow), and a blurry photo:
 
-|                                           | text-a-photo        |
-| ----------------------------------------- | ------------------- |
-| Auto-applied and right (precision)        | **9 of 9**          |
-| Gold items auto-applied (recall)          | **100%**            |
-| Invented dates                            | **0** of 13         |
-| Changes caught (applied before an answer) | 2 of 2 (0)          |
-| Duplicates recognized                     | 2 of 2              |
-| Model cost per photo                      | $0.0127 (3.3 calls) |
+|                                           | text-a-photo         |
+| ----------------------------------------- | -------------------- |
+| Auto-applied and right (precision)        | **8 of 8**           |
+| Gold items auto-applied (recall)          | **100%**             |
+| Invented dates                            | **0** of 13          |
+| Changes caught (applied before an answer) | 2 of 2 (0)           |
+| Duplicates recognized                     | 2 of 2               |
+| Model cost per photo                      | $0.01185 (3.3 calls) |
 
 ## License
 

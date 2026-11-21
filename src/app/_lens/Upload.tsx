@@ -79,11 +79,9 @@ export function Upload({
   return (
     <section id="upload" aria-labelledby="upload-title" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <span className="forum-caps">I · Read</span>
-        <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your week." />
+        <Reveal id="upload-title" className="forum-display text-3xl sm:text-4xl" text="Add your course material." />
         <p className="max-w-2xl text-ink-2">
-          Add a syllabus, your Testudo schedule, a whiteboard or notes photo, or a course site&apos;s to-do list. Lens
-          reads each page with Muse Spark, outlines photos with SAM 3.1, and keeps none of them.
+          Upload a syllabus, class schedule, or a photo of your notes. Review the dates and class times Lens finds, then choose a task to plan.
         </p>
       </div>
 
@@ -95,15 +93,13 @@ export function Upload({
           setOver(false);
           if (e.dataTransfer.files.length) onAdd(e.dataTransfer.files);
         }}
-        className={`flex flex-col items-center gap-4 rounded-2xl border border-dashed px-6 py-10 text-center transition-colors ${over ? "border-ink bg-well" : "border-line-strong bg-card"}`}
+        className={`course-dropzone flex flex-col items-center gap-4 rounded-2xl border border-dashed px-6 py-10 text-center transition-colors ${over ? "border-ink bg-well" : "border-line-strong bg-card"}`}
       >
         <UploadSimple size={32} weight="light" aria-hidden className="text-ink-2" />
         <div className="flex flex-col gap-1">
           <p className="text-lg">Drop PDFs, photos, or screenshots here</p>
           <p className="text-sm text-ink-2">
-            PDF (up to 12 pages), Word, PowerPoint, Excel or CSV, a saved course page (.html), a calendar file (.ics), or
-            a photo or screenshot (JPEG, PNG, WebP, HEIC). Reading starts as soon as you add it. Up to 25 pages a day,
-            free.
+            PDFs, documents, calendars and images. Documents and photos use AI; calendar files are read directly. Reading starts when you add a file. Up to 25 pages a day, free.
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-3">
@@ -128,7 +124,7 @@ export function Upload({
           }}
         />
         <details className="w-full max-w-xl text-left text-sm">
-          <summary className="cursor-pointer text-center text-ink-2 hover:text-ink">Or paste your Testudo schedule as text</summary>
+          <summary className="cursor-pointer text-center text-ink-2 hover:text-ink">Or paste a Testudo class schedule</summary>
           <div className="mt-3 flex flex-col gap-2">
             <textarea
               value={paste}
@@ -148,8 +144,7 @@ export function Upload({
         </details>
       </div>
       <p className="text-sm text-ink-2">
-        Next, Lens reads each page, checks every date against its words, and asks about anything unclear. You&apos;ll
-        review everything before anything is sent.
+        You review every deadline and its source before using it in your plan.
       </p>
       {busy && (
         <p role="status" className="text-sm text-ink-2">

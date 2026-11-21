@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import type { ClassBlock, Plan, PlanItem, Status } from "@/lib/plan/types";
+import { officeHours } from "@/lib/recovery/meeting";
 import { palette, type Pastel } from "../ui";
 
 // The plan as a calendar: which week to show, what's in each day, and where it
@@ -10,7 +11,7 @@ export type Entry = {
   key: string;
   /** The plan item or class this came from, for the evidence drawer. */
   id: string;
-  kind: "class" | "item";
+  kind: "class" | "item" | "office" | "study";
   title: string;
   course: string | null;
   tone: Pastel;
@@ -69,8 +70,10 @@ export function entriesFor(plan: Plan, days: string[]): Entry[] {
         out.push({
           key: `${c.id}-${day}`,
           id: c.id,
-          kind: "class",
-          title: `${c.course} ${MEETING[c.meeting_type]}`,
+          kind: officeHours(`${c.title} ${c.marker}`) ? "office" : "class",
+          title: officeHours(`${c.title} ${c.marker}`)
+            ? `${c.course} office hours`
+            : `${c.course} ${MEETING[c.meeting_type]}`,
           course: c.course,
           tone: tone(c.course),
           status: c.status,
@@ -87,7 +90,7 @@ export function entriesFor(plan: Plan, days: string[]): Entry[] {
     out.push({
       key: i.id,
       id: i.id,
-      kind: "item",
+      kind: officeHours(i.title) ? "office" : "item",
       title: i.title,
       course: i.course,
       tone: tone(i.course),

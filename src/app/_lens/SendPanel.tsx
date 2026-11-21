@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { updateWeek } from "../_workspace/week-store";
+import { WORKSPACE_KEY } from "@/lib/recovery/workspace";
 import type { Plan, SourceMeta } from "@/lib/plan/types";
 import { toIcs } from "@/lib/calendar/ics";
 import { NotSendable, sendable, toImport, type ImportResponse } from "@/lib/tomorrow/contract";
@@ -37,6 +40,7 @@ const saved = {
 };
 
 export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[] }) {
+  const router = useRouter();
   const remembered = useSyncExternalStore(saved.subscribe, saved.read, () => null);
   const [typed, setToken] = useState("");
   const token = remembered ?? typed;
@@ -94,82 +98,97 @@ export function SendPanel({ plan, sources }: { plan: Plan; sources: SourceMeta[]
     }
   };
 
+  const makePlan = () => {
+    const payload = build();
+    if (!payload) return;
+    try {
+      updateWeek((week) => ({ ...week, courses: payload }));
+      sessionStorage.setItem(WORKSPACE_KEY, JSON.stringify(payload));
+      if (window.location.pathname === "/") window.dispatchEvent(new Event("lens:import-ready"));
+      else router.push("/?tab=week");
+    } catch {
+      setState({ s: "error", message: "This browser could not prepare your plan." });
+    }
+  };
   return (
-    <section aria-labelledby="send-title" className="flex flex-col gap-4 rounded-2xl border border-line bg-card p-6">
-      <div className="flex flex-col gap-1">
-        <h2 id="send-title" className="forum-display text-2xl">
-          Send to Tomorrow
+    <section aria-labelledby="send-title" className="source-next-step">
+      <div>
+        <h2 id="send-title" className="forum-display text-3xl">
+          Save your schedule.
         </h2>
-        <p className="text-sm text-ink-2">
-          Tomorrow is the texting assistant that keeps this plan going: it plans study time around your classes, texts
-          you when a session slips, and asks Lens to rebuild the week.
-        </p>
-        <p className="text-sm">
-          {count} ready to send{waiting ? `; ${waiting} wait until you answer or edit them` : ""}. Only verified items
-          go.
+        <p>
+          {count} confirmed items{waiting ? ` · ${waiting} still need a look` : ""}. Save the reviewed dates and classes
+          on this device. New tasks will use this schedule.
         </p>
       </div>
-      <form onSubmit={send} className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        {remembered ? (
-          <p className="flex flex-1 flex-wrap items-center gap-x-3 text-sm" data-connected>
-            <span>Connected to Tomorrow</span>
-            <button
-              type="button"
-              onClick={() => {
-                saved.write(null);
-                setToken("");
-              }}
-              className={buttonClass("plain", "px-0")}
-            >
-              Forget token
-            </button>
-          </p>
-        ) : (
-          <>
-            <label className="sr-only" htmlFor="lens-token">
-              Lens token
-            </label>
-            <input
-              id="lens-token"
-              type="password"
-              autoComplete="off"
-              value={typed}
-              onChange={(e) => setToken(e.target.value)}
-              placeholder="Lens token from Tomorrow's Settings"
-              className="min-h-11 flex-1 rounded-lg border border-line-input bg-paper px-3 text-sm"
-            />
-          </>
-        )}
-        <button disabled={!count || token.trim().length < 8 || state.s === "sending"} className={buttonClass("primary")}>
-          {state.s === "sending" ? "Sending…" : `Send ${count}`}
+      <div className="flex flex-wrap gap-3">
+        <button disabled={!count} className={buttonClass("primary", "rounded-full")} onClick={makePlan}>
+          Save schedule and continue
         </button>
-      </form>
-      {state.s === "sent" && (
-        <p role="status" className="text-sm">
-          Sent {Object.keys(state.r.created).length} to Tomorrow
-          {state.r.skipped_duplicates.length ? `; ${state.r.skipped_duplicates.length} were already there` : ""}.
-        </p>
-      )}
+        <button disabled={!count} className={buttonClass("quiet", "rounded-full")} onClick={calendar}>
+          Export confirmed dates
+        </button>
+      </div>
       {state.s === "error" && (
         <p role="alert" className="text-sm text-crimson">
           {state.message}
         </p>
       )}
-      <div className="flex flex-col items-start gap-1">
-        <button onClick={calendar} disabled={!count} className={buttonClass("quiet")}>
-          Add to calendar (.ics)
-        </button>
-        <p className="text-xs text-ink-2">Or skip Tomorrow: the same verified items, as a file for any calendar app.</p>
-      </div>
-      <details className="text-sm text-ink-2">
-        <summary className="cursor-pointer hover:text-ink">Details</summary>
-        <div className="mt-2 flex flex-col items-start gap-1">
-          <p>Each item goes with its quote and date math. The connection uses a token from Tomorrow&apos;s Settings.</p>
-          <button onClick={download} disabled={!count} className={buttonClass("plain", "min-h-9 px-0 underline underline-offset-4")}>
-            Download what would be sent
+      <details className="source-connection">
+        <summary>
+          Connect the Tomorrow assistant <span>Optional</span>
+        </summary>
+        <p className="mt-3 text-sm text-ink-2">
+          Use a connection token to send these confirmed items to your separate Tomorrow texting assistant.
+        </p>
+        <form onSubmit={send} className="mt-4 flex flex-col gap-3 sm:flex-row">
+          {remembered ? (
+            <p className="flex flex-1 items-center gap-3 text-sm" data-connected>
+              Connected to Tomorrow
+              <button
+                type="button"
+                className={buttonClass("plain")}
+                onClick={() => {
+                  saved.write(null);
+                  setToken("");
+                }}
+              >
+                Forget token
+              </button>
+            </p>
+          ) : (
+            <>
+              <label className="sr-only" htmlFor="lens-token">
+                Lens token
+              </label>
+              <input
+                id="lens-token"
+                type="password"
+                autoComplete="off"
+                value={typed}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="Connection token"
+                className="min-h-11 flex-1 rounded-lg border border-line-input bg-paper px-3 text-sm"
+              />
+            </>
+          )}
+          <button
+            disabled={!count || token.trim().length < 8 || state.s === "sending"}
+            className={buttonClass("quiet")}
+          >
+            {state.s === "sending" ? "Sending…" : `Send ${count}`}
           </button>
-        </div>
+        </form>
+        {state.s === "sent" && (
+          <p role="status" className="mt-3 text-sm">
+            Sent {Object.keys(state.r.created).length} to Tomorrow
+            {state.r.skipped_duplicates.length ? `; ${state.r.skipped_duplicates.length} already existed` : ""}.
+          </p>
+        )}
+        <button className={buttonClass("plain", "mt-3 px-0 text-xs underline")} disabled={!count} onClick={download}>
+          Download the confirmed source data
+        </button>
       </details>
     </section>
-  ); // prettier-ignore
+  );
 }

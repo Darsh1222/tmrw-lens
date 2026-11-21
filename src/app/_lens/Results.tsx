@@ -11,7 +11,11 @@ const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 const STATS = [
   { value: pct(r.hard_rules), label: "Rebuild rules kept", note: `in ${r.cases * r.runs_per_case} runs: nothing in sleep, quiet hours, or past a deadline` }, // prettier-ignore
-  { value: pct(r.top1), label: "Best-slot accuracy", note: `the time code's ranking picks, in ${r.cases} cases` },
+  {
+    value: pct(r.top1),
+    label: "Internal ranking agreement",
+    note: `the time code's ranking picks, in ${r.cases} cases`,
+  },
   { value: invented.split(" ")[0], label: "Invented dates", note: `of ${invented.split(" of ")[1]}: every date traces to its words` }, // prettier-ignore
   { value: `$${r.cost_per_rebuild.toFixed(3)}`, label: "Per rebuild", note: `${r.turns_per_rebuild} model calls, about ${Math.round(r.latency_per_rebuild_s)} s` }, // prettier-ignore
 ];
@@ -23,7 +27,7 @@ export function Results() {
         <span className="forum-caps">IV · Results</span>
         <Reveal id="results-heading" className="forum-display text-3xl sm:text-4xl" text="Measured, not promised." />
         <p className="max-w-2xl text-ink-2">
-          Every number comes from made-up schedules and photos, replayed in CI on every change.
+          Every number comes from made-up schedules and photos, replayed in CI on every change. These tests do not establish real-world accuracy or student outcomes.
         </p>
       </div>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

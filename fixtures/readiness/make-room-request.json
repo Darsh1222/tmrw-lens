@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "zone": "America/New_York",
+  "prefs": {
+    "sleep": {
+      "start": "23:00",
+      "end": "07:00"
+    },
+    "quiet": null,
+    "study_time": null,
+    "study_hours": {
+      "start": "07:00",
+      "end": "23:00"
+    }
+  },
+  "now": "2026-11-04T18:10:00-05:00",
+  "missed": {
+    "item_id": "s_calc",
+    "reply": null
+  },
+  "items": [
+    {
+      "id": "s_calc",
+      "title": "Calc practice",
+      "course": "MATH141",
+      "start": "2026-11-04T16:00:00-05:00",
+      "end": "2026-11-04T17:00:00-05:00",
+      "due": null,
+      "for": "d_quiz",
+      "min_minutes": 45,
+      "status": "missed"
+    },
+    {
+      "id": "s_laundry",
+      "title": "Laundry",
+      "course": null,
+      "start": "2026-11-04T21:00:00-05:00",
+      "end": "2026-11-04T22:00:00-05:00",
+      "due": null,
+      "for": null,
+      "min_minutes": null,
+      "status": "planned"
+    },
+    {
+      "id": "s_outline",
+      "title": "Essay outline",
+      "course": "ENGL101",
+      "start": "2026-11-05T14:00:00-05:00",
+      "end": "2026-11-05T15:00:00-05:00",
+      "due": null,
+      "for": "d_essay",
+      "min_minutes": null,
+      "status": "planned"
+    },
+    {
+      "id": "s_hist",
+      "title": "Read HIST ch. 4",
+      "course": "HIST200",
+      "start": "2026-11-05T16:00:00-05:00",
+      "end": "2026-11-05T17:00:00-05:00",
+      "due": null,
+      "for": null,
+      "min_minutes": null,
+      "status": "planned"
+    }
+  ],
+  "fixed": [
+    {
+      "title": "MATH141 lecture",
+      "start": "2026-11-04T10:00:00-05:00",
+      "end": "2026-11-04T10:50:00-05:00"
+    },
+    {
+      "title": "ENGL101 seminar",
+      "start": "2026-11-05T11:00:00-05:00",
+      "end": "2026-11-05T12:15:00-05:00"
+    },
+    {
+      "title": "MATH141 lecture",
+      "start": "2026-11-06T10:00:00-05:00",
+      "end": "2026-11-06T10:50:00-05:00"
+    },
+    {
+      "title": "Robotics club",
+      "start": "2026-11-04T19:00:00-05:00",
+      "end": "2026-11-04T21:00:00-05:00"
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "d_quiz",
+      "title": "Quiz 3",
+      "course": "MATH141",
+      "due": "2026-11-05T10:00:00-05:00"
+    },
+    {
+      "id": "d_essay",
+      "title": "Essay 2",
+      "course": "ENGL101",
+      "due": "2026-11-06T23:59:00-05:00"
+    }
+  ],
+  "open_windows": [
+    {
+      "start": "2026-11-05T07:30:00-05:00",
+      "end": "2026-11-05T08:00:00-05:00"
+    },
+    {
+      "start": "2026-11-05T13:00:00-05:00",
+      "end": "2026-11-05T14:00:00-05:00"
+    },
+    {
+      "start": "2026-11-05T17:00:00-05:00",
+      "end": "2026-11-05T21:00:00-05:00"
+    }
+  ]
+}

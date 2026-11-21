@@ -160,3 +160,6 @@ public/pdfjs/
 # Playwright output (screenshots from pnpm test:visual)
 /test-results/
 /playwright-report/
+
+# Local UI design tooling installed with npx impeccable install
+.agents/skills/impeccable/
