@@ -95,6 +95,7 @@ export function LiveSchedule({
   const deadlineDetails = deadlines.find((d) => d.id === selectedDeadline);
   const chooseDeadline = (id: string) => {
     setSelectedDeadline(id);
+    setReviewMissingTimes(false);
     setSelected(null);
     setTimeToConfirm("");
     setEditingDeadlineTime(false);
@@ -254,7 +255,7 @@ export function LiveSchedule({
             aria-controls={`${group}-missing-times`}
             onClick={() => setReviewMissingTimes((show) => !show)}
           >
-            {reviewMissingTimes ? "Hide list" : "Review times"}
+            {reviewMissingTimes ? "Hide list" : deadlineDetails ? "Review another deadline" : "Review times"}
           </button>
           <ul id={`${group}-missing-times`} hidden={!reviewMissingTimes}>
             {missingTimes.map((d) => (
@@ -270,6 +271,7 @@ export function LiveSchedule({
       )}
       {deadlineDetails && (
         <section ref={deadlineRef} className="deadline-detail" aria-label="Deadline details">
+          <p className="deadline-detail-kicker">Deadline details</p>
           <div className="deadline-detail-heading">
             <h3>{deadlineDetails.title}</h3>
             <button aria-label="Close deadline details" onClick={() => setSelectedDeadline(null)}>

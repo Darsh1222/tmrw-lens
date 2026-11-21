@@ -357,3 +357,23 @@ Added larger task blocks, wrapped task titles, comfortable three-day desktop and
 Validation: 349 unit tests across 19 files and all three recorded evaluation replays pass. Typecheck, lint and local production build pass using the documented sandbox webpack workaround. Browser checks used synthetic data: expanded/split/Week views, original-task deadline navigation, date-only source review, explicit time confirmation/correction, task prefill and refresh persistence. Checked the 390px day view with no page overflow. Impeccable's manual detector ran once and returned no findings. Automated Playwright tests were not executed locally. No fresh AI success or student outcomes are claimed; the local reader key remains unconfigured.
 
 Researched Motion, Shovel, Reclaim and Goblin Tools. Existing products already cover much of scheduling, syllabus import, capacity and recovery. Proposed consequence-ranked clarifications, bounded disruption tests, help-aware recovery and source-change impact maps as future investigations, not implemented or verified market-first features.
+
+## November 18, 2026 — Workspace visual refinement
+
+Improved typography, spacing, panel framing, selected-task contrast, calendar labels and interaction feedback while retaining the existing workspace behavior and reduced-motion handling. Reviewed the desktop and 390px mobile layouts with saved synthetic tasks. Lint and the local production webpack build passed using the documented sandbox workaround. This visual pass has not been evaluated with students.
+
+## November 18, 2026 — Expressive workspace redesign
+
+Introduced an animated navy and crimson hero, oversized type, rounded navigation, updated course-upload and calendar surfaces and smoother control feedback. Reduced-motion settings disable the decorative animation. Browser-checked desktop and 390px mobile, course-tab navigation and the mobile schedule switch using saved synthetic data. Typecheck, lint and the local production webpack build passed with the documented sandbox workaround. This is a local preview and has not been tested with students.
+
+## November 18, 2026 — Heading theme throughout the workspace
+
+Updated the hero line and carried its typography and soft color into planning, recovery, calendar and course sections. Added reduced-motion-aware surface entrances. Typecheck, lint and local production build pass; browser-checked the refreshed copy, mobile task/schedule switch and calendar at 394px without horizontal page overflow. No student usability study was performed.
+
+## November 18, 2026 — Preferences and deadline review
+
+Reorganized planning preferences into visible groups with short explanations and clearer history-reset consequences. Selecting a missing-time deadline now collapses the list and opens a focused, styled detail panel; the list can be reopened. Added shared button feedback and reduced-motion-aware panel animation. Browser-checked the preference checkbox and the mobile list/detail/return flow using synthetic data. All 349 unit tests, typecheck, lint, formatting, environment checks and local production build passed with the documented sandbox workaround. Not every individual button was manually exercised, and the automated Playwright suite was not run.
+
+## November 18, 2026 — Preferences drawer and button feedback
+
+Added an animated preferences disclosure, animated split/expanded calendar layout and brief site-wide button activation feedback. The motion respects reduced-motion settings. Browser-checked the drawer opening and closing, retention of a changed option, calendar expansion and return, and verified the button animation and in-progress calendar transform. Typecheck, lint, 349 unit tests, formatting, environment checks and local production build passed with the documented sandbox workaround. Not every individual button was manually exercised.

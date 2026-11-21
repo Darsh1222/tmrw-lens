@@ -1716,3 +1716,772 @@ html {
     display: none;
   }
 }
+
+/* Refined workspace: stronger hierarchy, quieter framing and readable controls. */
+.lens-workspace {
+  padding-top: 30px;
+}
+.workspace-intro {
+  align-items: end;
+  margin-bottom: 24px;
+}
+.workspace-intro h1 {
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  letter-spacing: -0.04em;
+}
+.workspace-intro p {
+  max-width: 32rem;
+  font-size: 1rem;
+}
+.workspace-tabs {
+  gap: 32px;
+  margin-bottom: 22px;
+}
+.workspace-tabs > button {
+  font-size: 0.9375rem;
+}
+.workspace-section-bar {
+  padding: 14px 18px;
+  border: 1px solid var(--tm-border);
+  border-radius: 12px;
+}
+.workspace-section-bar p,
+.workspace-mode-actions button {
+  font-size: 0.875rem;
+}
+.workspace-section-bar p > span,
+.workspace-tabs-note {
+  font-size: 0.8125rem;
+}
+.saved-task-list h2 {
+  font-size: 1.0625rem;
+}
+.saved-task-list ul {
+  gap: 7px;
+}
+.saved-task-list button {
+  border: 1px solid transparent;
+  padding: 14px 15px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+.saved-task-list button[aria-current="true"] {
+  background: var(--tm-band);
+  border-color: var(--tm-crimson);
+  box-shadow: inset 3px 0 0 var(--tm-crimson);
+}
+.saved-task-list strong {
+  font-size: 0.9375rem;
+}
+.saved-task-list button span,
+.saved-task-list > div > span {
+  font-size: 0.8125rem;
+}
+.workbench-flow > section,
+.live-calendar {
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.1);
+}
+.calendar-toolbar h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+}
+.calendar-navigation strong {
+  font-size: 1.0625rem;
+}
+.calendar-event {
+  transition:
+    filter 180ms ease,
+    box-shadow 180ms ease;
+}
+.calendar-event:hover,
+.calendar-event:focus-visible {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.18);
+}
+.calendar-event strong {
+  font-size: 0.875rem;
+}
+.calendar-event small {
+  font-size: 0.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .saved-task-list button,
+  .calendar-event {
+    transition: none;
+  }
+}
+@media (max-width: 800px) {
+  .lens-workspace {
+    padding-top: 22px;
+  }
+  .workspace-intro {
+    margin-bottom: 18px;
+  }
+  .workspace-intro h1 {
+    font-size: 2rem;
+  }
+  .workspace-intro p {
+    font-size: 0.9375rem;
+  }
+  .workspace-section-bar {
+    padding: 14px;
+  }
+}
+
+/* A softer, more expressive home for the working week. */
+.lens-main {
+  max-width: 1600px;
+  padding-inline: clamp(16px, 3vw, 44px);
+}
+.lens-workspace {
+  padding-top: 18px;
+}
+.workspace-intro {
+  isolation: isolate;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: end;
+  min-height: clamp(280px, 33vw, 420px);
+  padding: clamp(28px, 4.5vw, 68px);
+  margin-bottom: 24px;
+  border: 1px solid rgb(255 255 255 / 0.15);
+  border-radius: 24px;
+  background: #111d38;
+  color: #fff8f5;
+}
+.workspace-hero-art {
+  position: absolute;
+  z-index: -1;
+  inset: -20%;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 20% 90%, #512c4b 0%, transparent 48%),
+    radial-gradient(ellipse at 90% 5%, #783849 0%, transparent 43%),
+    linear-gradient(115deg, #0c203b, #1b2745 53%, #39243d);
+}
+.workspace-hero-art span {
+  position: absolute;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 48% 52% 60% 40%;
+  filter: blur(65px);
+  opacity: 0.47;
+  animation: lens-drift 24s ease-in-out infinite alternate;
+}
+.workspace-hero-art span:nth-child(1) {
+  left: -5%;
+  top: -35%;
+  background: #b94c63;
+}
+.workspace-hero-art span:nth-child(2) {
+  right: -5%;
+  bottom: -50%;
+  background: #355d84;
+  animation-delay: -9s;
+}
+.workspace-hero-art span:nth-child(3) {
+  left: 38%;
+  top: 12%;
+  width: 35%;
+  background: #874558;
+  animation-delay: -16s;
+}
+@keyframes lens-drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) rotate(-12deg) scale(1);
+  }
+  to {
+    transform: translate3d(8%, 8%, 0) rotate(20deg) scale(1.15);
+  }
+}
+.workspace-hero-copy {
+  max-width: 900px;
+}
+.workspace-hero-kicker {
+  display: inline-block;
+  margin-bottom: 22px;
+  color: #f3bac1;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.workspace-intro h1 {
+  max-width: 13ch;
+  font-size: clamp(3.2rem, 7vw, 7.5rem);
+  line-height: 0.94;
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+}
+.workspace-intro h1 span {
+  display: block;
+  margin-left: clamp(0px, 7vw, 110px);
+}
+.workspace-intro p {
+  max-width: 31rem;
+  margin-top: 24px;
+  color: #f4e6e9;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.5;
+}
+.workspace-hero-aside {
+  position: absolute;
+  right: clamp(28px, 4.5vw, 68px);
+  bottom: clamp(28px, 4.5vw, 68px);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #f3bac1;
+  font-size: 0.875rem;
+}
+.workspace-hero-aside i {
+  width: 82px;
+  height: 1px;
+  margin-top: 10px;
+  background: currentColor;
+}
+.workspace-tabs {
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid var(--tm-border);
+  border-radius: 16px;
+  background: var(--tm-surface);
+}
+.workspace-tabs > button {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 11px;
+  transition:
+    background-color 250ms ease,
+    color 250ms ease;
+}
+.workspace-tabs > button[aria-selected="true"] {
+  background: var(--tm-band);
+}
+.workspace-tab-indicator {
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  border-radius: 2px;
+}
+.workspace-tabs-note {
+  padding: 0 14px 0 0;
+}
+.workspace-section-bar {
+  padding: 18px 22px;
+  border-radius: 16px;
+}
+.workspace-grid {
+  gap: clamp(20px, 2.2vw, 36px);
+}
+.workbench-flow > section,
+.live-calendar {
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.13);
+}
+.workspace-action button,
+.workspace-calendar button,
+.workspace-mode-actions button {
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.workspace-action button:active,
+.workspace-calendar button:active,
+.workspace-mode-actions button:active {
+  transform: scale(0.98);
+}
+@media (max-width: 800px) {
+  .workspace-intro {
+    min-height: 310px;
+    align-items: end;
+    padding: 28px 24px;
+    border-radius: 20px;
+  }
+  .workspace-intro h1 {
+    font-size: clamp(3.1rem, 12vw, 4.8rem);
+  }
+  .workspace-intro h1 span {
+    margin-left: 0;
+  }
+  .workspace-intro p {
+    margin-top: 20px;
+    font-size: 1rem;
+  }
+  .workspace-hero-kicker {
+    margin-bottom: 18px;
+  }
+  .workspace-hero-aside {
+    display: none;
+  }
+  .workspace-tabs {
+    gap: 2px;
+  }
+  .workspace-tabs > button {
+    flex: 1;
+    justify-content: center;
+    padding: 0 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspace-hero-art span {
+    animation: none;
+  }
+  .workspace-action button,
+  .workspace-calendar button,
+  .workspace-mode-actions button,
+  .workspace-tabs > button {
+    transition: none;
+  }
+}
+
+#upload,
+#prove {
+  scroll-margin-top: 90px;
+}
+#upload h2,
+#prove h2 {
+  font-family: var(--font-forum-sans), sans-serif;
+  font-size: clamp(2rem, 3.3vw, 3.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+#upload > div:first-child,
+#prove > div:first-child {
+  gap: 14px;
+}
+#upload > div:first-child p,
+#prove > div:first-child p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.course-dropzone {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(38px, 6vw, 80px) 24px;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 80% 0%, rgb(184 64 87 / 0.14), transparent 50%), var(--tm-surface);
+  transition:
+    border-color 250ms ease,
+    background-color 250ms ease,
+    box-shadow 250ms ease;
+}
+.course-dropzone:hover,
+.course-dropzone:focus-within {
+  box-shadow: 0 18px 55px rgb(0 0 0 / 0.12);
+}
+.course-dropzone > svg {
+  color: var(--tm-crimson);
+}
+.course-dropzone > div > p:first-child {
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+.calendar-toolbar {
+  background: linear-gradient(110deg, rgb(184 64 87 / 0.1), transparent 65%);
+}
+.calendar-navigation {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.calendar-navigation strong {
+  font-size: 1.125rem;
+}
+.workbench-flow > section {
+  padding: clamp(20px, 2vw, 28px);
+}
+.workbench-flow > section h2 {
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  letter-spacing: -0.04em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .course-dropzone {
+    transition: none;
+  }
+}
+
+/* Carry the hero's expressive type and soft color into everyday planning. */
+.workbench-flow > section:not(.planning-preferences) {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 100% 0%, rgb(184 64 87 / 0.12), transparent 54%), var(--tm-surface);
+}
+.workbench-flow > section h2,
+.calendar-toolbar h2,
+.saved-course-summary > h2,
+.workspace-how h2 {
+  font-family: var(--font-forum-sans), sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.workbench-flow > section:not(.planning-preferences) h2 {
+  max-width: 16ch;
+  font-size: clamp(2rem, 2.7vw, 3.25rem);
+}
+.calendar-toolbar {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+.calendar-toolbar h2 {
+  font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+}
+.saved-course-summary > h2,
+.workspace-how h2 {
+  font-size: clamp(2rem, 3vw, 3.2rem);
+}
+.saved-task-list > div {
+  margin-bottom: 14px;
+}
+.saved-task-list h2,
+.planning-preferences h2 {
+  font-size: 1.25rem !important;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.next-session {
+  margin: 22px 0;
+  padding: 20px;
+  border: 1px solid var(--tm-border);
+  border-radius: 15px;
+  background: var(--tm-band);
+}
+.next-session > p:first-child {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+.workspace-how {
+  margin-top: clamp(48px, 7vw, 100px);
+  padding: clamp(28px, 4vw, 56px);
+  border: 1px solid var(--tm-border);
+  border-radius: 22px;
+  background: radial-gradient(ellipse at 100% 100%, rgb(184 64 87 / 0.14), transparent 55%), var(--tm-surface);
+}
+.workspace-how p {
+  max-width: 68ch;
+  margin-top: 18px;
+  line-height: 1.7;
+}
+.workspace-how strong {
+  color: var(--tm-crimson);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .workbench-flow > section:not(.planning-preferences),
+  .saved-course-summary,
+  #upload,
+  #prove {
+    animation: lens-surface-enter 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes lens-surface-enter {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+@media (max-width: 800px) {
+  .workbench-flow > section:not(.planning-preferences) h2 {
+    font-size: clamp(2rem, 8vw, 2.7rem);
+  }
+  .calendar-toolbar h2 {
+    font-size: 1.8rem;
+  }
+  .calendar-toolbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .workspace-how {
+    margin-top: 48px;
+  }
+}
+
+/* Preferences are grouped by purpose, with each option explained beside its control. */
+.workbench-flow > section.planning-preferences {
+  padding: clamp(22px, 2vw, 28px);
+  border: 1px solid var(--tm-border);
+  border-radius: 20px;
+  background: var(--tm-surface);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.1);
+}
+.planning-preferences h2 {
+  font-size: 1.65rem !important;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+.planning-preferences > p {
+  margin: 9px 0 24px;
+  font-size: 0.875rem !important;
+}
+.preferences-controls {
+  gap: 14px;
+}
+.preference-group,
+.preference-history {
+  min-width: 0;
+  border: 1px solid var(--tm-border);
+  border-radius: 14px;
+  padding: 18px;
+  background: var(--tm-bg);
+}
+.preference-group-heading {
+  margin-bottom: 14px;
+}
+.preference-group-heading h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.preference-group-heading p,
+.preference-clear-note {
+  margin-top: 5px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--tm-text-2);
+}
+.preference-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 -6px;
+  padding: 11px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+.preference-choice:hover {
+  background: var(--tm-band);
+}
+.preference-choice[hidden] {
+  display: none;
+}
+.preferences-controls .preference-choice input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  margin: 2px 0 0;
+  flex: none;
+}
+.preference-choice span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.preference-choice strong {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.preference-choice small {
+  color: var(--tm-text-2);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.preference-category {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.preference-category input {
+  margin-top: 7px;
+}
+.preference-history {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.preference-history .preference-group-heading {
+  margin: 0;
+}
+.preference-history-count {
+  font-size: 0.8125rem;
+  color: var(--tm-text-2);
+}
+.preference-history > button {
+  align-self: flex-start;
+}
+.preference-clear-note {
+  margin-top: -4px;
+}
+.preference-planner-link {
+  align-self: flex-start;
+  margin: 6px 2px 0;
+  font-size: 0.875rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preference-choice {
+    transition: none;
+  }
+}
+
+/* Deadline review: choose one item, then give its details space. */
+.calendar-attention {
+  padding: 18px 20px;
+}
+.calendar-attention .calendar-review-times {
+  min-height: 42px;
+  padding: 8px 13px;
+  border-radius: 9px;
+  font-size: 0.8125rem;
+}
+.calendar-attention ul {
+  gap: 8px;
+  max-height: 240px;
+  margin-top: 14px;
+}
+.calendar-attention li {
+  min-width: 0;
+}
+.calendar-attention li button {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--tm-border);
+  border-radius: 10px;
+  background: var(--tm-bg);
+}
+.calendar-attention li button strong {
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.calendar-attention li button span {
+  font-size: 0.75rem;
+}
+.deadline-detail {
+  scroll-margin-top: 150px;
+  padding: 24px;
+  background: radial-gradient(ellipse at 100% 0%, rgb(184 64 87 / 0.1), transparent 55%), var(--tm-sunken);
+}
+.deadline-detail .deadline-detail-kicker {
+  margin: 0 0 12px;
+  color: var(--tm-crimson);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.deadline-detail h3 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+.deadline-detail blockquote {
+  padding: 14px 16px;
+  border: 1px solid var(--tm-border);
+  border-radius: 10px;
+  background: var(--tm-bg);
+}
+.deadline-detail form {
+  margin-top: 18px;
+}
+.deadline-detail form label {
+  min-width: min(100%, 190px);
+}
+.deadline-detail form input {
+  width: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .deadline-detail {
+    animation: deadline-arrive 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes deadline-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+@media (max-width: 800px) {
+  .deadline-detail {
+    padding: 20px 16px;
+    scroll-margin-top: 150px;
+  }
+  .calendar-attention {
+    padding: 16px;
+  }
+}
+
+/* An accessible, animated drawer keeps secondary settings within reach. */
+.workbench-flow > section.planning-preferences {
+  padding: 0;
+  overflow: hidden;
+}
+.planning-preferences h2 {
+  margin: 0;
+}
+.preferences-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 22px 24px;
+  text-align: left;
+}
+.preferences-toggle > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.preferences-toggle strong {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+.preferences-toggle small {
+  color: var(--tm-text-2);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+.preferences-chevron {
+  flex: none;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.preferences-toggle[aria-expanded="true"] .preferences-chevron {
+  transform: rotate(180deg);
+}
+.preferences-drawer {
+  overflow: hidden;
+}
+.preferences-intro {
+  margin: 0;
+  padding: 0 24px 18px;
+  font-size: 0.875rem;
+  color: var(--tm-text-2);
+}
+.preferences-drawer .preferences-controls {
+  padding: 0 24px 24px;
+}
+@media (max-width: 800px) {
+  .preferences-toggle {
+    padding: 20px;
+  }
+  .preferences-intro {
+    padding: 0 20px 16px;
+  }
+  .preferences-drawer .preferences-controls {
+    padding: 0 20px 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preferences-chevron {
+    transition: none;
+  }
+}

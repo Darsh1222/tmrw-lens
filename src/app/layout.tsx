@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ButtonFeedback } from "./ButtonFeedback";
 import { forumCaps, forumDisplay, forumSans } from "./fonts";
 import "./globals.css";
 import "./_workspace/workspace.css";
@@ -19,7 +20,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full ${forumSans.variable} ${forumDisplay.variable} ${forumCaps.variable}`}>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ButtonFeedback />
+        {children}
+      </body>
     </html>
   );
 }

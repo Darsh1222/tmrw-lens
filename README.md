@@ -22,7 +22,7 @@ Only work built during the hackathon is shown as the submission. What existed be
 
 The preparation branch adds **[/recover](https://tmrw-lens.vercel.app/recover)** (deploy this branch before using that public route): one task → what happened → one checked plan → a returning next-step card. The card keeps the deadline's source attached, records explicit step completion, and recovers only the work still needed. Two immediate actions: **Finished this step** and **Plans changed**. Other controls are under disclosure. [Market research and reproducible idea ranking](docs/research/PRODUCT-DIRECTION.md) explain this choice; no world-first or predicted-success claim is made.
 
-Start with one task, choose what got in the way, and review one checked recommendation. Tired? Lens prefers keeping tonight free when tomorrow fits. Stuck? It suggests a small first step while scheduling the full remainder. Alternatives stay in disclosure; planning preferences are visible; the full comparison workspace is available at `/recover/details`. Try the labeled synthetic example or enter a task with a confirmed deadline and busy time. Optional comparison may move one flexible task. Every option is previewed before apply, supports undo, and can export recovered sessions. If nothing fits, Lens explains the loaded capacity and decisions needed. Memory saving is off by default. This new workspace computes locally; the existing reader and SMS agent use Meta models as before. See [scope, guarantees, and limitations](docs/RECOVERY_WORKSPACE.md).
+Start with one task, choose what got in the way, and review one checked recommendation. Tired? Lens prefers keeping tonight free when tomorrow fits. Stuck? It suggests a small first step while scheduling the full remainder. Alternatives stay in disclosure; planning preferences are in a dropdown; the full comparison workspace is available at `/recover/details`. Try the labeled synthetic example or enter a task with a confirmed deadline and busy time. Optional comparison may move one flexible task. Every option is previewed before apply, supports undo, and can export recovered sessions. If nothing fits, Lens explains the loaded capacity and decisions needed. Memory saving is off by default. This new workspace computes locally; the existing reader and SMS agent use Meta models as before. See [scope, guarantees, and limitations](docs/RECOVERY_WORKSPACE.md).
 
 ## Try it in 10 seconds
 
@@ -71,7 +71,7 @@ Details and how each is measured: [Evals](#evals) below, and the live [evals pag
 
 ## AI coding assistance
 
-The original [build log](HACKATHON.md) credits Claude Code. Codex assisted with November 16 submission preparation: winner research, demo-guide implementation, evaluation wording, draft submission materials, and animation tooling. Runtime models are described above. The builder reviews and validates the final work.
+The original [build log](HACKATHON.md) credits Claude Code. OpenAI Codex assisted with submission research, interface and interaction design, the saved-week and recovery workspace, code, tests, documentation, and demo-video editing. Claude Code assisted with the original build. The builder directed the product, reviewed the changes, and should verify the final submission. Runtime models are described above; AI-assisted development is separate from the browser-local planner.
 
 ## Privacy
 

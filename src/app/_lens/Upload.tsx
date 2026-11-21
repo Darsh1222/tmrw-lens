@@ -93,7 +93,7 @@ export function Upload({
           setOver(false);
           if (e.dataTransfer.files.length) onAdd(e.dataTransfer.files);
         }}
-        className={`flex flex-col items-center gap-4 rounded-2xl border border-dashed px-6 py-10 text-center transition-colors ${over ? "border-ink bg-well" : "border-line-strong bg-card"}`}
+        className={`course-dropzone flex flex-col items-center gap-4 rounded-2xl border border-dashed px-6 py-10 text-center transition-colors ${over ? "border-ink bg-well" : "border-line-strong bg-card"}`}
       >
         <UploadSimple size={32} weight="light" aria-hidden className="text-ink-2" />
         <div className="flex flex-col gap-1">

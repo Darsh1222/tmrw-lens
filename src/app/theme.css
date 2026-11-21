@@ -500,3 +500,35 @@ body {
     transition: none;
   }
 }
+
+/* Consistent feedback for controls throughout Lens. */
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled) {
+    transition-property: background-color, border-color, color, box-shadow, filter, scale;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  button:not(:disabled):active:not(.calendar-event) {
+    scale: 0.98;
+  }
+  button:not(:disabled):hover {
+    filter: brightness(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  button.lens-press-feedback {
+    animation: lens-button-press 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes lens-button-press {
+    0% {
+      scale: 1;
+    }
+    35% {
+      scale: 0.965;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+}

@@ -182,8 +182,23 @@ function Workspace() {
   return (
     <div className={`lens-workspace mobile-view-${mobileView}`}>
       <header className="workspace-intro">
-        <h1>Make room for what’s next.</h1>
-        <p>Check deadlines, plan study time, and recover when plans change.</p>
+        <div className="workspace-hero-art" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="workspace-hero-copy">
+          <span className="workspace-hero-kicker">More room to breathe</span>
+          <h1>
+            Make room <span>for what’s next.</span>
+          </h1>
+          <p>Check deadlines, plan study time, and find your way forward when plans change.</p>
+        </div>
+        <div className="workspace-hero-aside" aria-hidden="true">
+          <span>Your week,</span>
+          <span>in perspective.</span>
+          <i />
+        </div>
       </header>
       <div
         className="workspace-tabs"
@@ -282,8 +297,12 @@ function Workspace() {
             Schedule{snapshot?.phase === "preview" && <span>Preview</span>}
           </button>
         </div>
-        <div className={`workspace-grid ${calendarExpanded ? "calendar-expanded" : ""}`}>
-          <div className="workspace-action" id="next-action">
+        <motion.div
+          layout
+          className={`workspace-grid ${calendarExpanded ? "calendar-expanded" : ""}`}
+          transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+        >
+          <motion.div layout="position" className="workspace-action" id="next-action">
             {week.tasks.length > 0 && !snapshot?.example && (
               <section className="saved-task-list" aria-label="Your saved tasks">
                 <div>
@@ -328,8 +347,13 @@ function Workspace() {
               See the schedule
               <ArrowRight size={15} />
             </button>
-          </div>
-          <div className="workspace-calendar" id="calendar">
+          </motion.div>
+          <motion.div
+            layout
+            className="workspace-calendar"
+            id="calendar"
+            transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+          >
             <LiveSchedule
               snapshot={snapshot}
               week={
@@ -348,8 +372,8 @@ function Workspace() {
               {snapshot?.phase === "preview" ? "Back to review and approve" : "Back to your next step"}
               <ArrowRight size={15} />
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
       <section
         id="sources-panel"

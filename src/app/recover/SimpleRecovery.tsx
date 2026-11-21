@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import REBUILDS from "@/lib/demo/rebuilds.json";
@@ -19,7 +19,8 @@ import { beginNextTask, sourceForTask, type NextTask, type TaskSource } from "@/
 import { NextStepCard, returningTask, keepTask, clearTask } from "./NextStepCard";
 import type { ScheduleSnapshot } from "@/lib/recovery/schedule";
 import type { Proposal } from "@/lib/recovery/engine";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { CaretDown } from "@phosphor-icons/react";
 import { preferredProposal } from "@/lib/recovery/presentation";
 import { RecoveryNote, emptyNoteDraft } from "./RecoveryNote";
 import { readRecoveryNote, requestWithNote, type RecoveryNoteSettings } from "@/lib/recovery/note";
@@ -169,6 +170,9 @@ function RecoveryFlow({
   const [noteDraft, setNoteDraft] = useState(emptyNoteDraft);
   const [noteSettings, setNoteSettings] = useState<RecoveryNoteSettings | null>(null);
   const [noteSummary, setNoteSummary] = useState(false);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const preferencesId = useId();
+  const reduceMotion = useReducedMotion();
   const [changePreview, setChangePreview] = useState<{ input: RecoveryInput; plan: Proposal } | null>(null);
   useEffect(() => {
     if (!onSchedule) return;
@@ -918,150 +922,219 @@ function RecoveryFlow({
           />
         )}
         <section className="planning-preferences" aria-labelledby="preferences-heading">
-          <h2 id="preferences-heading">Planning preferences</h2>
-          <p>Fine-tune future suggestions. Your saved schedule stays in place.</p>
-          <div className="preferences-controls">
-            <p className="text-ink-2">
-              Learning history stays temporary unless you save it below. Approved tasks and your reviewed schedule are
-              saved separately on this device.
-            </p>
-            <label className="flex gap-3">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => {
-                  try {
-                    if (e.target.checked) localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-                    else localStorage.removeItem(MEMORY_KEY);
-                    setRemember(e.target.checked);
-                  } catch {
-                    setError("This browser could not save your preferences.");
-                  }
-                }}
-              />
-              Remember my learning history in this browser
-            </label>
-            <label className="flex gap-3">
-              <input
-                type="checkbox"
-                checked={calibrate}
-                onChange={(e) => {
-                  setCalibrate(e.target.checked);
-                  if (step === 2) setStep(1);
-                }}
-              />
-              Use my actual completion times to improve estimates
-            </label>
-            <p className="text-xs text-ink-2">
-              Estimates become available after you record actual time for three completed tasks of the same type. You
-              can inspect or delete those records below.
-            </p>
-            <label>
-              Type of work
-              <input
-                className={`${field} mt-1`}
-                maxLength={60}
-                value={setup.category}
-                onChange={(e) => {
-                  setSetup({ ...setup, category: e.target.value });
-                  if (step === 2) setStep(1);
-                }}
-              />
-            </label>
-            <label className="flex gap-3">
-              <input
-                type="checkbox"
-                checked={memory.preferDaytime}
-                onChange={(e) => {
-                  updateMemory({ ...memory, preferDaytime: e.target.checked });
-                  if (step === 2) setStep(1);
-                }}
-              />
-              Finish sessions before 9 PM
-            </label>
-            <label className="flex gap-3" hidden={embedded}>
-              <input
-                type="checkbox"
-                checked={allowMove}
-                onChange={(e) => {
-                  setAllowMove(e.target.checked);
-                  if (step === 2) setStep(1);
-                }}
-              />
-              Let me compare moving one other flexible task
-            </label>
-            <p>
-              {memory.history.length} completion records · {memory.rejected.length} rejected start times
-            </p>
-            {memory.history.map((h) => (
-              <div key={h.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
-                <span>
-                  {h.category}: {h.estimated} min estimated, {h.actual} min actual
-                </span>
-                <button
-                  className={buttonClass("plain")}
-                  onClick={() => updateMemory({ ...memory, history: memory.history.filter((x) => x.id !== h.id) })}
-                >
-                  Delete record
-                </button>
-              </div>
-            ))}
-            {memory.rejected.map((r) => (
-              <div key={r.id} className="flex flex-wrap justify-between gap-2">
-                <span>
-                  {r.hour}:00 · {r.reason}
-                </span>
-                <button
-                  onClick={() => updateMemory({ ...memory, rejected: memory.rejected.filter((x) => x.id !== r.id) })}
-                >
-                  Forget this feedback
-                </button>
-              </div>
-            ))}
-            {step === 2 && selectedPlan && (
-              <button
-                className={buttonClass("quiet")}
-                onClick={() => {
-                  updateMemory({
-                    ...memory,
-                    rejected: [
-                      ...memory.rejected,
-                      {
-                        id: crypto.randomUUID(),
-                        hour: DateTime.fromISO(selectedPlan.placements[0].start, { zone: request!.zone }).hour,
-                        reason: "This start hour did not suit me",
-                      },
-                    ].slice(-50),
-                  });
-                  setNotice("Feedback recorded. Recompare to try this hour later in the default option’s search.");
-                  setStep(1);
-                }}
-              >
-                Remember that this start time doesn’t suit me
-              </button>
-            )}
+          <h2 id="preferences-heading">
             <button
-              className={buttonClass("quiet")}
-              onClick={() => {
-                try {
-                  localStorage.removeItem(MEMORY_KEY);
-                  sessionStorage.removeItem(WORKSPACE_KEY);
-                  setMemory(emptyMemory());
-                  setRemember(false);
-                  setPayload(null);
-                  setNotice("Your saved history and waiting import are cleared. The current plan stays on this page.");
-                  if (step === 2) setStep(1);
-                } catch {
-                  setError("This browser could not clear saved history.");
-                }
-              }}
+              type="button"
+              className="preferences-toggle"
+              aria-expanded={preferencesOpen}
+              aria-controls={preferencesId}
+              onClick={() => setPreferencesOpen((open) => !open)}
             >
-              Forget all learning history
+              <span>
+                <strong>Planning preferences</strong>
+                <small>Fine-tune future suggestions</small>
+              </span>
+              <CaretDown className="preferences-chevron" size={20} aria-hidden="true" />
             </button>
-            <Link href="/recover/details" className="underline underline-offset-4">
-              Open the detailed planner
-            </Link>
-          </div>
+          </h2>
+          <AnimatePresence initial={false}>
+            {preferencesOpen && (
+              <motion.div
+                id={preferencesId}
+                className="preferences-drawer"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="preferences-intro">
+                  Choose how Lens plans future tasks. Your saved schedule stays in place.
+                </p>
+                <div className="preferences-controls">
+                  <div className="preference-group">
+                    <div className="preference-group-heading">
+                      <h3>Learning from your work</h3>
+                      <p>Make future time estimates more personal.</p>
+                    </div>
+                    <label className="preference-choice">
+                      <input
+                        type="checkbox"
+                        checked={remember}
+                        onChange={(e) => {
+                          try {
+                            if (e.target.checked) localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+                            else localStorage.removeItem(MEMORY_KEY);
+                            setRemember(e.target.checked);
+                          } catch {
+                            setError("This browser could not save your preferences.");
+                          }
+                        }}
+                      />
+                      <span>
+                        <strong>Save learning history</strong>
+                        <small>Keep your completion times and feedback on this device.</small>
+                      </span>
+                    </label>
+                    <label className="preference-choice">
+                      <input
+                        type="checkbox"
+                        checked={calibrate}
+                        onChange={(e) => {
+                          setCalibrate(e.target.checked);
+                          if (step === 2) setStep(1);
+                        }}
+                      />
+                      <span>
+                        <strong>Use my completion times</strong>
+                        <small>Suggest estimates after three recorded tasks of the same type.</small>
+                      </span>
+                    </label>
+                    <label className="preference-category">
+                      <span>Type of work</span>
+                      <input
+                        className={`${field} mt-1`}
+                        maxLength={60}
+                        value={setup.category}
+                        onChange={(e) => {
+                          setSetup({ ...setup, category: e.target.value });
+                          if (step === 2) setStep(1);
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="preference-group">
+                    <div className="preference-group-heading">
+                      <h3>When to study</h3>
+                      <p>Set a boundary for future plans.</p>
+                    </div>
+                    <label className="preference-choice">
+                      <input
+                        type="checkbox"
+                        checked={memory.preferDaytime}
+                        onChange={(e) => {
+                          updateMemory({ ...memory, preferDaytime: e.target.checked });
+                          if (step === 2) setStep(1);
+                        }}
+                      />
+                      <span>
+                        <strong>Finish before 9 PM</strong>
+                        <small>Keep new study sessions earlier in the day.</small>
+                      </span>
+                    </label>
+                    <label className="preference-choice" hidden={embedded}>
+                      <input
+                        type="checkbox"
+                        checked={allowMove}
+                        onChange={(e) => {
+                          setAllowMove(e.target.checked);
+                          if (step === 2) setStep(1);
+                        }}
+                      />
+                      <span>
+                        <strong>Compare moving a flexible task</strong>
+                        <small>Consider moving one other flexible task when planning.</small>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="preference-history">
+                    <div className="preference-group-heading">
+                      <h3>Your learning history</h3>
+                      <p>
+                        Temporary unless you choose to save it. Your approved tasks and reviewed schedule are saved
+                        separately.
+                      </p>
+                    </div>
+                    <p className="preference-history-count" aria-live="polite">
+                      {memory.history.length} completion records · {memory.rejected.length} rejected start times
+                    </p>
+                    {memory.history.map((h) => (
+                      <div
+                        key={h.id}
+                        className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3"
+                      >
+                        <span>
+                          {h.category}: {h.estimated} min estimated, {h.actual} min actual
+                        </span>
+                        <button
+                          className={buttonClass("plain")}
+                          onClick={() =>
+                            updateMemory({ ...memory, history: memory.history.filter((x) => x.id !== h.id) })
+                          }
+                        >
+                          Delete record
+                        </button>
+                      </div>
+                    ))}
+                    {memory.rejected.map((r) => (
+                      <div key={r.id} className="flex flex-wrap justify-between gap-2">
+                        <span>
+                          {r.hour}:00 · {r.reason}
+                        </span>
+                        <button
+                          onClick={() =>
+                            updateMemory({ ...memory, rejected: memory.rejected.filter((x) => x.id !== r.id) })
+                          }
+                        >
+                          Forget this feedback
+                        </button>
+                      </div>
+                    ))}
+                    {step === 2 && selectedPlan && (
+                      <button
+                        className={buttonClass("quiet")}
+                        onClick={() => {
+                          updateMemory({
+                            ...memory,
+                            rejected: [
+                              ...memory.rejected,
+                              {
+                                id: crypto.randomUUID(),
+                                hour: DateTime.fromISO(selectedPlan.placements[0].start, { zone: request!.zone }).hour,
+                                reason: "This start hour did not suit me",
+                              },
+                            ].slice(-50),
+                          });
+                          setNotice(
+                            "Feedback recorded. Recompare to try this hour later in the default option’s search.",
+                          );
+                          setStep(1);
+                        }}
+                      >
+                        Remember that this start time doesn’t suit me
+                      </button>
+                    )}
+                    <button
+                      className={buttonClass("quiet")}
+                      onClick={() => {
+                        try {
+                          localStorage.removeItem(MEMORY_KEY);
+                          sessionStorage.removeItem(WORKSPACE_KEY);
+                          setMemory(emptyMemory());
+                          setRemember(false);
+                          setPayload(null);
+                          setNotice(
+                            "Your saved history and waiting import are cleared. The current plan stays on this page.",
+                          );
+                          if (step === 2) setStep(1);
+                        } catch {
+                          setError("This browser could not clear saved history.");
+                        }
+                      }}
+                    >
+                      Clear learning history
+                    </button>
+                    <p className="preference-clear-note">
+                      Also resets the 9 PM preference and clears any course import waiting to be reviewed. Your saved
+                      schedule and tasks stay in place.
+                    </p>
+                  </div>
+                  <Link href="/recover/details" className="preference-planner-link underline underline-offset-4">
+                    Open the detailed planner
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
         <p className="text-center text-xs text-ink-2">
           Plans are checked against the information you provide. This workspace stays in your browser; it does not send

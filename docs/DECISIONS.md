@@ -560,3 +560,23 @@ A narrow seven-column grid reduced short task blocks to minute counts. Default t
 Date-only deadlines receive visible flags and an in-app review notice. Their detail panel retains original evidence and distinguishes source-provided times from user choices. Clock confirmations live in the saved-week schema separately from imported evidence, are validated against local clock/DST ambiguity, and are invalidated by a changed source date. Optional source IDs on saved task evidence preserve backward compatibility while connecting deadline → task; quote-based fallback handles older saved tasks. Two unrelated tasks sharing a deadline instant stay separately linked. Opening an unplanned source deadline prefills its task and any confirmed time. Changing the reviewed deadline does not silently alter approved task plans.
 
 Research: [Motion](https://www.usemotion.com/features/ai-task-manager), [Shovel](https://shovelapp.io/), [Reclaim 2.0](https://help.reclaim.ai/en/articles/16558552-tasks-overview-decide-what-to-work-on-when) and [Goblin Tools](https://goblin.tools/) already cover substantial parts of automatic planning, syllabus intake, replanning, capacity, task breakdown and focus. Candidate directions are high-impact clarification ranking, bounded disruption tests, task-specific help planning and source-change impact maps. Public-page review does not establish a market-first invention. No new algorithmic success probability or student benefit is claimed.
+
+## November 18, 2026 — Workspace visual hierarchy
+
+Refined the existing navy and crimson workspace with a larger introduction, more deliberate spacing, readable labels, quieter panel framing and a clearly highlighted selected task. Retained the current task and calendar behavior and reduced-motion support. Reviewed Awwwards' editorial grid example in its [design collection](https://assets.awwwards.com/awards/gallery/2023/07/HOT-RIGHT-NOW-BOOK-2023.pdf), its [mobile guidance](https://www.awwwards.com/mobile-excellence-guidelines.pdf) and animation performance guidance; applied hierarchy and legibility to an operational interface rather than copying a marketing layout.
+
+## November 18, 2026 — Expressive Lens workspace
+
+The owner requested a much larger visual change inspired by https://www.tech-ish.org/ while keeping Lens colors. Studied its soft moving background, oversized asymmetric typography and rounded panels. Applied a navy and crimson animated atmosphere, large responsive introduction, redesigned tab navigation, coordinated upload and calendar surfaces and eased control feedback. Motion respects reduced-motion settings. The workspace still presents the existing review and scheduling interactions.
+
+## November 18, 2026 — Consistent workspace headings
+
+Changed the hero line to “More room to breathe” and extended the responsive heading style to task setup, recovery, calendar, course summary and the explanation section. Added a soft entry animation for surfaces when reduced motion is not requested. Keep functional status labels and calendar controls readable at phone widths.
+
+## November 18, 2026 — Clear preferences and deadline review
+
+Grouped visible planning preferences into learning, study time and history, with concise descriptions and an explicit explanation of what clearing history also resets. Kept native checkboxes and existing state behavior. Date-only deadline selection closes the list so the chosen source and time form are easier to reach; the student can reopen the list. Added consistent button press/hover feedback and a brief deadline-panel entrance, respecting reduced motion and preserving schedule movement. Research: [GOV.UK checkbox guidance](https://design-system.service.gov.uk/components/checkboxes/), [NN/g animation guidance](https://www.nngroup.com/articles/animation-duration/), [W3C reduced motion](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions), and [Awwwards motion performance](https://www.awwwards.com/brainfood-mobile-performance-vol3.pdf).
+
+## November 18, 2026 — Animated preferences and calendar expansion
+
+At the owner's request, put the grouped preferences in an accessible disclosure with a smooth height transition; setting state remains in the parent while the drawer is closed. Animate the calendar and task columns through their grid layout change rather than swapping instantly. Add a brief, non-blocking visual press response for button activation across the app, including keyboard activation, while respecting reduced-motion preferences and retaining existing control behavior.
